@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:warehouse/MyHomePage.dart';
 
 
@@ -535,11 +536,17 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                           const SizedBox(width: 15,),
                                           const Text("Follow us on : ",style: TextStyle(fontWeight: FontWeight.w500),),
                                           const SizedBox(width: 15,),
-                                          Image.asset("assets/images/Facebook.png"),
+                                          InkWell(child: Image.asset("assets/images/Facebook.png"),
+                                          onTap: _openFacebookProfile,
+                                          ),
                                           const SizedBox(width: 15,),
-                                          Image.asset("assets/images/Instagram.png"),
+                                          InkWell(child: Image.asset("assets/images/Instagram.png"),
+                                          onTap: _openInstagramProfile,
+                                          ),
                                           const SizedBox(width: 15,),
-                                          Image.asset("assets/images/TwitterX.png")
+                                          InkWell(child: Image.asset("assets/images/TwitterX.png"),
+                                          onTap: _openTwitterProfile,
+                                          )
 
                                         ],
                                       )
@@ -624,5 +631,53 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ],
       ),
     );
+  }
+  // Function to launch Instagram app or web page
+  void _openInstagramProfile() async {
+    const String instagramUrl = 'instagram://user?username=a_tinyhunter';
+    const String fallbackUrl = 'https://www.instagram.com/a_tinyhunter/';
+
+    try {
+      bool launched = await launchUrl(Uri.parse(instagramUrl), mode: LaunchMode.externalApplication);
+      if (!launched) {
+        // If Instagram app isn't installed, open in browser
+        await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      // In case any error occurs, open fallback URL in browser
+      await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+    }
+  }
+  // Function to launch Facebook app or web page
+  void _openFacebookProfile() async {
+    const String facebookAppUrl = 'fb://profile/100009158840334';
+    const String fallbackUrl = 'https://www.facebook.com/profile.php?id=100009158840334';
+
+    try {
+      bool launched = await launchUrl(Uri.parse(facebookAppUrl), mode: LaunchMode.externalApplication);
+      if (!launched) {
+        // If Facebook app isn't installed, open in browser
+        await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      // In case any error occurs, open fallback URL in browser
+      await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+    }
+  }
+  // Function to launch Twitter app or web page
+  void _openTwitterProfile() async {
+    const String twitterAppUrl = 'twitter://user?screen_name=AnkeshYada78626';
+    const String fallbackUrl = 'https://twitter.com/AnkeshYada78626';
+
+    try {
+      bool launched = await launchUrl(Uri.parse(twitterAppUrl), mode: LaunchMode.externalApplication);
+      if (!launched) {
+        // If Twitter app isn't installed, open in browser
+        await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      // In case any error occurs, open fallback URL in browser
+      await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+    }
   }
 }

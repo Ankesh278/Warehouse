@@ -10,6 +10,7 @@ import 'package:warehouse/MyHomePage.dart';
 import 'package:warehouse/Partner/HomeScreen.dart';
 import 'package:warehouse/Partner/Provider/AuthProvider.dart';
 import 'package:warehouse/Partner/Provider/LocationProvider.dart';
+import 'package:warehouse/Partner/Provider/warehouseProvider.dart';
 import 'package:warehouse/User/UserProvider/AuthUserProvider.dart';
 import 'package:warehouse/User/userHomePage.dart';
 import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
@@ -40,6 +41,7 @@ void main() async {
         ChangeNotifierProvider<LocationProvider>( // Add LocationProvider here
           create: (_) => LocationProvider(),
         ),
+        ChangeNotifierProvider(create: (_) => WarehouseProvider()),
 
 
       ],

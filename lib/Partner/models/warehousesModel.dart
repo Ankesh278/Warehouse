@@ -6,9 +6,9 @@ class Warehouse {
   final String whouseType1;
   final String whouseType2;
   final int whouseFloor;
-  final int whouseCarpetArea;
-  final bool isAvailable;
-  final int whouseRent;
+  final double whouseCarpetArea;
+  final bool isavilable;
+  final double whouseRent;
   final String whouseMaintenance;
   final String whouseExpected;
   final String whouseToken;
@@ -19,7 +19,7 @@ class Warehouse {
   final String whouseVid1;
   final String whouseVid2;
   final String mobile;
-  final DateTime dateTime;
+  final String dateTime;
 
   Warehouse({
     this.id = 0, // Default value for int
@@ -27,9 +27,9 @@ class Warehouse {
     this.whouseType1 = '',
     this.whouseType2 = '',
     this.whouseFloor = 0, // Default value for int
-    this.whouseCarpetArea = 0, // Default value for int
-    this.isAvailable = false, // Default value for bool
-    this.whouseRent = 0, // Default value for int
+    this.whouseCarpetArea = 0.0, // Default value for int
+    this.isavilable = true, // Default value for bool
+    this.whouseRent = 0.0, // Default value for int
     this.whouseMaintenance = '', // Default value for String
     this.whouseExpected = '', // Default value for String
     this.whouseToken = '', // Default value for String
@@ -40,8 +40,8 @@ class Warehouse {
     this.whouseVid1 = '', // Default value for String
     this.whouseVid2 = '', // Default value for String
     this.mobile = '', // Default value for String
-    DateTime? dateTime, // DateTime initialized below
-  }) : dateTime = dateTime ?? DateTime.now(); // Default to current time
+    String? dateTime, // DateTime initialized below
+  }) : dateTime = dateTime ?? ""; // Default to current time
 
   factory Warehouse.fromJson(Map<String, dynamic> json) {
     return Warehouse(
@@ -50,9 +50,15 @@ class Warehouse {
       whouseType1: json['whouse_type1'] ?? '',
       whouseType2: json['whouse_type2'] ?? '',
       whouseFloor: json['whouse_floor'] ?? 0,
-      whouseCarpetArea: json['whouse_carperarea'] ?? 0,
-      isAvailable: json['is_available'] ?? false,
-      whouseRent: json['whouse_rent'] ?? 0,
+      // Cast to double if it's an int
+      whouseCarpetArea: (json['whouse_carperarea'] is int)
+          ? (json['whouse_carperarea'] as int).toDouble()
+          : json['whouse_carperarea'] ?? 0.0,
+      isavilable: json['isavilable'] == 1 ? true : false,
+      // Cast to double if it's an int
+      whouseRent: (json['whouse_rent'] is int)
+          ? (json['whouse_rent'] as int).toDouble()
+          : json['whouse_rent'] ?? 0.0,
       whouseMaintenance: json['whouse_maintenance'] ?? '',
       whouseExpected: json['whouse_expected'] ?? '',
       whouseToken: json['whouse_token'] ?? '',
@@ -63,9 +69,10 @@ class Warehouse {
       whouseVid1: json['whouse_vid1'] ?? '',
       whouseVid2: json['whouse_vid2'] ?? '',
       mobile: json['mobile'] ?? '',
-      dateTime: json['dateTime'] != null ? DateTime.parse(json['dateTime']) : DateTime.now(),
+      dateTime: json['dateTime'] ?? '',
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -75,7 +82,7 @@ class Warehouse {
       'whouse_type2': whouseType2,
       'whouse_floor': whouseFloor,
       'whouse_carperarea': whouseCarpetArea,
-      'is_available': isAvailable,
+      'isavilable': isavilable,
       'whouse_rent': whouseRent,
       'whouse_maintenance': whouseMaintenance,
       'whouse_expected': whouseExpected,
@@ -87,7 +94,7 @@ class Warehouse {
       'whouse_vid1': whouseVid1,
       'whouse_vid2': whouseVid2,
       'mobile': mobile,
-      'dateTime': dateTime.toIso8601String(),
+      'dateTime': dateTime,
     };
   }
 }

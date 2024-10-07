@@ -2,11 +2,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Partner/AddWarehouse.dart';
 import 'package:warehouse/Partner/MyProfilePage.dart';
 import 'package:warehouse/Partner/NotificationScreen.dart';
+import 'package:warehouse/Partner/Provider/warehouseProvider.dart';
 import 'package:warehouse/Partner/WarehouseItemDesign.dart';
+import 'package:warehouse/Partner/WarehouseUpdate.dart';
 import 'package:warehouse/Partner/models/warehousesModel.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -39,6 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     futureWarehouseResponse = fetchWarehouseData();
+
+
   }
 
   Future<WarehouseResponse> fetchWarehouseData() async {
@@ -159,6 +164,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildHomePage(double screenWidth, double screenHeight) {
+    final warehouseProvider = Provider.of<WarehouseProvider>(context);
+
     return Container(
       color: Colors.blue,
       width: double.infinity,
@@ -339,6 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     onPressed: () {
                                       // Handle add button press
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>AddWareHouse()));
                                     },
                                   ),
                                 ),
@@ -459,204 +467,213 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemCount: warehouseList.length,
                         itemBuilder: (context, index) {
                           final warehouse = warehouseList[index];
-                         // print("carpetarea"${warehouse.whouseCarpetArea});
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Center(
-                                child: Container(
-                                  decoration:
-                                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                                  margin: EdgeInsets.only(top: screenHeight * 0.01, left: 10),
-                                  padding: const EdgeInsets.all(15),
-                                  child: DottedBorder(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Text(
+                          // Assuming `isAvailable` is the property that indicates switch state
+                          print("availability"+warehouse.isavilable.toString());
+                          bool isavail = warehouseProvider.warehouseStatus[warehouse.id] ?? warehouse.isavilable;
 
-                                                warehouse.whouseName,
-                                                style: const TextStyle(
-                                                    fontSize: 16, fontWeight: FontWeight.w700),
-                                              ),
-                                              const Spacer(),
-                                              Image.asset("assets/images/Share.png"),
-                                              const SizedBox(
-                                                width: 15,
-                                              ),
-                                              Image.asset("assets/images/QrCode.png"),
-                                              const SizedBox(
-                                                width: 15,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Text(
-                                                ". Vaccant",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.red,
-                                                    fontSize: 10),
-                                              ),
-                                              SizedBox(width: 20),
-                                              Text(
-                                                "  | WHNOW-UP-GAU-27142",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.grey,
-                                                    fontSize: 10),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: [
+                         // bool isavail=warehouse.isavilable;
 
-                                               Text(
-                                                warehouse.whouseCarpetArea.toString()+" sq.ft",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.black,
-                                                    fontSize: 15),
-                                              ),
-                                              SizedBox(width: screenWidth * 0.4),
-                                               Text(
-                                                "₹ ${warehouse.whouseRent}",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.black,
-                                                    fontSize: 15),
-                                              ),
-                                              SizedBox(width: screenWidth * 0.1)
-                                            ],
-                                          ),
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Text(
-                                                "Carpet Area (Sq.ft)",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.grey,
-                                                    fontSize: 10),
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                "  | Rent per Sq.ft / Month",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.grey,
-                                                    fontSize: 10),
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Flexible(
-                                                  flex: 4,
-                                                  child: Container(
-                                                    height: 25,
-                                                    decoration: BoxDecoration(
-                                                        color: const Color(0xffF0F4FD),
-                                                        border: Border.all(color:  const Color(0xffF0F4FD))),
-                                                    child: const Center(child: Text("View Request  | 0",style: TextStyle(color: Colors.black,fontSize: 10,fontWeight: FontWeight.w400),)),
-                                                  )),
-                                              const SizedBox(width: 5),
-                                              Flexible(
-                                                  flex: 3,
-                                                  child: Container(
-                                                      height: 25,
-                                                      decoration: BoxDecoration(
-                                                          color:  const Color(0xffF0F4FD),
-                                                          border: Border.all(color:  const Color(0xffF0F4FD))),
-                                                      child: const Center(child: Text("Bids  | 0",style: TextStyle(color: Colors.black,fontSize: 10,fontWeight: FontWeight.w400),))
-                                                  )),
-                                              const SizedBox(width: 5),
-                                              Flexible(
-                                                  flex: 4,
-                                                  child: Container(
-                                                      height: 25,
-                                                      decoration: BoxDecoration(
-                                                          color:  const Color(0xffF0F4FD),
-                                                          border: Border.all(color:  const Color(0xffF0F4FD))),
-                                                      child: const Center(child: Text("Contracts  | 0",style: TextStyle(color: Colors.black,fontSize: 10,fontWeight: FontWeight.w400),))
-                                                  )),
-                                            ],
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            const Text("Is warehouse available?"),
-                                            Row(
+                          // print("carpetarea"${warehouse.whouseCarpetArea});
+                          return GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Warehouseupdate( warehouse: warehouse,)));
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: Container(
+                                    decoration:
+                                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                                    margin: EdgeInsets.only(top: screenHeight * 0.01, left: 10),
+                                    padding: const EdgeInsets.all(15),
+                                    child: DottedBorder(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
                                               children: [
-                                                const Text("No",style: TextStyle(color: Colors.grey,fontSize: 11,fontWeight: FontWeight.w500),),
-                                                Switch(
-                                                  // This bool value toggles the switch.
-                                                  value: light,
-                                                  activeColor: Colors.white,
-                                                  dragStartBehavior: DragStartBehavior.start,
-                                                  activeTrackColor: const Color(0xff48A103),
+                                                Text(
 
-                                                  onChanged: (bool value) {
-                                                    // This is called when the user toggles the switch.
-                                                    setState(() {
-                                                      light = value;
-                                                    });
-                                                  },
+                                                  warehouse.whouseName,
+                                                  style: const TextStyle(
+                                                      fontSize: 16, fontWeight: FontWeight.w700),
                                                 ),
-                                                const Text("Yes",style: TextStyle(fontSize: 11,color: Colors.grey,fontWeight: FontWeight.w500),),
+                                                const Spacer(),
+                                                Image.asset("assets/images/Share.png"),
+                                                const SizedBox(
+                                                  width: 15,
+                                                ),
+                                                Image.asset("assets/images/QrCode.png"),
+                                                const SizedBox(
+                                                  width: 15,
+                                                )
                                               ],
-                                            )
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Text(
+                                                  warehouseProvider.warehouseStatus[warehouse.id.toString()] ?? warehouse.isavilable
+                                                      ? ". Vaccant" // Display text based on availability
+                                                      : ". Rented", // Optional, in case you want different text when unavailable
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: warehouseProvider.warehouseStatus[warehouse.id.toString()] ?? warehouse.isavilable
+                                                        ? Colors.red // Red when available (true)
+                                                        : Colors.green, // Grey when unavailable (false)
+                                                    fontSize: 10,
+                                                  ),
+                                                ),
 
-                                          ],
-                                        )
-                                      ],
+                                                const SizedBox(width: 20),
+                                                const Text(
+                                                  "  | WHNOW-UP-GAU-27142",
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w500,
+                                                      color: Colors.grey,
+                                                      fontSize: 10),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                SizedBox(width: screenWidth * 0.05 ),
+                                                 Text(
+                                                  warehouse.whouseCarpetArea.toString()+" sq.ft",
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w500,
+                                                      color: Colors.black,
+                                                      fontSize: 15),
+                                                ),
+                                                Spacer(),
+                                                 Text(
+                                                  "₹ ${warehouse.whouseRent}",
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w500,
+                                                      color: Colors.black,
+                                                      fontSize: 15),
+                                                ),
+                                                SizedBox(width: screenWidth * 0.1)
+                                              ],
+                                            ),
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Text(
+                                                  "Carpet Area (Sq.ft)",
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w500,
+                                                      color: Colors.grey,
+                                                      fontSize: 10),
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  "  | Rent per Sq.ft / Month",
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w500,
+                                                      color: Colors.grey,
+                                                      fontSize: 10),
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Flexible(
+                                                    flex: 4,
+                                                    child: Container(
+                                                      height: 25,
+                                                      decoration: BoxDecoration(
+                                                          color: const Color(0xffF0F4FD),
+                                                          border: Border.all(color:  const Color(0xffF0F4FD))),
+                                                      child: const Center(child: Text("View Request  | 0",style: TextStyle(color: Colors.black,fontSize: 10,fontWeight: FontWeight.w400),)),
+                                                    )),
+                                                const SizedBox(width: 5),
+                                                Flexible(
+                                                    flex: 3,
+                                                    child: Container(
+                                                        height: 25,
+                                                        decoration: BoxDecoration(
+                                                            color:  const Color(0xffF0F4FD),
+                                                            border: Border.all(color:  const Color(0xffF0F4FD))),
+                                                        child: const Center(child: Text("Bids  | 0",style: TextStyle(color: Colors.black,fontSize: 10,fontWeight: FontWeight.w400),))
+                                                    )),
+                                                const SizedBox(width: 5),
+                                                Flexible(
+                                                    flex: 4,
+                                                    child: Container(
+                                                        height: 25,
+                                                        decoration: BoxDecoration(
+                                                            color:  const Color(0xffF0F4FD),
+                                                            border: Border.all(color:  const Color(0xffF0F4FD))),
+                                                        child: const Center(child: Text("Contracts  | 0",style: TextStyle(color: Colors.black,fontSize: 10,fontWeight: FontWeight.w400),))
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              const Text("Is warehouse available?"),
+                                              Row(
+                                                children: [
+                                                  const Text("No",style: TextStyle(color: Colors.grey,fontSize: 11,fontWeight: FontWeight.w500),),
+                                                  // Switch button with Provider
+                                                  Switch(
+                                                    hoverColor: Colors.white,
+                                                    activeTrackColor: Colors.green,
+                                                    focusColor: Colors.white,
+                                                    activeColor: Colors.white, // Green color when switch is on
+                                                    inactiveThumbColor: Colors.grey, // Grey color when switch is off
+                                                    value: warehouseProvider.warehouseStatus[warehouse.id.toString()] ?? warehouse.isavilable,
+                                                    onChanged: (bool value) {
+                                                      // Immediately reflect the change in the UI
+                                                      warehouseProvider.initializeStatus(warehouse.id.toString(), value);
+
+                                                      // Call the provider method to update the status on the server
+                                                      warehouseProvider.updateWarehouseStatus(warehouse.id.toString(), value).catchError((error) {
+                                                        // Optionally revert the change if the API call fails
+                                                        warehouseProvider.initializeStatus(warehouse.id.toString(), !value);
+                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                          SnackBar(content: Text('Failed to update warehouse status!')),
+                                                        );
+                                                      });
+                                                    },
+                                                  ),
+                                                  const Text("Yes",style: TextStyle(fontSize: 11,color: Colors.grey,fontWeight: FontWeight.w500),),
+                                                ],
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(top: 3.0,left: 30),
-                                child: Text("Messenger"),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0,left: 20,right: 20),
-                                child: Container(
-                                  height: screenHeight*0.13,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade300,
-                                      borderRadius: BorderRadius.circular(8)
-                                  ),
-                                ),
-                              )
-                            ],
+                              ],
+                            ),
                           );
                         },
                       );
@@ -682,6 +699,38 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildAccountPage(double screenWidth, double screenHeight) {
     return MyProfilePage();
   }
+
+
+
+
+  Future<void> updateWarehouseStatus(String warehouseId, bool status) async {
+    final url = Uri.parse('http://xpacesphere.com/api/Wherehousedt/UpdIsAvailable');  // Updated to HTTPS
+
+    try {
+      // Send the HTTP POST request
+      final response = await http.put(
+        url,
+        headers: {'Content-Type': 'application/json'},  // Setting the header for JSON data
+        body: json.encode({
+          'Id': warehouseId,         // The Id parameter, should match the correct field name
+          'isavailable': status      // The isavailable status
+        }),
+      );
+
+      // Check for success or failure
+      if (response.statusCode == 200) {
+        print('Warehouse status updated successfully');
+      } else {
+        print('Failed to update warehouse status: ${response.statusCode}');
+        print('Response: ${response.body}');
+      }
+    } catch (e) {
+      print('Error updating warehouse status: $e');
+    }
+  }
+
+
+
 
 
 

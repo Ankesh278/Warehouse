@@ -1,41 +1,94 @@
-
-import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Partner/HelpPage.dart';
 import 'package:warehouse/Partner/MapScreen.dart';
 import 'package:warehouse/Partner/Provider/LocationProvider.dart';
-import 'package:http/http.dart' as http;
-import 'package:warehouse/Partner/WarehouseImageScreen.dart';
+import 'package:warehouse/Partner/models/warehousesModel.dart';
 
-class AddWareHouse extends StatefulWidget {
-  const AddWareHouse({super.key});
-
+class Warehouseupdate extends StatefulWidget {
+  final Warehouse warehouse;
+  const Warehouseupdate({super.key,required this.warehouse});
   @override
-  State<AddWareHouse> createState() => _AddWareHouseState();
+  State<Warehouseupdate> createState() => _WarehouseupdateState();
 }
-class _AddWareHouseState extends State<AddWareHouse> {
+class _WarehouseupdateState extends State<Warehouseupdate> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _carpetAreaController = TextEditingController();
-  final TextEditingController _rentPerSqFt = TextEditingController();
-  final TextEditingController _totalCarpetArea = TextEditingController();
-  final TextEditingController _maintenanceCost = TextEditingController();
-  final TextEditingController _expectedSecurityDeposit = TextEditingController();
-  final TextEditingController _tokenAdvance = TextEditingController();
-  final TextEditingController _expectedLockInPeriod = TextEditingController();
-  final TextEditingController _warehouseName = TextEditingController();
   final int _maxLength = 29;
   bool _isChecked = false;
   int _number = 0;
-  String displayText = 'Click here to Locate your Warehouse';
+  late String _address;
+
   String? _selectedWarehouseType;
   String? _constructionType;
   String? selectedLocation;
   bool isLoading=false;
   late final  LatLng finalAddress;
+  LatLng? _latLng;
+
+  void _increase() {
+    setState(() {
+      _number++;
+    });
+  }
+
+  void _decrease() {
+    if (_number > 0) {
+      setState(() {
+        _number--;
+      });
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    _getAddressFromLatLng();
+
+  }
+
+
+
+  Future<void> _getAddressFromLatLng() async {
+    try {
+      // Extract latitude and longitude
+      RegExp regExp = RegExp(r'LatLng\(([^,]+), ([^,]+)\)');
+      Match? match = regExp.firstMatch(widget.warehouse.whouseAddress);
+
+      if (match != null && match.groupCount == 2) {
+        double latitude = double.parse(match.group(1)!.trim());
+        double longitude = double.parse(match.group(2)!.trim());
+
+        // Set the LatLng
+        _latLng = LatLng(latitude, longitude);
+
+
+        // Get the address from the latitude and longitude
+        List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+        Placemark place = placemarks[0];
+        if (placemarks.isNotEmpty) {
+          setState(() {
+            _address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.country}';
+           print(_address);
+          });
+        }
+      }
+    } catch (e) {
+      print("Error getting address: $e");
+    }
+  }
+
+
+  // void _updateTextLength() {
+  //   if (_warehouseName.text.length > _maxLength) {
+  //     _warehouseName.text = _warehouseName.text.substring(0, _maxLength);
+  //     _warehouseName.selection = TextSelection.fromPosition(TextPosition(offset: _warehouseName.text.length));
+  //   }
+  //   setState(() {}); // Refresh to update character count
+  // }
+
   final List<String> _construction = [
     'Shed',
     'Cold Storage',
@@ -63,200 +116,6 @@ class _AddWareHouseState extends State<AddWareHouse> {
     'Government or Public Warehouse',
     'Others',
   ];
-
-
-  void _increase() {
-    setState(() {
-      _number++;
-    });
-  }
-
-  void _decrease() {
-    if (_number > 0) {
-      setState(() {
-        _number--;
-      });
-    }
-  }
-  @override
-  void initState() {
-    super.initState();
-    _warehouseName.addListener(_updateTextLength);
-  }
-
-  void _updateTextLength() {
-    if (_warehouseName.text.length > _maxLength) {
-      _warehouseName.text = _warehouseName.text.substring(0, _maxLength);
-      _warehouseName.selection = TextSelection.fromPosition(TextPosition(offset: _warehouseName.text.length));
-    }
-    setState(() {}); // Refresh to update character count
-  }
-
-  @override
-  void dispose() {
-    _warehouseName.dispose();
-    _carpetAreaController.dispose();
-    _totalCarpetArea.dispose();
-    _rentPerSqFt.dispose();
-    _maintenanceCost.dispose();
-    _expectedSecurityDeposit.dispose();
-    _tokenAdvance.dispose();
-    _expectedLockInPeriod.dispose();
-    super.dispose();
-  }
-
-
-  //Submit all the data to the server
-
-  Future<void> _submitForm() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String phone = prefs.getString("phone")!;
-    if (phone.startsWith("+91")) {
-      phone = phone.replaceFirst("+91", "");
-    }
-
-    print("Mobile>>>"+phone.toString());
-    print(">>>>>>>>>>>>>>"+finalAddress.toString());
-
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        isLoading = true;
-      });
-
-      // Gather all data
-      String warehousetype = _selectedWarehouseType!;
-      String constructionType = _constructionType!;
-      double carpetArea = double.tryParse(_carpetAreaController.text) ?? 0.0;
-      double rentPerSqFt = double.tryParse(_rentPerSqFt.text) ?? 0.0;
-      String maintenanceCostValue = _maintenanceCost.text.toString() ?? "0.0";
-      String expectedSecurityDepositValue = _expectedSecurityDeposit.text.toString() ?? "0.0";
-      String tokenAdvanceValue = _tokenAdvance.text.toString() ?? "0.0";
-      String expectedLockInPeriodValue = _expectedLockInPeriod.text.toString() ?? "0.0";
-      String warehouseNameValue = _warehouseName.text;
-
-      Map<String, dynamic> data = {
-        'whouse_type1': warehousetype,
-        'whouse_type2': constructionType,
-        'whouse_address': finalAddress.toString(),
-        'whouse_carperarea': carpetArea,
-        'whouse_rent': rentPerSqFt,
-        'whouse_maintenance': maintenanceCostValue,
-        'whouse_expected': expectedSecurityDepositValue,
-        'whouse_token': tokenAdvanceValue,
-        'whouse_lockin': expectedLockInPeriodValue,
-        'whouse_name': warehouseNameValue,
-        'isavilable': _isChecked,
-        'whouse_floor': _number,
-        'mobile': phone
-      };
-
-      print("Alldatass " + data.toString());
-
-      try {
-        final response = await http.post(
-          Uri.parse('http://xpacesphere.com/api/Wherehousedt/Ins_whousedetails'),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode(data),
-        );
-
-        print("ApiResponseBody" + response.body.toString());
-        print("ApiResponseCode" + response.statusCode.toString());
-
-        // Decode the JSON response body
-        try {
-          final Map<String, dynamic> responseData = jsonDecode(response.body);
-
-          // Check if the "status" is 201 for success
-          if (response.statusCode == 200 && responseData['status'] == 200) {
-            print('Data submitted successfully');
-            // Navigate to WarehouseImageScreen
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const WarehouseImageScreen()),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Uploaded successfully'),
-                backgroundColor: Colors.green,
-              ),
-            );
-            _clearFormFields();
-            setState(() {
-              isLoading = false;
-            });
-
-
-          } else {
-            // Handle failure
-            print('Failed to submit data: ${response.statusCode}');
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Failed to upload data. Please try again.'),
-                backgroundColor: Colors.red,
-              ),
-            );
-            setState(() {
-              isLoading = false;
-            });
-          }
-        } catch (e) {
-          print('Error parsing response JSON: $e');
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     content: Text('Invalid response from the server.'),
-          //     backgroundColor: Colors.red,
-          //   ),
-          // );
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
-        print('Error occurred: $e');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('An error occurred. Please try again.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
-  }
-
-  // Function to clear form fields
-  void _clearFormFields() {
-    _carpetAreaController.clear();
-    _totalCarpetArea.clear();
-    _rentPerSqFt.clear();
-    _maintenanceCost.clear();
-    _expectedSecurityDeposit.clear();
-    _tokenAdvance.clear();
-    _expectedLockInPeriod.clear();
-    _warehouseName.clear();
-    finalAddress=const LatLng(0.0, 0.0);
-
-    // Reset other form fields
-    _isChecked = false; // Reset checkbox
-    _number = 1; // Reset number of floors or any other number field
-    _selectedWarehouseType = ''; // Reset dropdown
-    _constructionType = ''; // Reset dropdown
-
-    // Optionally call setState() to refresh the UI
-    setState(() {});
-  }
-
-
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -289,16 +148,16 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                   Row(
-                                     children: [
-                                       InkWell(child: const Icon(Icons.arrow_back_ios_new,color: Colors.white,),
-                                       onTap: (){
-                                         Navigator.pop(context);
-                                       },
-                                       ),
-                                       const Text("Add Warehouse",style: TextStyle(color: Colors.white,fontSize: 14),)
-                                     ],
-                                   )
+                                    Row(
+                                      children: [
+                                        InkWell(child: const Icon(Icons.arrow_back_ios_new,color: Colors.white,),
+                                          onTap: (){
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                        const Text("Update Warehouse",style: TextStyle(color: Colors.white,fontSize: 14),)
+                                      ],
+                                    )
                                   ],
                                 ),
                                 const Spacer(),
@@ -337,7 +196,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Manage your warehouse quickly!",
+                                    "Update your warehouse information!",
                                     style: TextStyle(fontSize: 10, fontWeight: FontWeight.normal, color: Colors.white),
                                   ),
 
@@ -369,7 +228,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                 children:[
                                   Container(
                                       margin: EdgeInsets.only(top: screenHeight * 0.02,left: screenHeight * 0.035),
-                                      child: const Text("Enter your Warehouse address",style: TextStyle(color: Colors.grey),)),
+                                      child: const Text("Update your Warehouse address",style: TextStyle(color: Colors.grey),)),
                                   InkWell(
                                     child: Center(
                                       child: Container(
@@ -379,13 +238,33 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                         margin: EdgeInsets.only(top: screenHeight * 0.01),
                                         child: DottedBorder(
                                           child: Padding(
-                                            padding: const EdgeInsets.all(48.0),
+                                            padding: const EdgeInsets.all(10),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 Image.asset('assets/images/Worldwidelocation.png', width: 40, height: 40), // Replace with your image asset
-                                                const SizedBox(height: 20),
-                                                Text(displayText, style: const TextStyle(color: Colors.grey,fontSize: 10)),
+                                               // const SizedBox(height: 20),
+                                                Text(_address ?? '', style: const TextStyle(color: Colors.grey, fontSize: 10)),
+                                               // const SizedBox(height: 10),
+                                                Container(
+                                                  height: 100, // Height of the map container
+                                                  width: double.infinity, // Width of the map container
+                                                  child: _latLng != null // Check if LatLng is available
+                                                      ? GoogleMap(
+                                                    initialCameraPosition: CameraPosition(
+                                                      target: _latLng!,
+                                                      zoom: 18.0, // Zoom level
+                                                    ),
+                                                    markers: {
+                                                      Marker(
+                                                        markerId: MarkerId('location'),
+                                                        position: _latLng!,
+                                                        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed), // Set marker color to red
+                                                      ),
+                                                    },
+                                                  )
+                                                      : Center(child: CircularProgressIndicator()), // Show loading indicator until LatLng is available
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -417,7 +296,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                         setState(() {
                                           //displayText = 'Selected Location: (${selectedLocation.latitude.toStringAsFixed(4)}, ${selectedLocation.longitude.toStringAsFixed(4)})';
                                           // If you want to show the address as well, you can do it here
-                                          displayText += '\nAddress: $selectedAddress';
+                                         // displayText += '\nAddress: $selectedAddress';
                                         });
 
                                         // Optionally, do something with the result, e.g., update the UI
@@ -584,7 +463,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
 
                                     ],
                                   ),
-                                  CarpetAreaTextFormField(controller: _carpetAreaController),
+                                 // CarpetAreaTextFormField(controller: _carpetAreaController),
                                   Row(
                                     children: [
                                       Checkbox(
@@ -607,7 +486,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                     ],
                                   ),
                                   const Text("Total carpet area",style: TextStyle(color: Colors.grey,fontSize: 13,fontWeight: FontWeight.w600),),
-                                  TotalCarpetArea(totalcarpetArea:_totalCarpetArea),
+                                  //TotalCarpetArea(totalcarpetArea:_totalCarpetArea),
                                   const Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -616,7 +495,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
 
                                     ],
                                   ),
-                                  rentPerSqFt(controller: _rentPerSqFt,),
+                                 // rentPerSqFt(controller: _rentPerSqFt,),
                                   const Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -625,7 +504,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
 
                                     ],
                                   ),
-                                  maintenanceCost(controller: _maintenanceCost,),
+                                 // maintenanceCost(controller: _maintenanceCost,),
                                   const Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -634,7 +513,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
 
                                     ],
                                   ),
-                                  ExpectedSecurityDeposit(controller: _expectedSecurityDeposit,),
+                                 // ExpectedSecurityDeposit(controller: _expectedSecurityDeposit,),
                                   const Text("Security deposit: ₹0",style: TextStyle(color: Colors.grey,fontSize: 12),),
                                   const Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -644,7 +523,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
 
                                     ],
                                   ),
-                                  TokenAdvance(controller: _tokenAdvance,),
+                                 // TokenAdvance(controller: _tokenAdvance,),
                                   const Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -653,7 +532,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
 
                                     ],
                                   ),
-                                  ExpectedLockInPeriod(controller: _expectedLockInPeriod,),
+                                 // ExpectedLockInPeriod(controller: _expectedLockInPeriod,),
                                   Row(
                                     children: [
                                       const Text("Warehouse Name/Owner's name",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
@@ -666,7 +545,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                   ),
                                   TextFormField(
                                     validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
-                                    controller: _warehouseName,
+                                   // controller: _warehouseName,
                                     decoration: const InputDecoration(
                                       hintText: 'ex. Thane Mumbai Warehouse',
                                       hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
@@ -697,10 +576,10 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               isLoading?SpinKitCircle(
-                                          color: Colors.white,
-                                            size: 50.0,
-                                          )
-                                          :Text(
+                                                color: Colors.white,
+                                                size: 50.0,
+                                              )
+                                                  :Text(
                                                 'Save & Proceed',
                                                 style: TextStyle(
                                                   color: Colors.white,
@@ -713,7 +592,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                       ),
                                     ),
                                     onTap: () {
-                                      _submitForm();
+                                     // _submitForm();
                                       // if (_formKey.currentState!.validate()) {
                                       //   // Process data if the form is valid
                                       //
@@ -745,12 +624,9 @@ class _AddWareHouseState extends State<AddWareHouse> {
       ),
     );
   }
+
+
 }
-
-
-
-
-
 
 class DottedBorder extends StatelessWidget {
   final Widget child;
@@ -825,409 +701,3 @@ class DottedBorderPainter extends CustomPainter {
     return false;
   }
 }
-
-
-
-
-
-class CarpetAreaTextFormField extends StatelessWidget {
-  final TextEditingController controller;
-
-  const CarpetAreaTextFormField({super.key, required this.controller});
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      keyboardType: TextInputType.number,
-      controller: controller,
-      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
-      decoration: InputDecoration(
-        hintText: 'Enter carpet area',
-
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: const Text(
-            '|sqft',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class TotalCarpetArea extends StatelessWidget {
-  final TextEditingController totalcarpetArea;
-
-  const TotalCarpetArea({super.key, required this.totalcarpetArea});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 33,
-      decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(6)
-      ),
-
-      child: TextFormField(
-        controller: totalcarpetArea,
-        keyboardType: TextInputType.number,
-        validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
-        decoration: InputDecoration(
-          hintText: '0',
-          hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-           contentPadding: const EdgeInsets.only(left: 8,bottom: 10), // Adjust vertical padding
-          border: InputBorder.none,
-
-
-          suffix: Container(
-            padding: const EdgeInsets.only(left: 8.0,right: 6), // Space between the text and the input
-            child: const Text(
-              '|sqft',
-              style: TextStyle(color: Colors.grey, fontSize: 13),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class rentPerSqFt extends StatelessWidget {
-  final TextEditingController controller;
-
-  const rentPerSqFt({super.key, required this.controller});
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: TextInputType.number,
-      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
-      decoration: InputDecoration(
-        hintText: '₹|ex.35',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: const Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class maintenanceCost extends StatelessWidget {
-  final TextEditingController controller;
-
-  const maintenanceCost({super.key, required this.controller});
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      keyboardType: TextInputType.number,
-      controller: controller,
-      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
-      decoration: InputDecoration(
-        hintText: '₹|ex.2',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: const Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class ExpectedSecurityDeposit extends StatelessWidget {
-  final TextEditingController controller;
-
-  const ExpectedSecurityDeposit({super.key, required this.controller});
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: TextInputType.number,
-      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
-      decoration: const InputDecoration(
-        hintText: 'ex.2',
-        hintStyle: TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        // suffix: Container(
-        //   padding: EdgeInsets.only(left: 8.0), // Space between the text and the input
-        //   child: Text(
-        //     '|per month',
-        //     style: TextStyle(color: Colors.grey, fontSize: 13),
-        //   ),
-        // ),
-      ),
-    );
-  }
-}
-class TokenAdvance extends StatelessWidget {
-  final TextEditingController controller;
-
-  const TokenAdvance({super.key, required this.controller});
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      keyboardType: TextInputType.number,
-      controller: controller,
-      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
-      decoration: InputDecoration(
-        hintText: 'ex.3',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: const Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class ExpectedLockInPeriod extends StatelessWidget {
-  final TextEditingController controller;
-
-  const ExpectedLockInPeriod({super.key, required this.controller});
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      keyboardType: TextInputType.number,
-      controller: controller,
-      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
-      decoration: InputDecoration(
-        hintText: 'ex.18',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: const Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField8 extends StatelessWidget {
-  const CarpetAreaTextFormField8({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      keyboardType: TextInputType.number,
-      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
-      decoration: InputDecoration(
-        hintText: 'ex.18',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: const Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-
-
-
-
-
-class WarehouseAnimatedDropDown extends StatefulWidget {
-  final List<String> warehouseTypes;
-
-  const WarehouseAnimatedDropDown({super.key, required this.warehouseTypes});
-
-  @override
-  _WarehouseAnimatedDropDownState createState() => _WarehouseAnimatedDropDownState();
-}
-
-class _WarehouseAnimatedDropDownState extends State<WarehouseAnimatedDropDown>
-    with SingleTickerProviderStateMixin {
-  String? _selectedWarehouseType;
-
-  // Animation controller and animation
-  late AnimationController _controller;
-  late Animation<Offset> _offsetAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize animation controller
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-
-    _offsetAnimation = Tween<Offset>(
-      begin: const Offset(0.0, -1.0), // Start from top of the screen
-      end: Offset.zero, // End at the center of the screen
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _openDropdownPopup() {
-    _controller.forward(); // Start the animation
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return SlideTransition(
-          position: _offsetAnimation,
-          child: Dialog(
-            backgroundColor: Colors.transparent, // Transparent background
-            insetPadding: EdgeInsets.symmetric(horizontal: 50), // Control horizontal space
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                margin: const EdgeInsets.only(top: 100), // Position the popup from the top
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9), // Semi-transparent background
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min, // Adjust the size of the popup
-                  children: widget.warehouseTypes.map((String type) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _selectedWarehouseType = type;
-                        });
-                        Navigator.of(context).pop(); // Close the popup
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 5), // Compress vertical space
-                        child: Text(
-                          type,
-                          style: const TextStyle(fontSize: 12, color: Colors.black),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    ).then((_) {
-      _controller.reverse(); // Reset the animation when the dialog closes
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _openDropdownPopup, // Open the dropdown when tapped
-      child: Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Colors.blue, width: 1.0),
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min, // Compress horizontally to fit content
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              _selectedWarehouseType ?? 'Select Warehouse Type',
-              style: const TextStyle(color: Colors.grey, fontSize: 12), // Small font size
-            ),
-            const Icon(
-              Icons.keyboard_arrow_down_outlined,
-              color: Colors.grey,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
-
-
-
-
-
-
-
-

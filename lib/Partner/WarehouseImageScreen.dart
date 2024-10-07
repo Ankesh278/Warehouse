@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,9 +28,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
 
   // Function to pick images
   Future<void> _pickImage(ImageSource source) async {
-
-
-    if (_photoCount >= 2) return;
+    if (_photoCount >= 10) return;
 
     try {
       final pickedFile = await _picker.pickImage(source: source);
@@ -36,8 +36,8 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
         setState(() {
           totalmedia++;
           _photoCount++;
-          _pickedImages.add(pickedFile);
-          _progress += 0.25;
+          _pickedImages.add(pickedFile );
+          _progress += 5;
         });
       }
     } catch (e) {
@@ -48,8 +48,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
 
   // Function to pick videos
   Future<void> _pickVideo() async {
-    if (_videoCount >= 2) return;
-
+    if (_videoCount >= 10) return;
     try {
       final pickedFile = await _picker.pickVideo(source: ImageSource.gallery);
       if (pickedFile != null) {
@@ -57,7 +56,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
           totalmedia++;
           _videoCount++;
           _pickedVideos.add(pickedFile);
-          _progress += 0.25;
+          _progress += 5;
         });
       }
     } catch (e) {
@@ -65,12 +64,13 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
     }
   }
   // Function to upload files to server
-  Future<void> _uploadMedia( BuildContext context) async {
-    SharedPreferences prefs=await  SharedPreferences.getInstance();
-    String phone=prefs.getString("phone")!;
+  Future<void> _uploadMedia(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String phone = prefs.getString("phone")!;
     if (phone.startsWith("+91")) {
       phone = phone.replaceFirst("+91", "");
     }
+
     if (_pickedImages.isEmpty && _pickedVideos.isEmpty) return;
 
     setState(() {
@@ -83,35 +83,18 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
         Uri.parse('http://xpacesphere.com/api/Wherehousedt/Ins_whousefiledetails'),
       );
 
-      // Attach the first image to the request
-      if (_pickedImages.length > 0) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'whouse_Img1', _pickedImages[0].path,
-          filename: basename(_pickedImages[0].path),
-        ));
-      }
+      // Combine images and videos into a single list
+      List<File> mediaFiles = [];
+      // Convert XFile (from image picker) to File
+      mediaFiles.addAll(_pickedImages.map((xFile) => File(xFile.path)));
+      mediaFiles.addAll(_pickedVideos.map((xFile) => File(xFile.path)));
 
-      // Attach the second image to the request if available
-      if (_pickedImages.length > 1) {
+      // Attach all media files to the request under 'fileUpload'
+      for (int i = 0; i < mediaFiles.length; i++) {
         request.files.add(await http.MultipartFile.fromPath(
-          'whouse_Img_2', _pickedImages[1].path,
-          filename: basename(_pickedImages[1].path),
-        ));
-      }
-
-      // Attach the first video to the request
-      if (_pickedVideos.length > 0) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'whouse_vid1', _pickedVideos[0].path,
-          filename: basename(_pickedVideos[0].path),
-        ));
-      }
-
-      // Attach the second video to the request if available
-      if (_pickedVideos.length > 1) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'whouse_vid2', _pickedVideos[1].path,
-          filename: basename(_pickedVideos[1].path),
+          'Filedata',
+          mediaFiles[i].path,
+          filename: basename(mediaFiles[i].path),
         ));
       }
 
@@ -133,7 +116,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
             backgroundColor: Colors.green,
           ),
         );
-        _clearAllFields();// Clear fields after successful upload
+        _clearAllFields(); // Clear fields after successful upload
         // Navigate to the Home Screen and remove back stack
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => HomeScreen()), // Replace HomeScreen() with your actual HomeScreen widget
@@ -156,6 +139,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
       });
     }
   }
+
 
 
   // Function to clear all fields after upload
@@ -255,7 +239,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  'Warehouse Images $totalmedia/4',
+                                  'Warehouse Images $totalmedia/20',
                                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: Colors.blue),
                                 ),
                                 const SizedBox(height: 16),
@@ -417,7 +401,6 @@ Widget _buildCounter(String label, int count,String name) {
       Text(name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400,color: Colors.grey)),
       const SizedBox(height: 4),
       Container(
-
         padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
         decoration: BoxDecoration(
           color: Colors.grey.shade300,
