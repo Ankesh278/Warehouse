@@ -36,6 +36,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
   String? selectedLocation;
   bool isLoading=false;
   late final  LatLng finalAddress;
+
   final List<String> _construction = [
     'Shed',
     'Cold Storage',
@@ -82,13 +83,15 @@ class _AddWareHouseState extends State<AddWareHouse> {
   void initState() {
     super.initState();
     _warehouseName.addListener(_updateTextLength);
+
   }
+
 
   void _updateTextLength() {
     if (_warehouseName.text.length > _maxLength) {
       _warehouseName.text = _warehouseName.text.substring(0, _maxLength);
       _warehouseName.selection = TextSelection.fromPosition(TextPosition(offset: _warehouseName.text.length));
-    }
+     }
     setState(() {}); // Refresh to update character count
   }
 
@@ -101,6 +104,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
     _maintenanceCost.dispose();
     _expectedSecurityDeposit.dispose();
     _tokenAdvance.dispose();
+    _totalCarpetArea.dispose();
     _expectedLockInPeriod.dispose();
     super.dispose();
   }
@@ -125,6 +129,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
 
       // Gather all data
       String warehousetype = _selectedWarehouseType!;
+      double totalcarpetArea =double.tryParse(_totalCarpetArea!.text)??0.0 ;
       String constructionType = _constructionType!;
       double carpetArea = double.tryParse(_carpetAreaController.text) ?? 0.0;
       double rentPerSqFt = double.tryParse(_rentPerSqFt.text) ?? 0.0;
@@ -139,6 +144,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
         'whouse_type2': constructionType,
         'whouse_address': finalAddress.toString(),
         'whouse_carperarea': carpetArea,
+        'warehouse_carpetarea': totalcarpetArea,
         'whouse_rent': rentPerSqFt,
         'whouse_maintenance': maintenanceCostValue,
         'whouse_expected': expectedSecurityDepositValue,
@@ -148,6 +154,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
         'isavilable': _isChecked,
         'whouse_floor': _number,
         'mobile': phone
+        //'Id':Id
       };
 
       print("Alldatass " + data.toString());
@@ -167,7 +174,6 @@ class _AddWareHouseState extends State<AddWareHouse> {
         // Decode the JSON response body
         try {
           final Map<String, dynamic> responseData = jsonDecode(response.body);
-
           // Check if the "status" is 201 for success
           if (response.statusCode == 200 && responseData['status'] == 200) {
             print('Data submitted successfully');
@@ -239,7 +245,6 @@ class _AddWareHouseState extends State<AddWareHouse> {
     _expectedLockInPeriod.clear();
     _warehouseName.clear();
     finalAddress=const LatLng(0.0, 0.0);
-
     // Reset other form fields
     _isChecked = false; // Reset checkbox
     _number = 1; // Reset number of floors or any other number field
@@ -249,14 +254,6 @@ class _AddWareHouseState extends State<AddWareHouse> {
     // Optionally call setState() to refresh the UI
     setState(() {});
   }
-
-
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -424,6 +421,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                         print("Selected Location: ${selectedLocation.latitude}, ${selectedLocation.longitude}");
 
                                       } else {
+
                                         print("No location selected");
                                       }
                                     },
@@ -668,6 +666,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                     validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
                                     controller: _warehouseName,
                                     decoration: const InputDecoration(
+
                                       hintText: 'ex. Thane Mumbai Warehouse',
                                       hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
                                       contentPadding: EdgeInsets.symmetric(vertical: 10.0),
@@ -680,7 +679,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                       ),
 
                                     ),
-                                    style: const TextStyle(fontSize: 22), // Set text size to 29
+                                    style: const TextStyle(fontSize: 14), // Set text size to 29
                                     maxLength: _maxLength, // Limit text length
                                     keyboardType: TextInputType.text, // If you expect numeric input
                                   ),
@@ -837,6 +836,7 @@ class CarpetAreaTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyle(fontSize: 14),
       keyboardType: TextInputType.number,
       controller: controller,
       validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
@@ -877,6 +877,7 @@ class TotalCarpetArea extends StatelessWidget {
       ),
 
       child: TextFormField(
+        style: TextStyle(fontSize: 14),
         controller: totalcarpetArea,
         keyboardType: TextInputType.number,
         validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
@@ -906,6 +907,7 @@ class rentPerSqFt extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyle(fontSize: 14),
       controller: controller,
       keyboardType: TextInputType.number,
       validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
@@ -938,6 +940,7 @@ class maintenanceCost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyle(fontSize: 14),
       keyboardType: TextInputType.number,
       controller: controller,
       validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
@@ -970,6 +973,7 @@ class ExpectedSecurityDeposit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyle(fontSize: 14),
       controller: controller,
       keyboardType: TextInputType.number,
       validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
@@ -1002,6 +1006,7 @@ class TokenAdvance extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyle(fontSize: 14),
       keyboardType: TextInputType.number,
       controller: controller,
       validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
@@ -1034,6 +1039,7 @@ class ExpectedLockInPeriod extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyle(fontSize: 14),
       keyboardType: TextInputType.number,
       controller: controller,
       validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,

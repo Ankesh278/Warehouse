@@ -1,13 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Partner/HelpPage.dart';
+import 'package:warehouse/Partner/HomeScreen.dart';
 import 'package:warehouse/Partner/MapScreen.dart';
 import 'package:warehouse/Partner/Provider/LocationProvider.dart';
+import 'package:warehouse/Partner/WarehouseImageScreen.dart';
+import 'package:warehouse/Partner/WarehouseMediaUpdate.dart';
 import 'package:warehouse/Partner/models/warehousesModel.dart';
+import 'package:http/http.dart' as http;
 
 class Warehouseupdate extends StatefulWidget {
   final Warehouse warehouse;
@@ -17,16 +24,26 @@ class Warehouseupdate extends StatefulWidget {
 }
 class _WarehouseupdateState extends State<Warehouseupdate> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _carpetAreaController=TextEditingController();
+  TextEditingController _totalCarpetArea=TextEditingController();
+  TextEditingController _rentPerSqFt=TextEditingController();
+  TextEditingController _maintenanceCost=TextEditingController();
+  TextEditingController _expectedSecurityDeposit=TextEditingController();
+  TextEditingController _tokenAdvance=TextEditingController();
+  TextEditingController _expectedLockInPeriod=TextEditingController();
+  TextEditingController _warehouseName=TextEditingController();
   final int _maxLength = 29;
   bool _isChecked = false;
   int _number = 0;
-  late String _address;
+  late String _address = "Fetching address...";  // Set a default value
+
 
   String? _selectedWarehouseType;
   String? _constructionType;
   String? selectedLocation;
   bool isLoading=false;
-  late final  LatLng finalAddress;
+  late LatLng finalAddress = const LatLng(0.0, 0.0); // Set default value
+
   LatLng? _latLng;
 
   void _increase() {
@@ -46,6 +63,18 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
   void initState() {
     super.initState();
     _getAddressFromLatLng();
+    _selectedWarehouseType=widget.warehouse.whouseType1;
+    _constructionType=widget.warehouse.whouseType2;
+    _number=widget.warehouse.whouseFloor;
+    _isChecked=widget.warehouse.isavilable;
+    _carpetAreaController.text=widget.warehouse.whouseCarpetArea.toString();
+    _totalCarpetArea.text=widget.warehouse.carpetArea.toString();
+    _rentPerSqFt.text=widget.warehouse.whouseRent.toString();
+    _maintenanceCost.text=widget.warehouse.whouseMaintenance.toString();
+    _expectedSecurityDeposit.text=widget.warehouse.whouseExpected.toString();
+    _tokenAdvance.text=widget.warehouse.whouseToken.toString();
+    _expectedLockInPeriod.text=widget.warehouse.whouseLockin.toString();
+    _warehouseName.text=widget.warehouse.whouseName.toString();
 
   }
 
@@ -81,14 +110,6 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
   }
 
 
-  // void _updateTextLength() {
-  //   if (_warehouseName.text.length > _maxLength) {
-  //     _warehouseName.text = _warehouseName.text.substring(0, _maxLength);
-  //     _warehouseName.selection = TextSelection.fromPosition(TextPosition(offset: _warehouseName.text.length));
-  //   }
-  //   setState(() {}); // Refresh to update character count
-  // }
-
   final List<String> _construction = [
     'Shed',
     'Cold Storage',
@@ -107,7 +128,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
     'Dark Store',
     'Commercial Building',
     'Independent House',
-    'Multi Storey Building',
+    'Multi Store Building',
     'Open Space',
     'RCC Structure',
     'Shed',
@@ -116,6 +137,156 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
     'Government or Public Warehouse',
     'Others',
   ];
+
+  Future<void> _submitForm() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String phone = prefs.getString("phone")!;
+    if (phone.startsWith("+91")) {
+      phone = phone.replaceFirst("+91", "");
+    }
+
+    print("Mobile>>>"+phone.toString());
+   // print(">>>>>>>>>>>>>>"+finalAddress.toString());
+
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+      // If finalAddress is still the default value, check if we can fall back on existing location data
+      LatLng addressToSubmit = finalAddress != const LatLng(0.0, 0.0)
+          ? finalAddress
+          : _latLng ?? const LatLng(0.0, 0.0); // Fallback to _latLng if available
+
+      // Gather all data
+      String warehousetype = _selectedWarehouseType!;
+      String constructionType = _constructionType!;
+      double carpetArea = double.tryParse(_carpetAreaController.text) ?? 0.0;
+      double totalcarpetArea = double.tryParse(_totalCarpetArea.text) ?? 0.0;
+      double rentPerSqFt = double.tryParse(_rentPerSqFt.text) ?? 0.0;
+      String maintenanceCostValue = _maintenanceCost.text.toString() ?? "0.0";
+      String expectedSecurityDepositValue = _expectedSecurityDeposit.text.toString() ?? "0.0";
+      String tokenAdvanceValue = _tokenAdvance.text.toString() ?? "0.0";
+      String expectedLockInPeriodValue = _expectedLockInPeriod.text.toString() ?? "0.0";
+      String warehouseNameValue = _warehouseName.text;
+
+      Map<String, dynamic> data = {
+        'whouse_type1': warehousetype,
+        'whouse_type2': constructionType,
+        'whouse_address':  addressToSubmit.toString(),
+        'whouse_carperarea': carpetArea,
+        'warehouse_carpetarea': totalcarpetArea,
+        'whouse_rent': rentPerSqFt,
+        'whouse_maintenance': maintenanceCostValue,
+        'whouse_expected': expectedSecurityDepositValue,
+        'whouse_token': tokenAdvanceValue,
+        'whouse_lockin': expectedLockInPeriodValue,
+        'whouse_name': warehouseNameValue,
+        'isavilable': _isChecked,
+        'whouse_floor': _number,
+        'Id': widget.warehouse.id,
+        'mobile':phone
+      };
+
+      print("Alldatass " + data.toString());
+
+      try {
+        final response = await http.patch(
+          Uri.parse('http://xpacesphere.com/api/Wherehousedt/Updwarehouse'),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(data),
+        );
+
+        print("ApiResponseBody" + response.body.toString());
+        print("ApiResponseCode" + response.statusCode.toString());
+
+       // Decode the JSON response body
+        try {
+          final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+          // Check if the "status" is 201 for success
+          if (response.statusCode == 200 && responseData['status'] == 200) {
+            print('Data Updated successfully');
+            // Navigate to WarehouseImageScreen
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) =>  WarehouseMediaUpdate(warehouse:widget.warehouse)),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Uploaded successfully'),
+                backgroundColor: Colors.green,
+              ),
+            );
+            _clearFormFields();
+            setState(() {
+              isLoading = false;
+            });
+
+
+          } else {
+            // Handle failure
+            print('Failed to submit data: ${response.statusCode}');
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Failed to upload data. Please try again.'),
+                backgroundColor: Colors.red,
+              ),
+            );
+            setState(() {
+              isLoading = false;
+            });
+          }
+        } catch (e) {
+          print('Error parsing response JSON: $e');
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text('Invalid response from the server.'),
+          //     backgroundColor: Colors.red,
+          //   ),
+          // );
+          setState(() {
+            isLoading = false;
+          });
+        }
+      } catch (e) {
+        print('Error occurred: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('An error occurred. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  // Function to clear form fields
+  void _clearFormFields() {
+    _carpetAreaController.clear();
+    _totalCarpetArea.clear();
+    _rentPerSqFt.clear();
+    _maintenanceCost.clear();
+    _expectedSecurityDeposit.clear();
+    _tokenAdvance.clear();
+    _expectedLockInPeriod.clear();
+    _warehouseName.clear();
+    finalAddress=const LatLng(0.0, 0.0);
+
+    // Reset other form fields
+    _isChecked = false; // Reset checkbox
+    _number = 1; // Reset number of floors or any other number field
+    _selectedWarehouseType = ''; // Reset dropdown
+    _constructionType = ''; // Reset dropdown
+
+    // Optionally call setState() to refresh the UI
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -244,7 +415,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                               children: [
                                                 Image.asset('assets/images/Worldwidelocation.png', width: 40, height: 40), // Replace with your image asset
                                                // const SizedBox(height: 20),
-                                                Text(_address ?? '', style: const TextStyle(color: Colors.grey, fontSize: 10)),
+                                                Text(_address.isNotEmpty ? _address : 'Address not available', style: const TextStyle(color: Colors.grey, fontSize: 10)),
                                                // const SizedBox(height: 10),
                                                 Container(
                                                   height: 100, // Height of the map container
@@ -329,12 +500,12 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                       ),
                                     ),
                                     child: DropdownButtonFormField<String>(
-                                      value: _selectedWarehouseType,
+                                      value: widget.warehouse.whouseType1,
                                       hint: const Text('Select Warehouse Type',style: TextStyle(color: Colors.grey,fontSize: 10),),
                                       items: warehouseTypes.map((String type) {
                                         return DropdownMenuItem<String>(
                                           value: type,
-                                          child: Text(type),
+                                          child: Text(type,style: TextStyle(fontSize: 14),),
                                         );
                                       }).toList(),
                                       onChanged: (String? newValue) {
@@ -374,12 +545,12 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                       ),
                                     ),
                                     child: DropdownButtonFormField<String>(
-                                      value: _constructionType,
+                                      value: widget.warehouse.whouseType2,
                                       hint: const Text('Select Construction Type',style: TextStyle(color: Colors.grey,fontSize: 10),),
                                       items: _construction.map((String type) {
                                         return DropdownMenuItem<String>(
                                           value: type,
-                                          child: Text(type),
+                                          child: Text(type,style: TextStyle(fontSize: 14),),
                                         );
                                       }).toList(),
                                       onChanged: (String? newValue) {
@@ -432,7 +603,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                               color: Colors.blue,
                                               alignment: Alignment.center,
                                               child: Text(
-                                                '$_number',
+                                                _number.toString(),
                                                 style: const TextStyle(fontSize: 14, color: Colors.white), // Adjusted font size
                                               ),
                                             ),
@@ -463,7 +634,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
 
                                     ],
                                   ),
-                                 // CarpetAreaTextFormField(controller: _carpetAreaController),
+                                  CarpetAreaTextFormField(controller: _carpetAreaController),
                                   Row(
                                     children: [
                                       Checkbox(
@@ -486,7 +657,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                     ],
                                   ),
                                   const Text("Total carpet area",style: TextStyle(color: Colors.grey,fontSize: 13,fontWeight: FontWeight.w600),),
-                                  //TotalCarpetArea(totalcarpetArea:_totalCarpetArea),
+                                  TotalCarpetArea(totalcarpetArea:_totalCarpetArea),
                                   const Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -495,7 +666,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
 
                                     ],
                                   ),
-                                 // rentPerSqFt(controller: _rentPerSqFt,),
+                                  rentPerSqFt(controller: _rentPerSqFt,),
                                   const Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -504,7 +675,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
 
                                     ],
                                   ),
-                                 // maintenanceCost(controller: _maintenanceCost,),
+                                  maintenanceCost(controller: _maintenanceCost,),
                                   const Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -513,7 +684,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
 
                                     ],
                                   ),
-                                 // ExpectedSecurityDeposit(controller: _expectedSecurityDeposit,),
+                                  ExpectedSecurityDeposit(controller: _expectedSecurityDeposit,),
                                   const Text("Security deposit: ₹0",style: TextStyle(color: Colors.grey,fontSize: 12),),
                                   const Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -523,7 +694,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
 
                                     ],
                                   ),
-                                 // TokenAdvance(controller: _tokenAdvance,),
+                                  TokenAdvance(controller: _tokenAdvance,),
                                   const Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -532,7 +703,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
 
                                     ],
                                   ),
-                                 // ExpectedLockInPeriod(controller: _expectedLockInPeriod,),
+                                  ExpectedLockInPeriod(controller: _expectedLockInPeriod,),
                                   Row(
                                     children: [
                                       const Text("Warehouse Name/Owner's name",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
@@ -545,7 +716,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                   ),
                                   TextFormField(
                                     validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
-                                   // controller: _warehouseName,
+                                    controller: _warehouseName,
                                     decoration: const InputDecoration(
                                       hintText: 'ex. Thane Mumbai Warehouse',
                                       hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
@@ -559,7 +730,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                       ),
 
                                     ),
-                                    style: const TextStyle(fontSize: 22), // Set text size to 29
+                                    style: const TextStyle(fontSize: 14), // Set text size to 29
                                     maxLength: _maxLength, // Limit text length
                                     keyboardType: TextInputType.text, // If you expect numeric input
                                   ),
@@ -580,7 +751,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                                 size: 50.0,
                                               )
                                                   :Text(
-                                                'Save & Proceed',
+                                                'Update  & Proceed',
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 16,
@@ -592,18 +763,69 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                       ),
                                     ),
                                     onTap: () {
-                                     // _submitForm();
-                                      // if (_formKey.currentState!.validate()) {
-                                      //   // Process data if the form is valid
+                                      _submitForm();
+                                     //  if (_formKey.currentState!.validate()) {
+                                     //    // Process data if the form is valid
+                                     //
+                                     //   // print("Form Submitted Successfully!");
+                                     //    // You can navigate to the next screen or process the data here
+                                     //  } else {
+                                     //    print("Form is invalid!");
+                                     //  }
+                                     //  _submitForm;
+                                     //  Navigator.push(
+                                     //      context, MaterialPageRoute(builder: (context) => WarehouseImageScreen()));
+                                    },
+                                  ),
+                                  InkWell(
+                                    child: Container(
+                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                                      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 50),
+                                      child: DottedBorder(
+                                        child: Container(
+                                          color: Colors.blue,
+                                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              isLoading?SpinKitCircle(
+                                                color: Colors.white,
+                                                size: 50.0,
+                                              )
+                                                  :Row(
+                                                    children: [
+                                                      Text(
+                                                                                                      'Skip for now',
+                                                                                                      style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                                                                      ),
+                                                                                                    ),
+                                                      Icon(Icons.skip_next_outlined,color: Colors.white,)
+                                                    ],
+                                                  ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                                      );
+
+                                      //  if (_formKey.currentState!.validate()) {
+                                      //    // Process data if the form is valid
                                       //
-                                      //  // print("Form Submitted Successfully!");
-                                      //   // You can navigate to the next screen or process the data here
-                                      // } else {
-                                      //   print("Form is invalid!");
-                                      // }
-                                      //_submitForm;
-                                      // Navigator.push(
-                                      //     context, MaterialPageRoute(builder: (context) => WarehouseImageScreen()));
+                                      //   // print("Form Submitted Successfully!");
+                                      //    // You can navigate to the next screen or process the data here
+                                      //  } else {
+                                      //    print("Form is invalid!");
+                                      //  }
+                                      //  _submitForm;
+                                      //  Navigator.push(
+                                      //      context, MaterialPageRoute(builder: (context) => WarehouseImageScreen()));
                                     },
                                   ),
 
@@ -627,6 +849,245 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
 
 
 }
+
+
+class CarpetAreaTextFormField extends StatelessWidget {
+  final TextEditingController controller;
+
+  const CarpetAreaTextFormField({super.key, required this.controller});
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      style: TextStyle(fontSize: 14),
+      keyboardType: TextInputType.number,
+      controller: controller,
+      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
+      decoration: InputDecoration(
+        hintText: 'Enter carpet area',
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
+        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        border: InputBorder.none,
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 1.0),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 1.0),
+        ),
+        suffix: Container(
+          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          child: const Text(
+            '|sqft',
+            style: TextStyle(color: Colors.grey, fontSize: 13),
+          ),
+        ),
+      ),
+    );
+  }
+}
+class TotalCarpetArea extends StatelessWidget {
+  final TextEditingController totalcarpetArea;
+
+  const TotalCarpetArea({super.key, required this.totalcarpetArea});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 33,
+      decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(6)
+      ),
+
+      child: TextFormField(
+        style: TextStyle(fontSize: 14),
+        controller: totalcarpetArea,
+        keyboardType: TextInputType.number,
+        validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
+        decoration: InputDecoration(
+          hintText: '0',
+          hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
+          contentPadding: const EdgeInsets.only(left: 8,bottom: 10), // Adjust vertical padding
+          border: InputBorder.none,
+
+
+          suffix: Container(
+            padding: const EdgeInsets.only(left: 8.0,right: 6), // Space between the text and the input
+            child: const Text(
+              '|sqft',
+              style: TextStyle(color: Colors.grey, fontSize: 13),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+class rentPerSqFt extends StatelessWidget {
+  final TextEditingController controller;
+
+  const rentPerSqFt({super.key, required this.controller});
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      style: TextStyle(fontSize: 14),
+      controller: controller,
+      keyboardType: TextInputType.number,
+      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
+      decoration: InputDecoration(
+        hintText: '₹|ex.35',
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
+        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        border: InputBorder.none,
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 1.0),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 1.0),
+        ),
+        suffix: Container(
+          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          child: const Text(
+            '|per month',
+            style: TextStyle(color: Colors.grey, fontSize: 13),
+          ),
+        ),
+      ),
+    );
+  }
+}
+class maintenanceCost extends StatelessWidget {
+  final TextEditingController controller;
+
+  const maintenanceCost({super.key, required this.controller});
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      style: TextStyle(fontSize: 14),
+      keyboardType: TextInputType.number,
+      controller: controller,
+      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
+      decoration: InputDecoration(
+        hintText: '₹|ex.2',
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
+        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        border: InputBorder.none,
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 1.0),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 1.0),
+        ),
+        suffix: Container(
+          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          child: const Text(
+            '|per month',
+            style: TextStyle(color: Colors.grey, fontSize: 13),
+          ),
+        ),
+      ),
+    );
+  }
+}
+class ExpectedSecurityDeposit extends StatelessWidget {
+  final TextEditingController controller;
+
+  const ExpectedSecurityDeposit({super.key, required this.controller});
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      style: TextStyle(fontSize: 14),
+      controller: controller,
+      keyboardType: TextInputType.number,
+      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
+      decoration: const InputDecoration(
+        hintText: 'ex.2',
+        hintStyle: TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
+        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        border: InputBorder.none,
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 1.0),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 1.0),
+        ),
+        // suffix: Container(
+        //   padding: EdgeInsets.only(left: 8.0), // Space between the text and the input
+        //   child: Text(
+        //     '|per month',
+        //     style: TextStyle(color: Colors.grey, fontSize: 13),
+        //   ),
+        // ),
+      ),
+    );
+  }
+}
+class TokenAdvance extends StatelessWidget {
+  final TextEditingController controller;
+
+  const TokenAdvance({super.key, required this.controller});
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      style: TextStyle(fontSize: 14),
+      keyboardType: TextInputType.number,
+      controller: controller,
+      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
+      decoration: InputDecoration(
+        hintText: 'ex.3',
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
+        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        border: InputBorder.none,
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 1.0),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 1.0),
+        ),
+        suffix: Container(
+          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          child: const Text(
+            '|per month',
+            style: TextStyle(color: Colors.grey, fontSize: 13),
+          ),
+        ),
+      ),
+    );
+  }
+}
+class ExpectedLockInPeriod extends StatelessWidget {
+  final TextEditingController controller;
+
+  const ExpectedLockInPeriod({super.key, required this.controller});
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      style: TextStyle(fontSize: 14),
+      keyboardType: TextInputType.number,
+      controller: controller,
+      validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
+      decoration: InputDecoration(
+        hintText: 'ex.18',
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
+        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        border: InputBorder.none,
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 1.0),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 1.0),
+        ),
+        suffix: Container(
+          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          child: const Text(
+            '|per month',
+            style: TextStyle(color: Colors.grey, fontSize: 13),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
 
 class DottedBorder extends StatelessWidget {
   final Widget child;

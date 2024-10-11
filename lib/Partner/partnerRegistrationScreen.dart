@@ -184,10 +184,11 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
                                     height: 50, // Maintain the original size and design
                                     child: ElevatedButton(
                                       onPressed: () async {
-                                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                                        prefs.setString("name", _firstNameController.text.toString());
+
 
                                         if (_formKey.currentState!.validate()) {
+                                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                                          prefs.setString("name", _firstNameController.text.toString());
                                           // Only proceed if form is valid
                                           Navigator.pushAndRemoveUntil(
                                             context,

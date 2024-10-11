@@ -7,6 +7,7 @@ class Warehouse {
   final String whouseType2;
   final int whouseFloor;
   final double whouseCarpetArea;
+  final double carpetArea;
   final bool isavilable;
   final double whouseRent;
   final String whouseMaintenance;
@@ -18,6 +19,7 @@ class Warehouse {
   final String whouseImg2;
   final String whouseVid1;
   final String whouseVid2;
+  final String filepath;
   final String mobile;
   final String dateTime;
 
@@ -28,9 +30,11 @@ class Warehouse {
     this.whouseType2 = '',
     this.whouseFloor = 0, // Default value for int
     this.whouseCarpetArea = 0.0, // Default value for int
+    this.carpetArea = 0.0, // Default value for int
     this.isavilable = true, // Default value for bool
     this.whouseRent = 0.0, // Default value for int
     this.whouseMaintenance = '', // Default value for String
+    this.filepath = '', // Default value for String
     this.whouseExpected = '', // Default value for String
     this.whouseToken = '', // Default value for String
     this.whouseLockin = '', // Default value for String
@@ -50,6 +54,9 @@ class Warehouse {
       whouseType1: json['whouse_type1'] ?? '',
       whouseType2: json['whouse_type2'] ?? '',
       whouseFloor: json['whouse_floor'] ?? 0,
+      carpetArea: (json['warehouse_carpetarea'] is int)
+          ? (json['warehouse_carpetarea'] as int).toDouble()
+          : json['warehouse_carpetarea'] ?? 0.0,
       // Cast to double if it's an int
       whouseCarpetArea: (json['whouse_carperarea'] is int)
           ? (json['whouse_carperarea'] as int).toDouble()
@@ -60,6 +67,7 @@ class Warehouse {
           ? (json['whouse_rent'] as int).toDouble()
           : json['whouse_rent'] ?? 0.0,
       whouseMaintenance: json['whouse_maintenance'] ?? '',
+      filepath: json['filepath'] ?? '',
       whouseExpected: json['whouse_expected'] ?? '',
       whouseToken: json['whouse_token'] ?? '',
       whouseLockin: json['whouse_lockin'] ?? '',
@@ -93,6 +101,7 @@ class Warehouse {
       'whouse_img_2': whouseImg2,
       'whouse_vid1': whouseVid1,
       'whouse_vid2': whouseVid2,
+      'filepath': filepath,
       'mobile': mobile,
       'dateTime': dateTime,
     };

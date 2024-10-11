@@ -1,18 +1,25 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Partner/AddWarehouse.dart';
+import 'package:warehouse/Partner/HelpPage.dart';
 import 'package:warehouse/Partner/MyProfilePage.dart';
 import 'package:warehouse/Partner/NotificationScreen.dart';
 import 'package:warehouse/Partner/Provider/warehouseProvider.dart';
-import 'package:warehouse/Partner/WarehouseItemDesign.dart';
 import 'package:warehouse/Partner/WarehouseUpdate.dart';
 import 'package:warehouse/Partner/models/warehousesModel.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:share_plus/share_plus.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class HomeScreen extends StatefulWidget {
   final String name;
@@ -24,7 +31,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<WarehouseResponse> futureWarehouseResponse;
+  final TextEditingController _searchcontroller=TextEditingController();
 
+  final String warehouseName = 'WarehouseX';
+  final String benefitsText =
+      'WarehouseX offers the best solutions for storing your goods securely and efficiently.';
+  final String appInfoText = 'Download WarehouseX app for amazing offers!';
   bool light = true;
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
@@ -36,6 +48,14 @@ class _HomeScreenState extends State<HomeScreen> {
     _pageController.jumpToPage(index);
   }
 
+
+
+  String? qrData; // This will hold the data to generate the QR code
+
+
+
+
+
   @override
   void initState() {
     print("Init State executed");
@@ -45,6 +65,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   }
+  String _limitDigits(int count) {
+    if (count >= 1000) {
+      return '999+';
+    } else {
+      return count.toString();
+    }
+  }
+
 
   Future<WarehouseResponse> fetchWarehouseData() async {
     print("fetch data executed");
@@ -77,6 +105,79 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _searchcontroller.dispose();
+  }
+  Future<void> _shareAppInfo() async {
+    try {
+      // Load assets
+      final ByteData logoData = await rootBundle.load('assets/images/house.png');
+      final ByteData warehouseImageData =
+      await rootBundle.load('assets/images/house1.png');
+
+      // Get temp directory and save the images as files
+      final tempDir = await getTemporaryDirectory();
+      final File logoFile = File('${tempDir.path}/house.png');
+      final File warehouseImageFile =
+      File('${tempDir.path}/house1.png');
+
+      await logoFile.writeAsBytes(logoData.buffer.asUint8List());
+      await warehouseImageFile.writeAsBytes(warehouseImageData.buffer.asUint8List());
+
+      // Use shareXFiles to share the files and additional text
+      await Share.shareXFiles(
+        [
+          XFile(logoFile.path),
+          XFile(warehouseImageFile.path),
+        ],
+        text: 'WarehouseX\nThe best warehouse business in town!\nContact us for more details.',
+        subject: 'WarehouseX Business Info',
+      );
+    } catch (e) {
+      print('Error sharing app info: $e');
+    }
+  }
+  void _showQrDialog(String data) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Warehouse'),
+          content: SizedBox(
+            height: 200, // Adjust height as needed
+            width: 200, // Adjust width as needed
+            child: QrImageView(
+              data: data, // The data to encode in the QR code
+              version: QrVersions.auto, // Automatically selects the best QR version
+              size: 150.0, // Size of the QR code
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  // Function to get address from latitude and longitude
+  Future<String> _getAddressFromLatLng(double latitude, double longitude) async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+      Placemark placemark = placemarks[0]; // Get the first placemark
+      return '${placemark.street}, ${placemark.locality}, ${placemark.postalCode}, ${placemark.country}'; // Format the address
+    } catch (e) {
+      print('Error getting address: $e');
+      return 'Unknown Location'; // Return a fallback in case of error
+    }
+  }
 
 
   @override
@@ -203,20 +304,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             Container(
                               margin: EdgeInsets.only(left: screenWidth * 0.030),
                               child: Text(
-                                // Check the length of the name and truncate if it's greater than 7 characters
                                 widget.name.isNotEmpty
                                     ? (widget.name.length > 7
-                                    ? '${widget.name.substring(0, 7)}...'
-                                    : widget.name)
+                                    ? '${widget.name.substring(0, 7)}...' // Truncate after 7 characters
+                                    : widget.name) // Show full name if it's 7 or fewer characters
                                     : 'Guest',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1, // Limit to one line
+                                overflow: TextOverflow.ellipsis, // Ellipsis if the text overflows
                                 style: TextStyle(
                                   fontSize: screenWidth * 0.05,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+
                             )
 
 
@@ -231,6 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Container(
                               height: 35,
                               child: TextFormField(
+                                controller: _searchcontroller,
                                 decoration: InputDecoration(
                                   hintText: 'Search by location',
                                   hintStyle: const TextStyle(color: Colors.blueGrey, fontSize: 12),
@@ -278,8 +380,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           onTap: (){
-                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>HelpPage()));
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const Warehouseitemdesign()));
+                             Navigator.push(context, MaterialPageRoute(builder: (context)=>HelpPage()));
+                           // Navigator.push(context, MaterialPageRoute(builder: (context)=>const Warehouseitemdesign()));
 
                           },
                         ),
@@ -471,11 +573,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           print("availability"+warehouse.isavilable.toString());
                           bool isavail = warehouseProvider.warehouseStatus[warehouse.id] ?? warehouse.isavilable;
 
+
                          // bool isavail=warehouse.isavilable;
 
                           // print("carpetarea"${warehouse.whouseCarpetArea});
                           return GestureDetector(
                             onTap: (){
+
                               Navigator.push(context, MaterialPageRoute(builder: (context)=>Warehouseupdate( warehouse: warehouse,)));
                             },
                             child: Column(
@@ -496,17 +600,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: Row(
                                               children: [
                                                 Text(
-
-                                                  warehouse.whouseName,
+                                                  warehouse.whouseName.isNotEmpty
+                                                      ? (warehouse.whouseName.length > 7
+                                                      ? '${warehouse.whouseName.substring(0, 7)}...' // Truncate after 7 characters
+                                                      : warehouse.whouseName) // Show full name if it's 7 or fewer characters
+                                                      : 'N/A', // Provide a fallback if the name is empty
                                                   style: const TextStyle(
-                                                      fontSize: 16, fontWeight: FontWeight.w700),
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
                                                 ),
+
                                                 const Spacer(),
-                                                Image.asset("assets/images/Share.png"),
+                                                InkWell(child: Image.asset("assets/images/Share.png")
+                                                ,onTap:  (){
+                                                  _shareAppInfo();
+                                                  },
+                                                ),
                                                 const SizedBox(
                                                   width: 15,
                                                 ),
-                                                Image.asset("assets/images/QrCode.png"),
+                                                InkWell(child: Image.asset("assets/images/QrCode.png"),
+                                                onTap: (){
+                                                  // Set QR data to the specific warehouse information
+                                                  String data = 'Warehouse Name: ${warehouse.whouseName}\nLocation: ${warehouse.whouseAddress}\nContact: ${warehouse.mobile}'; // Customize this
+                                                  _showQrDialog(data); // Show the QR dialog
+                                                },
+                                                ),
                                                 const SizedBox(
                                                   width: 15,
                                                 )
@@ -548,21 +668,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 SizedBox(width: screenWidth * 0.05 ),
-                                                 Text(
-                                                  warehouse.whouseCarpetArea.toString()+" sq.ft",
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.w500,
-                                                      color: Colors.black,
-                                                      fontSize: 15),
+                                                Text(
+                                                  warehouse.whouseCarpetArea != null
+                                                      ? (warehouse.whouseCarpetArea.toString().length > 6
+                                                      ? '${warehouse.whouseCarpetArea.toString().substring(0, 6)}... sq.ft'
+                                                      : '${warehouse.whouseCarpetArea} sq.ft')
+                                                      : 'N/A',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                  ),
                                                 ),
+
                                                 Spacer(),
-                                                 Text(
-                                                  "₹ ${warehouse.whouseRent}",
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.w500,
-                                                      color: Colors.black,
-                                                      fontSize: 15),
+                                                Text(
+                                                  warehouse.whouseRent != null
+                                                      ? (warehouse.whouseRent.toString().length > 6
+                                                      ? '₹ ${warehouse.whouseRent.toString().substring(0, 6)}...'
+                                                      : '₹ ${warehouse.whouseRent}')
+                                                      : '₹ N/A',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                  ),
                                                 ),
+
                                                 SizedBox(width: screenWidth * 0.1)
                                               ],
                                             ),
@@ -601,37 +733,71 @@ class _HomeScreenState extends State<HomeScreen> {
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Flexible(
-                                                    flex: 4,
-                                                    child: Container(
-                                                      height: 25,
-                                                      decoration: BoxDecoration(
-                                                          color: const Color(0xffF0F4FD),
-                                                          border: Border.all(color:  const Color(0xffF0F4FD))),
-                                                      child: const Center(child: Text("View Request  | 0",style: TextStyle(color: Colors.black,fontSize: 10,fontWeight: FontWeight.w400),)),
-                                                    )),
+                                                  flex: 4,
+                                                  child: Container(
+                                                    height: 25,
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(0xffF0F4FD),
+                                                      border: Border.all(color: const Color(0xffF0F4FD)),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "View Request | ${_limitDigits(0)}", // Limit to 3 digits
+                                                        style: const TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 10,
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                                 const SizedBox(width: 5),
                                                 Flexible(
-                                                    flex: 3,
-                                                    child: Container(
-                                                        height: 25,
-                                                        decoration: BoxDecoration(
-                                                            color:  const Color(0xffF0F4FD),
-                                                            border: Border.all(color:  const Color(0xffF0F4FD))),
-                                                        child: const Center(child: Text("Bids  | 0",style: TextStyle(color: Colors.black,fontSize: 10,fontWeight: FontWeight.w400),))
-                                                    )),
+                                                  flex: 3,
+                                                  child: Container(
+                                                    height: 25,
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(0xffF0F4FD),
+                                                      border: Border.all(color: const Color(0xffF0F4FD)),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Bids | ${_limitDigits(0)}", // Limit to 3 digits
+                                                        style: const TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 10,
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                                 const SizedBox(width: 5),
                                                 Flexible(
-                                                    flex: 4,
-                                                    child: Container(
-                                                        height: 25,
-                                                        decoration: BoxDecoration(
-                                                            color:  const Color(0xffF0F4FD),
-                                                            border: Border.all(color:  const Color(0xffF0F4FD))),
-                                                        child: const Center(child: Text("Contracts  | 0",style: TextStyle(color: Colors.black,fontSize: 10,fontWeight: FontWeight.w400),))
-                                                    )),
+                                                  flex: 4,
+                                                  child: Container(
+                                                    height: 25,
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(0xffF0F4FD),
+                                                      border: Border.all(color: const Color(0xffF0F4FD)),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Contracts | ${_limitDigits(0)}", // Limit to 3 digits
+                                                        style: const TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 10,
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                               ],
                                             ),
-                                          ),
+                                          )
+                                          ,
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -689,7 +855,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+
   }
+
 
 
   Widget _buildNotificationPage(double screenWidth, double screenHeight) {

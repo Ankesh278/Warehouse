@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,19 +7,17 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Partner/HomeScreen.dart';
-
 class WarehouseImageScreen extends StatefulWidget {
   const WarehouseImageScreen({super.key});
-
   @override
   State<WarehouseImageScreen> createState() => _WarehouseImageScreenState();
 }
-
 class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
   int totalmedia=0;
   int _photoCount = 0;
   int _videoCount = 0;
   double _progress = 0.0;
+  late int Id;
   final List<XFile> _pickedImages = [];
   final List<XFile> _pickedVideos = [];
   bool _isUploading = false;
@@ -67,6 +65,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
   Future<void> _uploadMedia(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String phone = prefs.getString("phone")!;
+    String id = prefs.getString("id")!;
     if (phone.startsWith("+91")) {
       phone = phone.replaceFirst("+91", "");
     }
@@ -89,8 +88,13 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
       mediaFiles.addAll(_pickedImages.map((xFile) => File(xFile.path)));
       mediaFiles.addAll(_pickedVideos.map((xFile) => File(xFile.path)));
 
+      // DEBUG: Print the number of media files being uploaded
+      print("Number of media files: ${mediaFiles.length}");
+
       // Attach all media files to the request under 'fileUpload'
       for (int i = 0; i < mediaFiles.length; i++) {
+        // DEBUG: Print each file's path and name before attaching
+        print("Uploading file ${i + 1}: ${mediaFiles[i].path}");
         request.files.add(await http.MultipartFile.fromPath(
           'Filedata',
           mediaFiles[i].path,
@@ -99,7 +103,12 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
       }
 
       // Add the mobile number as form data
-      request.fields['mobile'] = phone;
+     // request.fields['mobile'] = phone;
+      request.fields['Id']=id;
+
+      // DEBUG: Print form fields being sent
+      print("Form fields: mobile=$phone, Id=$id");
+
 
       // Send the request to the server
       var response = await request.send();
@@ -110,8 +119,23 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
           _isUploading = false;
         });
         print("Files uploaded successfully!");
+        // Read the response as a string and parse it if needed
+        String responseString = await response.stream.bytesToString();
+        print("Response body: $responseString");
+
+        // Optionally, parse the response as JSON if it's JSON-formatted
+        try {
+          var responseJson = jsonDecode(responseString);
+          String message = responseJson['message']; // Adjust the key based on your API response
+          int code = responseJson['status']; // Adjust the key based on your API response
+          print("Message: $message");
+          print("Status: $code");
+        } catch (e) {
+          print("Error parsing response JSON: $e");
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Photos and Videos Uploaded...'),
             backgroundColor: Colors.green,
           ),
@@ -119,7 +143,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
         _clearAllFields(); // Clear fields after successful upload
         // Navigate to the Home Screen and remove back stack
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => HomeScreen()), // Replace HomeScreen() with your actual HomeScreen widget
+          MaterialPageRoute(builder: (context) => const HomeScreen()), // Replace HomeScreen() with your actual HomeScreen widget
               (Route<dynamic> route) => false, // Remove all previous routes
         );
       } else {
@@ -154,7 +178,65 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
     });
   }
 
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getId();
+  }
+  Future<String?> getId() async {
+    String apiUrl = "http://xpacesphere.com/api/Wherehousedt/GetWarehouseId";
 
+    // Retrieve the phone number from shared preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String phone = prefs.getString("phone")!;
+
+    // Strip out +91 if it's there
+    if (phone.startsWith("+91")) {
+      phone = phone.replaceFirst("+91", "");
+    }
+
+    try {
+      // Send GET request with mobile as a query parameter
+      final response = await http.get(
+        Uri.parse('$apiUrl?mobile=$phone'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      // Check if the request was successful (status code 200)
+      if (response.statusCode == 200) {
+        // Parse the response body
+        var jsonResponse = jsonDecode(response.body);
+
+        // Check if the id is an int and convert it to a String if necessary
+        Id = jsonResponse['id'];
+        prefs.setString("id",Id.toString());
+
+        // Convert id to a String for printing or return
+        if (Id is int) {
+          print("Iddddd: ${Id.toString()}");
+          // Convert int to string for printing
+          return Id.toString();
+        } else if (Id is String) {
+          print("Iddddd: $Id");  // Already a string, print it directly
+          return Id.toString();
+        } else {
+          print('Unexpected id type: ${Id.runtimeType}');
+          return null;
+        }
+      } else {
+        // Handle error if status code is not 200
+        print('Failed to load data. Status code: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      // Handle any exceptions that occur during the HTTP request
+      print('Error occurred: $e');
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +373,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                 ),
 
                                 const SizedBox(height: 16),
-                                _isUploading?SpinKitCircle(
+                                _isUploading?const SpinKitCircle(
                                   color: Colors.blue,
                                   size: 50.0,
                                 ):
@@ -422,27 +504,3 @@ Widget _buildCounter(String label, int count,String name) {
     ],
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

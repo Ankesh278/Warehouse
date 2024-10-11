@@ -1,12 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:warehouse/MyHomePage.dart';
 
 
 class MyProfilePage extends StatefulWidget {
+  final String phoneNumber = "tel:+91 9830268966";
+  const MyProfilePage({super.key});
+
   @override
   State<MyProfilePage> createState() => _MyProfilePageState();
 }
@@ -34,7 +38,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
       // Navigate to the Login Page and remove all previous routes
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => MyHomePage()), // Replace with your login page
+        MaterialPageRoute(builder: (context) => const MyHomePage()), // Replace with your login page
             (route) => false,
       );
     } catch (e) {
@@ -51,14 +55,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
       barrierDismissible: false, // Disable dismiss on tapping outside
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
+          title: const Text(
             "Log Out",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red, // Red title for log out warning
             ),
           ),
-          content: Row(
+          content: const Row(
             children: [
               Icon(Icons.warning_amber_rounded, color: Colors.red),
               SizedBox(width: 10),
@@ -75,7 +79,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               onPressed: () {
                 Navigator.of(context).pop(false); // Stay logged in
               },
-              child: Text(
+              child: const Text(
                 "No",
                 style: TextStyle(
                   color: Colors.green, // Green color for "No" button
@@ -90,7 +94,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red, // Red color for "Yes" button
               ),
-              child: Text(
+              child: const Text(
                 "Yes",
                 style: TextStyle(
                   color: Colors.white,
@@ -102,6 +106,67 @@ class _MyProfilePageState extends State<MyProfilePage> {
         );
       },
     );
+  }
+
+  String name="";
+  String phone="";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getShareData();
+  }
+  getShareData() async {
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    name=pref.getString("name")!;
+    phone=pref.getString("phone")!;
+
+    // Use setState to update the UI after data is loaded
+    setState(() {
+      name = name  ?? 'Unknown User'; // Set a default value if null
+      phone = phone ?? 'No Phone';
+    });
+
+    print("name::::::"+name);
+    print("[phone]::::::"+phone);
+
+  }
+
+  // Function to launch the dialer with the provided phone number
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    // Request phone permission
+    var status = await Permission.phone.status;
+
+    if (status.isDenied) {
+      // Request permission if it's denied
+      await Permission.phone.request();
+      status = await Permission.phone.status; // Check status again after requesting
+    }
+
+    // Proceed if the permission is granted
+    if (status.isGranted) {
+      final Uri launchUri = Uri(
+        scheme: 'tel:+91 ',
+        path: phoneNumber,
+      );
+
+      print("Trying to launch: $launchUri"); // Print the URI to the console
+
+      // Check if the device can launch the dialer
+      if (await canLaunchUrl(launchUri)) {
+        try {
+          await launchUrl(launchUri);
+          print("Dialer opened successfully");
+        } catch (e) {
+          print("Failed to launch dialer: $e");
+        }
+      } else {
+        print("Could not launch the dialer for $phoneNumber");
+      }
+    } else {
+      print("Phone permission not granted");
+    }
   }
 
   @override
@@ -149,41 +214,51 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   SizedBox(height: screenHeight*0.14,),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 13),
-                                    height: 35,
-                                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.blue,
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: Colors.blue),
-                                    ),
-                                    child: Row(
+                                  InkWell(
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 13),
+                                      height: 35,
+                                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(color: Colors.blue),
+                                      ),
+                                      child: Row(
 
-                                      children: [
+                                        children: [
 
-                                        Container(
-                                          height: 34,
-                                          width: 34,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(5)
+                                          Container(
+                                            height: 34,
+                                            width: 34,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(5)
+                                            ),
+                                            child: const Icon(Icons.wifi_calling_3_outlined,color: Colors.blue,),
+
                                           ),
-                                          child: const Icon(Icons.wifi_calling_3_outlined,color: Colors.blue,),
-                                        
-                                        ),
-                                        const SizedBox(width: 15),
-                                        const Text(
-                                          "Call for Assistance",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w400,
+                                          const SizedBox(width: 15),
+                                          const Text(
+                                            "Call for Assistance",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
-                                        ),
 
-                                      ],
+                                        ],
+                                      ),
                                     ),
+                                    onTap: () async{
+                                      final call = Uri.parse('tel:+91 7007221530');
+                                      if (await canLaunchUrl(call)) {
+                                        launchUrl(call);
+                                      } else {
+                                        throw 'Could not launch $call';
+                                      }
+                                    },
                                   ),
                                   const Padding(
                                     padding: EdgeInsets.only(left: 13.0,top: 10),
@@ -217,9 +292,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
+                                          ),
                                         )
 
 
@@ -253,10 +331,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
+                                          ),
                                         )
+
 
 
                                       ],
@@ -289,10 +371,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
+                                          ),
                                         )
+
 
 
                                       ],
@@ -330,10 +416,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
+                                          ),
                                         )
+
 
 
                                       ],
@@ -366,10 +456,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
+                                          ),
                                         )
+
 
 
                                       ],
@@ -402,10 +496,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
+                                          ),
                                         )
+
 
 
                                       ],
@@ -444,10 +542,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
+                                          ),
                                         )
+
 
 
                                       ],
@@ -480,10 +582,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
+                                          ),
                                         )
+
 
 
                                       ],
@@ -590,17 +696,30 @@ class _MyProfilePageState extends State<MyProfilePage> {
                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Spacer(),
-                  const Text("Ankesh Yadav",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w800),),
-                 // SizedBox(height: 10,),
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 25),
+                  Text(
+                    name.length > 10 ? '${name.substring(0, 10)}...' : name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+
+                  // SizedBox(height: 10,),
+                   Padding(
+                    padding: const EdgeInsets.only(bottom: 25),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.wifi_calling_3_outlined,color: Colors.blue,),
-                        SizedBox(width: 20,),
-                        Text("+91 700XX900XXX",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
+                        const Icon(Icons.wifi_calling_3_outlined,color: Colors.blue,),
+                        const SizedBox(width: 15,),
+                        Text(
+                          phone.length > 13 ? '${phone.substring(0, 13)}...' : phone,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
 
                       ],
                     ),
