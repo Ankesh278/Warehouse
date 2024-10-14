@@ -5,10 +5,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:warehouse/MyHomePage.dart';
+import 'package:warehouse/User/userlogin.dart';
 
 
 class MyProfilePage extends StatefulWidget {
-  final String phoneNumber = "tel:+91 9830268966";
   const MyProfilePage({super.key});
 
   @override
@@ -38,7 +38,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
       // Navigate to the Login Page and remove all previous routes
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const MyHomePage()), // Replace with your login page
+        MaterialPageRoute(builder: (context) =>  userlogin()), // Replace with your login page
             (route) => false,
       );
     } catch (e) {
@@ -133,41 +133,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   }
 
-  // Function to launch the dialer with the provided phone number
-  Future<void> _makePhoneCall(String phoneNumber) async {
-    // Request phone permission
-    var status = await Permission.phone.status;
 
-    if (status.isDenied) {
-      // Request permission if it's denied
-      await Permission.phone.request();
-      status = await Permission.phone.status; // Check status again after requesting
-    }
-
-    // Proceed if the permission is granted
-    if (status.isGranted) {
-      final Uri launchUri = Uri(
-        scheme: 'tel:+91 ',
-        path: phoneNumber,
-      );
-
-      print("Trying to launch: $launchUri"); // Print the URI to the console
-
-      // Check if the device can launch the dialer
-      if (await canLaunchUrl(launchUri)) {
-        try {
-          await launchUrl(launchUri);
-          print("Dialer opened successfully");
-        } catch (e) {
-          print("Failed to launch dialer: $e");
-        }
-      } else {
-        print("Could not launch the dialer for $phoneNumber");
-      }
-    } else {
-      print("Phone permission not granted");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

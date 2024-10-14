@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:warehouse/MyHomePage.dart';
+import 'package:warehouse/User/userlogin.dart';
 
 
 class userProfileScreen extends StatefulWidget {
@@ -16,9 +18,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
   late String Name='';
   @override
   void initState() {
-    print("Staterrrrr");
     super.initState();
-    print("ab call kr rhe hau shared ko");
     getSharedPreference();
   }
 
@@ -44,7 +44,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
 
       // Navigate to the Login Page and remove all previous routes
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => MyHomePage()), // Replace with your login page
+        MaterialPageRoute(builder: (context) => userlogin()), // Replace with your login page
             (route) => false,
       );
     } catch (e) {
@@ -228,7 +228,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                   ),
                                   SizedBox(height: screenHeight*0.02,),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 13),
+                                    margin: const EdgeInsets.symmetric(horizontal: 20),
                                     height: 35,
                                     padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                                     decoration: BoxDecoration(
@@ -251,26 +251,36 @@ class _userProfileScreenState extends State<userProfileScreen> {
 
                                         ),
                                         const SizedBox(width: 15),
-                                        const Text(
-                                          "Call for Assistance",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w400,
+                                        InkWell(
+                                          child: const Text(
+                                            "Call for Assistance",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
+                                          onTap: () async {
+                                            final call = Uri.parse('tel:+91 7007221530');
+                                            if (await canLaunchUrl(call)) {
+                                            launchUrl(call);
+                                            } else {
+                                            throw 'Could not launch $call';
+                                            }
+                                          },
                                         ),
 
                                       ],
                                     ),
                                   ),
                                   const Padding(
-                                    padding: EdgeInsets.only(left: 13.0,top: 10),
+                                    padding: EdgeInsets.only(left: 20.0,top: 10),
                                     child: Text("Account",style: TextStyle(fontWeight: FontWeight.w600),),
 
 
                                   ),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 13),
+                                    margin: const EdgeInsets.symmetric(horizontal: 20),
                                     height: 35,
                                     padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                                     decoration: BoxDecoration(
@@ -295,9 +305,12 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color: Colors.grey,),
+                                          ),
                                         )
 
 
@@ -306,7 +319,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                   ),
                                   SizedBox(height: screenHeight*0.02,),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 13),
+                                    margin: const EdgeInsets.symmetric(horizontal: 20),
                                     height: 35,
                                     padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                                     decoration: BoxDecoration(
@@ -331,9 +344,12 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color: Colors.grey,),
+                                          ),
                                         )
 
 
@@ -342,7 +358,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                   ),
                                   SizedBox(height: screenHeight*0.02,),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 13),
+                                    margin: const EdgeInsets.symmetric(horizontal: 20),
                                     height: 35,
                                     padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                                     decoration: BoxDecoration(
@@ -367,23 +383,25 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                          ),
                                         )
-
 
                                       ],
                                     ),
                                   ),
                                   const Padding(
-                                    padding: EdgeInsets.only(left: 13.0,top: 10,bottom: 10),
+                                    padding: EdgeInsets.only(left: 20.0,top: 10,bottom: 5),
                                     child: Text("General",style: TextStyle(fontWeight: FontWeight.w600),),
 
 
                                   ),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 13),
+                                    margin: const EdgeInsets.symmetric(horizontal: 20),
                                     height: 35,
                                     padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                                     decoration: BoxDecoration(
@@ -408,9 +426,12 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                          ),
                                         )
 
 
@@ -419,7 +440,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                   ),
                                   SizedBox(height: screenHeight*0.02,),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 13),
+                                    margin: const EdgeInsets.symmetric(horizontal: 20),
                                     height: 35,
                                     padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                                     decoration: BoxDecoration(
@@ -444,9 +465,12 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                          ),
                                         )
 
 
@@ -455,7 +479,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                   ),
                                   SizedBox(height: screenHeight*0.02,),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 13),
+                                    margin: const EdgeInsets.symmetric(horizontal: 20),
                                     height: 35,
                                     padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                                     decoration: BoxDecoration(
@@ -480,24 +504,26 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                          ),
                                         )
-
 
                                       ],
                                     ),
                                   ),
                                   const Padding(
-                                    padding: EdgeInsets.only(left: 13.0,top: 10,bottom: 10),
+                                    padding: EdgeInsets.only(left: 20.0,top: 10,bottom: 5),
                                     child: Text("General",style: TextStyle(fontWeight: FontWeight.w600),),
 
 
                                   ),
                                   SizedBox(height: screenHeight*0.01,),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 13),
+                                    margin: const EdgeInsets.symmetric(horizontal: 20),
                                     height: 35,
                                     padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                                     decoration: BoxDecoration(
@@ -522,9 +548,12 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                          ),
                                         )
 
 
@@ -533,7 +562,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                   ),
                                   SizedBox(height: screenHeight*0.01,),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 13),
+                                    margin: const EdgeInsets.symmetric(horizontal: 20),
                                     height: 35,
                                     padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                                     decoration: BoxDecoration(
@@ -558,9 +587,12 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child:  Icon(Icons.arrow_forward_ios,size: 20,),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                          ),
                                         )
 
 
@@ -571,7 +603,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                   Center(
                                     child: InkWell(
                                       child: const Padding(
-                                        padding: EdgeInsets.only(left: 13.0, top: 10, bottom: 10),
+                                        padding: EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
                                         child: Row(
                                           children: [
                                             Icon(Icons.logout_rounded, color: Colors.red),
@@ -597,7 +629,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                     ),
                                   ),
                                   Padding(
-                                      padding: const EdgeInsets.only(left: 13.0,top: 0,bottom: 0),
+                                      padding: const EdgeInsets.only(left: 20.0,top: 0,bottom: 0),
                                       child:Row(
                                         children: [
                                           Container(
@@ -612,18 +644,27 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                           const SizedBox(width: 15,),
                                           const Text("Follow us on : ",style: TextStyle(fontWeight: FontWeight.w500),),
                                           const SizedBox(width: 15,),
-                                          Image.asset("assets/images/Facebook.png"),
+                                          InkWell(child: Image.asset("assets/images/Facebook.png"),
+                                          onTap: (){
+                                           _openFacebookProfile();
+                                          },
+                                          ),
                                           const SizedBox(width: 15,),
-                                          Image.asset("assets/images/Instagram.png"),
+                                          InkWell(child: Image.asset("assets/images/Instagram.png"),
+                                          onTap: (){
+                                            _openInstagramProfile();
+                                          },
+                                          ),
                                           const SizedBox(width: 15,),
-                                          Image.asset("assets/images/TwitterX.png")
-
+                                          InkWell(child: Image.asset("assets/images/TwitterX.png"),
+                                          onTap: (){
+                                            _openTwitterProfile();
+                                          },
+                                          )
                                         ],
                                       )
-
-
                                   ),
-
+                                  SizedBox(height: screenHeight*0.04,),
                                 ],
                               ),
                             ),
@@ -710,7 +751,58 @@ class _userProfileScreenState extends State<userProfileScreen> {
 
     // Use a fallback value or handle null cases
     Name =await prefs.getString("Name") ?? "Default Name"; // Provide a default value
-    phone =await prefs.getString("phone") ?? "Default Phone"; // Provide a default value
+    phone =await prefs.getString("phone") ?? "Default Phone";
+    setState(() {
+
+    });// Provide a default value
   }
 
+}
+// Function to launch Instagram app or web page
+void _openInstagramProfile() async {
+  const String instagramUrl = 'instagram://user?username=a_tinyhunter';
+  const String fallbackUrl = 'https://www.instagram.com/a_tinyhunter/';
+
+  try {
+    bool launched = await launchUrl(Uri.parse(instagramUrl), mode: LaunchMode.externalApplication);
+    if (!launched) {
+      // If Instagram app isn't installed, open in browser
+      await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+    }
+  } catch (e) {
+    // In case any error occurs, open fallback URL in browser
+    await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+  }
+}
+// Function to launch Facebook app or web page
+void _openFacebookProfile() async {
+  const String facebookAppUrl = 'fb://profile/100009158840334';
+  const String fallbackUrl = 'https://www.facebook.com/profile.php?id=100009158840334';
+
+  try {
+    bool launched = await launchUrl(Uri.parse(facebookAppUrl), mode: LaunchMode.externalApplication);
+    if (!launched) {
+      // If Facebook app isn't installed, open in browser
+      await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+    }
+  } catch (e) {
+    // In case any error occurs, open fallback URL in browser
+    await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+  }
+}
+// Function to launch Twitter app or web page
+void _openTwitterProfile() async {
+  const String twitterAppUrl = 'twitter://user?screen_name=AnkeshYada78626';
+  const String fallbackUrl = 'https://twitter.com/AnkeshYada78626';
+
+  try {
+    bool launched = await launchUrl(Uri.parse(twitterAppUrl), mode: LaunchMode.externalApplication);
+    if (!launched) {
+      // If Twitter app isn't installed, open in browser
+      await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+    }
+  } catch (e) {
+    // In case any error occurs, open fallback URL in browser
+    await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+  }
 }

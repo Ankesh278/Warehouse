@@ -6,6 +6,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/User/getuserlocation.dart';
 import 'package:warehouse/User/userHomePage.dart';
+import 'package:warehouse/newHomePage.dart';
 
 class userverifyotp extends StatefulWidget {
   final String verificationId; // This will be passed from _submitForm
@@ -47,7 +48,7 @@ class _userverifyotpState extends State<userverifyotp> {
       print("sharedsebhi"+prefs.getString("phone")!);
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => userHomePage()),
+        MaterialPageRoute(builder: (context) => newHomePage()),
             (Route<dynamic> route) => false, // This removes all previous routes
       );
     } catch (e) {

@@ -14,6 +14,8 @@ import 'package:warehouse/Partner/Provider/LocationProvider.dart';
 import 'package:warehouse/Partner/Provider/warehouseProvider.dart';
 import 'package:warehouse/User/UserProvider/AuthUserProvider.dart';
 import 'package:warehouse/User/userHomePage.dart';
+import 'package:warehouse/User/userlogin.dart';
+import 'package:warehouse/newHomePage.dart';
 import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -177,8 +179,8 @@ class _MyAppState extends State<MyApp> {
           return widget.isLoggedIn
               ? HomeScreen(name: widget.name)
               : widget.isUserLoggedIn
-              ? userHomePage()
-              : const MyHomePage();
+              ? newHomePage()
+              :  userlogin();
         },
       ),
     );

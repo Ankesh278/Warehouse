@@ -1,23 +1,21 @@
 import 'dart:async';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:warehouse/Partner/AddWarehouse.dart';
-import 'package:warehouse/Partner/MyProfilePage.dart';
-import 'package:warehouse/Partner/NotificationScreen.dart';
-import 'package:warehouse/Partner/WarehouseItemDesign.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:warehouse/Partner/HomeScreen.dart';
 import 'package:warehouse/User/searchLocationUser.dart';
 import 'package:warehouse/User/userNotificationScreen.dart';
 import 'package:warehouse/User/userProfileScreen.dart';
 import 'package:warehouse/User/userShortlistedintrested.dart';
 import 'package:warehouse/User/wareHouseDetails.dart';
-import 'package:warehouse/newHomePage.dart';
+import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
-class userHomePage extends StatefulWidget {
+class newHomePage extends StatefulWidget {
   @override
-  State<userHomePage> createState() => _userHomePageState();
+  State<newHomePage> createState() => _newHomePageState();
 }
 
-class _userHomePageState extends State<userHomePage> {
+class _newHomePageState extends State<newHomePage>with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
   PageController _pageController = PageController();
 
@@ -28,13 +26,21 @@ class _userHomePageState extends State<userHomePage> {
     _pageController.jumpToPage(index);
   }
   int _currentIndex = 0;
+  int _trnasportIndex = 0;
+  int _manpowertIndex = 0;
+  int _agricultureIndex = 0;
   final List<String> _images = [
     'assets/images/slider3.jpg', // First Image URL
     'assets/images/slider2.jpg', // Second Image URL
   ];
 
   late PageController _pageControllerSlider;
+  late PageController _trnasportConmtroller;
+  late PageController _manpowerController;
+  late PageController _agricultureController;
   late Timer _timer;
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   bool isSortApplied = false;
   bool isNearbyEnabled = false;
@@ -47,9 +53,12 @@ class _userHomePageState extends State<userHomePage> {
   void initState() {
     super.initState();
     _pageControllerSlider = PageController(initialPage: _currentIndex);
+    _trnasportConmtroller = PageController(initialPage: _trnasportIndex);
+    _manpowerController = PageController(initialPage: _manpowertIndex);
+    _agricultureController = PageController(initialPage: _agricultureIndex);
 
     // Auto-slide after every 3 seconds
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+    _timer = Timer.periodic(Duration(seconds: 10), (Timer timer) {
       if (_currentIndex < _images.length - 1) {
         _currentIndex++;
       } else {
@@ -59,18 +68,112 @@ class _userHomePageState extends State<userHomePage> {
       // Animate to the next page
       _pageControllerSlider.animateToPage(
         _currentIndex,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
+        duration: Duration(milliseconds: 5000),
+        curve: Curves.easeInOutCubicEmphasized,
       );
     });
+
+
+    // Auto-slide after every 3 seconds
+    _timer = Timer.periodic(Duration(seconds: 15), (Timer timer) {
+      if (_trnasportIndex < _images.length - 1) {
+        _trnasportIndex++;
+      } else {
+        _trnasportIndex = 0;
+      }
+
+      // Animate to the next page
+      _trnasportConmtroller.animateToPage(
+        _trnasportIndex,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.slowMiddle,
+      );
+    });
+
+
+    // Auto-slide after every 3 seconds
+    _timer = Timer.periodic(Duration(seconds: 15), (Timer timer) {
+      if (_manpowertIndex < _images.length - 1) {
+        _manpowertIndex++;
+      } else {
+        _manpowertIndex = 0;
+      }
+
+      // Animate to the next page
+      _manpowerController.animateToPage(
+        _manpowertIndex,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.slowMiddle,
+      );
+    });
+
+
+    // Auto-slide after every 3 seconds
+    _timer = Timer.periodic(Duration(seconds: 10), (Timer timer) {
+      if (_agricultureIndex < _images.length - 1) {
+        _agricultureIndex++;
+      } else {
+        _agricultureIndex = 0;
+      }
+
+      // Animate to the next page
+      _agricultureController.animateToPage(
+        _agricultureIndex,
+        duration: Duration(milliseconds: 5000),
+        curve: Curves.easeInOutCubicEmphasized,
+      );
+    });
+
+
+
+    // Animation Controller to control the border animation
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(); // Repeats indefinitely
+
+    // Tween Animation for the glowing light to move along the border
+    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
+
+
+
   }
 
   @override
   void dispose() {
+    _controller.dispose();
     _timer?.cancel(); // Cancel the timer to prevent memory leaks
     _pageControllerSlider?.dispose(); // Dispose of the PageController
+    _trnasportConmtroller?.dispose(); // Dispose of the PageController
+    _manpowerController?.dispose(); // Dispose of the PageController
+    _agricultureController?.dispose(); // Dispose of the PageController
     super.dispose();
   }
+
+  // List of images (replace with your own image URLs or asset paths)
+  List<String> horizontalSliderImages = [
+    'assets/images/wareicon.png',
+    'assets/images/truckicon.png',
+    'assets/images/fieldicon.png',
+    'assets/images/fieldd.png',
+    'assets/images/newcrop.png',
+  ];
+
+  int horizontalSliderImagesIndex = 0; // Starting index for the images
+
+  // Function to shift images to the left
+  void _shiftImagesLeft() {
+    // Check if we can move to the next set of images
+    if (horizontalSliderImagesIndex + 3 < horizontalSliderImages.length) {
+      setState(() {
+        horizontalSliderImagesIndex++;
+      });
+    }
+  }
+
+
+
+
 
 
   @override
@@ -174,6 +277,57 @@ class _userHomePageState extends State<userHomePage> {
                 ),
                 child: Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15.0,top: 5),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: AnimatedBuilder(
+                          animation: _animation,
+                          builder: (context, child) {
+                            return Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                // CustomPaint for the glittering border effect
+                                CustomPaint(
+                                  painter: GlitterBorderPainter(_animation.value),
+                                  child: Container(
+                                    width: screenWidth*0.32,
+                                    height: screenHeight*0.037,
+                                    child: TextButton(
+                                      onPressed: () async{
+                                        SharedPreferences pref=await SharedPreferences.getInstance();
+                                        await pref.setBool('isUserLoggedIn', false);
+                                        await pref.setBool('isLoggedIn', true);
+                                        Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(builder: (context) => HomeScreen()), // Replace with your login page
+                                              (route) => false,
+                                        );
+
+                                        // Button action
+                                      },
+                                      child: Text(
+                                        'Become a Partner',
+                                        style: TextStyle(
+                                          fontSize: 9,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                          side: BorderSide(color: Colors.grey, width: 1), // Static grey border
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -200,13 +354,12 @@ class _userHomePageState extends State<userHomePage> {
                             // Navigate to the next page
                             Navigator.push(
                               context,
-                            //  MaterialPageRoute(builder: (context) => searchLocationUser()),
-                              MaterialPageRoute(builder: (context) => newHomePage()),
+                              MaterialPageRoute(builder: (context) => searchLocationUser()),
                             );
                           },
                           child: Container(
                             width: screenWidth * 0.55,
-                            height: screenHeight * 0.1,
+                            height: screenHeight * 0.09,
                             child: Align(
                               alignment: Alignment.center,
                               child: Container(
@@ -239,11 +392,11 @@ class _userHomePageState extends State<userHomePage> {
                           ),
                         ),
 
-                        const SizedBox(width: 5),
+                        const SizedBox(width: 3),
                         InkWell(
                           child: Container(
-                            height: 32,
-                            width: 32,
+                            height: 30,
+                            width: 30,
                             margin: const EdgeInsets.only(right: 15),
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -262,15 +415,14 @@ class _userHomePageState extends State<userHomePage> {
                             ),
                           ),
                           onTap: (){
-                             Navigator.push(context, MaterialPageRoute(builder: (context)=>userNotificationScreen()));
-                          //   Navigator.push(context, MaterialPageRoute(builder: (context)=>const Warehouseitemdesign()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>userNotificationScreen()));
+                            //   Navigator.push(context, MaterialPageRoute(builder: (context)=>const Warehouseitemdesign()));
 
                           },
                         ),
                       ],
                     ),
                     Container(
-                      margin: const EdgeInsets.only(top: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -283,7 +435,7 @@ class _userHomePageState extends State<userHomePage> {
                             children: [
                               Container(
                                 padding: EdgeInsets.zero,
-                                height: 30,
+                                height: 28,
                                 width: 60,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
@@ -546,7 +698,7 @@ class _userHomePageState extends State<userHomePage> {
                               InkWell(
                                 child: Container(
                                   margin: const EdgeInsets.only(right: 18),
-                                  height: 28, // Adjusted height to align with the "Add New" button
+                                  height: 26, // Adjusted height to align with the "Add New" button
                                   width: 60, // Adjusted width
                                   decoration: BoxDecoration(
                                     color: Colors.blue,
@@ -557,7 +709,7 @@ class _userHomePageState extends State<userHomePage> {
                                     borderRadius: BorderRadius.circular(5), // Rounded corners for consistency
                                   ),
                                   child: Center(
-                                    child: Text("Filter",style: TextStyle(color: Colors.white),)
+                                      child: Text("Filter",style: TextStyle(color: Colors.white),)
                                   ),
                                 ),
                                 onTap: (){
@@ -577,7 +729,7 @@ class _userHomePageState extends State<userHomePage> {
             ),
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(right: screenWidth * 0.005),
+                margin: EdgeInsets.only(right: screenWidth * 0.00),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -589,10 +741,132 @@ class _userHomePageState extends State<userHomePage> {
                   padding: EdgeInsets.all(screenWidth * 0.04),
                   child: SingleChildScrollView(
                     child:Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                     // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: screenHeight*0.075,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.blue,
+                                        border: Border.all(color: Colors.grey)
+                                      ),
+                                      child: Image.asset(ImageAssets.warehouseIco),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5.0),
+                                      child: Text("Warehousing",style: TextStyle(color: Colors.black,fontSize: 8),),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: screenHeight*0.075,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5),
+                                          color: Colors.blue,
+                                          border: Border.all(color: Colors.grey)
+                                      ),
+                                      child: Image.asset(ImageAssets.SemiTruck),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5.0),
+                                      child: Text("Transportation",style: TextStyle(color: Colors.black,fontSize: 7),),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: screenHeight*0.075,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5),
+                                          color: Colors.blue,
+                                          border: Border.all(color: Colors.grey)
+                                      ),
+                                      child: Image.asset(ImageAssets.group),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5.0),
+                                      child: Text("Manpower",style: TextStyle(color: Colors.black,fontSize: 8),),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: screenHeight*0.075,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5),
+                                          color: Colors.blue,
+                                          border: Border.all(color: Colors.grey)
+                                      ),
+                                      child: Image.asset(ImageAssets.Tractor),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5.0),
+                                      child: Text("Agricultural",style: TextStyle(color: Colors.black,fontSize: 8),),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: screenHeight*0.075,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5),
+                                          color: Colors.blue,
+                                          border: Border.all(color: Colors.grey)
+                                      ),
+                                      child: Image.asset(ImageAssets.threedots),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5.0),
+                                      child: Text("More",style: TextStyle(color: Colors.black,fontSize: 8),),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+
+
+                            
+
+                          ],
+                        ),
+                        SizedBox(height: screenHeight*0.025,),
                         Container(
-                          height: screenHeight*0.25, // Adjust to the height you want
+                          height: screenHeight*0.18, // Adjust to the height you want
                           width: screenWidth,
                           child: Stack(
                             children: [
@@ -609,7 +883,7 @@ class _userHomePageState extends State<userHomePage> {
                                     margin: EdgeInsets.all(0), // Margin around the image
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: Colors.blue, width: 3), // Blue border
+                                      border: Border.all(color: Colors.grey, width: 3), // Blue border
                                     ),
                                     child: Image.asset(
                                       _images[index],
@@ -620,250 +894,155 @@ class _userHomePageState extends State<userHomePage> {
                                   );
                                 },
                               ),
-                              Positioned(
-                                bottom: 20, // Position the dots just above the bottom
-                                left: 0,
-                                right: 0,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(_images.length, (index) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        borderRadius: BorderRadius.circular(4)
-                                      ),
-                                      child: AnimatedContainer(
-                                        duration: Duration(milliseconds: 500),
-                                        margin: EdgeInsets.symmetric(horizontal: 0),
-                                        width: _currentIndex == index ? 16 : 16,
-                                        height: 4,
-                                        decoration: BoxDecoration(
-                                          color: _currentIndex == index ? Colors.blue : Colors.grey,
-                                          borderRadius: BorderRadius.circular(3),
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                                ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: screenHeight*0.025,),
+                        Container(
+                          height: screenHeight*0.18, // Adjust to the height you want
+                          width: screenWidth,
+                          child: Stack(
+                            children: [
+                              PageView.builder(
+                                controller: _trnasportConmtroller,
+                                itemCount: _images.length,
+                                onPageChanged: (int index) {
+                                  setState(() {
+                                    _trnasportIndex = index;
+                                  });
+                                },
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: EdgeInsets.all(0), // Margin around the image
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(color: Colors.grey, width: 3), // Blue border
+                                    ),
+                                    child: Image.asset(
+                                      _images[index],
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: 250,
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(height: screenHeight*0.015,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              height: screenHeight*0.25,
-                              width: screenWidth*0.45,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.9),
-                                    spreadRadius: 0.5, // How much the shadow spreads
-                                    blurRadius: 0.5, // The blur effect
-                                    offset: Offset(0, 2), // Only shift the shadow downwards
-                                  ),
-                                ],
-                              ),
-                              child: Stack(
-                                children: [Column(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(15), // Set this value to half the width/height to make it circular
-                                      child: Image.asset(
-                                        'assets/images/slider2.jpg',
-                                        width: double.infinity, // Define width
-                                        height: 110, // Define height
-                                        fit: BoxFit.cover, // Ensures the image covers the whole container
-                                      ),
-                                    ),
-                                    SizedBox(height: 5,),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Row(children: [
-                                          Text("₹ 15.00-18.000",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w800),),
-                                          Text("  per sq.ft",style: TextStyle(fontSize: 5,fontWeight: FontWeight.w400,color: Colors.black),),
-
-                                        ],),
-                                        Row(children: [
-                                          Text("Type: ",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w400,color: Colors.grey),),
-                                          Text("Shed",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w600,color: Colors.black),),
-
-                                        ],)
-
-                                      ],
-                                    ),
-                                    SizedBox(height: 5,),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Row(children: [
-                                          SizedBox(width: 5,),
-                                          Image.asset("assets/images/Scaleup.png",height: 20,width: 20,),
-                                          Text("₹45000.00",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w800),),
-                                          Text(" per sq.ft",style: TextStyle(fontSize: 5,fontWeight: FontWeight.w400,color: Colors.black),),
-
-                                        ],),
-
-
-                                      ],
-                                    ),
-                                    SizedBox(height: 5,),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Row(children: [
-                                          Icon(Icons.location_on,size: 12,),
-                                          Text("6.0 kms away",style: TextStyle(fontSize: 8,fontWeight: FontWeight.w400,color: Colors.grey),),
-
-                                        ],),
-                                        Row(children: [
-                                          Image.asset("assets/images/people.png",height: 20,width: 17,),
-                                          SizedBox(width: 5,),
-                                          Container(
-                                            height: 20,
-                                            width: 20,
+                        SizedBox(height: screenHeight*0.025,),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // Use Flexible for the images
+                                for (int i = 0; i < 3; i++)
+                                  if (horizontalSliderImagesIndex + i < horizontalSliderImages.length)
+                                    Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 2.0), // Adjust horizontal padding
+                                        child: AspectRatio(
+                                          aspectRatio: 1, // Maintain equal width and height
+                                          child: Container(
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(4),
-                                            border: Border.all(color: Colors.black,width: 2)
+                                              border: Border.all(color: Colors.grey,width: 1),
+                                              borderRadius: BorderRadius.circular(5),
                                             ),
-                                            child: Center(child: Text("P",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700,fontSize: 13),)),
-                                          )
-
-                                        ],)
-
-                                      ],
-                                    ),
-
-
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Align(
-                                    alignment: Alignment.topRight,
-                                    child: Container(
-                                      color: Colors.white,
-                                      child: Icon(Icons.file_download_outlined,color: Colors.blue,),
-                                    )
-                                  ),
-                                )
-                                ],
-                              )
-                            ),
-                            InkWell(
-                              child: Container(
-                                  height: screenHeight*0.25,
-                                  width: screenWidth*0.45,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.9),
-                                        spreadRadius: 0.5, // How much the shadow spreads
-                                        blurRadius: 0.5, // The blur effect
-                                        offset: Offset(0, 2), // Only shift the shadow downwards
-                                      ),
-                                    ],
-                                  ),
-                                  child: Stack(
-                                    children: [Column(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(15), // Set this value to half the width/height to make it circular
-                                          child: Image.asset(
-                                            'assets/images/slider2.jpg',
-                                            width: double.infinity, // Define width
-                                            height: 110, // Define height
-                                            fit: BoxFit.cover, // Ensures the image covers the whole container
+                                            child: Image.asset(
+                                              horizontalSliderImages[horizontalSliderImagesIndex + i],
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
                                         ),
-                                        SizedBox(height: 5,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Row(children: [
-                                              Text("₹ 15.00-18.000",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w800),),
-                                              Text("  per sq.ft",style: TextStyle(fontSize: 5,fontWeight: FontWeight.w400,color: Colors.black),),
-
-                                            ],),
-                                            Row(children: [
-                                              Text("Type: ",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w400,color: Colors.grey),),
-                                              Text("Shed",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w600,color: Colors.black),),
-
-                                            ],)
-
-                                          ],
-                                        ),
-                                        SizedBox(height: 5,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Row(children: [
-                                              SizedBox(width: 5,),
-                                              Image.asset("assets/images/Scaleup.png",height: 20,width: 20,),
-                                              Text("₹45000.00",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w800),),
-                                              Text(" per sq.ft",style: TextStyle(fontSize: 5,fontWeight: FontWeight.w400,color: Colors.black),),
-
-                                            ],),
-
-
-                                          ],
-                                        ),
-                                        SizedBox(height: 5,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Row(children: [
-                                              Icon(Icons.location_on,size: 12,),
-                                              Text("6.0 kms away",style: TextStyle(fontSize: 8,fontWeight: FontWeight.w400,color: Colors.grey),),
-
-                                            ],),
-                                            Row(children: [
-                                              Image.asset("assets/images/people.png",height: 20,width: 17,),
-                                              SizedBox(width: 5,),
-                                              Container(
-                                                height: 20,
-                                                width: 20,
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(4),
-                                                    border: Border.all(color: Colors.black,width: 2)
-                                                ),
-                                                child: Center(child: Text("P",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700,fontSize: 13),)),
-                                              )
-
-                                            ],)
-
-                                          ],
-                                        ),
-
-
-                                      ],
+                                      ),
                                     ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Align(
-                                            alignment: Alignment.topRight,
-                                            child: Container(
-                                              color: Colors.white,
-                                              child: Icon(Icons.file_download_outlined,color: Colors.blue,),
-                                            )
-                                        ),
-                                      )
-                                    ],
-                                  )
-                              ),
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>wareHouseDetails()));
-                              },
+                                // Arrow button to shift images to the left
+                                Container(
+                                  width: screenWidth*0.1,
+                                  child: Center(
+                                    child: IconButton(
+                                      icon: Icon(Icons.arrow_circle_right_outlined, size: 20),
+                                      onPressed: _shiftImagesLeft,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        )
+                          ),
+                        ),
+                        SizedBox(height: screenHeight*0.025,),
+                        Container(
+                          height: screenHeight*0.18, // Adjust to the height you want
+                          width: screenWidth,
+                          child: Stack(
+                            children: [
+                              PageView.builder(
+                                controller: _manpowerController,
+                                itemCount: _images.length,
+                                onPageChanged: (int index) {
+                                  setState(() {
+                                    _manpowertIndex = index;
+                                  });
+                                },
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: EdgeInsets.all(0), // Margin around the image
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(color: Colors.grey, width: 3), // Blue border
+                                    ),
+                                    child: Image.asset(
+                                      _images[index],
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: 250,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: screenHeight*0.025,),
+                        Container(
+                          height: screenHeight*0.18, // Adjust to the height you want
+                          width: screenWidth,
+                          child: Stack(
+                            children: [
+                              PageView.builder(
+                                controller: _agricultureController,
+                                itemCount: _images.length,
+                                onPageChanged: (int index) {
+                                  setState(() {
+                                    _agricultureIndex = index;
+                                  });
+                                },
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: EdgeInsets.all(0), // Margin around the image
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(color: Colors.grey, width: 3), // Blue border
+                                    ),
+                                    child: Image.asset(
+                                      _images[index],
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: 250,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+                       
+
                       ],
                     ),
                   ),
@@ -1028,87 +1207,87 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
             ),
           ),
 
-      Padding(
-        padding: EdgeInsets.only(bottom: 10),
-        child: Container(
-          height: screenHeight * 0.05,
-          width: screenWidth * 0.553,
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: screenWidth * 0.045,
-              right: screenWidth * 0.03,
-              bottom: screenWidth * 0.013,
-            ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 10),
             child: Container(
-              width: screenWidth * 0.25,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.white, // Background color for the toggle container
-              ),
-              child: Row(
-                children: [
-                  // Clear All button
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isClearFilters = true; // Toggle to Clear Filters
-                        selectedOptions.clear(); // Clear Filters Logic
-                      });
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: screenWidth * 0.22, // Responsive width based on screen width
-                      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.005), // Adjust padding responsively
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                      ),
-                      child: Text(
-                        "Clear All",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: screenHeight * 0.015, // Responsive font size
+              height: screenHeight * 0.05,
+              width: screenWidth * 0.553,
+              color: Colors.white,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: screenWidth * 0.045,
+                  right: screenWidth * 0.03,
+                  bottom: screenWidth * 0.013,
+                ),
+                child: Container(
+                  width: screenWidth * 0.25,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white, // Background color for the toggle container
+                  ),
+                  child: Row(
+                    children: [
+                      // Clear All button
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isClearFilters = true; // Toggle to Clear Filters
+                            selectedOptions.clear(); // Clear Filters Logic
+                          });
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: screenWidth * 0.22, // Responsive width based on screen width
+                          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.005), // Adjust padding responsively
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                          ),
+                          child: Text(
+                            "Clear All",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: screenHeight * 0.015, // Responsive font size
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  // Spacer to push Apply Filters to the right
-                  Spacer(),
-                  // Apply Filters button
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isClearFilters = false; // Toggle to Apply Filters
-                        Navigator.pop(context); // Apply Filters Logic
-                      });
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: screenWidth * 0.25, // Responsive width based on screen width
-                      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.005), // Adjust padding responsively
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.blue,
-                      ),
-                      child: Text(
-                        "Apply Filters",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: screenHeight * 0.015, // Responsive font size
+                      // Spacer to push Apply Filters to the right
+                      Spacer(),
+                      // Apply Filters button
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isClearFilters = false; // Toggle to Apply Filters
+                            Navigator.pop(context); // Apply Filters Logic
+                          });
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: screenWidth * 0.25, // Responsive width based on screen width
+                          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.005), // Adjust padding responsively
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.blue,
+                          ),
+                          child: Text(
+                            "Apply Filters",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: screenHeight * 0.015, // Responsive font size
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      )
+          )
 
-      ],
+        ],
       ),
     );
   }
@@ -1190,3 +1369,60 @@ class DottedBorderPainter extends CustomPainter {
   }
 }
 
+// CustomPainter to animate the light/glitter effect along the button border
+class GlitterBorderPainter extends CustomPainter {
+  final double progress; // Animation progress value (0.0 to 1.0)
+
+  GlitterBorderPainter(this.progress);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Static border paint
+    final Paint borderPaint = Paint()
+      ..color = Colors.grey
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
+
+    // Draw the rectangular border
+    final Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(rect, Radius.circular(10)),
+      borderPaint,
+    );
+
+    // Glittering light paint
+    final Paint lightPaint = Paint()
+      ..color = Colors.amber.withOpacity(0.9)
+      ..style = PaintingStyle.fill;
+
+    // Compute the length of the entire border (perimeter of the rectangle)
+    final double totalPerimeter = 2 * (size.width + size.height);
+
+    // Calculate the current position of the glitter based on the progress
+    final double glitterPosition = progress * totalPerimeter;
+
+    // Compute the position of the glitter light along the border
+    Offset glitterOffset;
+    if (glitterPosition <= size.width) {
+      // Top edge
+      glitterOffset = Offset(glitterPosition, 0);
+    } else if (glitterPosition <= size.width + size.height) {
+      // Right edge
+      glitterOffset = Offset(size.width, glitterPosition - size.width);
+    } else if (glitterPosition <= 2 * size.width + size.height) {
+      // Bottom edge
+      glitterOffset = Offset(2 * size.width + size.height - glitterPosition, size.height);
+    } else {
+      // Left edge
+      glitterOffset = Offset(0, totalPerimeter - glitterPosition);
+    }
+
+    // Draw the glittering light as a small circle that moves along the border
+    canvas.drawCircle(glitterOffset, 5, lightPaint); // Adjust the circle size for the glowing light
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true; // Repaint whenever animation progress changes
+  }
+}
