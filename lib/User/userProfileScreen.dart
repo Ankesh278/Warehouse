@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:warehouse/Localization/LanguageSwitcher.dart';
 import 'package:warehouse/MyHomePage.dart';
 import 'package:warehouse/User/userlogin.dart';
 
@@ -318,42 +319,47 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                     ),
                                   ),
                                   SizedBox(height: screenHeight*0.02,),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                                    height: 35,
-                                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: Colors.grey),
-                                    ),
-                                    child: const Row(
+                                  InkWell(
+                                    onTap: (){
 
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 8.0),
-                                          child: Icon(Icons.diamond_outlined,color: Colors.grey,),
-                                        ),
-                                        SizedBox(width: 15),
-                                        Text(
-                                          "Subscriptions",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w300,
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                                      height: 35,
+                                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(color: Colors.grey),
+                                      ),
+                                      child: const Row(
+
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 8.0),
+                                            child: Icon(Icons.diamond_outlined,color: Colors.grey,),
                                           ),
-                                        ),
-                                        Spacer(),
-                                        Padding(
-                                          padding: EdgeInsets.only(right: 8.0),
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color: Colors.grey,),
+                                          SizedBox(width: 15),
+                                          Text(
+                                            "Subscriptions",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w300,
+                                            ),
                                           ),
-                                        )
+                                          Spacer(),
+                                          Padding(
+                                            padding: EdgeInsets.only(right: 8.0),
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child:  Icon(Icons.arrow_forward_ios,size: 15,color: Colors.grey,),
+                                            ),
+                                          )
 
 
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: screenHeight*0.02,),

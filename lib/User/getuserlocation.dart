@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:geolocator/geolocator.dart';
 //import 'package:permission_handler/permission_handler.dart';
 import 'package:warehouse/Partner/HelpPage.dart';
 import 'package:warehouse/Partner/WarehouseImageScreen.dart';
 import 'package:warehouse/User/userHelpPage.dart';
 import 'package:warehouse/User/userHomePage.dart';
+import 'package:warehouse/newHomePage.dart';
 
 class getuserlocation extends StatefulWidget {
   @override
@@ -12,7 +17,74 @@ class getuserlocation extends StatefulWidget {
 }
 
 class _getuserlocationState extends State<getuserlocation> {
+  String _coordinates = 'Fetching location...';
+  Position? position;
 
+  bool loading=false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    setState(() {
+      loading=true;
+    });
+    // Check for location permission
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      setState(() {
+        loading=false;
+      });
+      // Request permission
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
+        setState(() {
+          loading=false;
+        });
+        // Permissions are denied, exit the function
+        return;
+      }
+
+    }
+
+    // Get the current position
+    try {
+      position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+      // Print latitude and longitude to the console
+      print('Latitude: ${position?.latitude}, Longitude: ${position?.longitude}');
+      print("Current=>"+position!.longitude.toString());
+      print("Current=>"+position!.latitude.toString());
+
+
+
+      // Update UI with the coordinates
+      setState(() {
+        loading=false;
+        _coordinates = 'Latitude: ${position?.latitude}, Longitude: ${position?.longitude}';
+      });
+      SharedPreferences pref= await SharedPreferences.getInstance();
+      await pref.setDouble('latitude', position!.latitude);
+      await pref.setDouble('longitude', position!.longitude);
+
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>newHomePage(longitude: position?.longitude,latitude: position?.latitude,)));
+    } catch (e) {
+      setState(() {
+        loading=false;
+      });
+      // Handle errors in location fetching
+      print("Error fetching location: $e");
+      setState(() {
+        setState(() {
+          loading=false;
+        });
+        _coordinates = 'Could not fetch location';
+      });
+    }
+  }
 
 
   @override
@@ -54,7 +126,6 @@ class _getuserlocationState extends State<getuserlocation> {
                                   ],
                                 ),
                                 Spacer(),
-
                                 SizedBox(width: 5),
                                 InkWell(
                                   child: Container(
@@ -114,83 +185,106 @@ class _getuserlocationState extends State<getuserlocation> {
                         child: Padding(
                           padding: EdgeInsets.all(screenWidth * 0.04),
                           child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 15),
-                                  child: Container(
-                                    height: screenHeight*0.05,
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                        labelText: 'Search Near Me ',suffixStyle: TextStyle(fontSize: 13,color: Colors.black),
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(18)
-                                        ),
-                                        suffixIcon: InkWell(
-                                          child: Container(
-                                            height: 30,
+                              child: loading?SpinKitCircle(
+                                itemBuilder: (context, index) {
+                                  return DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: index.isEven ? Colors.blue : Colors.green,
+                                    ),
+                                  );
+                                },
+                                size: 50.0, // Optional size
+                              ):Column(
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 15),
+                                      child: loading?SpinKitCircle(
+                                        itemBuilder: (context, index) {
+                                          return DecoratedBox(
                                             decoration: BoxDecoration(
-                                              border: Border.all(color: Colors.grey),
-                                              borderRadius: BorderRadius.circular(18),
-                                              color: Colors.lightBlue, // Clue blue background color
-                                              shape: BoxShape.rectangle, // Rounded container
+                                              color: index.isEven ? Colors.blue : Colors.green,
                                             ),
-                                           // padding: EdgeInsets.all(8),
-                                            child: ImageIcon(AssetImage("assets/images/Location.png",),color: Colors.white,)
-                                          ),
-                                          onTap: (){
+                                          );
+                                        },
+                                        size: 50.0, // Optional size
+                                      )
+                                          :Container(
+                                        height: screenHeight*0.05,
+                                        child: TextField(
+                                          decoration: InputDecoration(
+                                            labelText: 'Search Near Me ',suffixStyle: TextStyle(fontSize: 13,color: Colors.black),
+                                            border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(18)
+                                            ),
+                                            suffixIcon: InkWell(
+                                              child: Container(
+                                                  height: 30,
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(color: Colors.grey),
+                                                    borderRadius: BorderRadius.circular(18),
+                                                    color: Colors.lightBlue, // Clue blue background color
+                                                    shape: BoxShape.rectangle, // Rounded container
+                                                  ),
+                                                  // padding: EdgeInsets.all(8),
+                                                  child: ImageIcon(AssetImage("assets/images/Location.png",),color: Colors.white,)
+                                              ),
+                                              onTap: (){
+                                                setState(() {
+                                                  loading=true;
+                                                });
+                                                _getCurrentLocation();
 
-                                          },
+                                              },
+                                            ),
+                                          ),
                                         ),
+                                      )
+                                  ),
+                                  SizedBox(height: screenHeight*0.03,),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.symmetric(vertical: 10.0), // Space around the line
+                                        width: 100.0,
+                                        height: 2,// Thickness of the line
+                                        color: Colors.blue, // Color of the line
                                       ),
-                                    ),
-                                  )
-                                ),
-                                SizedBox(height: screenHeight*0.03,),
+                                      SizedBox(width: screenHeight * 0.02),
+                                      Text("or",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),),
+                                      SizedBox(width: screenHeight * 0.02),
+                                      Container(
+                                        margin: EdgeInsets.symmetric(vertical: 10.0), // Space around the line
+                                        width: 100.0,
+                                        height: 2,// Thickness of the line
+                                        color: Colors.blue, // Color of the line
+                                      ),
 
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.symmetric(vertical: 10.0), // Space around the line
-                                      width: 100.0,
-                                      height: 2,// Thickness of the line
-                                      color: Colors.blue, // Color of the line
-                                    ),
-                                    SizedBox(width: screenHeight * 0.02),
-                                    Text("or",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),),
-                                    SizedBox(width: screenHeight * 0.02),
-                                    Container(
-                                      margin: EdgeInsets.symmetric(vertical: 10.0), // Space around the line
-                                      width: 100.0,
-                                      height: 2,// Thickness of the line
-                                      color: Colors.blue, // Color of the line
-                                    ),
-
-                                  ],
-                                ),
-                                SizedBox(height: screenHeight*0.08,),
-                                Row(
-                                  children: [
-                                    SizedBox(width: screenWidth*0.1,),
-                                    Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text("Enter Location Manually",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600),)),
-                                  ],
-                                ),
-                                SizedBox(height: screenHeight*0.001,),
-                                Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 15),
-                                    child: Container(
-                                      height: screenHeight*0.05,
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          labelText: 'E.g. indirapuram,Bengaluru , India ',labelStyle: TextStyle(color: Colors.grey,fontSize: 11),
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(18)
-                                          ),
-                                          suffixIcon: InkWell(
-                                            child: Container(
+                                    ],
+                                  ),
+                                  SizedBox(height: screenHeight*0.08,),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: screenWidth*0.1,),
+                                      Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("Enter Location Manually",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600),)),
+                                    ],
+                                  ),
+                                  SizedBox(height: screenHeight*0.001,),
+                                  Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 15),
+                                      child: Container(
+                                        height: screenHeight*0.05,
+                                        child: TextField(
+                                          decoration: InputDecoration(
+                                            labelText: 'E.g. indirapuram,Bengaluru , India ',labelStyle: TextStyle(color: Colors.grey,fontSize: 11),
+                                            border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(18)
+                                            ),
+                                            suffixIcon: InkWell(
+                                              child: Container(
                                                 height: 30,
                                                 decoration: BoxDecoration(
                                                   border: Border.all(color: Colors.grey),
@@ -201,19 +295,19 @@ class _getuserlocationState extends State<getuserlocation> {
                                                 // padding: EdgeInsets.all(8),
                                                 child: ImageIcon(AssetImage("assets/images/Location.png",),color: Colors.white,),
 
+                                              ),
+                                              onTap: (){
+
+                                              },
                                             ),
-                                            onTap: (){
-                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>userHomePage()));
-                                            },
                                           ),
                                         ),
-                                      ),
-                                    )
-                                ),
-                                SizedBox(height: screenHeight*0.05,),
-                                Image.asset("assets/images/Pinonthemapwaving.png")
-                              ],
-                            )
+                                      )
+                                  ),
+                                  SizedBox(height: screenHeight*0.05,),
+                                  Image.asset("assets/images/Pinonthemapwaving.png")
+                                ],
+                              )
                           ),
                         ),
                       ),

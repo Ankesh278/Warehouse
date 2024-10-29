@@ -167,17 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-  // Function to get address from latitude and longitude
-  Future<String> _getAddressFromLatLng(double latitude, double longitude) async {
-    try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
-      Placemark placemark = placemarks[0]; // Get the first placemark
-      return '${placemark.street}, ${placemark.locality}, ${placemark.postalCode}, ${placemark.country}'; // Format the address
-    } catch (e) {
-      print('Error getting address: $e');
-      return 'Unknown Location'; // Return a fallback in case of error
-    }
-  }
+
 
 
   @override
@@ -573,10 +563,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           print("availability"+warehouse.isavilable.toString());
                           bool isavail = warehouseProvider.warehouseStatus[warehouse.id] ?? warehouse.isavilable;
 
-
-                         // bool isavail=warehouse.isavilable;
-
-                          // print("carpetarea"${warehouse.whouseCarpetArea});
                           return GestureDetector(
                             onTap: (){
 

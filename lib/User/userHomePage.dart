@@ -1,25 +1,40 @@
 import 'dart:async';
-
+import 'dart:convert';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:warehouse/Partner/AddWarehouse.dart';
-import 'package:warehouse/Partner/MyProfilePage.dart';
-import 'package:warehouse/Partner/NotificationScreen.dart';
-import 'package:warehouse/Partner/WarehouseItemDesign.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:warehouse/Partner/HomeScreen.dart';
+import 'package:warehouse/User/UserProvider/sortingProvider.dart';
+import 'package:warehouse/User/models/WarehouseModel.dart';
 import 'package:warehouse/User/searchLocationUser.dart';
 import 'package:warehouse/User/userNotificationScreen.dart';
 import 'package:warehouse/User/userProfileScreen.dart';
 import 'package:warehouse/User/userShortlistedintrested.dart';
 import 'package:warehouse/User/wareHouseDetails.dart';
-import 'package:warehouse/newHomePage.dart';
+import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
 class userHomePage extends StatefulWidget {
+  final latitude;
+  final longitude;
+   const userHomePage({super.key, this.latitude, this.longitude});
+
   @override
   State<userHomePage> createState() => _userHomePageState();
 }
 
-class _userHomePageState extends State<userHomePage> {
+class _userHomePageState extends State<userHomePage> with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
+  late Future<List<interestedModel>> futureWarehouses;
+   int warehouseCount=0;
+   String address="";
+
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -35,6 +50,7 @@ class _userHomePageState extends State<userHomePage> {
 
   late PageController _pageControllerSlider;
   late Timer _timer;
+  final List<String> _uploadedImages = [];
 
   bool isSortApplied = false;
   bool isNearbyEnabled = false;
@@ -42,36 +58,73 @@ class _userHomePageState extends State<userHomePage> {
   bool isPriceEnabledmaxtomin = false;
   bool isAreaMinToMax = false;
   bool isAreaMaxToMin = false;
-
+  late AnimationController _controller;
+  late Animation<double> _animation;
   @override
   void initState() {
     super.initState();
+    print("Curetn${widget.latitude}");
+    print("Curetn${widget.longitude}");
+    ///Warehouse Fetching
+    futureWarehouses = fetchWarehouses(widget.latitude, widget.longitude);
     _pageControllerSlider = PageController(initialPage: _currentIndex);
-
     // Auto-slide after every 3 seconds
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       if (_currentIndex < _images.length - 1) {
         _currentIndex++;
       } else {
         _currentIndex = 0;
       }
-
       // Animate to the next page
       _pageControllerSlider.animateToPage(
         _currentIndex,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
     });
+
+    // Animation Controller to control the border animation
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(); // Repeats indefinitely
+
+    // Tween Animation for the glowing light to move along the border
+    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
+
+  }
+
+  Future<List<interestedModel>> fetchWarehouses(double latitude, double longitude) async {
+    final url = 'https://xpacesphere.com/api/Wherehousedt/GetNLocation?latitude=$latitude&longitude=$longitude';
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+
+      if (responseData['data'] != null && responseData['data'].isNotEmpty) {
+        List jsonResponse = responseData['data'];
+        // Count the number of warehouses
+         warehouseCount= jsonResponse.length;
+        print("Number of warehouses: $warehouseCount");
+
+        return jsonResponse.map((data) => interestedModel.fromJson(data)).toList();
+      } else {
+        // Return an empty list instead of throwing an exception
+        warehouseCount = 0;
+        return []; // Indicating no data available
+      }
+    } else {
+      // Handle other status codes if needed
+      throw Exception('Failed to load warehouses');
+    }
   }
 
   @override
   void dispose() {
-    _timer?.cancel(); // Cancel the timer to prevent memory leaks
-    _pageControllerSlider?.dispose(); // Dispose of the PageController
+    _controller.dispose();
+    _timer.cancel(); // Cancel the timer to prevent memory leaks
+    _pageControllerSlider.dispose(); // Dispose of the PageController
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -158,6 +211,7 @@ class _userHomePageState extends State<userHomePage> {
   }
 
   Widget _buildHomePage(double screenWidth, double screenHeight) {
+    final sortingProvider = Provider.of<SortingProvider>(context, listen: false);
     return Container(
       color: Colors.blue,
       width: double.infinity,
@@ -174,6 +228,64 @@ class _userHomePageState extends State<userHomePage> {
                 ),
                 child: Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15.0,top: 5),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: AnimatedBuilder(
+                          animation: _animation,
+                          builder: (context, child) {
+                            return Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                // CustomPaint for the glittering border effect
+                                CustomPaint(
+                                  painter: GlitterBorderPainter(_animation.value),
+                                  child: SizedBox(
+                                    width: screenWidth*0.32,
+                                    height: screenHeight*0.037,
+                                    child: TextButton(
+                                      onPressed: () async{
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomeScreen()));
+                                        //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                                        // SharedPreferences pref=await SharedPreferences.getInstance();
+                                        // await pref.setBool('isUserLoggedIn', false);
+                                        // await pref.setBool('isLoggedIn', true);
+                                        // Navigator.of(context).pushAndRemoveUntil(
+                                        //   MaterialPageRoute(builder: (context) => HomeScreen()), // Replace with your login page
+                                        //       (route) => false,
+                                        // );
+
+                                        // Button action
+                                      },
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                          side: const BorderSide(color: Colors.grey, width: 1), // Static grey border
+                                        ),
+                                      ),
+                                      child: Animate(
+                                          effects: const [FadeEffect(), ScaleEffect()],
+                                          child: const Text(
+                                            'Become a Part',
+                                            style: TextStyle(
+                                              fontSize: 9,
+                                              color: Colors.blue,
+                                            ),
+                                          ).animate(delay: 500.ms, // this delay only happens once at the very start
+                                            onPlay: (controller) => controller.repeat(), )
+                                              .tint(color: Colors.purple)
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -200,16 +312,15 @@ class _userHomePageState extends State<userHomePage> {
                             // Navigate to the next page
                             Navigator.push(
                               context,
-                            //  MaterialPageRoute(builder: (context) => searchLocationUser()),
-                              MaterialPageRoute(builder: (context) => newHomePage()),
+                              MaterialPageRoute(builder: (context) => searchLocationUser()),
                             );
                           },
-                          child: Container(
+                          child: SizedBox(
                             width: screenWidth * 0.55,
-                            height: screenHeight * 0.1,
+                            height: screenHeight * 0.09,
                             child: Align(
                               alignment: Alignment.center,
-                              child: Container(
+                              child: SizedBox(
                                 height: 35,
                                 child: TextFormField(
                                   enabled: false, // Disable typing here, only show the field
@@ -239,11 +350,11 @@ class _userHomePageState extends State<userHomePage> {
                           ),
                         ),
 
-                        const SizedBox(width: 5),
+                        const SizedBox(width: 3),
                         InkWell(
                           child: Container(
-                            height: 32,
-                            width: 32,
+                            height: 30,
+                            width: 30,
                             margin: const EdgeInsets.only(right: 15),
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -262,314 +373,363 @@ class _userHomePageState extends State<userHomePage> {
                             ),
                           ),
                           onTap: (){
-                             Navigator.push(context, MaterialPageRoute(builder: (context)=>userNotificationScreen()));
-                          //   Navigator.push(context, MaterialPageRoute(builder: (context)=>const Warehouseitemdesign()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>userNotificationScreen()));
 
                           },
                         ),
                       ],
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "498 warehouses near Noida ",
-                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.normal, color: Colors.white),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end, // Align buttons to the end
-                            children: [
-                              Container(
-                                padding: EdgeInsets.zero,
-                                height: 30,
-                                width: 60,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(width: 0,),
+                         Text(
+                          "${warehouseCount} warehouses near you.. ",
+                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.normal, color: Colors.white),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end, // Align buttons to the end
+                          children: [
+                            Container(
+                              padding: EdgeInsets.zero,
+                              height: 28,
+                              width: 60,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                              ),
+                              child: Center(
+                                child: TextButton(
+                                  child: const Text(
+                                    "Sort ↑↓",
+                                    style: TextStyle(fontSize: 8, fontWeight: FontWeight.w600, color: Colors.blue),
+                                  ),
+                                  onPressed: () {
+                                    // Handle add new button press
+                                    showModalBottomSheet(
+                                      context: context,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                      ),
+                                      isScrollControlled: true, // Allows the modal to take full height
+                                      builder: (BuildContext context) {
+                                        return StatefulBuilder( // Use StatefulBuilder for managing modal state
+                                          builder: (BuildContext context, StateSetter setModalState) {
+                                            return FractionallySizedBox(
+                                              heightFactor: 0.57, // Modal takes up 46% of the screen height, adjust as needed
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(16.0),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                  children: [
+                                                    // Sort Container, always visible
+                                                    Container(
+                                                      height: screenHeight * 0.05,
+                                                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                                                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.blue,
+                                                        border: Border.all(color: Colors.grey),
+                                                        borderRadius: BorderRadius.circular(10),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          const Text(
+                                                            'Sort By',
+                                                            style: TextStyle(fontSize: 14, color: Colors.white),
+                                                          ),
+                                                          IconButton(
+                                                            icon: Icon(
+                                                              Icons.clear,
+                                                              color: sortingProvider.selectedSortOption.isNotEmpty
+                                                                  ? Colors.white
+                                                                  : Colors.grey,
+                                                            ),
+                                                            onPressed: sortingProvider.selectedSortOption.isNotEmpty
+                                                                ? () {
+                                                              setModalState(() {
+                                                                sortingProvider.selectedSortOption = '';
+                                                                // Update isSortApplied based on sorting option
+                                                                isSortApplied = false;
+                                                              });
+                                                              Navigator.pop(context);
+                                                            }
+                                                                : null,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+
+                                                    // Sorting options
+                                                    _buildSortOption(
+                                                      context,
+                                                      sortingProvider,
+                                                      label: 'Near By',
+                                                      optionValue: 'Nearby',
+                                                    ),
+                                                    _buildSortOption(
+                                                      context,
+                                                      sortingProvider,
+                                                      label: 'Price (Min to Max)',
+                                                      optionValue: 'PriceMinToMax',
+                                                    ),
+                                                    _buildSortOption(
+                                                      context,
+                                                      sortingProvider,
+                                                      label: 'Price (Max to Min)',
+                                                      optionValue: 'PriceMaxToMin',
+                                                    ),
+                                                    _buildSortOption(
+                                                      context,
+                                                      sortingProvider,
+                                                      label: 'Area (Min to Max)',
+                                                      optionValue: 'AreaMinToMax',
+                                                    ),
+                                                    _buildSortOption(
+                                                      context,
+                                                      sortingProvider,
+                                                      label: 'Area (Max to Min)',
+                                                      optionValue: 'AreaMaxToMin',
+                                                    ),
+
+                                                    // // Nearby Container
+                                                    // Container(
+                                                    //   height: screenHeight * 0.05,
+                                                    //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                    //   margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                                                    //   decoration: BoxDecoration(
+                                                    //     color: Colors.white,
+                                                    //     borderRadius: BorderRadius.circular(8),
+                                                    //     border: Border.all(color: Colors.grey),
+                                                    //   ),
+                                                    //   child: Row(
+                                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    //     children: [
+                                                    //       Text(
+                                                    //         'Near By',
+                                                    //         style: isNearbyEnabled
+                                                    //             ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
+                                                    //             : const TextStyle(fontSize: 12, color: Colors.grey),
+                                                    //       ),
+                                                    //       Checkbox(
+                                                    //         checkColor: Colors.white,
+                                                    //         activeColor: Colors.green,
+                                                    //         value: isNearbyEnabled,
+                                                    //         onChanged: (bool? value) {
+                                                    //           setModalState(() {
+                                                    //             sortingProvider.selectedSortOption = 'Nearby';
+                                                    //
+                                                    //             Navigator.pop(context);
+                                                    //             // isNearbyEnabled = value!;
+                                                    //             // isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
+                                                    //
+                                                    //           });
+                                                    //           Navigator.pop(context);
+                                                    //         },
+                                                    //       ),
+                                                    //     ],
+                                                    //   ),
+                                                    // ),
+                                                    //
+                                                    // // Price (Min to Max) Container
+                                                    // Container(
+                                                    //   height: screenHeight * 0.05,
+                                                    //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                    //   margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                                                    //   decoration: BoxDecoration(
+                                                    //     color: Colors.white,
+                                                    //     borderRadius: BorderRadius.circular(8),
+                                                    //     border: Border.all(color: Colors.grey),
+                                                    //   ),
+                                                    //   child: Row(
+                                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    //     children: [
+                                                    //       Text(
+                                                    //         'Price (Min to max)',
+                                                    //         style: isPriceEnabled
+                                                    //             ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
+                                                    //             : const TextStyle(fontSize: 12, color: Colors.grey),
+                                                    //       ),
+                                                    //       Checkbox(
+                                                    //         checkColor: Colors.white,
+                                                    //         activeColor: Colors.green,
+                                                    //         value: isPriceEnabled,
+                                                    //         onChanged: (bool? value) {
+                                                    //           setModalState(() {
+                                                    //             sortingProvider.selectedSortOption = 'PriceMinToMax';
+                                                    //             Navigator.pop(context);
+                                                    //             // isPriceEnabled = value!;
+                                                    //             // isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
+                                                    //           });
+                                                    //          // Navigator.pop(context);
+                                                    //         },
+                                                    //       ),
+                                                    //     ],
+                                                    //   ),
+                                                    // ),
+                                                    //
+                                                    // // Price (Max to Min) Container
+                                                    // Container(
+                                                    //   height: screenHeight * 0.05,
+                                                    //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                    //   margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                                                    //   decoration: BoxDecoration(
+                                                    //     color: Colors.white,
+                                                    //     borderRadius: BorderRadius.circular(8),
+                                                    //     border: Border.all(color: Colors.grey),
+                                                    //   ),
+                                                    //   child: Row(
+                                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    //     children: [
+                                                    //       Text(
+                                                    //         'Price (Max to min)',
+                                                    //         style: isPriceEnabledmaxtomin
+                                                    //             ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
+                                                    //             : const TextStyle(fontSize: 12, color: Colors.grey),
+                                                    //       ),
+                                                    //       Checkbox(
+                                                    //         checkColor: Colors.white,
+                                                    //         activeColor: Colors.green,
+                                                    //         value: isPriceEnabledmaxtomin,
+                                                    //         onChanged: (bool? value) {
+                                                    //           setModalState(() {
+                                                    //             sortingProvider.selectedSortOption = 'PriceMaxToMin';
+                                                    //
+                                                    //             Navigator.pop(context);
+                                                    //             // isPriceEnabledmaxtomin = value!;
+                                                    //             // isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
+                                                    //           });
+                                                    //          // Navigator.pop(context);
+                                                    //         },
+                                                    //       ),
+                                                    //     ],
+                                                    //   ),
+                                                    // ),
+                                                    //
+                                                    // // Area (Min to Max) Container
+                                                    // Container(
+                                                    //   height: screenHeight * 0.05,
+                                                    //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                    //   margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                                                    //   decoration: BoxDecoration(
+                                                    //     color: Colors.white,
+                                                    //     borderRadius: BorderRadius.circular(8),
+                                                    //     border: Border.all(color: Colors.grey),
+                                                    //   ),
+                                                    //   child: Row(
+                                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    //     children: [
+                                                    //       Text(
+                                                    //         'Area (Min to max)',
+                                                    //         style: isAreaMinToMax
+                                                    //             ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
+                                                    //             : const TextStyle(fontSize: 12, color: Colors.grey),
+                                                    //       ),
+                                                    //       Checkbox(
+                                                    //         checkColor: Colors.white,
+                                                    //         activeColor: Colors.green,
+                                                    //         value: isAreaMinToMax,
+                                                    //         onChanged: (bool? value) {
+                                                    //           setModalState(() {
+                                                    //             sortingProvider.selectedSortOption = 'AreaMinToMax';
+                                                    //
+                                                    //             Navigator.pop(context);
+                                                    //             // isAreaMinToMax = value!;
+                                                    //             // isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
+                                                    //           });
+                                                    //          // Navigator.pop(context);
+                                                    //         },
+                                                    //       ),
+                                                    //     ],
+                                                    //   ),
+                                                    // ),
+                                                    //
+                                                    // // Area (Max to Min) Container
+                                                    // Container(
+                                                    //   height: screenHeight * 0.05,
+                                                    //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                    //   margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                                                    //   decoration: BoxDecoration(
+                                                    //     color: Colors.white,
+                                                    //     borderRadius: BorderRadius.circular(8),
+                                                    //     border: Border.all(color: Colors.grey),
+                                                    //   ),
+                                                    //   child: Row(
+                                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    //     children: [
+                                                    //       Text(
+                                                    //         'Area (Max to min)',
+                                                    //         style: isAreaMaxToMin
+                                                    //             ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
+                                                    //             : const TextStyle(fontSize: 12, color: Colors.grey),
+                                                    //       ),
+                                                    //       Checkbox(
+                                                    //         checkColor: Colors.white,
+                                                    //         activeColor: Colors.green,
+                                                    //         value: isAreaMaxToMin,
+                                                    //         onChanged: (bool? value) {
+                                                    //           setModalState(() {
+                                                    //             sortingProvider.selectedSortOption = 'AreaMaxToMin';
+                                                    //
+                                                    //             Navigator.pop(context);
+                                                    //             // isAreaMaxToMin = value!;
+                                                    //             // isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
+                                                    //           });
+                                                    //          // Navigator.pop(context);
+                                                    //         },
+                                                    //       ),
+                                                    //     ],
+                                                    //   ),
+                                                    // ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+
+
+
+
+                                  },
+                                ),
+                              ),
+                            ),
+
+                            InkWell(
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 18),
+                                height: 26, // Adjusted height to align with the "Add New" button
+                                width: 60, // Adjusted width
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.white,
+                                  color: Colors.blue,
                                   border: Border.all(
-                                    color: Colors.grey,
+                                    color: Colors.white,
                                     width: 1.0,
                                   ),
+                                  borderRadius: BorderRadius.circular(5), // Rounded corners for consistency
                                 ),
-                                child: Center(
-                                  child: TextButton(
-                                    child: const Text(
-                                      "Sort ↑↓",
-                                      style: TextStyle(fontSize: 8, fontWeight: FontWeight.w600, color: Colors.blue),
-                                    ),
-                                    onPressed: () {
-                                      // Handle add new button press
-                                      showModalBottomSheet(
-                                        context: context,
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                                        ),
-                                        isScrollControlled: true, // Allows the modal to take full height
-                                        builder: (BuildContext context) {
-                                          return StatefulBuilder( // Use StatefulBuilder for managing modal state
-                                            builder: (BuildContext context, StateSetter setModalState) {
-                                              return FractionallySizedBox(
-                                                heightFactor: 0.46, // Modal takes up 46% of the screen height, adjust as needed
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(16.0),
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                    children: [
-                                                      // Sort Container, always visible
-                                                      Container(
-                                                        height: screenHeight * 0.05,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                                                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.blue,
-                                                          border: Border.all(color: Colors.grey),
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            const Text(
-                                                              'Sort By',
-                                                              style: TextStyle(fontSize: 14, color: Colors.white),
-                                                            ),
-                                                            IconButton(
-                                                              icon: Icon(
-                                                                Icons.clear,
-                                                                color: isSortApplied ? Colors.white : Colors.grey,
-                                                              ),
-                                                              onPressed: isSortApplied
-                                                                  ? () {
-                                                                setModalState(() {
-                                                                  isAreaMinToMax = false;
-                                                                  isAreaMaxToMin = false;
-                                                                  isNearbyEnabled = false;
-                                                                  isPriceEnabled = false;
-                                                                  isPriceEnabledmaxtomin = false;
-                                                                  isSortApplied = false;
-                                                                });
-                                                              }
-                                                                  : null,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-
-                                                      // Nearby Container
-                                                      Container(
-                                                        height: screenHeight * 0.05,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                        margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          border: Border.all(color: Colors.grey),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'Near By',
-                                                              style: isNearbyEnabled
-                                                                  ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
-                                                                  : const TextStyle(fontSize: 12, color: Colors.grey),
-                                                            ),
-                                                            Checkbox(
-                                                              checkColor: Colors.white,
-                                                              activeColor: Colors.green,
-                                                              value: isNearbyEnabled,
-                                                              onChanged: (bool? value) {
-                                                                setModalState(() {
-                                                                  isNearbyEnabled = value!;
-                                                                  isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-
-                                                      // Price (Min to Max) Container
-                                                      Container(
-                                                        height: screenHeight * 0.05,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                        margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          border: Border.all(color: Colors.grey),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'Price (Min to max)',
-                                                              style: isPriceEnabled
-                                                                  ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
-                                                                  : const TextStyle(fontSize: 12, color: Colors.grey),
-                                                            ),
-                                                            Checkbox(
-                                                              checkColor: Colors.white,
-                                                              activeColor: Colors.green,
-                                                              value: isPriceEnabled,
-                                                              onChanged: (bool? value) {
-                                                                setModalState(() {
-                                                                  isPriceEnabled = value!;
-                                                                  isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-
-                                                      // Price (Max to Min) Container
-                                                      Container(
-                                                        height: screenHeight * 0.05,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                        margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          border: Border.all(color: Colors.grey),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'Price (Max to min)',
-                                                              style: isPriceEnabledmaxtomin
-                                                                  ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
-                                                                  : const TextStyle(fontSize: 12, color: Colors.grey),
-                                                            ),
-                                                            Checkbox(
-                                                              checkColor: Colors.white,
-                                                              activeColor: Colors.green,
-                                                              value: isPriceEnabledmaxtomin,
-                                                              onChanged: (bool? value) {
-                                                                setModalState(() {
-                                                                  isPriceEnabledmaxtomin = value!;
-                                                                  isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-
-                                                      // Area (Min to Max) Container
-                                                      Container(
-                                                        height: screenHeight * 0.05,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                        margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          border: Border.all(color: Colors.grey),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'Area (Min to max)',
-                                                              style: isAreaMinToMax
-                                                                  ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
-                                                                  : const TextStyle(fontSize: 12, color: Colors.grey),
-                                                            ),
-                                                            Checkbox(
-                                                              checkColor: Colors.white,
-                                                              activeColor: Colors.green,
-                                                              value: isAreaMinToMax,
-                                                              onChanged: (bool? value) {
-                                                                setModalState(() {
-                                                                  isAreaMinToMax = value!;
-                                                                  isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-
-                                                      // Area (Max to Min) Container
-                                                      Container(
-                                                        height: screenHeight * 0.05,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                        margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          border: Border.all(color: Colors.grey),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'Area (Max to min)',
-                                                              style: isAreaMaxToMin
-                                                                  ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
-                                                                  : const TextStyle(fontSize: 12, color: Colors.grey),
-                                                            ),
-                                                            Checkbox(
-                                                              checkColor: Colors.white,
-                                                              activeColor: Colors.green,
-                                                              value: isAreaMaxToMin,
-                                                              onChanged: (bool? value) {
-                                                                setModalState(() {
-                                                                  isAreaMaxToMin = value!;
-                                                                  isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                      );
-
-
-
-
-                                    },
-                                  ),
-                                ),
-                              ),
-
-                              InkWell(
-                                child: Container(
-                                  margin: const EdgeInsets.only(right: 18),
-                                  height: 28, // Adjusted height to align with the "Add New" button
-                                  width: 60, // Adjusted width
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    border: Border.all(
-                                      color: Colors.white,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5), // Rounded corners for consistency
-                                  ),
-                                  child: Center(
+                                child: const Center(
                                     child: Text("Filter",style: TextStyle(color: Colors.white),)
-                                  ),
                                 ),
-                                onTap: (){
-                                  showAdvancedFiltersBottomSheet(context);
-
-
-                                },
                               ),
-                            ],
-                          )
-                        ],
-                      ),
+                              onTap: (){
+                                showAdvancedFiltersBottomSheet(context);
+
+
+                              },
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                   ],
                 ),
@@ -587,291 +747,327 @@ class _userHomePageState extends State<userHomePage> {
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(screenWidth * 0.04),
-                  child: SingleChildScrollView(
-                    child:Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: screenHeight*0.25, // Adjust to the height you want
-                          width: screenWidth,
-                          child: Stack(
-                            children: [
-                              PageView.builder(
-                                controller: _pageControllerSlider,
-                                itemCount: _images.length,
-                                onPageChanged: (int index) {
-                                  setState(() {
-                                    _currentIndex = index;
-                                  });
-                                },
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    margin: EdgeInsets.all(0), // Margin around the image
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: Colors.blue, width: 3), // Blue border
-                                    ),
-                                    child: Image.asset(
-                                      _images[index],
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                      height: 250,
-                                    ),
-                                  );
-                                },
-                              ),
-                              Positioned(
-                                bottom: 20, // Position the dots just above the bottom
-                                left: 0,
-                                right: 0,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(_images.length, (index) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        borderRadius: BorderRadius.circular(4)
-                                      ),
-                                      child: AnimatedContainer(
-                                        duration: Duration(milliseconds: 500),
-                                        margin: EdgeInsets.symmetric(horizontal: 0),
-                                        width: _currentIndex == index ? 16 : 16,
-                                        height: 4,
-                                        decoration: BoxDecoration(
-                                          color: _currentIndex == index ? Colors.blue : Colors.grey,
-                                          borderRadius: BorderRadius.circular(3),
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: screenHeight*0.015,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: screenHeight * 0.25, // Adjust to the height you want
+                        width: screenWidth,
+                        child: Stack(
                           children: [
-                            Container(
-                              height: screenHeight*0.25,
-                              width: screenWidth*0.45,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.9),
-                                    spreadRadius: 0.5, // How much the shadow spreads
-                                    blurRadius: 0.5, // The blur effect
-                                    offset: Offset(0, 2), // Only shift the shadow downwards
-                                  ),
-                                ],
-                              ),
-                              child: Stack(
-                                children: [Column(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(15), // Set this value to half the width/height to make it circular
-                                      child: Image.asset(
-                                        'assets/images/slider2.jpg',
-                                        width: double.infinity, // Define width
-                                        height: 110, // Define height
-                                        fit: BoxFit.cover, // Ensures the image covers the whole container
-                                      ),
-                                    ),
-                                    SizedBox(height: 5,),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Row(children: [
-                                          Text("₹ 15.00-18.000",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w800),),
-                                          Text("  per sq.ft",style: TextStyle(fontSize: 5,fontWeight: FontWeight.w400,color: Colors.black),),
-
-                                        ],),
-                                        Row(children: [
-                                          Text("Type: ",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w400,color: Colors.grey),),
-                                          Text("Shed",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w600,color: Colors.black),),
-
-                                        ],)
-
-                                      ],
-                                    ),
-                                    SizedBox(height: 5,),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Row(children: [
-                                          SizedBox(width: 5,),
-                                          Image.asset("assets/images/Scaleup.png",height: 20,width: 20,),
-                                          Text("₹45000.00",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w800),),
-                                          Text(" per sq.ft",style: TextStyle(fontSize: 5,fontWeight: FontWeight.w400,color: Colors.black),),
-
-                                        ],),
-
-
-                                      ],
-                                    ),
-                                    SizedBox(height: 5,),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Row(children: [
-                                          Icon(Icons.location_on,size: 12,),
-                                          Text("6.0 kms away",style: TextStyle(fontSize: 8,fontWeight: FontWeight.w400,color: Colors.grey),),
-
-                                        ],),
-                                        Row(children: [
-                                          Image.asset("assets/images/people.png",height: 20,width: 17,),
-                                          SizedBox(width: 5,),
-                                          Container(
-                                            height: 20,
-                                            width: 20,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(4),
-                                            border: Border.all(color: Colors.black,width: 2)
-                                            ),
-                                            child: Center(child: Text("P",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700,fontSize: 13),)),
-                                          )
-
-                                        ],)
-
-                                      ],
-                                    ),
-
-
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Align(
-                                    alignment: Alignment.topRight,
-                                    child: Container(
-                                      color: Colors.white,
-                                      child: Icon(Icons.file_download_outlined,color: Colors.blue,),
-                                    )
-                                  ),
-                                )
-                                ],
-                              )
-                            ),
-                            InkWell(
-                              child: Container(
-                                  height: screenHeight*0.25,
-                                  width: screenWidth*0.45,
+                            PageView.builder(
+                              controller: _pageControllerSlider,
+                              itemCount: _images.length,
+                              onPageChanged: (int index) {
+                                setState(() {
+                                  _currentIndex = index;
+                                });
+                              },
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: EdgeInsets.all(0), // Margin around the image
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.9),
-                                        spreadRadius: 0.5, // How much the shadow spreads
-                                        blurRadius: 0.5, // The blur effect
-                                        offset: Offset(0, 2), // Only shift the shadow downwards
-                                      ),
-                                    ],
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(color: Colors.blue, width: 3), // Blue border
                                   ),
-                                  child: Stack(
-                                    children: [Column(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(15), // Set this value to half the width/height to make it circular
-                                          child: Image.asset(
-                                            'assets/images/slider2.jpg',
-                                            width: double.infinity, // Define width
-                                            height: 110, // Define height
-                                            fit: BoxFit.cover, // Ensures the image covers the whole container
-                                          ),
-                                        ),
-                                        SizedBox(height: 5,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Row(children: [
-                                              Text("₹ 15.00-18.000",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w800),),
-                                              Text("  per sq.ft",style: TextStyle(fontSize: 5,fontWeight: FontWeight.w400,color: Colors.black),),
-
-                                            ],),
-                                            Row(children: [
-                                              Text("Type: ",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w400,color: Colors.grey),),
-                                              Text("Shed",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w600,color: Colors.black),),
-
-                                            ],)
-
-                                          ],
-                                        ),
-                                        SizedBox(height: 5,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Row(children: [
-                                              SizedBox(width: 5,),
-                                              Image.asset("assets/images/Scaleup.png",height: 20,width: 20,),
-                                              Text("₹45000.00",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w800),),
-                                              Text(" per sq.ft",style: TextStyle(fontSize: 5,fontWeight: FontWeight.w400,color: Colors.black),),
-
-                                            ],),
-
-
-                                          ],
-                                        ),
-                                        SizedBox(height: 5,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Row(children: [
-                                              Icon(Icons.location_on,size: 12,),
-                                              Text("6.0 kms away",style: TextStyle(fontSize: 8,fontWeight: FontWeight.w400,color: Colors.grey),),
-
-                                            ],),
-                                            Row(children: [
-                                              Image.asset("assets/images/people.png",height: 20,width: 17,),
-                                              SizedBox(width: 5,),
-                                              Container(
-                                                height: 20,
-                                                width: 20,
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(4),
-                                                    border: Border.all(color: Colors.black,width: 2)
-                                                ),
-                                                child: Center(child: Text("P",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700,fontSize: 13),)),
-                                              )
-
-                                            ],)
-
-                                          ],
-                                        ),
-
-
-                                      ],
-                                    ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Align(
-                                            alignment: Alignment.topRight,
-                                            child: Container(
-                                              color: Colors.white,
-                                              child: Icon(Icons.file_download_outlined,color: Colors.blue,),
-                                            )
-                                        ),
-                                      )
-                                    ],
-                                  )
-                              ),
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>wareHouseDetails()));
+                                  child: Image.asset(
+                                    _images[index],
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: 250,
+                                  ),
+                                );
                               },
                             ),
+                            Positioned(
+                              bottom: 20, // Position the dots just above the bottom
+                              left: 0,
+                              right: 0,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: List.generate(_images.length, (index) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: AnimatedContainer(
+                                      duration: Duration(milliseconds: 500),
+                                      margin: EdgeInsets.symmetric(horizontal: 0),
+                                      width: _currentIndex == index ? 16 : 16,
+                                      height: 4,
+                                      decoration: BoxDecoration(
+                                        color: _currentIndex == index ? Colors.blue : Colors.grey,
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              ),
+                            ),
                           ],
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.015),
+                      /// Api data
+                      Expanded( // Use Expanded here to allow GridView to take available space
+                        child: FutureBuilder<List<interestedModel>>(
+                          future: futureWarehouses,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Center(child: SpinKitCircle(
+                                color: Colors.blue,
+                              ));
+                            } else if (snapshot.hasError) {
+                              return Center(child: Text(snapshot.error.toString()));
+                            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                              return Center(child:
+                                  Stack(
+                                    children: [
+                                      Image.asset(ImageAssets.noWarehouse),
+                                      Center(child: Text("No Warehouse near you..."))
+                                    ],
+                                  )
+                              );
+                            } else {
+                              final warehouses = snapshot.data!;
+                              return Consumer<SortingProvider>(
+                                  builder: (context,sortingProvider,child){
+                                    // Make a copy of the data to sort without re-triggering the FutureBuilder
+                                    final List<interestedModel> warehouses = List.from(snapshot.data!);
+
+
+                                    // Apply sorting based on the selected sort option
+                                    if (sortingProvider.selectedSortOption == 'PriceMinToMax') {
+                                      warehouses.sort((a, b) => a.whouseRent.compareTo(b.whouseRent));
+                                    } else if (sortingProvider.selectedSortOption == 'PriceMaxToMin') {
+                                      warehouses.sort((a, b) => b.whouseRent.compareTo(a.whouseRent));
+                                    } else if (sortingProvider.selectedSortOption == 'AreaMinToMax') {
+                                      warehouses.sort((a, b) => a.warehouseCarpetArea.compareTo(b.warehouseCarpetArea));
+                                    } else if (sortingProvider.selectedSortOption == 'AreaMaxToMin') {
+                                      warehouses.sort((a, b) => b.warehouseCarpetArea.compareTo(a.warehouseCarpetArea));
+                                    }
+
+                                    return GridView.builder(
+                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 10,
+                                        mainAxisSpacing: 10,
+                                        childAspectRatio: 0.8,
+                                      ),
+                                      itemCount: warehouses.length,
+                                      itemBuilder: (context, index) {
+                                        final warehouse = warehouses[index];
+                                        return InkWell(
+                                          child: Container(
+                                            height: screenHeight * 0.25,
+                                            width: screenWidth * 0.45,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(15),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey.withOpacity(0.9),
+                                                  spreadRadius: 0.5,
+                                                  blurRadius: 0.5,
+                                                  offset: const Offset(0, 2),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Stack(
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius: BorderRadius.circular(15),
+                                                      child: Image.network(
+                                                        "https://xpacesphere.com${warehouse.image}",
+                                                        width: double.infinity,
+                                                        height: 110,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                      children: [
+                                                        Row(children: [
+                                                          Container(
+                                                            constraints: BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
+                                                            child: FittedBox(
+                                                              fit: BoxFit.scaleDown, // This will scale down the text if it overflows
+                                                              child: Text(
+                                                                warehouse.whouseRent.toString(), // Limit to 3 decimal places
+                                                                style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700),
+                                                                textAlign: TextAlign.start, // Align text as needed
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "  per sq.ft",
+                                                            style: TextStyle(fontSize: 5, fontWeight: FontWeight.w400, color: Colors.black),
+                                                          ),
+                                                        ]),
+                                                        Row(children: [
+                                                          const Text(
+                                                            "Type: ",
+                                                            style: TextStyle(fontSize: 7, fontWeight: FontWeight.w400, color: Colors.grey),
+                                                          ),
+                                                          Container(
+                                                            constraints: BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
+                                                            child: FittedBox(
+                                                              fit: BoxFit.scaleDown, // This will scale down the text if it overflows
+                                                              child: Text(
+                                                                warehouse.whouseType1, // Limit to 3 decimal places
+                                                                style: TextStyle(fontSize: 7, fontWeight: FontWeight.w600, color: Colors.black87),
+                                                                textAlign: TextAlign.start, // Align text as needed
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ]),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Row(children: [
+                                                          const SizedBox(width: 5),
+                                                          Image.asset("assets/images/Scaleup.png", height: 20, width: 20),
+                                                          Container(
+                                                            constraints: BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
+                                                            child: FittedBox(
+                                                              fit: BoxFit.scaleDown, // This will scale down the text if it overflows
+                                                              child: Text(
+                                                                warehouse.warehouseCarpetArea.toString(), // Limit to 3 decimal places
+                                                                style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800),
+                                                                textAlign: TextAlign.start, // Align text as needed
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const Text(
+                                                            " per sq.ft",
+                                                            style: TextStyle(fontSize: 5, fontWeight: FontWeight.w400, color: Colors.black),
+                                                          ),
+                                                        ]),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                      children: [
+                                                        Row(children: [
+                                                          Icon(Icons.location_on, size: 12),
+                                                          Container(
+                                                            constraints: BoxConstraints(maxWidth: 80), // Adjust maxWidth as needed
+                                                            child: FittedBox(
+                                                              fit: BoxFit.scaleDown, // This will scale down the text if it overflows
+                                                              child: Text(
+                                                                warehouse.distance.toStringAsFixed(3)+"km away", // Limit to 3 decimal places
+                                                                style: TextStyle(fontSize: 8, fontWeight: FontWeight.w400, color: Colors.grey),
+                                                                textAlign: TextAlign.start, // Align text as needed
+                                                              ),
+                                                            ),
+                                                          ),
+
+                                                        ]),
+                                                        Row(children: [
+                                                          Image.asset("assets/images/people.png", height: 20, width: 17),
+                                                          const SizedBox(width: 5),
+                                                          Container(
+                                                            height: 20,
+                                                            width: 20,
+                                                            decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.circular(4),
+                                                              border: Border.all(color: Colors.black, width: 2),
+                                                            ),
+                                                            child: const Center(
+                                                              child: Text(
+                                                                "P",
+                                                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 13),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ]),
+                                                        SizedBox(width: 5,)
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(4.0),
+                                                  child: Align(
+                                                    alignment: Alignment.topRight,
+                                                    child: Container(
+                                                      color: Colors.white,
+                                                      child: const Icon(Icons.file_download_outlined, color: Colors.blue),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => wareHouseDetails(warehouses:warehouse)));
+                                          },
+                                        );
+                                      },
+                                    );
+                                  });
+                            }
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
+
           ],
         ),
+      ),
+    );
+  }
+
+
+
+  // Helper widget for each sorting option
+  Widget _buildSortOption(
+      BuildContext context,
+      SortingProvider sortingProvider, {
+        required String label,
+        required String optionValue,
+      }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: sortingProvider.selectedSortOption == optionValue
+                ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
+                : const TextStyle(fontSize: 12, color: Colors.grey),
+          ),
+          Checkbox(
+            checkColor: Colors.white,
+            activeColor: Colors.green,
+            value: sortingProvider.selectedSortOption == optionValue,
+            onChanged: (bool? value) {
+              if (value == true) {
+                sortingProvider.selectedSortOption = optionValue;
+                Navigator.pop(context);
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -890,13 +1086,15 @@ class _userHomePageState extends State<userHomePage> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-        return AdvancedFiltersBottomSheet();
+        return const AdvancedFiltersBottomSheet();
       },
     );
   }
 }
 
 class AdvancedFiltersBottomSheet extends StatefulWidget {
+  const AdvancedFiltersBottomSheet({super.key});
+
   @override
   _AdvancedFiltersBottomSheetState createState() => _AdvancedFiltersBottomSheetState();
 }
@@ -906,13 +1104,10 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
   bool isShortlisted = true;
   bool isClearFilters = true;
   Map<String, List<String>> filterOptions = {
-    'Construction Types': ['PEB', 'RCC', 'Shed'],
-    'Product Types': ['Cold Storage', 'Others'],
-    'Price (rent/sq.ft)': [],
+    'Construction Types': ['PEB','Cold Storage','RCC', 'Shed','Factory' 'Others'],
+    'Warehouse Types': ['PEB','Cold Storage','RCC','SHED','Dark Store','Open Space','Industrial SHED','BTS','Multi Storey Building','Parking Land'],
     'Area (sq.ft)': [],
-    'Amenities': [],
-    'Compliances': [],
-    'Services': [],
+
   };
   Map<String, bool> selectedOptions = {};
 
@@ -923,7 +1118,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
 
     return Container(
       height: MediaQuery.of(context).size.height / 1.9, // Half screen height
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)), // Rounded top border
       ),
@@ -932,17 +1127,17 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
           Container(
             height: 35,
             margin: EdgeInsets.symmetric(horizontal: screenWidth*0.15,vertical: 8),
+            decoration: BoxDecoration(color: Colors.blue,borderRadius: BorderRadius.circular(8),border: Border.all(color: Colors.grey)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
+                const Padding(
+                  padding: EdgeInsets.only(left: 8.0),
                   child: Text("Advanced Filters",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600),),
                 ),
                 IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.clear,color: Colors.white,size: 20,))
               ],
             ),
-            decoration: BoxDecoration(color: Colors.blue,borderRadius: BorderRadius.circular(8),border: Border.all(color: Colors.grey)),
           ),
           // Filters List
           Expanded(
@@ -956,7 +1151,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                     children: filterOptions.keys.map((filter) {
                       return Container(
                         height: 30,
-                        margin: EdgeInsets.all(5),
+                        margin: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
                           color: selectedFilter == filter ? Colors.blue : Colors.white, // Change color on selection
                           border: Border.all(color: Colors.grey),
@@ -994,7 +1189,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                       children: filterOptions[selectedFilter!]!.map((option) {
                         return Container(
                           height: 30,
-                          margin: EdgeInsets.all(8),
+                          margin: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(8),
@@ -1006,14 +1201,14 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                                 value: selectedOptions[option] ?? false,
                                 onChanged: (bool? value) {
                                   setState(() {
-                                    selectedOptions[option!] = value!;
+                                    selectedOptions[option] = value!;
                                   });
                                 },
                               ),
                               Expanded(
                                 child: Text(
                                   option,
-                                  style: TextStyle(fontSize: 12),
+                                  style: const TextStyle(fontSize: 12),
                                 ),
                               ),
                             ],
@@ -1021,7 +1216,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                         );
                       }).toList(),
                     )
-                        : Center(child: Text('Select a filter')),
+                        : const Center(child: Text('Select a filter')),
                   ),
                 ),
               ],
@@ -1029,7 +1224,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
           ),
 
       Padding(
-        padding: EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: 10),
         child: Container(
           height: screenHeight * 0.05,
           width: screenWidth * 0.553,
@@ -1075,7 +1270,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                     ),
                   ),
                   // Spacer to push Apply Filters to the right
-                  Spacer(),
+                  const Spacer(),
                   // Apply Filters button
                   GestureDetector(
                     onTap: () {
@@ -1117,7 +1312,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
 class DottedBorder extends StatelessWidget {
   final Widget child;
 
-  DottedBorder({required this.child});
+  const DottedBorder({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -1187,6 +1382,64 @@ class DottedBorderPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false;
+  }
+}
+
+
+class GlitterBorderPainter extends CustomPainter {
+  final double progress; // Animation progress value (0.0 to 1.0)
+
+  GlitterBorderPainter(this.progress);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Static border paint
+    final Paint borderPaint = Paint()
+      ..color = Colors.grey
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
+
+    // Draw the rectangular border
+    final Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(rect, Radius.circular(10)),
+      borderPaint,
+    );
+
+    // Glittering light paint
+    final Paint lightPaint = Paint()
+      ..color = Colors.amber.withOpacity(0.9)
+      ..style = PaintingStyle.fill;
+
+    // Compute the length of the entire border (perimeter of the rectangle)
+    final double totalPerimeter = 2 * (size.width + size.height);
+
+    // Calculate the current position of the glitter based on the progress
+    final double glitterPosition = progress * totalPerimeter;
+
+    // Compute the position of the glitter light along the border
+    Offset glitterOffset;
+    if (glitterPosition <= size.width) {
+      // Top edge
+      glitterOffset = Offset(glitterPosition, 0);
+    } else if (glitterPosition <= size.width + size.height) {
+      // Right edge
+      glitterOffset = Offset(size.width, glitterPosition - size.width);
+    } else if (glitterPosition <= 2 * size.width + size.height) {
+      // Bottom edge
+      glitterOffset = Offset(2 * size.width + size.height - glitterPosition, size.height);
+    } else {
+      // Left edge
+      glitterOffset = Offset(0, totalPerimeter - glitterPosition);
+    }
+
+    // Draw the glittering light as a small circle that moves along the border
+    canvas.drawCircle(glitterOffset, 5, lightPaint); // Adjust the circle size for the glowing light
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true; // Repaint whenever animation progress changes
   }
 }
 

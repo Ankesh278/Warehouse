@@ -43,13 +43,11 @@ class _userverifyotpState extends State<userverifyotp> {
       await _auth.signInWithCredential(credential);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isUserLoggedIn', true);
-      print("yahasethogya"+widget.phoneNumber);
       await prefs.setString("phone", widget.phoneNumber);
-      print("sharedsebhi"+prefs.getString("phone")!);
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => newHomePage()),
-            (Route<dynamic> route) => false, // This removes all previous routes
+        MaterialPageRoute(builder: (context) => getuserlocation()),
+            (Route<dynamic> route) => false,
       );
     } catch (e) {
       setState(() {
@@ -219,6 +217,8 @@ class _userverifyotpState extends State<userverifyotp> {
                                         ],
                                         enableActiveFill: true,
                                         onCompleted: (value) {
+
+                                          FocusScope.of(context).unfocus();
                                           _verifyOtp();
                                           // Navigator.push(
                                           //     context,
@@ -268,6 +268,7 @@ class _userverifyotpState extends State<userverifyotp> {
                                 margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
                                 child: ElevatedButton(
                                   onPressed: () {
+                                    FocusScope.of(context).unfocus();
                                     _verifyOtp();
                                     // Handle OTP verification
                                   },

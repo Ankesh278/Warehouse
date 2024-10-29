@@ -5,9 +5,26 @@ import 'package:warehouse/Partner/VerifyOtpScreen.dart';
 import 'package:warehouse/User/UserProvider/AuthUserProvider.dart';
 import 'package:warehouse/User/userverifyotp.dart';
 
-class userlogin extends StatelessWidget {
+class userlogin extends StatefulWidget {
+  @override
+  State<userlogin> createState() => _userloginState();
+}
+
+class _userloginState extends State<userlogin> {
   final _formKey = GlobalKey<FormState>();
+
   final TextEditingController _phoneController = TextEditingController();
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _phoneController.addListener(() {
+      if (_phoneController.text.length == 10) {
+        // Dismiss the keyboard when 10 digits are entered
+        FocusScope.of(context).unfocus();
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     // Get screen dimensions

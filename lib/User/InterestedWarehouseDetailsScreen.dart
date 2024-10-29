@@ -1,43 +1,31 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:warehouse/DistanceCalculator.dart';
 import 'package:warehouse/User/ExpressInterestScreen.dart';
-import 'package:warehouse/User/models/WarehouseModel.dart';
+import 'package:warehouse/User/models/interestedDataModel.dart';
 
+class InterestedWarehouseDetailsScreen extends StatefulWidget {
+  final InteretedModel warehouses;
 
-class wareHouseDetails extends StatefulWidget {
-
-   final  warehouses;
-
-  const wareHouseDetails({super.key, this.warehouses});
+  const InterestedWarehouseDetailsScreen({super.key, required this.warehouses});
   @override
-  State<wareHouseDetails> createState() => _wareHouseDetailsState();
+  State<InterestedWarehouseDetailsScreen> createState() => _InterestedWarehouseDetailsScreenState();
 }
-
-class _wareHouseDetailsState extends State<wareHouseDetails> {
-
-
-
-   late PageController _pageControllerSlider;
+class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDetailsScreen> {
+  late PageController _pageControllerSlider;
+  DistanceCalculator distanceCalculator=DistanceCalculator();
   late Timer _timer;
   int _currentIndex = 0;
+  bool isLoading=false;
   final List<String> _uploadedImages = [];
-   final List<String> _defaultImages = [
-     'assets/images/slider3.jpg', // First Image URL
-     'assets/images/slider2.jpg', // Second Image URL
-   ];
-  final List<String> _uploadedVideos = [];
-   late String _address = "Fetching address...";
-   String? selectedLocation;
-   bool isLoading=false;
-   late LatLng finalAddress = const LatLng(0.0, 0.0); // Set default value
-   LatLng? _latLng;
-   @override
+  final List<String> _defaultImages = [
+    'assets/images/slider3.jpg', // First Image URL
+    'assets/images/slider2.jpg', // Second Image URL
+  ];
+
+  @override
   void initState() {
     super.initState();
-    //Address
-    _getAddressFromLatLng(widget.warehouses.latitude.toString(),widget.warehouses.longitude.toString());
     //warehouseImage
     String filePath = widget.warehouses.filePath;
     processMediaFilePath(filePath);
@@ -50,7 +38,6 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
       } else {
         _currentIndex = 0;
       }
-
       // Animate to the next page
       _pageControllerSlider.animateToPage(
         _currentIndex,
@@ -60,33 +47,11 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
     });
   }
 
-   Future<void> _getAddressFromLatLng(String latitudeStr, String longitudeStr) async {
-     try {
-       // Parse the latitude and longitude strings into doubles
-       double latitude = double.parse(latitudeStr.trim());
-       double longitude = double.parse(longitudeStr.trim());
-
-       // Set the LatLng
-       _latLng = LatLng(latitude, longitude);
-
-       // Get the address from the latitude and longitude
-       List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
-       if (placemarks.isNotEmpty) {
-         Placemark place = placemarks[0];
-
-         setState(() {
-           _address = ' ${place.locality}, ${place.administrativeArea}, ${place.country}';
-           print(_address);
-         });
-       }
-     } catch (e) {
-       print("Error getting address: $e");
-     }
-   }
 
 
 
-   void processMediaFilePath(String filePath) {
+
+  void processMediaFilePath(String filePath) {
     List<String> filePaths = filePath.split(',');
 
     List<String> photos = [];
@@ -111,8 +76,8 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
 
   @override
   void dispose() {
-    _timer?.cancel(); // Cancel the timer to prevent memory leaks
-    _pageControllerSlider?.dispose(); // Dispose of the PageController
+    _timer.cancel(); // Cancel the timer to prevent memory leaks
+    _pageControllerSlider.dispose(); // Dispose of the PageController
     super.dispose();
   }
 
@@ -151,7 +116,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                 SizedBox(width: 7,height: 30,),
                                 InkWell(child: Icon(Icons.arrow_back_ios_new_rounded,color: Colors.white,size: 18,),
                                   onTap: (){
-                                  Navigator.pop(context);
+                                    Navigator.pop(context);
                                   },
 
                                 ),
@@ -161,16 +126,15 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-
                                 InkWell(
                                   child: Container(
-                                    height: 30,
-                                    width: 25,
-                                    margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.04),
-                                    decoration: BoxDecoration(
-                                        color: Colors.blue
-                                    ),
-                                    child: Image.asset("assets/images/Shareicon.png")
+                                      height: 30,
+                                      width: 25,
+                                      margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.04),
+                                      decoration: BoxDecoration(
+                                          color: Colors.blue
+                                      ),
+                                      child: Image.asset("assets/images/Shareicon.png")
                                   ),
                                 ),
                                 Container(
@@ -178,10 +142,10 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                   width: 20,
                                   margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.1),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.white
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.white
                                   ),
-                                 
+
                                   child: Center(child: Icon(Icons.file_download_outlined,color: Colors.blue,size: 16,)),
                                 ),
                               ],
@@ -269,8 +233,8 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                     height: screenHeight*0.05,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.blue),
-                                      borderRadius: BorderRadius.circular(5)
+                                        border: Border.all(color: Colors.blue),
+                                        borderRadius: BorderRadius.circular(5)
                                     ),
                                     child: Row(
                                       children: [
@@ -280,7 +244,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                           child: FittedBox(
                                             fit: BoxFit.scaleDown, // This will scale down the text if it overflows
                                             child: Text("₹ "+
-                                              widget.warehouses.whouseRent.toString(), // Limit to 3 decimal places
+                                                widget.warehouses.whouseRent.toString(), // Limit to 3 decimal places
                                               style: TextStyle(fontWeight: FontWeight.w700,color: Colors.black),
                                               textAlign: TextAlign.start, // Align text as needed
                                             ),
@@ -289,10 +253,10 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                         Text(" Rent sq.ft",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 10,color: Colors.grey),),
                                         Spacer(),
                                         Container(
-                                            height: screenHeight*0.05,
+                                          height: screenHeight*0.05,
                                           width: screenWidth*0.13,
                                           decoration: BoxDecoration(
-                                            color: Colors.blue
+                                              color: Colors.blue
                                           ),
                                           child: Icon(Icons.help_center_outlined,color: Colors.white,),
                                         )
@@ -307,9 +271,9 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                         height: screenHeight*0.12,
                                         width: screenWidth*0.37,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(3),
-                                          border: Border.all(color: Colors.grey,width: 1.5),
-                                          shape: BoxShape.rectangle
+                                            borderRadius: BorderRadius.circular(3),
+                                            border: Border.all(color: Colors.grey,width: 1.5),
+                                            shape: BoxShape.rectangle
                                         ),
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.start,
@@ -412,15 +376,15 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                   ),
                                   SizedBox(height: 13,),
                                   Align(
-                                   alignment: Alignment.centerLeft,
-                                   child: Padding(
-                                     padding: const EdgeInsets.only(left: 15.0),
-                                     child: Text("Address",style: TextStyle(
-                                       fontSize: 13,
-                                       fontWeight: FontWeight.w500
-                                     ),),
-                                   ),
-                                 ),
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 15.0),
+                                      child: Text("Address",style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w500
+                                      ),),
+                                    ),
+                                  ),
                                   SizedBox(height: 13,),
                                   Container(
                                     margin: EdgeInsets.symmetric(horizontal: 15),
@@ -434,17 +398,24 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                       children: [
                                         SizedBox(width: 10),
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 4.0),
+                                          padding: const EdgeInsets.only(top: 10.0),
                                           child: Column(
                                             children: [
                                               Container(
-                                                constraints: BoxConstraints(maxWidth: 130), // Adjust maxWidth as needed
+                                                constraints: BoxConstraints(maxWidth: 150), // Adjust maxWidth as needed
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown, // This will scale down the text if it overflows
-                                                  child: Text(
-                                                    _address, // Limit to 3 decimal places
-                                                    style: TextStyle( fontWeight: FontWeight.w500,fontSize: 13),
-                                                    textAlign: TextAlign.start, // Align text as needed
+                                                  child: FutureBuilder<String>(
+                                                    future: distanceCalculator.getAddressFromLatLng(widget.warehouses.whouse_address), // Replace with actual coordinates
+                                                    builder: (context, snapshot) {
+                                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                                        return Text("Loading address...", style: TextStyle(color: Colors.grey, fontSize: 12));
+                                                      } else if (snapshot.hasError) {
+                                                        return Text("Error: ${snapshot.error}", style: TextStyle(color: Colors.red, fontSize: 12));
+                                                      } else {
+                                                        return Text(snapshot.data!, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14));
+                                                      }
+                                                    },
                                                   ),
                                                 ),
                                               ),
@@ -452,10 +423,19 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                                 constraints: BoxConstraints(maxWidth: screenWidth*0.5), // Adjust maxWidth as needed
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown, // This will scale down the text if it overflows
-                                                  child: Text(
-                                                    widget.warehouses.distance.toStringAsFixed(3)+" km away from your current Location", // Limit to 3 decimal places
-                                                    style: TextStyle( fontWeight: FontWeight.w400, color: Colors.grey,fontSize: 12),
-                                                    textAlign: TextAlign.start, // Align text as needed
+                                                  child: FutureBuilder<double>(
+                                                    future: distanceCalculator.getDistanceFromCurrentToWarehouse(widget.warehouses.whouse_address), // Replace with actual data
+                                                    builder: (context, snapshot) {
+                                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                                        return Text("Calculating distance...", style: TextStyle(color: Colors.grey, fontSize: 12));
+                                                      } else if (snapshot.hasError) {
+                                                        return Text("Error: ${snapshot.error}", style: TextStyle(color: Colors.red, fontSize: 12));
+                                                      } else {
+                                                        double distanceInKm = snapshot.data! / 1000; // Convert to kilometers
+                                                        return Text("${distanceInKm.toStringAsFixed(3)} km away from your current location",
+                                                            style: TextStyle(fontWeight: FontWeight.w500, color: Colors.grey, fontSize: 15));
+                                                      }
+                                                    },
                                                   ),
                                                 ),
                                               ),
@@ -496,25 +476,25 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                   Align(
                                     alignment: Alignment.centerLeft,
                                     child: Padding(padding: EdgeInsets.only(left: 10),
-                                    child: Container(
-                                      height: screenHeight*0.08,
-                                      width: screenWidth*0.27,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(3),
-                                          border: Border.all(color: Colors.grey,width: 1.5),
-                                          shape: BoxShape.rectangle,
-                                        color: Colors.blue
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Text("40 KWA",style: TextStyle(fontWeight: FontWeight.w500,color: Colors.white),),
-                                          Text("Electricity",style: TextStyle(color: Colors.white,fontSize: 8),)
+                                      child: Container(
+                                        height: screenHeight*0.08,
+                                        width: screenWidth*0.27,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(3),
+                                            border: Border.all(color: Colors.grey,width: 1.5),
+                                            shape: BoxShape.rectangle,
+                                            color: Colors.blue
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Text("40 KWA",style: TextStyle(fontWeight: FontWeight.w500,color: Colors.white),),
+                                            Text("Electricity",style: TextStyle(color: Colors.white,fontSize: 8),)
 
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
                                     ),
                                   ),
                                   SizedBox(height: 7,),
@@ -614,8 +594,8 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                         height: screenHeight*0.0415,
                                         width: screenWidth*0.34,
                                         decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.blue),
-                                          borderRadius: BorderRadius.circular(10)
+                                            border: Border.all(color: Colors.blue),
+                                            borderRadius: BorderRadius.circular(10)
                                         ),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
@@ -632,7 +612,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                           height: screenHeight*0.0415,
                                           width: screenWidth*0.34,
                                           decoration: BoxDecoration(
-                                            color: Colors.blue,
+                                              color: Colors.blue,
                                               border: Border.all(color: Colors.blue),
                                               borderRadius: BorderRadius.circular(10)
                                           ),

@@ -2,16 +2,139 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:convert';  // For jsonEncode
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:warehouse/User/userHomePage.dart';
 
 
 class Expressinterestdatetime extends StatefulWidget {
+  final name;
+  final email;
+  final phone;
+  final companyName;
+  final designation;
+  final dateOfPossession;
+  final msg;
+  final id;
+  Expressinterestdatetime({super.key,required this.id,required this.name,required this.email,required this.phone,required this.companyName,required this.designation,required this.msg, this.dateOfPossession});
   @override
   State<Expressinterestdatetime> createState() => _ExpressinterestdatetimeState();
 }
 
 class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
-  TextEditingController _dateController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
   DateTime? _selectedDate;
+
+  ///Post intrest data of the user
+
+  Future<void> postWarehouseData() async {
+
+    // The data you want to send
+    Map<String, dynamic> data = {
+      "warehouse_Id": widget.id,
+      "Name": widget.name.toString(),
+      "Email": widget.email.toString(),
+      "Company_Name": widget.companyName.toString(),
+      "Designation": widget.designation.toString(),
+      "Possession_date": widget.dateOfPossession,
+      "Message": widget.msg,
+      "MDate": _selectedDate.toString(),
+      "MTime": _selectedTime.toString(),
+      "Contact": widget.phone.toString()
+    };
+
+    // The API endpoint
+    String url = "https://xpacesphere.com/api/Wherehousedt/Intrest_warehouse";
+
+    try {
+      // Make the POST request
+      var response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json', // Set the content-type to JSON
+        },
+        body: jsonEncode(data),  // Convert your data to JSON format
+      );
+
+      // Check the response status
+      if (response.statusCode == 200) {
+        // Request was successful
+        print('Data posted successfully!');
+        print('Response: ${response.body}');
+        showCongratulationsDialog(context);
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text('Interest Showed',style: TextStyle(fontSize: 12,color: Colors.white),),
+        //     backgroundColor: Colors.green,
+        //   ),
+        // );
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => userHomePage(latitude:latitude ,longitude: longitude,)),
+        //       (Route<dynamic> route) => false,
+        // );
+
+      } else {
+        // Request failed
+        print('Failed to post data. Status code: ${response.statusCode}');
+        print('Response: ${response.body}');
+      }
+    } catch (error) {
+      // Catch any errors that occur during the request
+      print('Error occurred: $error');
+    }
+  }
+
+
+
+  void showCongratulationsDialog(BuildContext context)async {
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    double? latitude=pref.getDouble("latitude");
+    double? longitude=pref.getDouble("longitude");
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent closing the dialog when tapping outside
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(20.0),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.check_circle, color: Colors.green, size: 40), // Green checkmark
+              SizedBox(width: 5),
+              Text('Congratulations!', style: TextStyle(fontSize: 16)),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Your warehouse has been added. Our team will connect with you shortly.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => userHomePage(latitude:latitude ,longitude: longitude,)),
+                        (Route<dynamic> route) => false,
+                  );// Navigate to home page
+                },
+                child: Text('Continue Browsing'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
+
 
   void _selectDate(BuildContext context) async {
     DateTime initialDate = _selectedDate ?? DateTime.now();
@@ -334,6 +457,11 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
 
 
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
 
 
@@ -412,7 +540,8 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                                         Padding(
                                           padding: const EdgeInsets.only(left: 15,right: 15),
                                           child: TextField(
-
+                                            onTap: (){_selectDate(context);},
+                                            readOnly: true,
                                             controller: _dateController,
                                             decoration: InputDecoration(
                                               labelText: 'Date',
@@ -467,7 +596,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                                               // Optional hint color customization
                                               suffixIcon: IconButton(
                                                 icon: Icon(Icons.more_time_rounded),
-                                                onPressed: () {},
+                                                onPressed: () { _selectTime(context);},
                                               ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(color: Colors.grey, width: 2.0), // Blue color for the border
@@ -481,8 +610,8 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: screenHeight*0.1,),
-                                  Container(
+                                   SizedBox(height: screenHeight*0.1,),
+                                   Container(
                                     height: screenHeight * 0.06,
                                     margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
                                     decoration: BoxDecoration(
@@ -493,7 +622,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                                       borderRadius: BorderRadius.circular(21), // Apply the same border radius to the clip
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          //Navigator.push(context, MaterialPageRoute(builder: (context) => Expressinterestdatetime()));
+                                          postWarehouseData();
                                         },
                                         child: Text('Submit'),
                                         style: ElevatedButton.styleFrom(

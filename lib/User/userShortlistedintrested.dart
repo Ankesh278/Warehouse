@@ -1,5 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:warehouse/DistanceCalculator.dart';
+import 'package:warehouse/User/InterestedWarehouseDetailsScreen.dart';
+import 'package:warehouse/User/models/WarehouseModel.dart';
+import 'package:http/http.dart' as http;
+import 'package:warehouse/User/models/interestedDataModel.dart';
+import 'package:warehouse/User/wareHouseDetails.dart';
 
 class userShortlistedIntrested extends StatefulWidget {
   @override
@@ -9,6 +19,10 @@ class userShortlistedIntrested extends StatefulWidget {
 class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
   bool isShortlisted = true; // State to track toggle between Shortlisted and Interested
   final ScrollController _scrollController = ScrollController();
+  List<InteretedModel> interestedWarehouses = [];
+  List<InteretedModel> shortlistedWarehouses = [];
+  bool isLoading = true;
+
   int _page = 1;
 
   // This function simulates fetching new data when paginating.
@@ -21,6 +35,7 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
   @override
   void initState() {
     super.initState();
+    fetchWarehouses();
     // Listen to the scroll controller to detect when the user reaches the end of the scroll.
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -29,6 +44,67 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
       }
     });
   }
+
+  // Fetch data from API and filter based on type
+  Future<void> fetchWarehouses() async {
+    setState(() {
+      isLoading = true; // Show loading spinner
+    });
+
+    try {
+      final response = await http.get(Uri.parse(
+          "https://xpacesphere.com/api/Wherehousedt/Intrest_warehousedata?mobile=7007221531"));
+
+      if (response.statusCode == 200) {
+        print("API hit successful");
+        print("API response: " + response.body);
+
+        // Decode the response as a map
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+        // Access the list under the 'data' key
+        List<dynamic> data = jsonResponse['data']; // 'data' is the key holding the list
+
+        print("Data: " + data.toString());
+
+        // Create separate lists for interested and shortlisted warehouses
+        List<InteretedModel> interested = [];
+        List<InteretedModel> shortlisted = [];
+
+        for (var item in data) {
+          InteretedModel warehouse = InteretedModel.fromJson(item);
+
+          // Separate based on the 'type' field
+          if (warehouse.type == 'Intrested') {  // Typo from 'Intrested' in the API
+            interested.add(warehouse);
+          } else if (warehouse.type == 'Shortlisted') {
+            shortlisted.add(warehouse);
+          }
+        }
+
+        // Update the state with the filtered lists
+        setState(() {
+          interestedWarehouses = interested;
+          shortlistedWarehouses = shortlisted;
+          isLoading = false; // Stop loading spinner
+        });
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print(e.toString());
+    }
+  }
+
+  //Distance Calculator
+  DistanceCalculator distanceCalculator = DistanceCalculator();
+
+  //print("Distance: ${distance / 1000} km"); // Convert to km for readability
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -283,24 +359,128 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
 
   // Function to build the content for Interested section
   Widget _buildInterestedContent() {
+    // if (isLoading) {
+    //   return Center(child: SpinKitCircle(color: Colors.blue));
+    // }
+    //
+    // if (interestedWarehouses.isEmpty) {
+    //   // If there are no interested warehouses, show a message or UI
+    //   return Center(
+    //     child: Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         Image.asset("assets/images/warehousegift.png", scale: 1.5),
+    //         const SizedBox(height: 20),
+    //         const Text(
+    //           "No Interested Warehouses found. Express interest to get a callback.",
+    //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+    //           textAlign: TextAlign.center,
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
+
+    // Build GridView if data is available
     return Column(
       children: [
-        SizedBox(height: 60,),
-        Stack(children: [
-          Image.asset("assets/images/Ellipse.png",color: Colors.blue,), Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: Image.asset("assets/images/warehousegift.png",scale: 1.57,),
-          ),]),
+        Container(
+          height:  MediaQuery.of(context).size.height * 0.6,
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 0.8,
+            ),
+            itemCount: interestedWarehouses.length,
+            itemBuilder: (context, index) {
+              final warehouse = interestedWarehouses[index];
+              String whouseAddress = warehouse.whouse_address;
+              // Example usage to get the distance
+             // double distance =  distanceCalculator.getDistanceFromCurrentToWarehouse(whouseAddress);
+              return FutureBuilder(
+                future: distanceCalculator.getDistanceFromCurrentToWarehouse(whouseAddress),
+                builder: (context,snapshot){
+                  double distanceInKm = (snapshot.data ?? 0.0) / 1000; // Convert to km
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: SpinKitCircle(
+                      color: Colors.blue, // Specify a color for the spinner
+                      size: 50.0, //
+                    ));
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text(' calculating distance'));
+                  }else{
+                    return InkWell(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.25,
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.9),
+                              spreadRadius: 0.5,
+                              blurRadius: 0.5,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(
+                                "https://xpacesphere.com${warehouse.image}",
+                                width: double.infinity,
+                                height: 110,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              warehouse.whouseRent.toString() + " per sq.ft",
+                              style: const TextStyle(
+                                  fontSize: 10, fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              "Type: " + warehouse.whouseType1,
+                              style: const TextStyle(
+                                  fontSize: 10, fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              (distanceInKm != null
+                                  ? distanceInKm.toStringAsFixed(3) + " km away"
+                                  : "N/A km away"), // Handle null distance gracefully
+                              style: TextStyle(
+                                  fontSize: 8, fontWeight: FontWeight.w400),
+                            ),
 
-        SizedBox(height: 20,width: double.infinity,),
-        Text("Click on a Warehouse of your choice and express interest to get a callback.",style: TextStyle(
-          fontSize: 14,fontWeight: FontWeight.w600
-        ),),
-        SizedBox(height: 20),
-         // Display page for Interested
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  InterestedWarehouseDetailsScreen(warehouses: warehouse)),
+                        );
+                      },
+                    );
+                  }
+                },
+              );
+            },
+          ),
+        ),
       ],
     );
   }
+
 
 
 

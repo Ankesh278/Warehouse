@@ -1,23 +1,28 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
+import 'package:warehouse/Localization/Languages.dart';
 import 'package:warehouse/Partner/HomeScreen.dart';
-import 'package:warehouse/User/searchLocationUser.dart';
-import 'package:warehouse/User/userNotificationScreen.dart';
+import 'package:warehouse/User/userHomePage.dart';
 import 'package:warehouse/User/userProfileScreen.dart';
 import 'package:warehouse/User/userShortlistedintrested.dart';
-import 'package:warehouse/User/wareHouseDetails.dart';
+import 'package:warehouse/generated/l10n.dart';
 import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
-
 class newHomePage extends StatefulWidget {
+  final longitude;
+  final latitude;
+  const newHomePage({super.key,required this.latitude,required this.longitude});
+
   @override
   State<newHomePage> createState() => _newHomePageState();
 }
 
 class _newHomePageState extends State<newHomePage>with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -29,6 +34,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
   int _trnasportIndex = 0;
   int _manpowertIndex = 0;
   int _agricultureIndex = 0;
+  int sliderControllerIndex = 0;
   final List<String> _images = [
     'assets/images/slider3.jpg', // First Image URL
     'assets/images/slider2.jpg', // Second Image URL
@@ -38,6 +44,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
   late PageController _trnasportConmtroller;
   late PageController _manpowerController;
   late PageController _agricultureController;
+  late PageController sliderController;
   late Timer _timer;
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -49,82 +56,62 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
   bool isAreaMinToMax = false;
   bool isAreaMaxToMin = false;
 
+
   @override
   void initState() {
     super.initState();
+
+    // Initialize PageControllers
     _pageControllerSlider = PageController(initialPage: _currentIndex);
     _trnasportConmtroller = PageController(initialPage: _trnasportIndex);
     _manpowerController = PageController(initialPage: _manpowertIndex);
     _agricultureController = PageController(initialPage: _agricultureIndex);
+    sliderController = PageController(initialPage: sliderControllerIndex);
 
-    // Auto-slide after every 3 seconds
-    _timer = Timer.periodic(Duration(seconds: 10), (Timer timer) {
+    // Auto-slide after every 10 seconds for the slider
+    _startAutoSlide(_pageControllerSlider, () {
       if (_currentIndex < _images.length - 1) {
         _currentIndex++;
       } else {
         _currentIndex = 0;
       }
+    }, 10, const Duration(milliseconds: 5000), Curves.easeInOutCubicEmphasized);
 
-      // Animate to the next page
-      _pageControllerSlider.animateToPage(
-        _currentIndex,
-        duration: Duration(milliseconds: 5000),
-        curve: Curves.easeInOutCubicEmphasized,
-      );
-    });
-
-
-    // Auto-slide after every 3 seconds
-    _timer = Timer.periodic(Duration(seconds: 15), (Timer timer) {
+    // Auto-slide for transport
+    _startAutoSlide(_trnasportConmtroller, () {
       if (_trnasportIndex < _images.length - 1) {
         _trnasportIndex++;
       } else {
         _trnasportIndex = 0;
       }
+    }, 15, const Duration(milliseconds: 300), Curves.slowMiddle);
 
-      // Animate to the next page
-      _trnasportConmtroller.animateToPage(
-        _trnasportIndex,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.slowMiddle,
-      );
-    });
-
-
-    // Auto-slide after every 3 seconds
-    _timer = Timer.periodic(Duration(seconds: 15), (Timer timer) {
+    // Auto-slide for manpower
+    _startAutoSlide(_manpowerController, () {
       if (_manpowertIndex < _images.length - 1) {
         _manpowertIndex++;
       } else {
         _manpowertIndex = 0;
       }
+    }, 15, const Duration(milliseconds: 300), Curves.slowMiddle);
 
-      // Animate to the next page
-      _manpowerController.animateToPage(
-        _manpowertIndex,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.slowMiddle,
-      );
-    });
-
-
-    // Auto-slide after every 3 seconds
-    _timer = Timer.periodic(Duration(seconds: 10), (Timer timer) {
+    // Auto-slide for agriculture
+    _startAutoSlide(_agricultureController, () {
       if (_agricultureIndex < _images.length - 1) {
         _agricultureIndex++;
       } else {
         _agricultureIndex = 0;
       }
+    }, 10, const Duration(milliseconds: 5000), Curves.easeInOutCubicEmphasized);
 
-      // Animate to the next page
-      _agricultureController.animateToPage(
-        _agricultureIndex,
-        duration: Duration(milliseconds: 5000),
-        curve: Curves.easeInOutCubicEmphasized,
-      );
-    });
-
-
+    // Auto-slide for slider controller
+    _startAutoSlide(sliderController, () {
+      if (sliderControllerIndex < _images.length - 1) {
+        sliderControllerIndex++;
+      } else {
+        sliderControllerIndex = 0;
+      }
+    }, 10, const Duration(milliseconds: 5000), Curves.easeOut);
 
     // Animation Controller to control the border animation
     _controller = AnimationController(
@@ -134,19 +121,34 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
 
     // Tween Animation for the glowing light to move along the border
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
-
-
-
   }
+
+// Helper method to start auto-slide
+  void _startAutoSlide(PageController controller, Function onNext, int seconds, Duration duration, Curve curve) {
+    Timer.periodic(Duration(seconds: seconds), (Timer timer) {
+      onNext(); // Update the index
+      // Animate to the next page
+      controller.animateToPage(
+        controller.page!.toInt(), // Use current page directly
+        duration: duration,
+        curve: curve,
+      );
+    });
+  }
+
+
+
 
   @override
   void dispose() {
     _controller.dispose();
-    _timer?.cancel(); // Cancel the timer to prevent memory leaks
-    _pageControllerSlider?.dispose(); // Dispose of the PageController
-    _trnasportConmtroller?.dispose(); // Dispose of the PageController
-    _manpowerController?.dispose(); // Dispose of the PageController
-    _agricultureController?.dispose(); // Dispose of the PageController
+    _timer.cancel();
+    _pageControllerSlider.dispose();
+    _trnasportConmtroller.dispose();
+    _manpowerController.dispose();
+    _agricultureController.dispose();
+    sliderController.dispose();
+
     super.dispose();
   }
 
@@ -180,6 +182,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+
 
     return Scaffold(
       body: Column(
@@ -261,6 +264,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
   }
 
   Widget _buildHomePage(double screenWidth, double screenHeight) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
     return Container(
       color: Colors.blue,
       width: double.infinity,
@@ -290,34 +294,39 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                                 // CustomPaint for the glittering border effect
                                 CustomPaint(
                                   painter: GlitterBorderPainter(_animation.value),
-                                  child: Container(
+                                  child: SizedBox(
                                     width: screenWidth*0.32,
                                     height: screenHeight*0.037,
                                     child: TextButton(
                                       onPressed: () async{
-                                        SharedPreferences pref=await SharedPreferences.getInstance();
-                                        await pref.setBool('isUserLoggedIn', false);
-                                        await pref.setBool('isLoggedIn', true);
-                                        Navigator.of(context).pushAndRemoveUntil(
-                                          MaterialPageRoute(builder: (context) => HomeScreen()), // Replace with your login page
-                                              (route) => false,
-                                        );
+                                        // SharedPreferences pref=await SharedPreferences.getInstance();
+                                        // await pref.setBool('isUserLoggedIn', false);
+                                        // await pref.setBool('isLoggedIn', true);
+                                        // Navigator.of(context).pushAndRemoveUntil(
+                                        //   MaterialPageRoute(builder: (context) => HomeScreen()), // Replace with your login page
+                                        //       (route) => false,
+                                        // );
 
                                         // Button action
                                       },
-                                      child: Text(
-                                        'Become a Partner',
-                                        style: TextStyle(
-                                          fontSize: 9,
-                                          color: Colors.blue,
-                                        ),
-                                      ),
                                       style: TextButton.styleFrom(
                                         backgroundColor: Colors.white,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(10),
-                                          side: BorderSide(color: Colors.grey, width: 1), // Static grey border
+                                          side: const BorderSide(color: Colors.grey, width: 1), // Static grey border
                                         ),
+                                      ),
+                                      child: Animate(
+                                        effects: const [FadeEffect(), ScaleEffect()],
+                                        child: Text(
+                                          S.of(context).became_partner,
+                                          style: const TextStyle(
+                                            fontSize: 9,
+                                            color: Colors.blue,
+                                          ),
+                                        ).animate(delay: 500.ms, // this delay only happens once at the very start
+                                          onPlay: (controller) => controller.repeat(), )
+                                            .tint(color: Colors.purple)
                                       ),
                                     ),
                                   ),
@@ -349,380 +358,441 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                           ],
                         ),
                         const Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            // Navigate to the next page
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => searchLocationUser()),
-                            );
-                          },
-                          child: Container(
-                            width: screenWidth * 0.55,
-                            height: screenHeight * 0.09,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                height: 35,
-                                child: TextFormField(
-                                  enabled: false, // Disable typing here, only show the field
-                                  decoration: InputDecoration(
-                                    hintText: 'Search by location',
-                                    hintStyle: const TextStyle(color: Colors.blueGrey, fontSize: 12),
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-                                    ),
-                                    suffixIcon: const Icon(Icons.search, color: Colors.blue, size: 18),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(width: 3),
-                        InkWell(
-                          child: Container(
-                            height: 30,
-                            width: 30,
-                            margin: const EdgeInsets.only(right: 15),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: const Center(
-                              child: Icon(
-                                Icons.notifications,
-                                color: Colors.blue,
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>userNotificationScreen()));
-                            //   Navigator.push(context, MaterialPageRoute(builder: (context)=>const Warehouseitemdesign()));
-
-                          },
-                        ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     // Navigate to the next page
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(builder: (context) => searchLocationUser()),
+                        //     );
+                        //   },
+                        //   child: Container(
+                        //     width: screenWidth * 0.55,
+                        //     height: screenHeight * 0.09,
+                        //     child: Align(
+                        //       alignment: Alignment.center,
+                        //       child: Container(
+                        //         height: 35,
+                        //         child: TextFormField(
+                        //           enabled: false, // Disable typing here, only show the field
+                        //           decoration: InputDecoration(
+                        //             hintText: 'Search by location',
+                        //             hintStyle: const TextStyle(color: Colors.blueGrey, fontSize: 12),
+                        //             filled: true,
+                        //             fillColor: Colors.white,
+                        //             contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        //             border: OutlineInputBorder(
+                        //               borderRadius: BorderRadius.circular(5),
+                        //               borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        //             ),
+                        //             enabledBorder: OutlineInputBorder(
+                        //               borderRadius: BorderRadius.circular(5),
+                        //               borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        //             ),
+                        //             focusedBorder: OutlineInputBorder(
+                        //               borderRadius: BorderRadius.circular(5),
+                        //               borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                        //             ),
+                        //             suffixIcon: const Icon(Icons.search, color: Colors.blue, size: 18),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        //
+                        // const SizedBox(width: 3),
+                        // InkWell(
+                        //   child: Container(
+                        //     height: 30,
+                        //     width: 30,
+                        //     margin: const EdgeInsets.only(right: 15),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.white,
+                        //       border: Border.all(
+                        //         color: Colors.grey,
+                        //         width: 1.0,
+                        //       ),
+                        //       borderRadius: BorderRadius.circular(5),
+                        //     ),
+                        //     child: const Center(
+                        //       child: Icon(
+                        //         Icons.notifications,
+                        //         color: Colors.blue,
+                        //         size: 18,
+                        //       ),
+                        //     ),
+                        //   ),
+                        //   onTap: (){
+                        //     Navigator.push(context, MaterialPageRoute(builder: (context)=>userNotificationScreen()));
+                        //     //   Navigator.push(context, MaterialPageRoute(builder: (context)=>const Warehouseitemdesign()));
+                        //
+                        //   },
+                        // ),
                       ],
                     ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "498 warehouses near Noida ",
-                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.normal, color: Colors.white),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end, // Align buttons to the end
-                            children: [
-                              Container(
-                                padding: EdgeInsets.zero,
-                                height: 28,
-                                width: 60,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.white,
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                child: Center(
-                                  child: TextButton(
-                                    child: const Text(
-                                      "Sort ↑↓",
-                                      style: TextStyle(fontSize: 8, fontWeight: FontWeight.w600, color: Colors.blue),
-                                    ),
-                                    onPressed: () {
-                                      // Handle add new button press
-                                      showModalBottomSheet(
-                                        context: context,
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                                        ),
-                                        isScrollControlled: true, // Allows the modal to take full height
-                                        builder: (BuildContext context) {
-                                          return StatefulBuilder( // Use StatefulBuilder for managing modal state
-                                            builder: (BuildContext context, StateSetter setModalState) {
-                                              return FractionallySizedBox(
-                                                heightFactor: 0.46, // Modal takes up 46% of the screen height, adjust as needed
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(16.0),
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                    children: [
-                                                      // Sort Container, always visible
-                                                      Container(
-                                                        height: screenHeight * 0.05,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                                                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.blue,
-                                                          border: Border.all(color: Colors.grey),
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            const Text(
-                                                              'Sort By',
-                                                              style: TextStyle(fontSize: 14, color: Colors.white),
-                                                            ),
-                                                            IconButton(
-                                                              icon: Icon(
-                                                                Icons.clear,
-                                                                color: isSortApplied ? Colors.white : Colors.grey,
-                                                              ),
-                                                              onPressed: isSortApplied
-                                                                  ? () {
-                                                                setModalState(() {
-                                                                  isAreaMinToMax = false;
-                                                                  isAreaMaxToMin = false;
-                                                                  isNearbyEnabled = false;
-                                                                  isPriceEnabled = false;
-                                                                  isPriceEnabledmaxtomin = false;
-                                                                  isSortApplied = false;
-                                                                });
-                                                              }
-                                                                  : null,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-
-                                                      // Nearby Container
-                                                      Container(
-                                                        height: screenHeight * 0.05,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                        margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          border: Border.all(color: Colors.grey),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'Near By',
-                                                              style: isNearbyEnabled
-                                                                  ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
-                                                                  : const TextStyle(fontSize: 12, color: Colors.grey),
-                                                            ),
-                                                            Checkbox(
-                                                              checkColor: Colors.white,
-                                                              activeColor: Colors.green,
-                                                              value: isNearbyEnabled,
-                                                              onChanged: (bool? value) {
-                                                                setModalState(() {
-                                                                  isNearbyEnabled = value!;
-                                                                  isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-
-                                                      // Price (Min to Max) Container
-                                                      Container(
-                                                        height: screenHeight * 0.05,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                        margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          border: Border.all(color: Colors.grey),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'Price (Min to max)',
-                                                              style: isPriceEnabled
-                                                                  ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
-                                                                  : const TextStyle(fontSize: 12, color: Colors.grey),
-                                                            ),
-                                                            Checkbox(
-                                                              checkColor: Colors.white,
-                                                              activeColor: Colors.green,
-                                                              value: isPriceEnabled,
-                                                              onChanged: (bool? value) {
-                                                                setModalState(() {
-                                                                  isPriceEnabled = value!;
-                                                                  isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-
-                                                      // Price (Max to Min) Container
-                                                      Container(
-                                                        height: screenHeight * 0.05,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                        margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          border: Border.all(color: Colors.grey),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'Price (Max to min)',
-                                                              style: isPriceEnabledmaxtomin
-                                                                  ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
-                                                                  : const TextStyle(fontSize: 12, color: Colors.grey),
-                                                            ),
-                                                            Checkbox(
-                                                              checkColor: Colors.white,
-                                                              activeColor: Colors.green,
-                                                              value: isPriceEnabledmaxtomin,
-                                                              onChanged: (bool? value) {
-                                                                setModalState(() {
-                                                                  isPriceEnabledmaxtomin = value!;
-                                                                  isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-
-                                                      // Area (Min to Max) Container
-                                                      Container(
-                                                        height: screenHeight * 0.05,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                        margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          border: Border.all(color: Colors.grey),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'Area (Min to max)',
-                                                              style: isAreaMinToMax
-                                                                  ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
-                                                                  : const TextStyle(fontSize: 12, color: Colors.grey),
-                                                            ),
-                                                            Checkbox(
-                                                              checkColor: Colors.white,
-                                                              activeColor: Colors.green,
-                                                              value: isAreaMinToMax,
-                                                              onChanged: (bool? value) {
-                                                                setModalState(() {
-                                                                  isAreaMinToMax = value!;
-                                                                  isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-
-                                                      // Area (Max to Min) Container
-                                                      Container(
-                                                        height: screenHeight * 0.05,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                        margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          border: Border.all(color: Colors.grey),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'Area (Max to min)',
-                                                              style: isAreaMaxToMin
-                                                                  ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
-                                                                  : const TextStyle(fontSize: 12, color: Colors.grey),
-                                                            ),
-                                                            Checkbox(
-                                                              checkColor: Colors.white,
-                                                              activeColor: Colors.green,
-                                                              value: isAreaMaxToMin,
-                                                              onChanged: (bool? value) {
-                                                                setModalState(() {
-                                                                  isAreaMaxToMin = value!;
-                                                                  isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                      );
-
-
-
-
-                                    },
-                                  ),
-                                ),
-                              ),
-
-                              InkWell(
-                                child: Container(
-                                  margin: const EdgeInsets.only(right: 18),
-                                  height: 26, // Adjusted height to align with the "Add New" button
-                                  width: 60, // Adjusted width
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    border: Border.all(
-                                      color: Colors.white,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5), // Rounded corners for consistency
-                                  ),
-                                  child: Center(
-                                      child: Text("Filter",style: TextStyle(color: Colors.white),)
-                                  ),
-                                ),
-                                onTap: (){
-                                  showAdvancedFiltersBottomSheet(context);
-
-
-                                },
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15.0),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Background color for the dropdown
+                            borderRadius: BorderRadius.circular(12), // Rounded corners
+                            border: Border.all(color: Colors.blue, width: 2), // Border color and width
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5), // Soft shadow
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 3), // Shadow position
                               ),
                             ],
-                          )
-                        ],
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 10), // Padding inside the dropdown
+                          child: DropdownButton<Locale>(
+                            icon: Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Colors.blue, // Change icon color to blue
+                              size: 24, // Adjust icon size
+                            ),
+                            value: languageProvider.locale,
+                            onChanged: (Locale? newLocale) {
+                              if (newLocale != null) {
+                                languageProvider.setLocale(newLocale);
+                              }
+                            },
+                            underline: Container(), // Remove the default underline
+                            dropdownColor: Colors.white, // Dropdown background color
+                            isDense: true, // Makes the dropdown more compact
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ), // Text style for selected item
+                            items: LanguageProvider.supportedLocales.map((Locale locale) {
+                              return DropdownMenuItem(
+                                value: locale,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.language, color: Colors.blueAccent, size: 18), // Optional icon before text
+                                    SizedBox(width: 8), // Space between icon and text
+                                    Text(
+                                      languageProvider.getLanguageName(locale), // Display full language name
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
                       ),
-                    ),
+                    )
+
+
+                    // Container(
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       const Text(
+                    //         "498 warehouses near Noida ",
+                    //         style: TextStyle(fontSize: 10, fontWeight: FontWeight.normal, color: Colors.white),
+                    //       ),
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.end, // Align buttons to the end
+                    //         children: [
+                    //           Container(
+                    //             padding: EdgeInsets.zero,
+                    //             height: 28,
+                    //             width: 60,
+                    //             decoration: BoxDecoration(
+                    //               borderRadius: BorderRadius.circular(5),
+                    //               color: Colors.white,
+                    //               border: Border.all(
+                    //                 color: Colors.grey,
+                    //                 width: 1.0,
+                    //               ),
+                    //             ),
+                    //             child: Center(
+                    //               child: TextButton(
+                    //                 child: const Text(
+                    //                   "Sort ↑↓",
+                    //                   style: TextStyle(fontSize: 8, fontWeight: FontWeight.w600, color: Colors.blue),
+                    //                 ),
+                    //                 onPressed: () {
+                    //                   // Handle add new button press
+                    //                   showModalBottomSheet(
+                    //                     context: context,
+                    //                     shape: const RoundedRectangleBorder(
+                    //                       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    //                     ),
+                    //                     isScrollControlled: true, // Allows the modal to take full height
+                    //                     builder: (BuildContext context) {
+                    //                       return StatefulBuilder( // Use StatefulBuilder for managing modal state
+                    //                         builder: (BuildContext context, StateSetter setModalState) {
+                    //                           return FractionallySizedBox(
+                    //                             heightFactor: 0.46, // Modal takes up 46% of the screen height, adjust as needed
+                    //                             child: Padding(
+                    //                               padding: const EdgeInsets.all(16.0),
+                    //                               child: Column(
+                    //                                 mainAxisAlignment: MainAxisAlignment.center,
+                    //                                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                    //                                 children: [
+                    //                                   // Sort Container, always visible
+                    //                                   Container(
+                    //                                     height: screenHeight * 0.05,
+                    //                                     padding: const EdgeInsets.symmetric(horizontal: 12),
+                    //                                     margin: const EdgeInsets.symmetric(horizontal: 16),
+                    //                                     decoration: BoxDecoration(
+                    //                                       color: Colors.blue,
+                    //                                       border: Border.all(color: Colors.grey),
+                    //                                       borderRadius: BorderRadius.circular(10),
+                    //                                     ),
+                    //                                     child: Row(
+                    //                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //                                       children: [
+                    //                                         const Text(
+                    //                                           'Sort By',
+                    //                                           style: TextStyle(fontSize: 14, color: Colors.white),
+                    //                                         ),
+                    //                                         IconButton(
+                    //                                           icon: Icon(
+                    //                                             Icons.clear,
+                    //                                             color: isSortApplied ? Colors.white : Colors.grey,
+                    //                                           ),
+                    //                                           onPressed: isSortApplied
+                    //                                               ? () {
+                    //                                             setModalState(() {
+                    //                                               isAreaMinToMax = false;
+                    //                                               isAreaMaxToMin = false;
+                    //                                               isNearbyEnabled = false;
+                    //                                               isPriceEnabled = false;
+                    //                                               isPriceEnabledmaxtomin = false;
+                    //                                               isSortApplied = false;
+                    //                                             });
+                    //                                           }
+                    //                                               : null,
+                    //                                         ),
+                    //                                       ],
+                    //                                     ),
+                    //                                   ),
+                    //
+                    //                                   // Nearby Container
+                    //                                   Container(
+                    //                                     height: screenHeight * 0.05,
+                    //                                     padding: const EdgeInsets.symmetric(horizontal: 16),
+                    //                                     margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                    //                                     decoration: BoxDecoration(
+                    //                                       color: Colors.white,
+                    //                                       borderRadius: BorderRadius.circular(8),
+                    //                                       border: Border.all(color: Colors.grey),
+                    //                                     ),
+                    //                                     child: Row(
+                    //                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //                                       children: [
+                    //                                         Text(
+                    //                                           'Near By',
+                    //                                           style: isNearbyEnabled
+                    //                                               ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
+                    //                                               : const TextStyle(fontSize: 12, color: Colors.grey),
+                    //                                         ),
+                    //                                         Checkbox(
+                    //                                           checkColor: Colors.white,
+                    //                                           activeColor: Colors.green,
+                    //                                           value: isNearbyEnabled,
+                    //                                           onChanged: (bool? value) {
+                    //                                             setModalState(() {
+                    //                                               isNearbyEnabled = value!;
+                    //                                               isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
+                    //                                             });
+                    //                                           },
+                    //                                         ),
+                    //                                       ],
+                    //                                     ),
+                    //                                   ),
+                    //
+                    //                                   // Price (Min to Max) Container
+                    //                                   Container(
+                    //                                     height: screenHeight * 0.05,
+                    //                                     padding: const EdgeInsets.symmetric(horizontal: 16),
+                    //                                     margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                    //                                     decoration: BoxDecoration(
+                    //                                       color: Colors.white,
+                    //                                       borderRadius: BorderRadius.circular(8),
+                    //                                       border: Border.all(color: Colors.grey),
+                    //                                     ),
+                    //                                     child: Row(
+                    //                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //                                       children: [
+                    //                                         Text(
+                    //                                           'Price (Min to max)',
+                    //                                           style: isPriceEnabled
+                    //                                               ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
+                    //                                               : const TextStyle(fontSize: 12, color: Colors.grey),
+                    //                                         ),
+                    //                                         Checkbox(
+                    //                                           checkColor: Colors.white,
+                    //                                           activeColor: Colors.green,
+                    //                                           value: isPriceEnabled,
+                    //                                           onChanged: (bool? value) {
+                    //                                             setModalState(() {
+                    //                                               isPriceEnabled = value!;
+                    //                                               isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
+                    //                                             });
+                    //                                           },
+                    //                                         ),
+                    //                                       ],
+                    //                                     ),
+                    //                                   ),
+                    //
+                    //                                   // Price (Max to Min) Container
+                    //                                   Container(
+                    //                                     height: screenHeight * 0.05,
+                    //                                     padding: const EdgeInsets.symmetric(horizontal: 16),
+                    //                                     margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                    //                                     decoration: BoxDecoration(
+                    //                                       color: Colors.white,
+                    //                                       borderRadius: BorderRadius.circular(8),
+                    //                                       border: Border.all(color: Colors.grey),
+                    //                                     ),
+                    //                                     child: Row(
+                    //                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //                                       children: [
+                    //                                         Text(
+                    //                                           'Price (Max to min)',
+                    //                                           style: isPriceEnabledmaxtomin
+                    //                                               ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
+                    //                                               : const TextStyle(fontSize: 12, color: Colors.grey),
+                    //                                         ),
+                    //                                         Checkbox(
+                    //                                           checkColor: Colors.white,
+                    //                                           activeColor: Colors.green,
+                    //                                           value: isPriceEnabledmaxtomin,
+                    //                                           onChanged: (bool? value) {
+                    //                                             setModalState(() {
+                    //                                               isPriceEnabledmaxtomin = value!;
+                    //                                               isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
+                    //                                             });
+                    //                                           },
+                    //                                         ),
+                    //                                       ],
+                    //                                     ),
+                    //                                   ),
+                    //
+                    //                                   // Area (Min to Max) Container
+                    //                                   Container(
+                    //                                     height: screenHeight * 0.05,
+                    //                                     padding: const EdgeInsets.symmetric(horizontal: 16),
+                    //                                     margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                    //                                     decoration: BoxDecoration(
+                    //                                       color: Colors.white,
+                    //                                       borderRadius: BorderRadius.circular(8),
+                    //                                       border: Border.all(color: Colors.grey),
+                    //                                     ),
+                    //                                     child: Row(
+                    //                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //                                       children: [
+                    //                                         Text(
+                    //                                           'Area (Min to max)',
+                    //                                           style: isAreaMinToMax
+                    //                                               ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
+                    //                                               : const TextStyle(fontSize: 12, color: Colors.grey),
+                    //                                         ),
+                    //                                         Checkbox(
+                    //                                           checkColor: Colors.white,
+                    //                                           activeColor: Colors.green,
+                    //                                           value: isAreaMinToMax,
+                    //                                           onChanged: (bool? value) {
+                    //                                             setModalState(() {
+                    //                                               isAreaMinToMax = value!;
+                    //                                               isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
+                    //                                             });
+                    //                                           },
+                    //                                         ),
+                    //                                       ],
+                    //                                     ),
+                    //                                   ),
+                    //
+                    //                                   // Area (Max to Min) Container
+                    //                                   Container(
+                    //                                     height: screenHeight * 0.05,
+                    //                                     padding: const EdgeInsets.symmetric(horizontal: 16),
+                    //                                     margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                    //                                     decoration: BoxDecoration(
+                    //                                       color: Colors.white,
+                    //                                       borderRadius: BorderRadius.circular(8),
+                    //                                       border: Border.all(color: Colors.grey),
+                    //                                     ),
+                    //                                     child: Row(
+                    //                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //                                       children: [
+                    //                                         Text(
+                    //                                           'Area (Max to min)',
+                    //                                           style: isAreaMaxToMin
+                    //                                               ? const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)
+                    //                                               : const TextStyle(fontSize: 12, color: Colors.grey),
+                    //                                         ),
+                    //                                         Checkbox(
+                    //                                           checkColor: Colors.white,
+                    //                                           activeColor: Colors.green,
+                    //                                           value: isAreaMaxToMin,
+                    //                                           onChanged: (bool? value) {
+                    //                                             setModalState(() {
+                    //                                               isAreaMaxToMin = value!;
+                    //                                               isSortApplied = isNearbyEnabled || isPriceEnabled || isPriceEnabledmaxtomin || isAreaMinToMax || isAreaMaxToMin;
+                    //                                             });
+                    //                                           },
+                    //                                         ),
+                    //                                       ],
+                    //                                     ),
+                    //                                   ),
+                    //                                 ],
+                    //                               ),
+                    //                             ),
+                    //                           );
+                    //                         },
+                    //                       );
+                    //                     },
+                    //                   );
+                    //                 },
+                    //               ),
+                    //             ),
+                    //           ),
+                    //
+                    //           InkWell(
+                    //             child: Container(
+                    //               margin: const EdgeInsets.only(right: 18),
+                    //               height: 26, // Adjusted height to align with the "Add New" button
+                    //               width: 60, // Adjusted width
+                    //               decoration: BoxDecoration(
+                    //                 color: Colors.blue,
+                    //                 border: Border.all(
+                    //                   color: Colors.white,
+                    //                   width: 1.0,
+                    //                 ),
+                    //                 borderRadius: BorderRadius.circular(5), // Rounded corners for consistency
+                    //               ),
+                    //               child: Center(
+                    //                   child: Text("Filter",style: TextStyle(color: Colors.white),)
+                    //               ),
+                    //             ),
+                    //             onTap: (){
+                    //               showAdvancedFiltersBottomSheet(context);
+                    //
+                    //
+                    //             },
+                    //           ),
+                    //         ],
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -743,12 +813,15 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                     child:Column(
                      // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Flexible(
+                              child:InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>userHomePage(longitude:widget.longitude,latitude:widget.latitude)));
+                                },
                               child: Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: Column(
@@ -762,13 +835,14 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                                       ),
                                       child: Image.asset(ImageAssets.warehouseIco),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text("Warehousing",style: TextStyle(color: Colors.black,fontSize: 8),),
+                                     Padding(
+                                      padding: EdgeInsets.only(top: 5.0),
+                                      child: Text(S.of(context).warehousing,style: TextStyle(color: Colors.black,fontSize: 8),),
                                     )
                                   ],
                                 ),
                               ),
+                            ),
                             ),
                             Flexible(
                               child: Padding(
@@ -784,9 +858,9 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                                       ),
                                       child: Image.asset(ImageAssets.SemiTruck),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text("Transportation",style: TextStyle(color: Colors.black,fontSize: 7),),
+                                     Padding(
+                                      padding: EdgeInsets.only(top: 5.0),
+                                      child: Text(S.of(context).transportation,style: TextStyle(color: Colors.black,fontSize: 7),),
                                     )
                                   ],
                                 ),
@@ -806,9 +880,9 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                                       ),
                                       child: Image.asset(ImageAssets.group),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text("Manpower",style: TextStyle(color: Colors.black,fontSize: 8),),
+                                     Padding(
+                                      padding: EdgeInsets.only(top: 5.0),
+                                      child: Text(S.of(context).manpower,style: TextStyle(color: Colors.black,fontSize: 8),),
                                     )
                                   ],
                                 ),
@@ -828,9 +902,9 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                                       ),
                                       child: Image.asset(ImageAssets.Tractor),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text("Agricultural",style: TextStyle(color: Colors.black,fontSize: 8),),
+                                     Padding(
+                                      padding: EdgeInsets.only(top: 5.0),
+                                      child: Text(S.of(context).agricultural,style: TextStyle(color: Colors.black,fontSize: 8),),
                                     )
                                   ],
                                 ),
@@ -850,22 +924,18 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                                       ),
                                       child: Image.asset(ImageAssets.threedots),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text("More",style: TextStyle(color: Colors.black,fontSize: 8),),
+                                     Padding(
+                                      padding: EdgeInsets.only(top: 5.0),
+                                      child: Text(S.of(context).more,style: TextStyle(color: Colors.black,fontSize: 8),),
                                     )
                                   ],
                                 ),
                               ),
                             ),
-
-
-                            
-
                           ],
                         ),
                         SizedBox(height: screenHeight*0.025,),
-                        Container(
+                        SizedBox(
                           height: screenHeight*0.18, // Adjust to the height you want
                           width: screenWidth,
                           child: Stack(
@@ -880,7 +950,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                                 },
                                 itemBuilder: (context, index) {
                                   return Container(
-                                    margin: EdgeInsets.all(0), // Margin around the image
+                                    margin: const EdgeInsets.all(0), // Margin around the image
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(6),
                                       border: Border.all(color: Colors.grey, width: 3), // Blue border
@@ -897,8 +967,9 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                             ],
                           ),
                         ),
+                         Text(S.of(context).seall,style: TextStyle(color: Colors.blue,fontSize: 10),),
                         SizedBox(height: screenHeight*0.025,),
-                        Container(
+                        SizedBox(
                           height: screenHeight*0.18, // Adjust to the height you want
                           width: screenWidth,
                           child: Stack(
@@ -913,7 +984,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                                 },
                                 itemBuilder: (context, index) {
                                   return Container(
-                                    margin: EdgeInsets.all(0), // Margin around the image
+                                    margin: const EdgeInsets.all(0), // Margin around the image
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(6),
                                       border: Border.all(color: Colors.grey, width: 3), // Blue border
@@ -930,6 +1001,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                             ],
                           ),
                         ),
+                         Text(S.of(context).seall,style: TextStyle(color: Colors.blue,fontSize: 10),),
                         SizedBox(height: screenHeight*0.025,),
                         Padding(
                           padding: const EdgeInsets.only(right: 10.0),
@@ -964,7 +1036,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                                   width: screenWidth*0.1,
                                   child: Center(
                                     child: IconButton(
-                                      icon: Icon(Icons.arrow_circle_right_outlined, size: 20),
+                                      icon: const Icon(Icons.arrow_circle_right_outlined, size: 20),
                                       onPressed: _shiftImagesLeft,
                                     ),
                                   ),
@@ -974,7 +1046,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                           ),
                         ),
                         SizedBox(height: screenHeight*0.025,),
-                        Container(
+                        SizedBox(
                           height: screenHeight*0.18, // Adjust to the height you want
                           width: screenWidth,
                           child: Stack(
@@ -989,7 +1061,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                                 },
                                 itemBuilder: (context, index) {
                                   return Container(
-                                    margin: EdgeInsets.all(0), // Margin around the image
+                                    margin: const EdgeInsets.all(0), // Margin around the image
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(6),
                                       border: Border.all(color: Colors.grey, width: 3), // Blue border
@@ -1006,8 +1078,9 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                             ],
                           ),
                         ),
+                         Text(S.of(context).seall,style: TextStyle(color: Colors.blue,fontSize: 10),),
                         SizedBox(height: screenHeight*0.025,),
-                        Container(
+                        SizedBox(
                           height: screenHeight*0.18, // Adjust to the height you want
                           width: screenWidth,
                           child: Stack(
@@ -1022,7 +1095,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                                 },
                                 itemBuilder: (context, index) {
                                   return Container(
-                                    margin: EdgeInsets.all(0), // Margin around the image
+                                    margin: const EdgeInsets.all(0), // Margin around the image
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(6),
                                       border: Border.all(color: Colors.grey, width: 3), // Blue border
@@ -1039,9 +1112,40 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                             ],
                           ),
                         ),
-
-
-                       
+                         Text(S.of(context).seall,style: TextStyle(color: Colors.blue,fontSize: 10),),
+                        SizedBox(height: screenHeight*0.025,),
+                        SizedBox(
+                          height: screenHeight*0.18, // Adjust to the height you want
+                          width: screenWidth,
+                          child: Stack(
+                            children: [
+                              PageView.builder(
+                                controller: sliderController,
+                                itemCount: _images.length,
+                                onPageChanged: (int index) {
+                                  setState(() {
+                                    sliderControllerIndex = index;
+                                  });
+                                },
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: const EdgeInsets.all(0), // Margin around the image
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(color: Colors.grey, width: 3), // Blue border
+                                    ),
+                                    child: Image.asset(
+                                      _images[index],
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: 250,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
 
                       ],
                     ),
@@ -1069,13 +1173,15 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-        return AdvancedFiltersBottomSheet();
+        return const AdvancedFiltersBottomSheet();
       },
     );
   }
 }
 
 class AdvancedFiltersBottomSheet extends StatefulWidget {
+  const AdvancedFiltersBottomSheet({super.key});
+
   @override
   _AdvancedFiltersBottomSheetState createState() => _AdvancedFiltersBottomSheetState();
 }
@@ -1102,7 +1208,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
 
     return Container(
       height: MediaQuery.of(context).size.height / 1.9, // Half screen height
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)), // Rounded top border
       ),
@@ -1111,17 +1217,17 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
           Container(
             height: 35,
             margin: EdgeInsets.symmetric(horizontal: screenWidth*0.15,vertical: 8),
+            decoration: BoxDecoration(color: Colors.blue,borderRadius: BorderRadius.circular(8),border: Border.all(color: Colors.grey)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
+                const Padding(
+                  padding: EdgeInsets.only(left: 8.0),
                   child: Text("Advanced Filters",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600),),
                 ),
-                IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.clear,color: Colors.white,size: 20,))
+                IconButton(onPressed: (){Navigator.pop(context);}, icon: const Icon(Icons.clear,color: Colors.white,size: 20,))
               ],
             ),
-            decoration: BoxDecoration(color: Colors.blue,borderRadius: BorderRadius.circular(8),border: Border.all(color: Colors.grey)),
           ),
           // Filters List
           Expanded(
@@ -1135,7 +1241,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                     children: filterOptions.keys.map((filter) {
                       return Container(
                         height: 30,
-                        margin: EdgeInsets.all(5),
+                        margin: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
                           color: selectedFilter == filter ? Colors.blue : Colors.white, // Change color on selection
                           border: Border.all(color: Colors.grey),
@@ -1173,7 +1279,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                       children: filterOptions[selectedFilter!]!.map((option) {
                         return Container(
                           height: 30,
-                          margin: EdgeInsets.all(8),
+                          margin: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(8),
@@ -1185,14 +1291,14 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                                 value: selectedOptions[option] ?? false,
                                 onChanged: (bool? value) {
                                   setState(() {
-                                    selectedOptions[option!] = value!;
+                                    selectedOptions[option] = value!;
                                   });
                                 },
                               ),
                               Expanded(
                                 child: Text(
                                   option,
-                                  style: TextStyle(fontSize: 12),
+                                  style: const TextStyle(fontSize: 12),
                                 ),
                               ),
                             ],
@@ -1200,7 +1306,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                         );
                       }).toList(),
                     )
-                        : Center(child: Text('Select a filter')),
+                        : const Center(child: Text('Select a filter')),
                   ),
                 ),
               ],
@@ -1208,7 +1314,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
           ),
 
           Padding(
-            padding: EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 10),
             child: Container(
               height: screenHeight * 0.05,
               width: screenWidth * 0.553,
@@ -1254,7 +1360,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                         ),
                       ),
                       // Spacer to push Apply Filters to the right
-                      Spacer(),
+                      const Spacer(),
                       // Apply Filters button
                       GestureDetector(
                         onTap: () {
@@ -1286,7 +1392,6 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
               ),
             ),
           )
-
         ],
       ),
     );
@@ -1296,7 +1401,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
 class DottedBorder extends StatelessWidget {
   final Widget child;
 
-  DottedBorder({required this.child});
+  const DottedBorder({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -1368,7 +1473,6 @@ class DottedBorderPainter extends CustomPainter {
     return false;
   }
 }
-
 // CustomPainter to animate the light/glitter effect along the button border
 class GlitterBorderPainter extends CustomPainter {
   final double progress; // Animation progress value (0.0 to 1.0)
@@ -1386,7 +1490,7 @@ class GlitterBorderPainter extends CustomPainter {
     // Draw the rectangular border
     final Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
     canvas.drawRRect(
-      RRect.fromRectAndRadius(rect, Radius.circular(10)),
+      RRect.fromRectAndRadius(rect, const Radius.circular(10)),
       borderPaint,
     );
 
