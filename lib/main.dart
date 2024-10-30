@@ -12,6 +12,7 @@ import 'package:warehouse/Partner/Provider/AuthProvider.dart';
 import 'package:warehouse/Partner/Provider/LocationProvider.dart';
 import 'package:warehouse/Partner/Provider/warehouseProvider.dart';
 import 'package:warehouse/User/UserProvider/AuthUserProvider.dart';
+import 'package:warehouse/User/UserProvider/FilterProvider.dart';
 import 'package:warehouse/User/UserProvider/sortingProvider.dart';
 import 'package:warehouse/User/userlogin.dart';
 import 'package:warehouse/generated/l10n.dart';
@@ -53,6 +54,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => WarehouseProvider()),
         ChangeNotifierProvider<LanguageProvider>(create: (_) => LanguageProvider()),
         ChangeNotifierProvider(create: (_) => SortingProvider()),
+        ChangeNotifierProvider(create: (_) => FilterProvider()),
+
 
 
       ],

@@ -9,6 +9,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Partner/HomeScreen.dart';
+import 'package:warehouse/User/UserProvider/FilterProvider.dart';
 import 'package:warehouse/User/UserProvider/sortingProvider.dart';
 import 'package:warehouse/User/models/WarehouseModel.dart';
 import 'package:warehouse/User/searchLocationUser.dart';
@@ -1092,24 +1093,31 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
   }
 }
 
+
+
 class AdvancedFiltersBottomSheet extends StatefulWidget {
   const AdvancedFiltersBottomSheet({super.key});
 
   @override
   _AdvancedFiltersBottomSheetState createState() => _AdvancedFiltersBottomSheetState();
 }
-
 class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet> {
   String? selectedFilter;
-  bool isShortlisted = true;
   bool isClearFilters = true;
   Map<String, List<String>> filterOptions = {
-    'Construction Types': ['PEB','Cold Storage','RCC', 'Shed','Factory' 'Others'],
-    'Warehouse Types': ['PEB','Cold Storage','RCC','SHED','Dark Store','Open Space','Industrial SHED','BTS','Multi Storey Building','Parking Land'],
-    'Area (sq.ft)': [],
-
+    'Construction Types': ['PEB', 'Cold Storage', 'RCC', 'Shed', 'Factory', 'Others'],
+    'Warehouse Types': ['PEB', 'Cold Storage', 'RCC', 'SHED', 'Dark Store', 'Open Space', 'Industrial SHED', 'BTS', 'Multi Storey Building', 'Parking Land'],
+    'Rent Range': [], // Empty list to indicate this will use a slider
   };
-  Map<String, bool> selectedOptions = {};
+
+  Map<String, Map<String, bool>> selectedOptions = {
+    'Construction Types': {},
+    'Warehouse Types': {},
+    'Rent Range': {},
+  };
+  double minRent = 0;
+  double maxRent = 10000;
+  RangeValues rentRange = const RangeValues(0, 10000);
 
   @override
   Widget build(BuildContext context) {
@@ -1117,35 +1125,48 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      height: MediaQuery.of(context).size.height / 1.9, // Half screen height
+      height: MediaQuery.of(context).size.height / 1.9,
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)), // Rounded top border
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: Column(
         children: [
+          // Header with Close Button
           Container(
             height: 35,
-            margin: EdgeInsets.symmetric(horizontal: screenWidth*0.15,vertical: 8),
-            decoration: BoxDecoration(color: Colors.blue,borderRadius: BorderRadius.circular(8),border: Border.all(color: Colors.grey)),
+            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.15, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.grey),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Padding(
                   padding: EdgeInsets.only(left: 8.0),
-                  child: Text("Advanced Filters",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600),),
+                  child: Text(
+                    "Advanced Filters",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                  ),
                 ),
-                IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.clear,color: Colors.white,size: 20,))
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.clear, color: Colors.white, size: 20),
+                ),
               ],
             ),
           ),
-          // Filters List
           Expanded(
             flex: 1,
             child: Row(
               children: [
+                // Filter Categories
                 Container(
-                  width: MediaQuery.of(context).size.width / 2,
+                  width: screenWidth / 2,
                   color: Colors.white,
                   child: ListView(
                     children: filterOptions.keys.map((filter) {
@@ -1153,7 +1174,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                         height: 30,
                         margin: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: selectedFilter == filter ? Colors.blue : Colors.white, // Change color on selection
+                          color: selectedFilter == filter ? Colors.blue : Colors.white,
                           border: Border.all(color: Colors.grey),
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -1163,12 +1184,12 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                               selectedFilter = filter;
                             });
                           },
-                          child: Center(  // Ensure text is centered vertically and horizontally
+                          child: Center(
                             child: Text(
                               filter,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: selectedFilter == filter ? Colors.white : Colors.black, // Change text color based on selection
+                                color: selectedFilter == filter ? Colors.white : Colors.black,
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -1183,7 +1204,36 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                   flex: 1,
                   child: Container(
                     color: Colors.white,
-                    child: selectedFilter != null
+                    child: selectedFilter == 'Rent Range'
+                        ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Select Rent Range (₹)", style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: 10),
+                          RotatedBox(
+                            quarterTurns: -1,
+                            child: RangeSlider(
+                              min: minRent,
+                              max: maxRent,
+                              values: rentRange,
+                              onChanged: (RangeValues newRange) {
+                                setState(() {
+                                  rentRange = newRange;
+                                });
+                              },
+                              divisions: 10,
+                              labels: RangeLabels(
+                                '${rentRange.start.round()}',
+                                '${rentRange.end.round()}',
+                              ),
+                            ),
+                          ),
+                          Text("₹${rentRange.start.round()} - ₹${rentRange.end.round()}"),
+                        ],
+                      ),
+                    )
+                        : selectedFilter != null
                         ? ListView(
                       padding: EdgeInsets.zero,
                       children: filterOptions[selectedFilter!]!.map((option) {
@@ -1198,10 +1248,10 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                             children: [
                               Checkbox(
                                 activeColor: Colors.green,
-                                value: selectedOptions[option] ?? false,
+                                value: selectedOptions[selectedFilter]?[option] ?? false,
                                 onChanged: (bool? value) {
                                   setState(() {
-                                    selectedOptions[option] = value!;
+                                    selectedOptions[selectedFilter]![option] = value!;
                                   });
                                 },
                               ),
@@ -1222,92 +1272,100 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
               ],
             ),
           ),
-
-      Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: Container(
-          height: screenHeight * 0.05,
-          width: screenWidth * 0.553,
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: screenWidth * 0.045,
-              right: screenWidth * 0.03,
-              bottom: screenWidth * 0.013,
-            ),
+          // Bottom Action Buttons
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
             child: Container(
-              width: screenWidth * 0.25,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.white, // Background color for the toggle container
-              ),
-              child: Row(
-                children: [
-                  // Clear All button
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isClearFilters = true; // Toggle to Clear Filters
-                        selectedOptions.clear(); // Clear Filters Logic
-                      });
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: screenWidth * 0.22, // Responsive width based on screen width
-                      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.005), // Adjust padding responsively
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                      ),
-                      child: Text(
-                        "Clear All",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: screenHeight * 0.015, // Responsive font size
+              height: screenHeight * 0.05,
+              width: screenWidth * 0.553,
+              color: Colors.white,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: screenWidth * 0.045,
+                  right: screenWidth * 0.03,
+                  bottom: screenWidth * 0.013,
+                ),
+                child: Container(
+                  width: screenWidth * 0.25,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                  ),
+                  child: Row(
+                    children: [
+                      // Clear All button
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isClearFilters = true;
+                            selectedOptions = {
+                              'Construction Types': {},
+                              'Warehouse Types': {},
+                              'Rent Range': {},
+                            };
+                            rentRange = const RangeValues(0, 10000);
+                          });
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: screenWidth * 0.22,
+                          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.005),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                          ),
+                          child: Text(
+                            "Clear All",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: screenHeight * 0.015,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  // Spacer to push Apply Filters to the right
-                  const Spacer(),
-                  // Apply Filters button
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isClearFilters = false; // Toggle to Apply Filters
-                        Navigator.pop(context); // Apply Filters Logic
-                      });
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: screenWidth * 0.25, // Responsive width based on screen width
-                      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.005), // Adjust padding responsively
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.blue,
-                      ),
-                      child: Text(
-                        "Apply Filters",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: screenHeight * 0.015, // Responsive font size
+                      const Spacer(),
+                      // Apply Filters button
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isClearFilters = false;
+                            Navigator.pop(context);
+                            // Here you would apply the filters
+                          });
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: screenWidth * 0.25,
+                          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.005),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.blue,
+                          ),
+                          child: Text(
+                            "Apply Filters",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: screenHeight * 0.015,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      )
-
-      ],
+        ],
       ),
     );
   }
 }
+
+
+
+
 
 class DottedBorder extends StatelessWidget {
   final Widget child;
