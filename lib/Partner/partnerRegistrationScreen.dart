@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Partner/HomeScreen.dart';
+import 'package:warehouse/User/getuserlocation.dart';
 
 class PartnerRegistrationScreen extends StatefulWidget {
   @override
@@ -192,7 +193,7 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
                                           // Only proceed if form is valid
                                           Navigator.pushAndRemoveUntil(
                                             context,
-                                            MaterialPageRoute(builder: (context) => HomeScreen(name:_firstNameController.text.toString())),
+                                            MaterialPageRoute(builder: (context) => GetUserLocation()),
                                                 (Route<dynamic> route) => false, // Removes all previous routes
                                           );
                                         }

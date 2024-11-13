@@ -23,7 +23,6 @@ class FilterProvider with ChangeNotifier {
     rentRange = range;
     notifyListeners();
   }
-
   // Clear all filters
   void clearFilters() {
     selectedFilter = null;

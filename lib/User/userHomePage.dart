@@ -61,13 +61,17 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
   bool isAreaMaxToMin = false;
   late AnimationController _controller;
   late Animation<double> _animation;
+
+  List<String> constructionTypes = ['']; // Example construction types
+  List<String> warehouseTypes = ['']; // Example warehouse types
+  String rentRange = ''; // Example rent range
   @override
   void initState() {
     super.initState();
     print("Curetn${widget.latitude}");
     print("Curetn${widget.longitude}");
     ///Warehouse Fetching
-    futureWarehouses = fetchWarehouses(widget.latitude, widget.longitude);
+    futureWarehouses = fetchWarehouses(widget.latitude, widget.longitude,constructionTypes,warehouseTypes,rentRange);
     _pageControllerSlider = PageController(initialPage: _currentIndex);
     // Auto-slide after every 3 seconds
     _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
@@ -95,29 +99,56 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
 
   }
 
-  Future<List<interestedModel>> fetchWarehouses(double latitude, double longitude) async {
-    final url = 'https://xpacesphere.com/api/Wherehousedt/GetNLocation?latitude=$latitude&longitude=$longitude';
-    final response = await http.get(Uri.parse(url));
+
+  Future<List<interestedModel>> fetchWarehouses(
+      double latitude,
+      double longitude,
+      List<String> constructionTypes,
+      List<String> warehouseTypes,
+      String rentRange,
+      ) async {
+    final url = 'https://xpacesphere.com/api/Wherehousedt/GetNLocation';
+
+    // Create the request body with the necessary parameters
+    final Map<String, dynamic> body = {
+      "latitude": latitude.toString(),
+      "longitude": longitude.toString(),
+      "constructiontypes": constructionTypes.map((e) => "'$e'").join(','),
+      "warehousetypes": warehouseTypes.map((e) => "'$e'").join(','),
+      "rentrange": rentRange,
+    };
+
+    // Make the POST request
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(body),
+    );
+
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
 
       if (responseData['data'] != null && responseData['data'].isNotEmpty) {
         List jsonResponse = responseData['data'];
         // Count the number of warehouses
-         warehouseCount= jsonResponse.length;
+        warehouseCount = jsonResponse.length;
         print("Number of warehouses: $warehouseCount");
 
         return jsonResponse.map((data) => interestedModel.fromJson(data)).toList();
       } else {
-        // Return an empty list instead of throwing an exception
+        // Return an empty list if no data is available
         warehouseCount = 0;
-        return []; // Indicating no data available
+        return [];
       }
     } else {
       // Handle other status codes if needed
+      const Text("Something went wrong");
       throw Exception('Failed to load warehouses');
     }
   }
+
 
   @override
   void dispose() {
@@ -383,10 +414,10 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(width: 0,),
+                        const SizedBox(width: 0,),
                          Text(
                           "${warehouseCount} warehouses near you.. ",
-                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.normal, color: Colors.white),
+                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.normal, color: Colors.white),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end, // Align buttons to the end
@@ -766,7 +797,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                               },
                               itemBuilder: (context, index) {
                                 return Container(
-                                  margin: EdgeInsets.all(0), // Margin around the image
+                                  margin: const EdgeInsets.all(0), // Margin around the image
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(6),
                                     border: Border.all(color: Colors.blue, width: 3), // Blue border
@@ -793,8 +824,8 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: AnimatedContainer(
-                                      duration: Duration(milliseconds: 500),
-                                      margin: EdgeInsets.symmetric(horizontal: 0),
+                                      duration: const Duration(milliseconds: 500),
+                                      margin: const EdgeInsets.symmetric(horizontal: 0),
                                       width: _currentIndex == index ? 16 : 16,
                                       height: 4,
                                       decoration: BoxDecoration(
@@ -816,22 +847,27 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                           future: futureWarehouses,
                           builder: (context, snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
-                              return Center(child: SpinKitCircle(
+                              return const Center(child: SpinKitCircle(
                                 color: Colors.blue,
                               ));
                             } else if (snapshot.hasError) {
-                              return Center(child: Text(snapshot.error.toString()));
+                              return Center(child: Column(
+                                children: [
+                                  Image.asset(ImageAssets.something),
+                                  const Text("Please wait for sometime...",style: TextStyle(color: Colors.black,fontSize: 14),)
+                                ],
+                              ));
                             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                               return Center(child:
                                   Stack(
                                     children: [
                                       Image.asset(ImageAssets.noWarehouse),
-                                      Center(child: Text("No Warehouse near you..."))
+                                      const Center(child: Text("No Warehouse near you..."))
                                     ],
                                   )
                               );
                             } else {
-                              final warehouses = snapshot.data!;
+                             // final warehouses = snapshot.data!;
                               return Consumer<SortingProvider>(
                                   builder: (context,sortingProvider,child){
                                     // Make a copy of the data to sort without re-triggering the FutureBuilder
@@ -850,7 +886,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                     }
 
                                     return GridView.builder(
-                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2,
                                         crossAxisSpacing: 10,
                                         mainAxisSpacing: 10,
@@ -894,17 +930,17 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                                       children: [
                                                         Row(children: [
                                                           Container(
-                                                            constraints: BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
+                                                            constraints: const BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
                                                             child: FittedBox(
                                                               fit: BoxFit.scaleDown, // This will scale down the text if it overflows
                                                               child: Text(
                                                                 warehouse.whouseRent.toString(), // Limit to 3 decimal places
-                                                                style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700),
+                                                                style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w700),
                                                                 textAlign: TextAlign.start, // Align text as needed
                                                               ),
                                                             ),
                                                           ),
-                                                          Text(
+                                                          const Text(
                                                             "  per sq.ft",
                                                             style: TextStyle(fontSize: 5, fontWeight: FontWeight.w400, color: Colors.black),
                                                           ),
@@ -915,12 +951,12 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                                             style: TextStyle(fontSize: 7, fontWeight: FontWeight.w400, color: Colors.grey),
                                                           ),
                                                           Container(
-                                                            constraints: BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
+                                                            constraints: const BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
                                                             child: FittedBox(
                                                               fit: BoxFit.scaleDown, // This will scale down the text if it overflows
                                                               child: Text(
                                                                 warehouse.whouseType1, // Limit to 3 decimal places
-                                                                style: TextStyle(fontSize: 7, fontWeight: FontWeight.w600, color: Colors.black87),
+                                                                style: const TextStyle(fontSize: 7, fontWeight: FontWeight.w600, color: Colors.black87),
                                                                 textAlign: TextAlign.start, // Align text as needed
                                                               ),
                                                             ),
@@ -936,12 +972,12 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                                           const SizedBox(width: 5),
                                                           Image.asset("assets/images/Scaleup.png", height: 20, width: 20),
                                                           Container(
-                                                            constraints: BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
+                                                            constraints: const BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
                                                             child: FittedBox(
                                                               fit: BoxFit.scaleDown, // This will scale down the text if it overflows
                                                               child: Text(
                                                                 warehouse.warehouseCarpetArea.toString(), // Limit to 3 decimal places
-                                                                style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800),
+                                                                style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w800),
                                                                 textAlign: TextAlign.start, // Align text as needed
                                                               ),
                                                             ),
@@ -958,14 +994,14 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                       children: [
                                                         Row(children: [
-                                                          Icon(Icons.location_on, size: 12),
+                                                          const Icon(Icons.location_on, size: 12),
                                                           Container(
-                                                            constraints: BoxConstraints(maxWidth: 80), // Adjust maxWidth as needed
+                                                            constraints: const BoxConstraints(maxWidth: 80), // Adjust maxWidth as needed
                                                             child: FittedBox(
                                                               fit: BoxFit.scaleDown, // This will scale down the text if it overflows
                                                               child: Text(
                                                                 warehouse.distance.toStringAsFixed(3)+"km away", // Limit to 3 decimal places
-                                                                style: TextStyle(fontSize: 8, fontWeight: FontWeight.w400, color: Colors.grey),
+                                                                style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w400, color: Colors.grey),
                                                                 textAlign: TextAlign.start, // Align text as needed
                                                               ),
                                                             ),
@@ -990,7 +1026,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                                             ),
                                                           ),
                                                         ]),
-                                                        SizedBox(width: 5,)
+                                                        const SizedBox(width: 5,)
                                                       ],
                                                     ),
                                                   ],
@@ -1210,7 +1246,7 @@ class _AdvancedFiltersBottomSheetState extends State<AdvancedFiltersBottomSheet>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text("Select Rent Range (₹)", style: TextStyle(fontWeight: FontWeight.bold)),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           RotatedBox(
                             quarterTurns: -1,
                             child: RangeSlider(
@@ -1460,7 +1496,7 @@ class GlitterBorderPainter extends CustomPainter {
     // Draw the rectangular border
     final Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
     canvas.drawRRect(
-      RRect.fromRectAndRadius(rect, Radius.circular(10)),
+      RRect.fromRectAndRadius(rect, const Radius.circular(10)),
       borderPaint,
     );
 

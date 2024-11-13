@@ -7,5 +7,6 @@ class ImageAssets{
   static const String Tractor = 'assets/images/Tractor.png';
   static const String Truck = 'assets/images/truck.png';
   static const String noWarehouse = 'assets/images/nohouse.gif';
+  static const String something = 'assets/images/something.png';
 
 }

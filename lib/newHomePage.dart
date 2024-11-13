@@ -197,7 +197,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
               },
               children: [
                 _buildHomePage(screenWidth, screenHeight),
-                _userShortListedIntrestedPage(screenWidth, screenHeight),
+               // _userShortListedIntrestedPage(screenWidth, screenHeight),
                 _buildAccountPage(screenWidth, screenHeight),
               ],
             ),
@@ -215,44 +215,44 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                     onPressed: () => _onItemTapped(0),
                   ),
                 ),
-                Expanded(
-                  child: Stack(
-                    clipBehavior: Clip.none, // Allow the bell icon to overflow if necessary
-                    alignment: Alignment.center,
-                    children: [
-                      Positioned(
-                        bottom: 15, // Adjust the bottom position to elevate the icon
-                        child: Container(
-                          width: 40,  // Set the width of the circle background
-                          height: 40, // Set the height of the circle background
-                          decoration: BoxDecoration(
-                            color: _selectedIndex==1?Colors.blue:const Color(0xffD9D9D9), // Circle background color
-                            shape: BoxShape.circle, // Make the background circular
-                            border: Border.all(
-                              color: Colors.white, // White border color
-                              width: 1, // Border width of 1 pixel
-                            ),
-                          ),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.file_download_outlined, // Bell icon
-                              color: _selectedIndex==1?Colors.white:Colors.blue, // Set the icon color to blue
-                              size: 24, // Adjust the size of the icon
-                            ),
-                            onPressed: () => _onItemTapped(1),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Expanded(
+                //   child: Stack(
+                //     clipBehavior: Clip.none, // Allow the bell icon to overflow if necessary
+                //     alignment: Alignment.center,
+                //     children: [
+                //       Positioned(
+                //         bottom: 15, // Adjust the bottom position to elevate the icon
+                //         child: Container(
+                //           width: 40,  // Set the width of the circle background
+                //           height: 40, // Set the height of the circle background
+                //           decoration: BoxDecoration(
+                //             color: _selectedIndex==1?Colors.blue:const Color(0xffD9D9D9), // Circle background color
+                //             shape: BoxShape.circle, // Make the background circular
+                //             border: Border.all(
+                //               color: Colors.white, // White border color
+                //               width: 1, // Border width of 1 pixel
+                //             ),
+                //           ),
+                //           child: IconButton(
+                //             icon: Icon(
+                //               Icons.file_download_outlined, // Bell icon
+                //               color: _selectedIndex==1?Colors.white:Colors.blue, // Set the icon color to blue
+                //               size: 24, // Adjust the size of the icon
+                //             ),
+                //             onPressed: () => _onItemTapped(1),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 Expanded(
                   child: IconButton(
                     icon: ImageIcon(
                       _selectedIndex==2?const AssetImage("assets/images/Gear2.png"):const AssetImage('assets/images/Gear.png'),
                       color: _selectedIndex == 2 ? Colors.white : Colors.grey[300],
                     ),
-                    onPressed: () => _onItemTapped(2),
+                    onPressed: () => _onItemTapped(1),
                   ),
                 ),
               ],
@@ -264,7 +264,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
   }
 
   Widget _buildHomePage(double screenWidth, double screenHeight) {
-    final languageProvider = Provider.of<LanguageProvider>(context);
+
     return Container(
       color: Colors.blue,
       width: double.infinity,
@@ -432,68 +432,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                       ],
                     ),
                     const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 15.0),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white, // Background color for the dropdown
-                            borderRadius: BorderRadius.circular(12), // Rounded corners
-                            border: Border.all(color: Colors.blue, width: 2), // Border color and width
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5), // Soft shadow
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3), // Shadow position
-                              ),
-                            ],
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 10), // Padding inside the dropdown
-                          child: DropdownButton<Locale>(
-                            icon: Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Colors.blue, // Change icon color to blue
-                              size: 24, // Adjust icon size
-                            ),
-                            value: languageProvider.locale,
-                            onChanged: (Locale? newLocale) {
-                              if (newLocale != null) {
-                                languageProvider.setLocale(newLocale);
-                              }
-                            },
-                            underline: Container(), // Remove the default underline
-                            dropdownColor: Colors.white, // Dropdown background color
-                            isDense: true, // Makes the dropdown more compact
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ), // Text style for selected item
-                            items: LanguageProvider.supportedLocales.map((Locale locale) {
-                              return DropdownMenuItem(
-                                value: locale,
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.language, color: Colors.blueAccent, size: 18), // Optional icon before text
-                                    SizedBox(width: 8), // Space between icon and text
-                                    Text(
-                                      languageProvider.getLanguageName(locale), // Display full language name
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ),
-                    )
+
 
 
                     // Container(

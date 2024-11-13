@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:warehouse/Localization/LanguageSwitcher.dart';
+import 'package:warehouse/Localization/Languages.dart';
 import 'package:warehouse/MyHomePage.dart';
+import 'package:warehouse/User/websiteViewer.dart';
 import 'package:warehouse/User/userlogin.dart';
 
 
@@ -116,6 +118,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    final languageProvider = Provider.of<LanguageProvider>(context);
 
     return Scaffold(
       body: Stack(
@@ -139,6 +142,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                               color: Colors.white, fontSize: 14),
                         ),
                       ),
+
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.only(right: screenWidth * 0.005),
@@ -444,45 +448,45 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: screenHeight*0.02,),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                                    height: 35,
-                                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: Colors.grey),
-                                    ),
-                                    child: const Row(
-
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 4.0),
-                                          child: Icon(Icons.punch_clock_outlined,color: Colors.grey,),
-                                        ),
-                                        SizedBox(width: 15),
-                                        Text(
-                                          "Change Password",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w300,
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Padding(
-                                          padding: EdgeInsets.only(right: 8.0),
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
-                                          ),
-                                        )
-
-
-                                      ],
-                                    ),
-                                  ),
+                                 // SizedBox(height: screenHeight*0.02,),
+                                  // Container(
+                                  //   margin: const EdgeInsets.symmetric(horizontal: 20),
+                                  //   height: 35,
+                                  //   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                                  //   decoration: BoxDecoration(
+                                  //     color: Colors.white,
+                                  //     borderRadius: BorderRadius.circular(6),
+                                  //     border: Border.all(color: Colors.grey),
+                                  //   ),
+                                  //   child: const Row(
+                                  //
+                                  //     children: [
+                                  //       Padding(
+                                  //         padding: EdgeInsets.only(left: 4.0),
+                                  //         child: Icon(Icons.punch_clock_outlined,color: Colors.grey,),
+                                  //       ),
+                                  //       SizedBox(width: 15),
+                                  //       Text(
+                                  //         "Change Password",
+                                  //         style: TextStyle(
+                                  //           fontSize: 12,
+                                  //           color: Colors.black,
+                                  //           fontWeight: FontWeight.w300,
+                                  //         ),
+                                  //       ),
+                                  //       Spacer(),
+                                  //       Padding(
+                                  //         padding: EdgeInsets.only(right: 8.0),
+                                  //         child: Align(
+                                  //           alignment: Alignment.centerRight,
+                                  //           child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                  //         ),
+                                  //       )
+                                  //
+                                  //
+                                  //     ],
+                                  //   ),
+                                  // ),
                                   SizedBox(height: screenHeight*0.02,),
                                   Container(
                                     margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -528,99 +532,188 @@ class _userProfileScreenState extends State<userProfileScreen> {
 
                                   ),
                                   SizedBox(height: screenHeight*0.01,),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                                    height: 35,
-                                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: Colors.grey),
-                                    ),
-                                    child: const Row(
-
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 4.0),
-                                          child: Icon(Icons.policy_outlined,color: Colors.grey,),
-                                        ),
-                                        SizedBox(width: 15),
-                                        Text(
-                                          "Privacy Policy",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w300,
+                                  InkWell(
+                                    onTap: (){
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WebViewScreen(
+                                              url: 'https://xpacesphere.com/Privacy%20Policy%20for%20Xpace%20Sphere.html',
+                                              title:"Privacy and Policy"
                                           ),
                                         ),
-                                        Spacer(),
-                                        Padding(
-                                          padding: EdgeInsets.only(right: 8.0),
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                      );
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                                      height: 35,
+                                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(color: Colors.grey),
+                                      ),
+                                      child: const Row(
+
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 4.0),
+                                            child: Icon(Icons.policy_outlined,color: Colors.grey,),
                                           ),
-                                        )
+                                          SizedBox(width: 15),
+                                          Text(
+                                            "Privacy Policy",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Padding(
+                                            padding: EdgeInsets.only(right: 8.0),
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                            ),
+                                          )
 
 
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: screenHeight*0.01,),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                                    height: 35,
-                                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: Colors.grey),
-                                    ),
-                                    child: const Row(
-
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 4.0),
-                                          child: Icon(Icons.collections_bookmark_outlined,color: Colors.grey,),
-                                        ),
-                                        SizedBox(width: 15),
-                                        Text(
-                                          "Terms & Conditions",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w300,
+                                  InkWell(
+                                    onTap: (){
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WebViewScreen(
+                                            url: 'https://xpacesphere.com/Terms%20of%20use.html',
+                                           title:"Terms and Conditions"
                                           ),
                                         ),
-                                        Spacer(),
-                                        Padding(
-                                          padding: EdgeInsets.only(right: 8.0),
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                      );
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                                      height: 35,
+                                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(color: Colors.grey),
+                                      ),
+                                      child: const Row(
+
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 4.0),
+                                            child: Icon(Icons.collections_bookmark_outlined,color: Colors.grey,),
                                           ),
-                                        )
+                                          SizedBox(width: 15),
+                                          Text(
+                                            "Terms & Conditions",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Padding(
+                                            padding: EdgeInsets.only(right: 8.0),
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                            ),
+                                          )
 
 
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: screenHeight*0.03,),
                                   Center(
                                     child: InkWell(
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
                                         child: Row(
                                           children: [
-                                            Icon(Icons.logout_rounded, color: Colors.red),
-                                            SizedBox(width: 10),
-                                            Text(
+                                            const Icon(Icons.logout_rounded, color: Colors.red),
+                                            const SizedBox(width: 10),
+                                            const Text(
                                               "Log out",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 color: Colors.red, // Red text for logout
                                               ),
                                             ),
+                                            Spacer(),
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 0.0),
+                                              child: Align(
+                                                alignment: Alignment.centerRight,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white, // Background color for the dropdown
+                                                    borderRadius: BorderRadius.circular(12), // Rounded corners
+                                                    border: Border.all(color: Colors.blue, width: 2), // Border color and width
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.grey.withOpacity(0.5), // Soft shadow
+                                                        spreadRadius: 2,
+                                                        blurRadius: 5,
+                                                        offset: Offset(0, 3), // Shadow position
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 0), // Padding inside the dropdown
+                                                  child: DropdownButton<Locale>(
+                                                    icon: Icon(
+                                                      Icons.keyboard_arrow_down,
+                                                      color: Colors.blue, // Change icon color to blue
+                                                      size: 24, // Adjust icon size
+                                                    ),
+                                                    value: languageProvider.locale,
+                                                    onChanged: (Locale? newLocale) {
+                                                      if (newLocale != null) {
+                                                        languageProvider.setLocale(newLocale);
+                                                      }
+                                                    },
+                                                    underline: Container(), // Remove the default underline
+                                                    dropdownColor: Colors.white, // Dropdown background color
+                                                    isDense: true, // Makes the dropdown more compact
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.bold,
+                                                    ), // Text style for selected item
+                                                    items: LanguageProvider.supportedLocales.map((Locale locale) {
+                                                      return DropdownMenuItem(
+                                                        value: locale,
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(Icons.language, color: Colors.blueAccent, size: 18), // Optional icon before text
+                                                           // SizedBox(width: 8), // Space between icon and text
+                                                            Text(
+                                                              languageProvider.getLanguageName(locale), // Display full language name
+                                                              style: TextStyle(
+                                                                color: Colors.black,
+                                                                fontSize: 14,
+                                                                fontWeight: FontWeight.w500,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    }).toList(),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -756,7 +849,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
     print("intialize v ho gya");
 
     // Use a fallback value or handle null cases
-    Name =await prefs.getString("Name") ?? "Default Name"; // Provide a default value
+    Name =await prefs.getString("name") ?? "Default Name"; // Provide a default value
     phone =await prefs.getString("phone") ?? "Default Phone";
     setState(() {
 

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:warehouse/Partner/partnerRegistrationScreen.dart';
 import 'package:warehouse/User/getuserlocation.dart';
 import 'package:warehouse/User/userHomePage.dart';
 import 'package:warehouse/newHomePage.dart';
@@ -46,7 +47,7 @@ class _userverifyotpState extends State<userverifyotp> {
       await prefs.setString("phone", widget.phoneNumber);
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => getuserlocation()),
+        MaterialPageRoute(builder: (context) => PartnerRegistrationScreen()),
             (Route<dynamic> route) => false,
       );
     } catch (e) {

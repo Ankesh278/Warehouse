@@ -55,7 +55,7 @@ class AuthUserProvider extends ChangeNotifier {
           await prefs.setBool('isUserLoggedIn', true);
 
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => getuserlocation()),
+            MaterialPageRoute(builder: (context) => GetUserLocation()),
                 (route) => false,
           );
           ScaffoldMessenger.of(context).showSnackBar(
