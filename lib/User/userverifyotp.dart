@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Partner/partnerRegistrationScreen.dart';
+import 'package:http/http.dart' as http;
 import 'package:warehouse/User/getuserlocation.dart';
 import 'package:warehouse/User/userHomePage.dart';
 import 'package:warehouse/newHomePage.dart';
@@ -20,20 +22,25 @@ class userverifyotp extends StatefulWidget {
 
 class _userverifyotpState extends State<userverifyotp> {
   String? _errorMessage;
+ // String? _errorMessage;
+  bool isLoading=false;
 
   final TextEditingController _otpController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _verifyOtp() async {
+    setState(() {
+      isLoading = true;
+    });
+
     String otp = _otpController.text.trim();
     if (otp.isEmpty || otp.length < 6) {
       setState(() {
+        isLoading = false;
         _errorMessage = 'Please enter a 6-digit OTP.';
       });
       return;
     }
-
-
 
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
       verificationId: widget.verificationId,
@@ -41,18 +48,63 @@ class _userverifyotpState extends State<userverifyotp> {
     );
 
     try {
+      // Verify the OTP using Firebase Authentication
       await _auth.signInWithCredential(credential);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isUserLoggedIn', true);
-      await prefs.setString("phone", widget.phoneNumber);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => PartnerRegistrationScreen()),
-            (Route<dynamic> route) => false,
-      );
+
+      // OTP verification successful, send the phone number to the server
+      // String phoneNumber = '7037406808'; // You can replace this with the actual phone number
+      String url = 'http://xpacesphere.com/api/Register/Registration?mobile=${widget.phoneNumber}';
+
+      // Send the phone number to the server
+      final response = await http.post(Uri.parse(url));
+      if (kDebugMode) {
+        print("Registration api       "     +url);
+      }
+      // print("Response>>>>>>>>>>>"+response)
+      if (kDebugMode) {
+        print('Response status: ${response.statusCode}');
+      }
+      if (kDebugMode) {
+        print('Response body: ${response.body}');
+      }
+
+      // Check the response status code
+      if (response.statusCode == 200) {
+        // User exists, navigate to HomeScreen
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isUserLoggedIn', true);
+        await prefs.setString('phone', widget.phoneNumber);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => PartnerRegistrationScreen()), // Replace HomeScreen() with your actual home screen widget
+              (Route<dynamic> route) => false,
+        );
+      } else if (response.statusCode == 201) {
+        // New user, navigate to PartnerRegistrationScreen
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString('phone', widget.phoneNumber);
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => PartnerRegistrationScreen()), // Replace with your registration screen widget
+              (Route<dynamic> route) => false,
+        );
+      } else {
+        // Handle unexpected server responses
+        setState(() {
+          _errorMessage = 'Unexpected server response: ${response.statusCode}';
+        });
+      }
     } catch (e) {
+      // Handle errors (e.g., invalid OTP, network issues)
       setState(() {
-        _errorMessage = 'Invalid OTP. Please enter the correct OTP.';
+        isLoading = false;
+        _errorMessage = 'Invalid OTP or server error. Please try again.';
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
       });
     }
   }
@@ -70,7 +122,7 @@ class _userverifyotpState extends State<userverifyotp> {
   void startTimer() {
     _isButtonDisabled = true;
     _start = 30;
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_start > 0) {
           _start--;
@@ -92,7 +144,6 @@ class _userverifyotpState extends State<userverifyotp> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
 
     return Scaffold(
       body: Stack(
@@ -117,7 +168,7 @@ class _userverifyotpState extends State<userverifyotp> {
                           Align(
                             alignment: Alignment.topLeft,
                             child: IconButton(
-                              icon: Icon(Icons.arrow_back_ios_sharp, color: Colors.white),
+                              icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.white),
                               onPressed: () {
                                 Navigator.pop(context);
                               },
@@ -171,7 +222,7 @@ class _userverifyotpState extends State<userverifyotp> {
                   Expanded(
                     child: Container(
                       margin: EdgeInsets.only(right: screenWidth * 0.005),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(0),
@@ -179,7 +230,7 @@ class _userverifyotpState extends State<userverifyotp> {
                         ),
                       ),
                       child: Padding(
-                          padding: EdgeInsets.only(top:10),
+                          padding: const EdgeInsets.only(top:10),
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
@@ -193,7 +244,9 @@ class _userverifyotpState extends State<userverifyotp> {
                                         appContext: context,
                                         length: 6,
                                         onChanged: (value) {
-                                          print(value);
+                                          if (kDebugMode) {
+                                            print(value);
+                                          }
                                         },
                                         pinTheme: PinTheme(
                                           errorBorderColor: Colors.red,
@@ -210,7 +263,7 @@ class _userverifyotpState extends State<userverifyotp> {
                                         ),
                                         keyboardType: TextInputType.number,
                                         animationType: AnimationType.slide,
-                                        boxShadows: [
+                                        boxShadows: const [
                                           BoxShadow(
                                             color: Colors.white,
                                             blurRadius: 4,
@@ -233,14 +286,14 @@ class _userverifyotpState extends State<userverifyotp> {
                                     if (_errorMessage != null)
                                       Text(
                                         _errorMessage!,
-                                        style: TextStyle(color: Colors.red),
+                                        style: const TextStyle(color: Colors.red),
                                       ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           '$_start seconds',
-                                          style: TextStyle(color: Colors.blue),
+                                          style: const TextStyle(color: Colors.blue),
                                         ),
                                         TextButton(
                                           onPressed: _isButtonDisabled
@@ -273,12 +326,12 @@ class _userverifyotpState extends State<userverifyotp> {
                                     _verifyOtp();
                                     // Handle OTP verification
                                   },
-                                  child: Text('Verify & Proceed'),
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
                                     backgroundColor: Colors.blue,
                                     minimumSize: Size(double.infinity, screenHeight * 0.06),
                                   ),
+                                  child: const Text('Verify & Proceed'),
                                 ),
                               ),
                               SizedBox(height: screenHeight * 0.017),

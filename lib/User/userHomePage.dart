@@ -1,15 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Partner/HomeScreen.dart';
-import 'package:warehouse/User/UserProvider/FilterProvider.dart';
 import 'package:warehouse/User/UserProvider/sortingProvider.dart';
 import 'package:warehouse/User/models/WarehouseModel.dart';
 import 'package:warehouse/User/searchLocationUser.dart';
@@ -51,7 +48,6 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
 
   late PageController _pageControllerSlider;
   late Timer _timer;
-  final List<String> _uploadedImages = [];
 
   bool isSortApplied = false;
   bool isNearbyEnabled = false;
@@ -68,8 +64,12 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    print("Curetn${widget.latitude}");
-    print("Curetn${widget.longitude}");
+    if (kDebugMode) {
+      print("Curetn${widget.latitude}");
+    }
+    if (kDebugMode) {
+      print("Curetn${widget.longitude}");
+    }
     ///Warehouse Fetching
     futureWarehouses = fetchWarehouses(widget.latitude, widget.longitude,constructionTypes,warehouseTypes,rentRange);
     _pageControllerSlider = PageController(initialPage: _currentIndex);
@@ -107,7 +107,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
       List<String> warehouseTypes,
       String rentRange,
       ) async {
-    final url = 'https://xpacesphere.com/api/Wherehousedt/GetNLocation';
+    const url = 'https://xpacesphere.com/api/Wherehousedt/GetNLocation';
 
     // Create the request body with the necessary parameters
     final Map<String, dynamic> body = {
@@ -134,7 +134,9 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
         List jsonResponse = responseData['data'];
         // Count the number of warehouses
         warehouseCount = jsonResponse.length;
-        print("Number of warehouses: $warehouseCount");
+        if (kDebugMode) {
+          print("Number of warehouses: $warehouseCount");
+        }
 
         return jsonResponse.map((data) => interestedModel.fromJson(data)).toList();
       } else {
@@ -416,7 +418,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                       children: [
                         const SizedBox(width: 0,),
                          Text(
-                          "${warehouseCount} warehouses near you.. ",
+                          "$warehouseCount warehouses near you.. ",
                           style: const TextStyle(fontSize: 10, fontWeight: FontWeight.normal, color: Colors.white),
                         ),
                         Row(
@@ -783,7 +785,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: screenHeight * 0.25, // Adjust to the height you want
+                        height: screenHeight * 0.20, // Adjust to the height you want
                         width: screenWidth,
                         child: Stack(
                           children: [
@@ -920,7 +922,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                                       child: Image.network(
                                                         "https://xpacesphere.com${warehouse.image}",
                                                         width: double.infinity,
-                                                        height: 110,
+                                                        height: screenHeight*0.15,
                                                         fit: BoxFit.cover,
                                                       ),
                                                     ),
@@ -1000,7 +1002,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                                             child: FittedBox(
                                                               fit: BoxFit.scaleDown, // This will scale down the text if it overflows
                                                               child: Text(
-                                                                warehouse.distance.toStringAsFixed(3)+"km away", // Limit to 3 decimal places
+                                                                "${warehouse.distance.toStringAsFixed(3)}km away", // Limit to 3 decimal places
                                                                 style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w400, color: Colors.grey),
                                                                 textAlign: TextAlign.start, // Align text as needed
                                                               ),
@@ -1036,7 +1038,10 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                                   child: Align(
                                                     alignment: Alignment.topRight,
                                                     child: Container(
-                                                      color: Colors.white,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius: BorderRadius.circular(7)
+                                                      ),
                                                       child: const Icon(Icons.file_download_outlined, color: Colors.blue),
                                                     ),
                                                   ),

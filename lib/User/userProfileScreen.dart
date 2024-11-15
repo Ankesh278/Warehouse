@@ -1,16 +1,23 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:warehouse/Localization/Languages.dart';
-import 'package:warehouse/MyHomePage.dart';
+import 'package:warehouse/User/UserProvider/photoProvider.dart';
 import 'package:warehouse/User/websiteViewer.dart';
 import 'package:warehouse/User/userlogin.dart';
-
+import 'package:http_parser/http_parser.dart';
 
 class userProfileScreen extends StatefulWidget {
+  const userProfileScreen({super.key});
+
   @override
   State<userProfileScreen> createState() => _userProfileScreenState();
 }
@@ -24,7 +31,9 @@ class _userProfileScreenState extends State<userProfileScreen> {
     super.initState();
     getSharedPreference();
   }
-
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController additionalPhoneController = TextEditingController();
 
   Future<void> _logoutAndRedirect(BuildContext context) async {
     try {
@@ -51,7 +60,9 @@ class _userProfileScreenState extends State<userProfileScreen> {
             (route) => false,
       );
     } catch (e) {
-      print("Error during logout: $e");
+      if (kDebugMode) {
+        print("Error during logout: $e");
+      }
       // Optionally, show an error message or handle the error
     }
   }
@@ -62,14 +73,14 @@ class _userProfileScreenState extends State<userProfileScreen> {
       barrierDismissible: false, // Disable dismiss on tapping outside
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
+          title: const Text(
             "Log Out",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red, // Red title for log out warning
             ),
           ),
-          content: Row(
+          content: const Row(
             children: [
               Icon(Icons.warning_amber_rounded, color: Colors.red),
               SizedBox(width: 10),
@@ -86,7 +97,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
               onPressed: () {
                 Navigator.of(context).pop(false); // Stay logged in
               },
-              child: Text(
+              child: const Text(
                 "No",
                 style: TextStyle(
                   color: Colors.green, // Green color for "No" button
@@ -101,7 +112,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red, // Red color for "Yes" button
               ),
-              child: Text(
+              child: const Text(
                 "Yes",
                 style: TextStyle(
                   color: Colors.white,
@@ -154,7 +165,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                             ),
                           ),
                           child: Padding(
-                            padding: EdgeInsets.all(0),
+                            padding: const EdgeInsets.all(0),
                             child: SingleChildScrollView(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,8 +181,8 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                       children: [
                                         Column(
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 8.0,top: 5),
+                                            const Padding(
+                                              padding: EdgeInsets.only(left: 8.0,top: 5),
                                               child: Align(
                                                   alignment: Alignment.centerLeft,
                                                   child: Text("Looking for Rent your Properties?",style: TextStyle(color: Colors.white,fontSize: 13,fontWeight: FontWeight.w800),)),
@@ -181,7 +192,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                               child: Row(
                                                 children: [
                                                   Image.asset("assets/images/CheckMark.png"),
-                                                  Align(
+                                                  const Align(
                                                       alignment: Alignment.centerLeft,
                                                       child: Text("Verified Property and Owner",style: TextStyle(color: Colors.white,fontSize: 10,fontWeight: FontWeight.normal),)),
                                                 ],
@@ -192,7 +203,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                               child: Row(
                                                 children: [
                                                   Image.asset("assets/images/CheckMark.png"),
-                                                  Align(
+                                                  const Align(
                                                       alignment: Alignment.centerLeft,
                                                       child: Text("Larger Collection of Warehouses",style: TextStyle(color: Colors.white,fontSize: 10,fontWeight: FontWeight.normal),)),
                                                 ],
@@ -209,7 +220,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                                     color: Colors.white,
                                                     borderRadius: BorderRadius.circular(7),
                                                   ),
-                                                  child: Center(child: Text("Post your Property FREE",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w800,fontSize: 12),)),
+                                                  child: const Center(child: Text("Post your Property FREE",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w800,fontSize: 12),)),
                                                 ),
                                               ),
                                             )
@@ -410,42 +421,47 @@ class _userProfileScreenState extends State<userProfileScreen> {
 
 
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                                    height: 35,
-                                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: Colors.grey),
-                                    ),
-                                    child: const Row(
+                                  InkWell(
+                                    onTap: (){
+                                      _sendEmail(context);
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                                      height: 35,
+                                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(color: Colors.grey),
+                                      ),
+                                      child: const Row(
 
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 4.0),
-                                          child: Icon(Icons.support_agent,color: Colors.grey,),
-                                        ),
-                                        SizedBox(width: 15),
-                                        Text(
-                                          "Help and Support",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w300,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 4.0),
+                                            child: Icon(Icons.support_agent,color: Colors.grey,),
                                           ),
-                                        ),
-                                        Spacer(),
-                                        Padding(
-                                          padding: EdgeInsets.only(right: 8.0),
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                          SizedBox(width: 15),
+                                          Text(
+                                            "Help and Support",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w300,
+                                            ),
                                           ),
-                                        )
+                                          Spacer(),
+                                          Padding(
+                                            padding: EdgeInsets.only(right: 8.0),
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                            ),
+                                          )
 
 
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                  // SizedBox(height: screenHeight*0.02,),
@@ -537,7 +553,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => WebViewScreen(
+                                          builder: (context) => const WebViewScreen(
                                               url: 'https://xpacesphere.com/Privacy%20Policy%20for%20Xpace%20Sphere.html',
                                               title:"Privacy and Policy"
                                           ),
@@ -589,7 +605,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => WebViewScreen(
+                                          builder: (context) => const WebViewScreen(
                                             url: 'https://xpacesphere.com/Terms%20of%20use.html',
                                            title:"Terms and Conditions"
                                           ),
@@ -651,7 +667,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                                 color: Colors.red, // Red text for logout
                                               ),
                                             ),
-                                            Spacer(),
+                                            const Spacer(),
                                             Padding(
                                               padding: const EdgeInsets.only(right: 0.0),
                                               child: Align(
@@ -666,13 +682,13 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                                         color: Colors.grey.withOpacity(0.5), // Soft shadow
                                                         spreadRadius: 2,
                                                         blurRadius: 5,
-                                                        offset: Offset(0, 3), // Shadow position
+                                                        offset: const Offset(0, 3), // Shadow position
                                                       ),
                                                     ],
                                                   ),
                                                   padding: const EdgeInsets.symmetric(horizontal: 0), // Padding inside the dropdown
                                                   child: DropdownButton<Locale>(
-                                                    icon: Icon(
+                                                    icon: const Icon(
                                                       Icons.keyboard_arrow_down,
                                                       color: Colors.blue, // Change icon color to blue
                                                       size: 24, // Adjust icon size
@@ -686,7 +702,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                                     underline: Container(), // Remove the default underline
                                                     dropdownColor: Colors.white, // Dropdown background color
                                                     isDense: true, // Makes the dropdown more compact
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       color: Colors.black,
                                                       fontSize: 14,
                                                       fontWeight: FontWeight.bold,
@@ -696,11 +712,11 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                                         value: locale,
                                                         child: Row(
                                                           children: [
-                                                            Icon(Icons.language, color: Colors.blueAccent, size: 18), // Optional icon before text
+                                                            const Icon(Icons.language, color: Colors.blueAccent, size: 18), // Optional icon before text
                                                            // SizedBox(width: 8), // Space between icon and text
                                                             Text(
                                                               languageProvider.getLanguageName(locale), // Display full language name
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                 color: Colors.black,
                                                                 fontSize: 14,
                                                                 fontWeight: FontWeight.w500,
@@ -781,8 +797,8 @@ class _userProfileScreenState extends State<userProfileScreen> {
               top: screenHeight * 0.15, // Adjust this to move the container vertically
               left: screenWidth / 2 - 125, // Center the container horizontally
               child: Container(
-                height: 190,
-                width: 250,
+                height: screenHeight*0.24,
+                width: screenWidth*0.77,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -800,7 +816,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                   // crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Spacer(),
-                     Text(Name.isNotEmpty?Name:'Guest',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w800),),
+                     Text(Name.isNotEmpty?Name:'Guest',style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w800),),
                     // SizedBox(height: 10,),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 25),
@@ -809,52 +825,637 @@ class _userProfileScreenState extends State<userProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Icon(Icons.wifi_calling_3_outlined,color: Colors.blue,),
-                          const SizedBox(width: 20,),
+                          const SizedBox(width: 10,),
                           Text(phone.isNotEmpty?phone:'',style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
-
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15,left: 13,right: 13),
-                      child: Container(
-                        alignment: Alignment.bottomCenter,
-                        width: double.infinity,
-                        height: 30,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(color: Colors.blue)
+                    InkWell(
+                      onTap: (){
+                        _showEditDialog(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 15,left: 13,right: 13),
+                        child: Container(
+                          alignment: Alignment.bottomCenter,
+                          width: double.infinity,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.blue)
+                          ),
+                          child: const Center(child: Text("Edit Profile",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w400,fontSize: 14),)),
                         ),
-                        child: const Center(child: Text("Edit Profile",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w400,fontSize: 14),)),
                       ),
                     )
                   ],
                 ),
               )
           ),
-          Positioned(
-              top: screenHeight * 0.08, // Adjust this to move the container vertically
-              left: screenWidth / 2 - 45, // Center the container horizontally
-              child: Image.asset("assets/images/userround.png")
+          Consumer<ProfileProvider>(
+            builder: (context, profileProvider, child) {
+              return Positioned(
+                top: screenHeight * 0.08,
+                left: screenWidth / 2 - 45,
+                child: GestureDetector(
+                  onTap: () => _pickImage(context),
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: 90, // CircleAvatar size + border
+                        height: 90,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.blue, // Border color
+                            width: 2.0, // Border width
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          radius: 45,
+                          backgroundColor: Colors.blue,
+                          backgroundImage: profileProvider.profileImage != null
+                              ? FileImage(profileProvider.profileImage!) // Show picked image from gallery
+                              : profileProvider.profileImageUrl != null
+                              ? NetworkImage(profileProvider.profileImageUrl!) // Show uploaded image from URL
+                              : const AssetImage("assets/images/userround.png")
+                          as ImageProvider, // Default image
+                        ),
+                      ),
+                      const Positioned(
+                        bottom: 5, // Positioning relative to the border
+                        right: 5,
+                        child: CircleAvatar(
+                          radius: 12, // Small circle size for the camera icon
+                          backgroundColor: Colors.white, // Background color for the small circle
+                          child: Icon(
+                            Icons.camera_alt,
+                            size: 14, // Icon size
+                            color: Colors.blue, // Icon color
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
+          Consumer<ProfileProvider>(
+            builder: (context, profileProvider, child) {
+              return Positioned(
+                top: screenHeight * 0.08,
+                left: screenWidth / 2 - 45,
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 90, // CircleAvatar size + border
+                      height: 90,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.blue, // Border color
+                          width: 2.0, // Border width
+                        ),
+                      ),
+                      child: CircleAvatar(
+                        radius: 45,
+                        backgroundColor: Colors.blue,
+                        backgroundImage: profileProvider.profileImage != null
+                            ? FileImage(profileProvider.profileImage!) // Show picked image from gallery
+                            : profileProvider.profileImageUrl != null
+                            ? NetworkImage(profileProvider.profileImageUrl!) // Show uploaded image from URL
+                            : const AssetImage("assets/images/userround.png")
+                        as ImageProvider, // Default image
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 3, // Positioning relative to the border
+                      right: 5,
+                      child: InkWell(
+                        onTap:() =>_pickImage(context),
+                        child: const CircleAvatar(
+                          radius: 8, // Small circle size for the camera icon
+                          backgroundColor: Colors.blue, // Background color for the small circle
+                          child: Icon(
+                            Icons.camera_alt,
+                            size: 14, // Icon size
+                            color: Colors.white, // Icon color
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+
         ],
       ),
     );
   }
 
   Future<void> getSharedPreference() async {
-    print("Shared call ho gya");
+    if (kDebugMode) {
+      print("Shared call ho gya");
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("intialize v ho gya");
+    if (kDebugMode) {
+      print("intialize v ho gya");
+    }
 
     // Use a fallback value or handle null cases
-    Name =await prefs.getString("name") ?? "Default Name"; // Provide a default value
-    phone =await prefs.getString("phone") ?? "Default Phone";
+    Name =prefs.getString("name") ?? "Default Name"; // Provide a default value
+    phone =prefs.getString("phone") ?? "Default Phone";
+    // Remove the '+91' prefix if it exists
+    if (phone.startsWith("+91")) {
+      phone = phone.substring(3);  // Remove the first 3 characters ("+91")
+    }
+    phoneController.text=phone;
+    nameController.text=Name;
+    _fetchProfileImage();
+
     setState(() {
 
     });// Provide a default value
   }
+  // Call the fetchProfileImage method when the widget is initialized
+  Future<void> _fetchProfileImage() async {
+    try {
+      final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+      await fetchProfileImage(profileProvider,phone);  // Fetch and update provider
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error fetching profile image: $e");
+      }
+    }
+  }
+
+
+  Future<void> fetchProfileImage(ProfileProvider profileProvider, String phone) async {
+    final response = await http.get(
+      Uri.parse('https://xpacesphere.com/api/Register/GetRegistr?mobile=$phone'),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (kDebugMode) {
+        print("Response data: $data");
+      }  // Logs the entire response body
+
+      // Log the status code and full response
+      if (kDebugMode) {
+        print("Response Status Code: ${response.statusCode}");
+      }
+      if (kDebugMode) {
+        print("Full Response: ${response.body}");
+      }
+
+      // Check if the 'data' array is not empty and contains the 'userProfile' key
+      if (data.containsKey('data') && data['data'].isNotEmpty) {
+        final userData = data['data'][0]; // Access the first item in the 'data' array
+        final String relativeImageUrl = userData['userProfile'];
+        if (kDebugMode) {
+          print("Relative Image URL: $relativeImageUrl");
+        }
+
+        // Concatenate the base URL with the relative image URL
+        final String fullImageUrl = 'https://xpacesphere.com$relativeImageUrl';
+        if (kDebugMode) {
+          print("Full Image URL: $fullImageUrl");
+        }
+
+        // Update the profile provider with the full image URL
+        profileProvider.setProfileImageUrl(fullImageUrl);
+      } else {
+        if (kDebugMode) {
+          print("No user data or userProfile found in the response.");
+        }
+      }
+    } else {
+      if (kDebugMode) {
+        print('Failed to load profile image with status code: ${response.statusCode}');
+      }
+    }
+  }
+
+  Future<void> _pickImage(BuildContext context) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+      final imageFile = File(pickedFile.path);
+
+      // Log for debugging
+      if (kDebugMode) {
+        print('Picked image: ${imageFile.path}');
+      }
+
+      // Update the image in the Provider immediately
+      profileProvider.setProfileImage(imageFile);
+      if (kDebugMode) {
+        print('Updated profile image in provider.');
+      }
+
+      // Start uploading the image to the server in the background
+      _uploadImage(imageFile, phone).then((uploadedImageUrl) {
+        if (uploadedImageUrl != null) {
+          // If upload is successful, update the image URL in the provider
+          profileProvider.setProfileImageUrl(uploadedImageUrl);
+          if (kDebugMode) {
+            print('Uploaded image URL: $uploadedImageUrl');
+          }
+        }
+      }).catchError((error) {
+        // Handle error if upload fails
+        if (kDebugMode) {
+          print("Error uploading image: $error");
+        }
+      });
+    }
+  }
+
+
+
+
+
+  Future<String?> _uploadImage(File imageFile, String phone) async {
+    final uri = Uri.parse('https://xpacesphere.com/api/Register/UPDRegistr');
+    final request = http.MultipartRequest('PUT', uri)
+      ..fields['Mobile'] = phone // Add the phone number field to the request
+      ..files.add(await http.MultipartFile.fromPath(
+        'UserProfile', // form-data field name
+        imageFile.path,
+        contentType: MediaType('image', 'jpeg'), // Set content type if necessary
+      ));
+
+    try {
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        // Read the response body
+        final responseBody = await response.stream.bytesToString();
+        if (kDebugMode) {
+          print("Response Code: ${response.statusCode}");
+        }
+        if (kDebugMode) {
+          print("Response Body: $responseBody");
+        }
+
+        // Assuming the server returns the URL of the uploaded image
+        final responseData = json.decode(responseBody);
+        if (responseData['status'] == 'success') {
+
+          // Extract the image URL from the response
+          return responseData['imageUrl'];  // Return the image URL
+        } else {
+          if (kDebugMode) {
+            print("Error: ${responseData['message']}");
+          }
+          return null;  // If upload failed, return null
+        }
+      } else {
+        if (kDebugMode) {
+          print("Image upload failed with status: ${response.statusCode}");
+        }
+        final responseBody = await response.stream.bytesToString();
+        if (kDebugMode) {
+          print("Error response body: $responseBody");
+        }
+        return null;  // If response status is not 200, return null
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error uploading image: $e");
+      }
+      return null;  // If an error occurred during upload, return null
+    }
+  }
+
+
+
+  void _showEditDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, -1),
+            end: const Offset(0, 0),
+          ).animate(CurvedAnimation(
+            parent: ModalRoute.of(context)!.animation!,
+            curve: Curves.fastEaseInToSlowEaseOut,
+          )),
+          child: Center(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 1000),
+              curve: Curves.easeInOutBack,
+              padding: const EdgeInsets.all(20),
+              child: Material(
+                elevation: 10,
+                color: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Colors.blueAccent, Colors.lightBlue,Colors.blue],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                        offset: Offset(5, 5),
+                      ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Edit Profile',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        height: 45,
+                        child: TextField(
+                          controller: nameController,
+                          decoration: InputDecoration(
+                            labelText: 'Name',
+                            labelStyle: const TextStyle(color: Colors.black,fontWeight: FontWeight.w700),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.8),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(6),
+                              borderSide: const BorderSide(color: Colors.grey)
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: 45,
+                        child: TextField(
+                          controller: phoneController,
+                          decoration: InputDecoration(
+                            labelText: 'Phone Number',
+                            labelStyle: const TextStyle(color: Colors.black,fontWeight: FontWeight.w700),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.8),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                borderSide: const BorderSide(color: Colors.grey)
+                            ),
+                          ),
+                          readOnly: true,
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      SizedBox(
+                        height: 60,
+                        child: TextField(
+                          controller: additionalPhoneController,
+                          decoration: InputDecoration(
+                            labelText: 'Additional Phone Number',
+                            filled: true,
+                            labelStyle: const TextStyle(color: Colors.black,fontWeight: FontWeight.w400),
+                            fillColor: Colors.white.withOpacity(0.8),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                borderSide: const BorderSide(color: Colors.grey)
+                            ),
+                          ),
+                          keyboardType: TextInputType.number,
+                          maxLength: 10,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.redAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Cancel',style: TextStyle(color: Colors.white),),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.greenAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: () async {
+                              if (true) {
+
+                                await _submitFormWithAnimation(
+                                  context,
+                                  nameController,
+                                  phoneController,
+                                  additionalPhoneController,
+                                );
+                              }
+                            },
+                            child: const Text('Submit'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _submitFormWithAnimation(
+      BuildContext context,
+      TextEditingController nameController,
+      TextEditingController phoneController,
+      TextEditingController additionalPhoneController,
+      ) async {
+    // Show loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
+    // Submit form and get the result
+    final uri = Uri.parse('https://xpacesphere.com/api/Register/UPDRegistr');
+    final request = http.MultipartRequest('PUT', uri)
+      ..fields['Name'] = nameController.text
+      ..fields['Mobile'] = phoneController.text
+      ..fields['OPMobile'] = additionalPhoneController.text;
+
+    bool success = false;
+
+    try {
+      final response = await request.send();
+      final responseBody = await response.stream.bytesToString();
+
+      if (response.statusCode == 200) {
+        if (kDebugMode) {
+          print("Response Status Code: ${response.statusCode}");
+        }
+        success = true; // Successful submission
+        SharedPreferences pref= await SharedPreferences.getInstance();
+        pref.setString("name", nameController.text.toString());
+      } else {
+        if (kDebugMode) {
+          print("Error Message: $responseBody");
+        }
+        success = false; // Submission failed
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error submitting form: $e");
+      }
+      success = false; // Submission failed
+    }
+
+    // Close the loading dialog after a small delay
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
+
+    // Show success/error dialog after form submission
+    if (mounted) {
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return Center(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+              padding: const EdgeInsets.all(20),
+              child: Material(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 500),
+                        child: success
+                            ? const Icon(
+                          Icons.check_circle,
+                          color: Colors.green,
+                          size: 80,
+                          key: ValueKey('success'),
+                        )
+                            : const Icon(
+                          Icons.error,
+                          color: Colors.red,
+                          size: 80,
+                          key: ValueKey('error'),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        success
+                            ? "Profile updated successfully!"
+                            : "Failed to update profile.",
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (mounted) {
+                            additionalPhoneController.clear();
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop(); // Close the form dialog first
+                            setState(() {
+
+                            });
+                          }
+                        },
+                        child: const Text("OK"),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+  Future<void> _sendEmail(BuildContext context) async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: 'yankesh278@gmail.com',
+      query: 'subject=Help%20Request',
+    );
+
+    try {
+      // Attempt to open the mail client
+      if (await canLaunchUrl(emailUri)) {
+        await launchUrl(emailUri);
+
+        // Show confirmation message after the email is opened
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Our team will connect with you soon."),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        throw 'Could not launch email app';
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Unable to open email app. Please try again."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
 
 }
 // Function to launch Instagram app or web page

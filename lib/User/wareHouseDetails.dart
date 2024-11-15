@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:warehouse/User/ExpressInterestScreen.dart';
-import 'package:warehouse/User/models/WarehouseModel.dart';
+import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
 
 class wareHouseDetails extends StatefulWidget {
@@ -27,7 +28,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
      'assets/images/slider3.jpg', // First Image URL
      'assets/images/slider2.jpg', // Second Image URL
    ];
-  final List<String> _uploadedVideos = [];
+
    late String _address = "Fetching address...";
    String? selectedLocation;
    bool isLoading=false;
@@ -44,7 +45,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
 
     _pageControllerSlider = PageController(initialPage: _currentIndex);
     // Auto-slide after every 3 seconds
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       if (_currentIndex < _uploadedImages.length - 1) {
         _currentIndex++;
       } else {
@@ -54,7 +55,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
       // Animate to the next page
       _pageControllerSlider.animateToPage(
         _currentIndex,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
     });
@@ -117,14 +118,11 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
   }
 
 
-
-
   @override
   Widget build(BuildContext context) {
 
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Column(
         children: [
@@ -148,8 +146,8 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                SizedBox(width: 7,height: 30,),
-                                InkWell(child: Icon(Icons.arrow_back_ios_new_rounded,color: Colors.white,size: 18,),
+                                const SizedBox(width: 7,height: 30,),
+                                InkWell(child: const Icon(Icons.arrow_back_ios_new_rounded,color: Colors.white,size: 18,),
                                   onTap: (){
                                   Navigator.pop(context);
                                   },
@@ -161,13 +159,27 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
+                                // InkWell(
+                                //   onTap :(){
+                                //
+                                //   },
+                                //   child: Container(
+                                //       height: 30,
+                                //       width: 25,
+                                //       margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.04),
+                                //       decoration: BoxDecoration(
+                                //           color: Colors.blue
+                                //       ),
+                                //       child: Icon(Icons.shopping_cart,color: Colors.white,)
+                                //   ),
+                                // ),
 
                                 InkWell(
                                   child: Container(
                                     height: 30,
                                     width: 25,
                                     margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.04),
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                         color: Colors.blue
                                     ),
                                     child: Image.asset("assets/images/Shareicon.png")
@@ -182,7 +194,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                     color: Colors.white
                                   ),
                                  
-                                  child: Center(child: Icon(Icons.file_download_outlined,color: Colors.blue,size: 16,)),
+                                  child: const Center(child: Icon(Icons.file_download_outlined,color: Colors.blue,size: 16,)),
                                 ),
                               ],
                             )
@@ -193,7 +205,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.only(right: screenWidth * 0.005),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(0),
@@ -205,13 +217,13 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                           child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     height: screenHeight * 0.28, // Adjust to give some space for dots below the slider
                                     width: screenWidth,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           height: screenHeight * 0.25, // Height for the PageView slider
                                           width: screenWidth,
                                           child: PageView.builder(
@@ -223,9 +235,9 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                               });
                                             },
                                             itemBuilder: (context, index) {
-                                              final String baseUrl = 'https://xpacesphere.com';
+                                              const String baseUrl = 'https://xpacesphere.com';
                                               return Container(
-                                                margin: EdgeInsets.all(0), // No margin around the image
+                                                margin: const EdgeInsets.all(0), // No margin around the image
                                                 decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.circular(20), // Circular border radius
                                                   border: Border.all(color: Colors.white, width: 0), // Optional border color
@@ -243,14 +255,14 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                             },
                                           ),
                                         ),
-                                        SizedBox(height: 10), // Space between slider and dots
+                                        const SizedBox(height: 10), // Space between slider and dots
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: List.generate(_uploadedImages.length, (index) {
                                             return Container(
-                                              margin: EdgeInsets.symmetric(horizontal: 5), // Space between dots
+                                              margin: const EdgeInsets.symmetric(horizontal: 5), // Space between dots
                                               child: AnimatedContainer(
-                                                duration: Duration(milliseconds: 500),
+                                                duration: const Duration(milliseconds: 500),
                                                 width: _currentIndex == index ? 20 : 20,
                                                 height: 5,
                                                 decoration: BoxDecoration(
@@ -264,7 +276,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 10,),
+                                  const SizedBox(height: 10,),
                                   Container(
                                     height: screenHeight*0.05,
                                     width: double.infinity,
@@ -274,32 +286,38 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                     ),
                                     child: Row(
                                       children: [
-                                        SizedBox(width: 15,),
+                                        const SizedBox(width: 15,),
                                         Container(
-                                          constraints: BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
+                                          constraints: const BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
                                           child: FittedBox(
                                             fit: BoxFit.scaleDown, // This will scale down the text if it overflows
-                                            child: Text("₹ "+
-                                              widget.warehouses.whouseRent.toString(), // Limit to 3 decimal places
-                                              style: TextStyle(fontWeight: FontWeight.w700,color: Colors.black),
+                                            child: Text("₹ ${widget.warehouses.whouseRent}", // Limit to 3 decimal places
+                                              style: const TextStyle(fontWeight: FontWeight.w700,color: Colors.black),
                                               textAlign: TextAlign.start, // Align text as needed
                                             ),
                                           ),
                                         ),
-                                        Text(" Rent sq.ft",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 10,color: Colors.grey),),
-                                        Spacer(),
-                                        Container(
-                                            height: screenHeight*0.05,
-                                          width: screenWidth*0.13,
-                                          decoration: BoxDecoration(
-                                            color: Colors.blue
+                                        const Text(" Rent sq.ft",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 10,color: Colors.grey),),
+                                        const Spacer(),
+                                        Tooltip(
+                                          message: 'This is a help icon', // The message you want to show in the tooltip
+                                          child: Container(
+                                            height: screenHeight * 0.05,
+                                            width: screenWidth * 0.13,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.blue,
+                                            ),
+                                            child: const Icon(
+                                              Icons.help_center_outlined,
+                                              color: Colors.white,
+                                            ),
                                           ),
-                                          child: Icon(Icons.help_center_outlined,color: Colors.white,),
                                         )
+
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 10,),
+                                  const SizedBox(height: 10,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
@@ -318,38 +336,38 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                             Padding(
                                               padding: const EdgeInsets.only(left: 4.0,top: 8),
                                               child: Container(
-                                                constraints: BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
+                                                constraints: const BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown, // This will scale down the text if it overflows
                                                   child: Text(
                                                     widget.warehouses.warehouseCarpetArea.toString(), // Limit to 3 decimal places
-                                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500,color: Colors.black),
+                                                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500,color: Colors.black),
                                                     textAlign: TextAlign.start, // Align text as needed
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 4.0),
+                                            const Padding(
+                                              padding: EdgeInsets.only(left: 4.0),
                                               child: Text("Available area",style: TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
                                             ),
-                                            SizedBox(height: 4,),
+                                            const SizedBox(height: 4,),
                                             Padding(
                                               padding: const EdgeInsets.only(left: 4.0,top: 8),
                                               child: Container(
-                                                constraints: BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
+                                                constraints: const BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown, // This will scale down the text if it overflows
                                                   child: Text(
                                                     widget.warehouses.whouseToken.toString(), // Limit to 3 decimal places
-                                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500,color: Colors.black),
+                                                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500,color: Colors.black),
                                                     textAlign: TextAlign.start, // Align text as needed
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 4.0),
+                                            const Padding(
+                                              padding: EdgeInsets.only(left: 4.0),
                                               child: Text("Security deposit",style: TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
                                             ),
                                           ],
@@ -370,38 +388,38 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                             Padding(
                                               padding: const EdgeInsets.only(left: 4.0,top: 8),
                                               child: Container(
-                                                constraints: BoxConstraints(maxWidth: 50), // Adjust maxWidth as needed
+                                                constraints: const BoxConstraints(maxWidth: 50), // Adjust maxWidth as needed
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown, // This will scale down the text if it overflows
                                                   child: Text(
                                                     widget.warehouses.whouseType1, // Limit to 3 decimal places
-                                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500,color: Colors.black),
+                                                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500,color: Colors.black),
                                                     textAlign: TextAlign.start, // Align text as needed
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 4.0),
+                                            const Padding(
+                                              padding: EdgeInsets.only(left: 4.0),
                                               child: Text("Warehouse Type",style: TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
                                             ),
-                                            SizedBox(height: 4,),
+                                            const SizedBox(height: 4,),
                                             Padding(
                                               padding: const EdgeInsets.only(left: 4.0,top: 8),
                                               child: Container(
-                                                constraints: BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
+                                                constraints: const BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown, // This will scale down the text if it overflows
                                                   child: Text(
                                                     widget.warehouses.whouseType2, // Limit to 3 decimal places
-                                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500,color: Colors.black),
+                                                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500,color: Colors.black),
                                                     textAlign: TextAlign.start, // Align text as needed
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 4.0),
+                                            const Padding(
+                                              padding: EdgeInsets.only(left: 4.0),
                                               child: Text("Floor type",style: TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
                                             ),
                                           ],
@@ -410,20 +428,20 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
 
                                     ],
                                   ),
-                                  SizedBox(height: 13,),
-                                  Align(
+                                  const SizedBox(height: 13,),
+                                  const Align(
                                    alignment: Alignment.centerLeft,
                                    child: Padding(
-                                     padding: const EdgeInsets.only(left: 15.0),
+                                     padding: EdgeInsets.only(left: 15.0),
                                      child: Text("Address",style: TextStyle(
                                        fontSize: 13,
                                        fontWeight: FontWeight.w500
                                      ),),
                                    ),
                                  ),
-                                  SizedBox(height: 13,),
+                                  const SizedBox(height: 13,),
                                   Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 15),
+                                    margin: const EdgeInsets.symmetric(horizontal: 15),
                                     height: screenHeight*0.07,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
@@ -432,18 +450,18 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                     ),
                                     child: Row(
                                       children: [
-                                        SizedBox(width: 10),
+                                        const SizedBox(width: 10),
                                         Padding(
                                           padding: const EdgeInsets.only(top: 4.0),
                                           child: Column(
                                             children: [
                                               Container(
-                                                constraints: BoxConstraints(maxWidth: 130), // Adjust maxWidth as needed
+                                                constraints: const BoxConstraints(maxWidth: 130), // Adjust maxWidth as needed
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown, // This will scale down the text if it overflows
                                                   child: Text(
                                                     _address, // Limit to 3 decimal places
-                                                    style: TextStyle( fontWeight: FontWeight.w500,fontSize: 13),
+                                                    style: const TextStyle( fontWeight: FontWeight.w500,fontSize: 13),
                                                     textAlign: TextAlign.start, // Align text as needed
                                                   ),
                                                 ),
@@ -454,7 +472,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                                   fit: BoxFit.scaleDown, // This will scale down the text if it overflows
                                                   child: Text(
                                                     widget.warehouses.distance.toStringAsFixed(3)+" km away from your current Location", // Limit to 3 decimal places
-                                                    style: TextStyle( fontWeight: FontWeight.w400, color: Colors.grey,fontSize: 12),
+                                                    style: const TextStyle( fontWeight: FontWeight.w400, color: Colors.grey,fontSize: 12),
                                                     textAlign: TextAlign.start, // Align text as needed
                                                   ),
                                                 ),
@@ -462,17 +480,29 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                             ],
                                           ),
                                         ),
-                                        Spacer(),
+                                        const Spacer(),
                                         Padding(
-                                          padding: const EdgeInsets.only(right: 5.0),
-                                          child: Image.asset("assets/images/Locationblack.png"),
+                                          padding: const EdgeInsets.only(right: 5.0,top: 3,bottom: 3),
+                                          child: InkWell(
+                                            onTap: (){
+                                              _openMap(widget.warehouses.latitude, widget.warehouses.longitude);
+
+                                            },
+                                              child: ClipOval(
+                                                child: Image.asset(
+                                                  ImageAssets.map, // Replace with your image asset path
+                                                  height: 50.0, // Set the height of the circular image
+                                                  width: 40.0,  // Set the width of the circular image
+                                                  fit: BoxFit.cover, // Ensures the image covers the circular area
+                                                ),
+                                              ),),
                                         )
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 13,),
+                                  const SizedBox(height: 13,),
                                   Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 15),
+                                    margin: const EdgeInsets.symmetric(horizontal: 15),
                                     height: screenHeight*0.12,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
@@ -481,21 +511,21 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                     ),
 
                                   ),
-                                  SizedBox(height: 7,),
-                                  Align(
+                                  const SizedBox(height: 7,),
+                                  const Align(
                                     alignment: Alignment.centerLeft,
                                     child: Padding(
-                                      padding: const EdgeInsets.only(left: 17.0),
+                                      padding: EdgeInsets.only(left: 17.0),
                                       child: Text("Amenities",style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500
                                       ),),
                                     ),
                                   ),
-                                  SizedBox(height: 15,),
+                                  const SizedBox(height: 15,),
                                   Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Padding(padding: EdgeInsets.only(left: 10),
+                                    child: Padding(padding: const EdgeInsets.only(left: 10),
                                     child: Container(
                                       height: screenHeight*0.08,
                                       width: screenWidth*0.27,
@@ -505,7 +535,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                           shape: BoxShape.rectangle,
                                         color: Colors.blue
                                       ),
-                                      child: Column(
+                                      child: const Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
@@ -517,7 +547,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                     ),
                                     ),
                                   ),
-                                  SizedBox(height: 7,),
+                                  const SizedBox(height: 7,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
@@ -535,7 +565,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Image.asset("assets/images/Toilet.png"),
-                                            Text("Toilet | 2",style: TextStyle(color: Colors.white,fontSize: 8),)
+                                            const Text("Toilet | 2",style: TextStyle(color: Colors.white,fontSize: 8),)
 
                                           ],
                                         ),
@@ -554,7 +584,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Image.asset("assets/images/DumpTruck.png"),
-                                            Text("Truck slot | 2",style: TextStyle(color: Colors.white,fontSize: 8),)
+                                            const Text("Truck slot | 2",style: TextStyle(color: Colors.white,fontSize: 8),)
 
                                           ],
                                         ),
@@ -573,7 +603,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Image.asset("assets/images/Office.png"),
-                                            Text("Office space",style: TextStyle(color: Colors.white,fontSize: 8),)
+                                            const Text("Office space",style: TextStyle(color: Colors.white,fontSize: 8),)
 
                                           ],
                                         ),
@@ -581,10 +611,10 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
 
                                     ],
                                   ),
-                                  SizedBox(height: 7,),
+                                  const SizedBox(height: 7,),
                                   Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Padding(padding: EdgeInsets.only(left: 10),
+                                    child: Padding(padding: const EdgeInsets.only(left: 10),
                                       child: Container(
                                         height: screenHeight*0.08,
                                         width: screenWidth*0.27,
@@ -599,7 +629,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Image.asset("assets/images/QuadBike.png"),
-                                            Text("Bike parking slot",style: TextStyle(color: Colors.white,fontSize: 8),)
+                                            const Text("Bike parking slot",style: TextStyle(color: Colors.white,fontSize: 8),)
 
                                           ],
                                         ),
@@ -617,7 +647,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                           border: Border.all(color: Colors.blue),
                                           borderRadius: BorderRadius.circular(10)
                                         ),
-                                        child: Row(
+                                        child: const Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
@@ -636,7 +666,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                               border: Border.all(color: Colors.blue),
                                               borderRadius: BorderRadius.circular(10)
                                           ),
-                                          child: Row(
+                                          child: const Row(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
@@ -675,6 +705,16 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
       ),
     );
   }
+
+   Future<void> _openMap(double lat, double lng) async {
+     final url = "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
+     if (await canLaunch(url)) {
+       await launch(url);
+     } else {
+       throw 'Could not launch $url';
+     }
+   }
+
 }
 
 
@@ -682,299 +722,9 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
 
 
 
-class DottedBorder extends StatelessWidget {
-  final Widget child;
-
-  DottedBorder({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: DottedBorderPainter(),
-      child: child,
-    );
-  }
-}
-
-class DottedBorderPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blue
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0;
-
-    const double dashWidth = 4.0;
-    const double dashSpace = 4.0;
-    double startX = 0;
-
-    final path = Path()
-      ..addRect(Rect.fromLTWH(0, 0, size.width, size.height));
-
-    // Draw dotted border
-    while (startX < size.width) {
-      canvas.drawLine(
-        Offset(startX, 0),
-        Offset(startX + dashWidth, 0),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-
-    startX = 0; // Reset startX for the next side
-    while (startX < size.height) {
-      canvas.drawLine(
-        Offset(size.width, startX),
-        Offset(size.width, startX + dashWidth),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-
-    startX = 0; // Reset startX for the next side
-    while (startX < size.width) {
-      canvas.drawLine(
-        Offset(size.width - startX, size.height),
-        Offset(size.width - startX - dashWidth, size.height),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-
-    startX = 0; // Reset startX for the next side
-    while (startX < size.height) {
-      canvas.drawLine(
-        Offset(0, size.height - startX),
-        Offset(0, size.height - startX - dashWidth),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}
 
 
 
-
-
-class CarpetAreaTextFormField extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: 'Enter carpet area',
-        hintStyle: TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: Text(
-            '|sqft',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 33,
-      decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(6)
-      ),
-
-      child: TextFormField(
-
-        decoration: InputDecoration(
-          hintText: '0',
-          hintStyle: TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-          contentPadding: EdgeInsets.only(left: 8,bottom: 10), // Adjust vertical padding
-          border: InputBorder.none,
-
-
-          suffix: Container(
-            padding: EdgeInsets.only(left: 8.0,right: 6), // Space between the text and the input
-            child: Text(
-              '|sqft',
-              style: TextStyle(color: Colors.grey, fontSize: 13),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField3 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: '₹|ex.35',
-        hintStyle: TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField4 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: '₹|ex.2',
-        hintStyle: TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField5 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: 'ex.2',
-        hintStyle: TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        // suffix: Container(
-        //   padding: EdgeInsets.only(left: 8.0), // Space between the text and the input
-        //   child: Text(
-        //     '|per month',
-        //     style: TextStyle(color: Colors.grey, fontSize: 13),
-        //   ),
-        // ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField6 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: 'ex.3',
-        hintStyle: TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField7 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: 'ex.18',
-        hintStyle: TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField8 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: 'ex.18',
-        hintStyle: TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 
 

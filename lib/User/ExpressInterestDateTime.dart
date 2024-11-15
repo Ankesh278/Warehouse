@@ -1,5 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';  // For jsonEncode
@@ -17,7 +18,7 @@ class Expressinterestdatetime extends StatefulWidget {
   final dateOfPossession;
   final msg;
   final id;
-  Expressinterestdatetime({super.key,required this.id,required this.name,required this.email,required this.phone,required this.companyName,required this.designation,required this.msg, this.dateOfPossession});
+  const Expressinterestdatetime({super.key,required this.id,required this.name,required this.email,required this.phone,required this.companyName,required this.designation,required this.msg, this.dateOfPossession});
   @override
   State<Expressinterestdatetime> createState() => _ExpressinterestdatetimeState();
 }
@@ -60,8 +61,12 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
       // Check the response status
       if (response.statusCode == 200) {
         // Request was successful
-        print('Data posted successfully!');
-        print('Response: ${response.body}');
+        if (kDebugMode) {
+          print('Data posted successfully!');
+        }
+        if (kDebugMode) {
+          print('Response: ${response.body}');
+        }
         showCongratulationsDialog(context);
         // ScaffoldMessenger.of(context).showSnackBar(
         //   SnackBar(
@@ -77,12 +82,15 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
 
       } else {
         // Request failed
-        print('Failed to post data. Status code: ${response.statusCode}');
-        print('Response: ${response.body}');
+        if (kDebugMode) {
+          print('Response: ${response.body}');
+        }
       }
     } catch (error) {
       // Catch any errors that occur during the request
-      print('Error occurred: $error');
+      if (kDebugMode) {
+        print('Error occurred: $error');
+      }
     }
   }
 
@@ -97,8 +105,8 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
       barrierDismissible: false, // Prevent closing the dialog when tapping outside
       builder: (BuildContext context) {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(20.0),
-          title: Row(
+          contentPadding: const EdgeInsets.all(20.0),
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.check_circle, color: Colors.green, size: 40), // Green checkmark
@@ -109,12 +117,12 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              const Text(
                 'Your warehouse has been added. Our team will connect with you shortly.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog
@@ -124,7 +132,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                         (Route<dynamic> route) => false,
                   );// Navigate to home page
                 },
-                child: Text('Continue Browsing'),
+                child: const Text('Continue Browsing'),
               ),
             ],
           ),
@@ -156,7 +164,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                     height: 150,
                     width: 300,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
                       border: Border.all(color: Colors.grey), // Grey border only
                     ),
                     child: CupertinoDatePicker(
@@ -183,7 +191,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                       onPressed: () {
                         Navigator.pop(context, tempPickedDate); // Pass the selected date back
                       },
-                      child: Text(
+                      child: const Text(
                         'OK',
                         style: TextStyle(color: Colors.blue),
                       ),
@@ -202,7 +210,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15), // Rounded corners for the Cancel button
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black26,
                         blurRadius: 10,
@@ -215,7 +223,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                     onPressed: () {
                       Navigator.pop(context); // Close dialog without selecting a date
                     },
-                    child: Text('Cancel', style: TextStyle(color: Colors.blue)),
+                    child: const Text('Cancel', style: TextStyle(color: Colors.blue)),
                   ),
                 ),
               ),
@@ -237,7 +245,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
   }
 
 
-  TextEditingController _timeController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
   DateTime? _selectedTime;
 
   void _selectTime(BuildContext context) async {
@@ -264,7 +272,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                     height: 160, // Increased to fit arrows and picker
                     width: 300,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(25),
                           topRight: Radius.circular(25)),
                       border: Border.all(color: Colors.grey),
@@ -305,7 +313,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                   // Divider
                   Container(width: 300, height: 3, color: Colors.grey),
                   // OK button
-                  Container(
+                  SizedBox(
                     width: 300,
                     child: TextButton(
                       onPressed: () {
@@ -322,7 +330,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                         );
                         Navigator.pop(context, tempPickedTime);
                       },
-                      child: Text(
+                      child: const Text(
                         'OK',
                         style: TextStyle(color: Colors.blue),
                       ),
@@ -340,7 +348,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black26,
                         blurRadius: 10,
@@ -353,7 +361,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('Cancel', style: TextStyle(color: Colors.blue)),
+                    child: const Text('Cancel', style: TextStyle(color: Colors.blue)),
                   ),
                 ),
               ),
@@ -380,7 +388,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
       ),
       child: Column(
         children: [
-          Icon(Icons.arrow_drop_up, size: 30, color: Colors.grey), // Up arrow
+          const Icon(Icons.arrow_drop_up, size: 30, color: Colors.grey), // Up arrow
           SizedBox(
             width: 60,
             height: 80, // Reduced height to fit the arrows
@@ -398,13 +406,13 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                 return Center(
                   child: Text(
                     (index + min).toString().padLeft(2, '0'),
-                    style: TextStyle(fontSize: 22),
+                    style: const TextStyle(fontSize: 22),
                   ),
                 );
               }),
             ),
           ),
-          Icon(Icons.arrow_drop_down, size: 30, color: Colors.grey), // Down arrow
+          const Icon(Icons.arrow_drop_down, size: 30, color: Colors.grey), // Down arrow
         ],
       ),
     );
@@ -419,7 +427,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
       ),
       child: Column(
         children: [
-          Icon(Icons.arrow_drop_up, size: 30, color: Colors.grey), // Up arrow
+          const Icon(Icons.arrow_drop_up, size: 30, color: Colors.grey), // Up arrow
           SizedBox(
             width: 60,
             height: 80,
@@ -433,7 +441,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
               magnification: 1.2,
               useMagnifier: true,
               backgroundColor: Colors.transparent,
-              children: <Widget>[
+              children: const <Widget>[
                 Center(
                   child: Text(
                     'AM',
@@ -449,7 +457,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
               ],
             ),
           ),
-          Icon(Icons.arrow_drop_down, size: 30, color: Colors.grey), // Down arrow
+          const Icon(Icons.arrow_drop_down, size: 30, color: Colors.grey), // Down arrow
         ],
       ),
     );
@@ -495,9 +503,9 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                               children: [
                                 IconButton(onPressed: (){
                                   Navigator.pop(context);
-                                }, icon: Icon(Icons.arrow_back_ios_new_sharp,color: Colors.white,)),
-                                SizedBox(width: 0,),
-                                Text("Express Interest",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700,color: Colors.white),)
+                                }, icon: const Icon(Icons.arrow_back_ios_new_sharp,color: Colors.white,)),
+                                const SizedBox(width: 0,),
+                                const Text("Express Interest",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700,color: Colors.white),)
                               ],
                             ),
 
@@ -508,7 +516,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.only(right: screenWidth * 0.005),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(0),
@@ -530,13 +538,13 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                                     ),
                                     child: Column(
                                       children: [
-                                        Align(
+                                        const Align(
                                             alignment: Alignment.centerLeft,
                                             child: Padding(
-                                              padding: const EdgeInsets.only(left: 18.0,top: 15),
+                                              padding: EdgeInsets.only(left: 18.0,top: 15),
                                               child: Text("SELECT DATE",style: TextStyle(fontWeight: FontWeight.w700),),
                                             )),
-                                        SizedBox(height: 10,),
+                                        const SizedBox(height: 10,),
                                         Padding(
                                           padding: const EdgeInsets.only(left: 15,right: 15),
                                           child: TextField(
@@ -545,17 +553,17 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                                             controller: _dateController,
                                             decoration: InputDecoration(
                                               labelText: 'Date',
-                                              labelStyle: TextStyle(color: Colors.black), // Label text in blue color
+                                              labelStyle: const TextStyle(color: Colors.black), // Label text in blue color
                                               hintText: 'dd/mm/yyyy',
-                                              hintStyle: TextStyle(color: Colors.grey), // Optional hint color customization
+                                              hintStyle: const TextStyle(color: Colors.grey), // Optional hint color customization
                                               suffixIcon: IconButton(
-                                                icon: Icon(Icons.calendar_today),
+                                                icon: const Icon(Icons.calendar_today),
                                                 onPressed: () => _selectDate(context),
                                               ),
-                                              enabledBorder: OutlineInputBorder(
+                                              enabledBorder: const OutlineInputBorder(
                                                 borderSide: BorderSide(color: Colors.grey, width: 2.0), // Blue color for the border
                                               ),
-                                              focusedBorder: OutlineInputBorder(
+                                              focusedBorder: const OutlineInputBorder(
                                                 borderSide: BorderSide(color: Colors.blue, width: 2.0), // Blue border when focused
                                               ),
                                             ),
@@ -565,7 +573,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                                     ),
 
                                   ),
-                                  SizedBox(height: 10,),
+                                  const SizedBox(height: 10,),
                                   Container(
                                     height: screenHeight*0.18,
                                     width: screenWidth*0.95,
@@ -576,13 +584,13 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                                     ),
                                     child: Column(
                                       children: [
-                                        Align(
+                                        const Align(
                                             alignment: Alignment.centerLeft,
                                             child: Padding(
-                                              padding: const EdgeInsets.only(left: 18.0,top: 15),
+                                              padding: EdgeInsets.only(left: 18.0,top: 15),
                                               child: Text("SELECT TIME",style: TextStyle(fontWeight: FontWeight.w700),),
                                             )),
-                                        SizedBox(height: 10,),
+                                        const SizedBox(height: 10,),
                                         Padding(
                                           padding: const EdgeInsets.only(left: 15,right: 15),
                                           child: TextField(
@@ -592,16 +600,16 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                                             onTap: () => _selectTime(context),
                                             decoration: InputDecoration(
                                               labelText: 'Time',
-                                              labelStyle: TextStyle(color: Colors.black), // Label text in blue color
+                                              labelStyle: const TextStyle(color: Colors.black), // Label text in blue color
                                               // Optional hint color customization
                                               suffixIcon: IconButton(
-                                                icon: Icon(Icons.more_time_rounded),
+                                                icon: const Icon(Icons.more_time_rounded),
                                                 onPressed: () { _selectTime(context);},
                                               ),
-                                              enabledBorder: OutlineInputBorder(
+                                              enabledBorder: const OutlineInputBorder(
                                                 borderSide: BorderSide(color: Colors.grey, width: 2.0), // Blue color for the border
                                               ),
-                                              focusedBorder: OutlineInputBorder(
+                                              focusedBorder: const OutlineInputBorder(
                                                 borderSide: BorderSide(color: Colors.blue, width: 2.0), // Blue border when focused
                                               ),
                                             ),
@@ -624,7 +632,6 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                                         onPressed: () {
                                           postWarehouseData();
                                         },
-                                        child: Text('Submit'),
                                         style: ElevatedButton.styleFrom(
                                           foregroundColor: Colors.white,
                                           backgroundColor: Colors.blue,
@@ -633,6 +640,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                                             borderRadius: BorderRadius.circular(21), // Match the container's border radius
                                           ),
                                         ),
+                                        child: const Text('Submit'),
                                       ),
                                     ),
                                   ),
