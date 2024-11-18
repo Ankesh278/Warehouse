@@ -24,6 +24,11 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+
 
 
 
@@ -58,6 +63,26 @@
                 android:value="AIzaSyDxbkZhKCXDGPdtOWxTPxFBg_tjAd3jsTk" />
 
 
+<!--            &lt;!&ndash; Firebase Messaging Metadata &ndash;&gt;-->
+<!--            <meta-data-->
+<!--                android:name="com.google.firebase.messaging.default_notification_icon"-->
+<!--                android:resource="@mipmap/ic_launcher" />-->
+<!--            <meta-data-->
+<!--                android:name="com.google.firebase.messaging.default_notification_color"-->
+<!--                android:resource="@color/notification_color" />-->
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_channel_id"
+                android:value="general_notifications" />
+
+            <meta-data
+                android:name="flutterEmbedding"
+                android:value="2" />
+
+
+
+
+
+
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -69,6 +94,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+
 
     </application>
 

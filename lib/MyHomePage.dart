@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:warehouse/Partner/OtpScreen.dart';
 import 'package:warehouse/User/userlogin.dart';
@@ -18,20 +19,20 @@ class _MyHomePageState extends State<MyHomePage> {
       barrierDismissible: false, // Prevents dismissal by tapping outside
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Exit App"),
-        content: Text("Are you sure you want to exit?"),
+        title: const Text("Exit App"),
+        content: const Text("Are you sure you want to exit?"),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(false); // Stay in the app
             },
-            child: Text("No"),
+            child: const Text("No"),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(true); // Exit the app
             },
-            child: Text("Yes"),
+            child: const Text("Yes"),
           ),
         ],
       ),
@@ -92,7 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: ElevatedButton(
                         onPressed: () {
           
-                          print('Button Pressed');
+                          if (kDebugMode) {
+                            print('Button Pressed');
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white, // Background color of the combined button
@@ -143,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => OTPScreen()));
+                                          builder: (context) => const OTPScreen()));
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(

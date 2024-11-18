@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:warehouse/Localization/Languages.dart';
+import 'package:warehouse/User/NotificationSetting.dart';
 import 'package:warehouse/User/UserProvider/photoProvider.dart';
 import 'package:warehouse/User/websiteViewer.dart';
 import 'package:warehouse/User/userlogin.dart';
@@ -504,41 +505,46 @@ class _userProfileScreenState extends State<userProfileScreen> {
                                   //   ),
                                   // ),
                                   SizedBox(height: screenHeight*0.02,),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                                    height: 35,
-                                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: Colors.grey),
-                                    ),
-                                    child: const Row(
+                                  InkWell(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotificationSetting()));
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                                      height: 35,
+                                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(color: Colors.grey),
+                                      ),
+                                      child: const Row(
 
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 4.0),
-                                          child: Icon(Icons.edit_notifications_sharp,color: Colors.grey,),
-                                        ),
-                                        SizedBox(width: 15),
-                                        Text(
-                                          "Notification Setting",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w300,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 4.0),
+                                            child: Icon(Icons.edit_notifications_sharp,color: Colors.grey,),
                                           ),
-                                        ),
-                                        Spacer(),
-                                        Padding(
-                                          padding: EdgeInsets.only(right: 8.0),
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                          SizedBox(width: 15),
+                                          Text(
+                                            "Notification Setting",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w300,
+                                            ),
                                           ),
-                                        )
+                                          Spacer(),
+                                          Padding(
+                                            padding: EdgeInsets.only(right: 8.0),
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child:  Icon(Icons.arrow_forward_ios,size: 15,color:Colors.grey),
+                                            ),
+                                          )
 
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   const Padding(
@@ -1141,147 +1147,111 @@ class _userProfileScreenState extends State<userProfileScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, -1),
-            end: const Offset(0, 0),
-          ).animate(CurvedAnimation(
-            parent: ModalRoute.of(context)!.animation!,
-            curve: Curves.fastEaseInToSlowEaseOut,
-          )),
-          child: Center(
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 1000),
-              curve: Curves.easeInOutBack,
-              padding: const EdgeInsets.all(20),
-              child: Material(
-                elevation: 10,
-                color: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Colors.blueAccent, Colors.lightBlue,Colors.blue],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+        return Dialog(
+          insetPadding: EdgeInsets.zero,
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              elevation: 1,
+              backgroundColor: Colors.white,
+              leading: IconButton(
+                icon: const Icon(Icons.close, color: Colors.black),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              title: const Text(
+                'Edit Profile',
+                style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      labelText: 'Name',
+                      labelStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10,
-                        spreadRadius: 2,
-                        offset: Offset(5, 5),
-                      ),
-                    ],
                   ),
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                  const SizedBox(height: 15),
+                  TextField(
+                    controller: phoneController,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      labelText: 'Phone Number',
+                      labelStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  TextField(
+                    controller: additionalPhoneController,
+                    keyboardType: TextInputType.number,
+                    maxLength: 10,
+                    decoration: InputDecoration(
+                      labelText: 'Additional Phone Number',
+                      labelStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Edit Profile',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        height: 45,
-                        child: TextField(
-                          controller: nameController,
-                          decoration: InputDecoration(
-                            labelText: 'Name',
-                            labelStyle: const TextStyle(color: Colors.black,fontWeight: FontWeight.w700),
-                            filled: true,
-                            fillColor: Colors.white.withOpacity(0.8),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6),
-                              borderSide: const BorderSide(color: Colors.grey)
-                            ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey[300],
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(color: Colors.black),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        height: 45,
-                        child: TextField(
-                          controller: phoneController,
-                          decoration: InputDecoration(
-                            labelText: 'Phone Number',
-                            labelStyle: const TextStyle(color: Colors.black,fontWeight: FontWeight.w700),
-                            filled: true,
-                            fillColor: Colors.white.withOpacity(0.8),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6),
-                                borderSide: const BorderSide(color: Colors.grey)
-                            ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
-                          readOnly: true,
+                          onPressed: () async {
+                            await _submitFormWithAnimation(
+                              context,
+                              nameController,
+                              phoneController,
+                              additionalPhoneController,
+                            );
+                          },
+                          child: const Text('Submit', style: TextStyle(color: Colors.white)),
                         ),
-                      ),
-                      const SizedBox(height: 15),
-                      SizedBox(
-                        height: 60,
-                        child: TextField(
-                          controller: additionalPhoneController,
-                          decoration: InputDecoration(
-                            labelText: 'Additional Phone Number',
-                            filled: true,
-                            labelStyle: const TextStyle(color: Colors.black,fontWeight: FontWeight.w400),
-                            fillColor: Colors.white.withOpacity(0.8),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6),
-                                borderSide: const BorderSide(color: Colors.grey)
-                            ),
-                          ),
-                          keyboardType: TextInputType.number,
-                          maxLength: 10,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.redAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: const Text('Cancel',style: TextStyle(color: Colors.white),),
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.greenAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            onPressed: () async {
-                              if (true) {
-
-                                await _submitFormWithAnimation(
-                                  context,
-                                  nameController,
-                                  phoneController,
-                                  additionalPhoneController,
-                                );
-                              }
-                            },
-                            child: const Text('Submit'),
-                          ),
-                        ],
                       ),
                     ],
                   ),
-                ),
+                ],
               ),
             ),
           ),
@@ -1289,6 +1259,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
       },
     );
   }
+
 
   Future<void> _submitFormWithAnimation(
       BuildContext context,
