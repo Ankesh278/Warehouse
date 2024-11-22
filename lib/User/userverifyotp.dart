@@ -7,9 +7,6 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Partner/partnerRegistrationScreen.dart';
 import 'package:http/http.dart' as http;
-import 'package:warehouse/User/getuserlocation.dart';
-import 'package:warehouse/User/userHomePage.dart';
-import 'package:warehouse/newHomePage.dart';
 
 class userverifyotp extends StatefulWidget {
   final String verificationId; // This will be passed from _submitForm

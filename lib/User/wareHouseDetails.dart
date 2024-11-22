@@ -2,8 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:warehouse/User/ExpressInterestScreen.dart';
+import 'package:warehouse/User/UserProvider/InterestProvider.dart';
 import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
 
@@ -37,6 +39,11 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
    @override
   void initState() {
     super.initState();
+
+    // Fetch shortlist status on page load
+    Provider.of<CartProvider>(context, listen: false)
+        .fetchShortlistStatus(widget.warehouses.id, widget.warehouses.mobile);
+
     //Address
     _getAddressFromLatLng(widget.warehouses.latitude.toString(),widget.warehouses.longitude.toString());
     //warehouseImage
@@ -121,6 +128,8 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
   @override
   Widget build(BuildContext context) {
 
+    final cartProvider = Provider.of<CartProvider>(context);
+    final isShortlisted = cartProvider.isShortlisted(widget.warehouses.id);
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -159,20 +168,18 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                // InkWell(
-                                //   onTap :(){
-                                //
-                                //   },
-                                //   child: Container(
-                                //       height: 30,
-                                //       width: 25,
-                                //       margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.04),
-                                //       decoration: BoxDecoration(
-                                //           color: Colors.blue
-                                //       ),
-                                //       child: Icon(Icons.shopping_cart,color: Colors.white,)
-                                //   ),
-                                // ),
+                                InkWell(
+                                  onTap: () {
+                                    // Toggle shortlist state
+                                    cartProvider.toggleWarehouse(widget.warehouses.id, widget.warehouses.mobile,context);
+                                  },
+                                  child: Container(
+                                    height: 30,
+                                    width: 25,
+                                    margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.04),
+                                    child: isShortlisted?Icon(Icons.add_home_rounded,color: Colors.white,):Icon(Icons.add_home_outlined,color: Colors.white,)
+                                  ),
+                                ),
 
                                 InkWell(
                                   child: Container(
@@ -249,6 +256,15 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                                     fit: BoxFit.cover,
                                                     width: double.infinity,
                                                     height: 250,
+                                                    errorBuilder: (context, error, stackTrace) {
+                                                      // Return a default image when an error occurs
+                                                      return Image.asset(
+                                                        ImageAssets.defaultImage, // Path to your default image
+                                                        width: double.infinity,
+                                                        height: 110,
+                                                        fit: BoxFit.cover,
+                                                      );
+                                                    },
                                                   ),
                                                 ),
                                               );

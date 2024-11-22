@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:warehouse/Partner/HomeScreen.dart';
+import 'package:warehouse/generated/l10n.dart';
 import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
 class PartnerChooserScreen extends StatefulWidget {
@@ -27,10 +28,10 @@ class _PartnerChooserScreenState extends State<PartnerChooserScreen> {
                   children: [
                     Container(
                       color: Colors.blue,
-                      height: screenHeight * 0.18,
+                      height: screenHeight * 0.13,
                       child: Padding(
                         padding: EdgeInsets.only(
-                          top: screenHeight * 0.025,
+                          top: screenHeight * 0.02,
                           left: screenWidth * 0.025,
                         ),
                         child: Column(
@@ -62,7 +63,7 @@ class _PartnerChooserScreenState extends State<PartnerChooserScreen> {
                           ),
                         ),
                         child: Padding(
-                          padding: EdgeInsets.all(screenWidth * 0.08),
+                          padding: EdgeInsets.all(screenWidth * 0.06),
                           child: const SingleChildScrollView(
                               child: Column(
                                 children: [
@@ -131,22 +132,29 @@ class _CustomTextFieldShapeState extends State<CustomTextFieldShape> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 30),
-          buildSelectableContainer(0, "Warehousing", ImageAssets.warehouseIco),
-          buildSelectableContainer(1, "Transportation", ImageAssets.SemiTruck),
-          buildSelectableContainer(2, "Manpower", ImageAssets.group),
-          buildSelectableContainer(3, "Agricultural", ImageAssets.Tractor),
+          SizedBox(height: screenHeight*0.01),
+          buildSelectableContainer(0, S.of(context).warehousing, ImageAssets.warehouseIco,ImageAssets.warehouseIcon),
+          SizedBox(height: 10,),
+          buildSelectableContainer(1, S.of(context).transportation, ImageAssets.SemiTruck,ImageAssets.transport),
+          SizedBox(height: 10,),
+          buildSelectableContainer(2, S.of(context).manpower, ImageAssets.group,ImageAssets.manpower),
+          SizedBox(height: 10,),
+          buildSelectableContainer(3, S.of(context).agricultural, ImageAssets.Tractor,ImageAssets.agricultural),
         ],
       ),
     );
   }
 
-  Widget buildSelectableContainer(int index, String label, String imageAsset) {
+  Widget buildSelectableContainer(int index, String label, String imageAsset,String image) {
     bool isSelected = selectedOption == index;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,64 +163,98 @@ class _CustomTextFieldShapeState extends State<CustomTextFieldShape> {
           onTap: () {
             selectOption(index);
           },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.circular(8.0),
-              border: Border.all(color: isSelected ? Colors.green : Colors.grey),
-            ),
-            child: Row(
-              children: [
-                // Left image
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(color: Colors.grey),
+          child: Stack(
+            children: [
+              // Background image
+              Container(
+                width: double.infinity,
+                height: screenHeight * 0.17,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0),
+                  image: DecorationImage(
+                    image: AssetImage(imageAsset), // Background image
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(0.3), // Semi-transparent overlay
+                      BlendMode.darken,
+                    ),
                   ),
-                  height: 50,
-                  child: Image.asset(
-                    imageAsset,
-                    width: 54,
-                    height: 34,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 6,
+                      offset: const Offset(0, 4), // Shadow position
+                    ),
+                  ],
+                ),
+              ),
+
+              // Content on top of the image
+              Positioned.fill(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Left image
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.asset(
+                          image,
+                          width: screenWidth * 0.28,
+                          height: screenHeight * 0.12,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0, top: 4),
+                        child: Text(
+                          label,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                      // Center space and label
+                      const Spacer(),
+
+                      // Right green tick box
+                      // if (isSelected)
+                      //   Container(
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.white,
+                      //       borderRadius: BorderRadius.circular(8.0),
+                      //       border: Border.all(color: Colors.green),
+                      //       boxShadow: [
+                      //         BoxShadow(
+                      //           color: Colors.green.withOpacity(0.4),
+                      //           spreadRadius: 2,
+                      //           blurRadius: 4,
+                      //         ),
+                      //       ],
+                      //     ),
+                      //     width: 50,
+                      //     height: 50,
+                      //     child: const Icon(
+                      //       Icons.check,
+                      //       color: Colors.green,
+                      //     ),
+                      //   ),
+                    ],
                   ),
                 ),
-
-                // Center space
-                const Spacer(),
-
-                // Right green tick box
-                if (isSelected)
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.green),
-                    ),
-                    width: 50,
-                    height: 50,
-                    child: const Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    ),
-                  ),
-                if (!isSelected)
-                  Container(
-                    width: 50,
-                    height: 50,
-                  ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 4),
-          child: Text(label),
-        ),
-        const SizedBox(height: 15),
+
       ],
     );
   }
+
 }
 
 class ComingSoonDialog extends StatelessWidget {
@@ -227,7 +269,7 @@ class ComingSoonDialog extends StatelessWidget {
       backgroundColor: Colors.transparent,
       child: TweenAnimationBuilder(
         tween: Tween<double>(begin: 0, end: 1),
-        duration: Duration(seconds: 1),
+        duration: Duration(seconds: 2),
         builder: (context, double value, child) {
           return Opacity(
             opacity: value,
@@ -235,7 +277,7 @@ class ComingSoonDialog extends StatelessWidget {
               scale: value,
               child: Center(
                 child: Container(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(0),
                   decoration: BoxDecoration(
                     color: Colors.blueAccent,
                     borderRadius: BorderRadius.circular(20),

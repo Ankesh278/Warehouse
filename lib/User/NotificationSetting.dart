@@ -9,7 +9,6 @@ class NotificationSetting extends StatefulWidget {
   @override
   State<NotificationSetting> createState() => _NotificationSettingState();
 }
-
 class _NotificationSettingState extends State<NotificationSetting> {
   String? Phone;
   String? Email;
@@ -206,7 +205,6 @@ class NotificationSettingsProvider with ChangeNotifier {
     _phoneNotifications = prefs.getBool('phoneNotifications') ?? true;
     _emailNotifications = prefs.getBool('emailNotifications') ?? true;
     _pushNotifications = prefs.getBool('pushNotifications') ?? true;
-
     _phone = prefs.getString('phone');
     _email = prefs.getString('email');
 
@@ -214,7 +212,6 @@ class NotificationSettingsProvider with ChangeNotifier {
     if (_phone != null && _phone!.startsWith("+91")) {
       _phone = _phone!.substring(3);
     }
-
     notifyListeners();
   }
 

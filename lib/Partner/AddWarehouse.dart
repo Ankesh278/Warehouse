@@ -31,6 +31,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
   bool _isChecked = false;
   int _number = 0;
   String displayText = 'Click here to Locate your Warehouse';
+  String fullAddress = '';
   String? _selectedWarehouseType;
   String? _constructionType;
   String? selectedLocation;
@@ -153,6 +154,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
         'whouse_name': warehouseNameValue,
         'isavilable': _isChecked,
         'whouse_floor': _number,
+        'Current_address': fullAddress,
         'mobile': phone
         //'Id':Id
       };
@@ -412,9 +414,11 @@ class _AddWareHouseState extends State<AddWareHouse> {
 
                                         // Update the display text with the selected location and address
                                         setState(() {
+                                          fullAddress=selectedAddress;
                                           //displayText = 'Selected Location: (${selectedLocation.latitude.toStringAsFixed(4)}, ${selectedLocation.longitude.toStringAsFixed(4)})';
                                           // If you want to show the address as well, you can do it here
                                           displayText += '\nAddress: $selectedAddress';
+                                          print("Addresss"+fullAddress);
                                         });
 
                                         // Optionally, do something with the result, e.g., update the UI

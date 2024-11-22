@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Partner/HomeScreen.dart';
 import 'package:warehouse/User/UserProvider/sortingProvider.dart';
 import 'package:warehouse/User/models/WarehouseModel.dart';
@@ -17,9 +19,9 @@ import 'package:warehouse/User/wareHouseDetails.dart';
 import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
 class userHomePage extends StatefulWidget {
-  final latitude;
-  final longitude;
-   const userHomePage({super.key, this.latitude, this.longitude});
+   double latitude;
+   double longitude;
+    userHomePage({super.key, required this.latitude, required this.longitude});
 
   @override
   State<userHomePage> createState() => _userHomePageState();
@@ -72,6 +74,9 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
     }
     ///Warehouse Fetching
     futureWarehouses = fetchWarehouses(widget.latitude, widget.longitude,constructionTypes,warehouseTypes,rentRange);
+
+    // Start periodic location tracking to check if the user moved more than 1 km
+     _startLocationTracking();
     _pageControllerSlider = PageController(initialPage: _currentIndex);
     // Auto-slide after every 3 seconds
     _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
@@ -99,6 +104,70 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
 
   }
 
+
+  void _startLocationTracking()  {
+    // Start checking the user's location every 10 seconds
+    Timer.periodic(const Duration(seconds: 10), (timer) async {
+      Position currentPosition = await _getCurrentLocation();
+
+      if (currentPosition != null) {
+        double distance = _calculateDistance(
+          widget.latitude,
+          widget.longitude,
+          currentPosition.latitude,
+          currentPosition.longitude,
+        );
+
+        if (distance >= 5.0) { // If user moved more than 5 km
+          setState(() async {
+            widget.latitude = currentPosition.latitude;
+            widget.longitude = currentPosition.longitude;
+            SharedPreferences pref=await SharedPreferences.getInstance();
+            pref.setDouble("latitude", currentPosition.latitude);
+            pref.setDouble("longitude", currentPosition.longitude);
+
+          });
+
+          // Fetch warehouses with new location
+          futureWarehouses = fetchWarehouses(
+            widget.latitude,
+            widget.longitude,
+            constructionTypes,
+            warehouseTypes,
+            rentRange,
+          );
+        }
+      }
+    });
+  }
+  Future<Position> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    // Check for location permissions
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    // Get the current location
+    return await Geolocator.getCurrentPosition();
+  }
+
+  double _calculateDistance(double startLat, double startLong, double endLat, double endLong) {
+    // Calculate distance between two points (in meters)
+    double distanceInMeters = Geolocator.distanceBetween(startLat, startLong, endLat, endLong);
+    return distanceInMeters / 1000; // Convert to kilometers
+  }
 
   Future<List<interestedModel>> fetchWarehouses(
       double latitude,
@@ -132,6 +201,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
 
       if (responseData['data'] != null && responseData['data'].isNotEmpty) {
         List jsonResponse = responseData['data'];
+        print("Warehouses data"+jsonResponse.toString());
         // Count the number of warehouses
         warehouseCount = jsonResponse.length;
         if (kDebugMode) {
@@ -159,6 +229,8 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
     _pageControllerSlider.dispose(); // Dispose of the PageController
     super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -729,10 +801,6 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                         );
                                       },
                                     );
-
-
-
-
                                   },
                                 ),
                               ),
@@ -899,6 +967,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                         final warehouse = warehouses[index];
                                         return InkWell(
                                           child: Container(
+                                            margin: const EdgeInsets.only(right: 5),
                                             height: screenHeight * 0.25,
                                             width: screenWidth * 0.45,
                                             decoration: BoxDecoration(
@@ -906,10 +975,10 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                               borderRadius: BorderRadius.circular(15),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.9),
+                                                  color: Colors.grey.withOpacity(0.8),
                                                   spreadRadius: 0.5,
-                                                  blurRadius: 0.5,
-                                                  offset: const Offset(0, 2),
+                                                  blurRadius: 0.8,
+                                                  offset: const Offset(2, 2),
                                                 ),
                                               ],
                                             ),
@@ -924,9 +993,19 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                                         width: double.infinity,
                                                         height: screenHeight*0.15,
                                                         fit: BoxFit.cover,
+                                                        errorBuilder: (context, error, stackTrace) {
+                                                          // Return a default image when an error occurs
+                                                          return Image.asset(
+                                                            ImageAssets.defaultImage, // Path to your default image
+                                                            width: double.infinity,
+                                                            height: 110,
+                                                            fit: BoxFit.cover,
+                                                          );
+                                                        },
                                                       ),
                                                     ),
                                                     const SizedBox(height: 5),
+                                                    const Spacer(),
                                                     Row(
                                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                       children: [
@@ -1014,6 +1093,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
                                                           Image.asset("assets/images/people.png", height: 20, width: 17),
                                                           const SizedBox(width: 5),
                                                           Container(
+                                                            margin: const EdgeInsets.only(bottom: 3),
                                                             height: 20,
                                                             width: 20,
                                                             decoration: BoxDecoration(
@@ -1120,7 +1200,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
   }
 
   Widget _buildAccountPage(double screenWidth, double screenHeight) {
-    return userProfileScreen();
+    return const userProfileScreen();
   }
   void showAdvancedFiltersBottomSheet(BuildContext context) {
     showModalBottomSheet(

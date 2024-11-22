@@ -6,10 +6,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/DistanceCalculator.dart';
 import 'package:warehouse/User/InterestedWarehouseDetailsScreen.dart';
+import 'package:warehouse/User/models/ShortListModel.dart';
 import 'package:warehouse/User/models/WarehouseModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:warehouse/User/models/interestedDataModel.dart';
 import 'package:warehouse/User/wareHouseDetails.dart';
+import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
 class userShortlistedIntrested extends StatefulWidget {
   @override
@@ -20,8 +22,10 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
   bool isShortlisted = true; // State to track toggle between Shortlisted and Interested
   final ScrollController _scrollController = ScrollController();
   List<InteretedModel> interestedWarehouses = [];
-  List<InteretedModel> shortlistedWarehouses = [];
+  List<ShortListModel> shortlistedWarehouses = [];
   bool isLoading = true;
+  String phone="";
+  late Future<List<ShortListModel>> _warehousesFuture;
 
   int _page = 1;
 
@@ -32,9 +36,13 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
     });
   }
 
+
   @override
   void initState() {
     super.initState();
+    //Shortlistmethod
+    _warehousesFuture = fetchShortlistedWarehouses();
+    //Intrest data
     fetchWarehouses();
     // Listen to the scroll controller to detect when the user reaches the end of the scroll.
     _scrollController.addListener(() {
@@ -51,21 +59,43 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
       isLoading = true; // Show loading spinner
     });
 
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    phone=pref.getString("phone")!;
+    if(phone != null && phone.startsWith("+91")){
+      phone=phone.substring(3);
+    }
+    print("Phone is "+phone);
+
+
+
+    // Construct the API URL with the parameter
+    final String apiUrl =
+        "https://xpacesphere.com/api/Wherehousedt/Intrest_warehousedata?mobile=$phone";
+
+    print("Constructed API URL: $apiUrl"); // Print the URL with parameters
+
     try {
-      final response = await http.get(Uri.parse(
-          "https://xpacesphere.com/api/Wherehousedt/Intrest_warehousedata?mobile=7007221531"));
+      // Make the API request
+      final response = await http.get(Uri.parse(apiUrl));
+
+      // Log the HTTP status code
+      print("HTTP Status Code: ${response.statusCode}");
+
+      // Log the entire response body
+      print("API Response Body: ${response.body}");
 
       if (response.statusCode == 200) {
         print("API hit successful");
-        print("API response: " + response.body);
 
         // Decode the response as a map
         Map<String, dynamic> jsonResponse = json.decode(response.body);
 
+        // Log the JSON response
+        print("Decoded JSON Response: $jsonResponse");
+
         // Access the list under the 'data' key
         List<dynamic> data = jsonResponse['data']; // 'data' is the key holding the list
-
-        print("Data: " + data.toString());
+        print("Extracted Data List: $data");
 
         // Create separate lists for interested and shortlisted warehouses
         List<InteretedModel> interested = [];
@@ -74,8 +104,11 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
         for (var item in data) {
           InteretedModel warehouse = InteretedModel.fromJson(item);
 
+          // Log each warehouse type for debugging
+          print("Warehouse Type: ${warehouse.type}");
+
           // Separate based on the 'type' field
-          if (warehouse.type == 'Intrested') {  // Typo from 'Intrested' in the API
+          if (warehouse.type == 'Intrested') { // Typo from 'Intrested' in the API
             interested.add(warehouse);
           } else if (warehouse.type == 'Shortlisted') {
             shortlisted.add(warehouse);
@@ -85,19 +118,71 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
         // Update the state with the filtered lists
         setState(() {
           interestedWarehouses = interested;
-          shortlistedWarehouses = shortlisted;
           isLoading = false; // Stop loading spinner
         });
+
+        // Log the final interested and shortlisted lists
+        print("Interested Warehouses: $interested");
+        print("Shortlisted Warehouses: $shortlisted");
       } else {
+        // Handle HTTP errors
+        print("Error: Failed to load data with status ${response.statusCode}");
         throw Exception('Failed to load data');
       }
     } catch (e) {
+      // Log any exceptions
+      print("Exception occurred: $e");
+
       setState(() {
         isLoading = false;
       });
-      print(e.toString());
     }
   }
+
+  ///ShortlistData
+
+
+  Future<List<ShortListModel>> fetchShortlistedWarehouses() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String phone = pref.getString("phone")!;
+
+    // Ensure the phone number starts with country code, if necessary
+    if (phone != null && phone.startsWith("+91")) {
+      phone = phone.substring(3);
+    }
+    print("Phone is $phone");
+
+    String url = 'https://xpacesphere.com/api/Wherehousedt/GetSortlist_warehouse?_mobile=$phone';
+    final response = await http.get(Uri.parse(url));
+
+    // Print the full API response body for debugging
+    print("API URLShort: $url");
+    print("Response BodyShortShort: ${response.body}");
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      print("Decoded JSON Response: $jsonResponse");
+
+      if (jsonResponse['status'] == 200) {
+        final List data = jsonResponse['data'];
+        print("API DataShort: $data");  // Print the actual data being returned
+
+        // Map the data to ShortListModel objects and store them in the list
+        shortlistedWarehouses = data.map((json) => ShortListModel.fromJson(json)).toList();
+
+
+
+        return shortlistedWarehouses;
+      } else {
+        throw Exception('Failed to fetch data: ${jsonResponse['message']}');
+      }
+    } else {
+      throw Exception('Failed to fetch data: ${response.reasonPhrase}');
+    }
+  }
+
+
+
 
   //Distance Calculator
   DistanceCalculator distanceCalculator = DistanceCalculator();
@@ -240,165 +325,40 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
 
   // Function to build the content for Shortlisted section
   Widget _buildShortlistedContent() {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-    return Column(
-      children: [
-        Row(
-          children: [
-            Container(
-                height: screenHeight*0.25,
-                width: screenWidth*0.45,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.9),
-                      spreadRadius: 0.5, // How much the shadow spreads
-                      blurRadius: 0.5, // The blur effect
-                      offset: Offset(0, 2), // Only shift the shadow downwards
-                    ),
-                  ],
-                ),
-                child: Stack(
-                  children: [Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15), // Set this value to half the width/height to make it circular
-                        child: Image.asset(
-                          'assets/images/slider2.jpg',
-                          width: double.infinity, // Define width
-                          height: 110, // Define height
-                          fit: BoxFit.cover, // Ensures the image covers the whole container
-                        ),
-                      ),
-                      SizedBox(height: 5,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(children: [
-                            Text("₹ 15.00-18.000",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w800),),
-                            Text("  per sq.ft",style: TextStyle(fontSize: 5,fontWeight: FontWeight.w400,color: Colors.black),),
-
-                          ],),
-                          Row(children: [
-                            Text("Type: ",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w400,color: Colors.grey),),
-                            Text("Shed",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w600,color: Colors.black),),
-
-                          ],)
-
-                        ],
-                      ),
-                      SizedBox(height: 5,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(children: [
-                            SizedBox(width: 5,),
-                            Image.asset("assets/images/Scaleup.png",height: 20,width: 20,),
-                            Text("₹45000.00",style: TextStyle(fontSize: 7,fontWeight: FontWeight.w800),),
-                            Text(" per sq.ft",style: TextStyle(fontSize: 5,fontWeight: FontWeight.w400,color: Colors.black),),
-
-                          ],),
-
-
-                        ],
-                      ),
-                      SizedBox(height: 5,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(children: [
-                            Icon(Icons.location_on,size: 12,),
-                            Text("6.0 kms away",style: TextStyle(fontSize: 8,fontWeight: FontWeight.w400,color: Colors.grey),),
-
-                          ],),
-                          Row(children: [
-                            Image.asset("assets/images/people.png",height: 20,width: 17,),
-                            SizedBox(width: 5,),
-                            Container(
-                              height: 20,
-                              width: 20,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(color: Colors.black,width: 2)
-                              ),
-                              child: Center(child: Text("P",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700,fontSize: 13),)),
-                            )
-
-                          ],)
-
-                        ],
-                      ),
-
-
-                    ],
-                  ),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Align(
-                          alignment: Alignment.topRight,
-                          child: Container(
-                            color: Colors.white,
-                            child: Icon(Icons.file_download_outlined,color: Colors.blue,),
-                          )
-                      ),
-                    )
-                  ],
-                )
-            ),
-          ],
-        )
-
-
-       // Display page for Shortlisted
-      ],
-    );
-  }
-
-  // Function to build the content for Interested section
-  Widget _buildInterestedContent() {
-    // if (isLoading) {
-    //   return Center(child: SpinKitCircle(color: Colors.blue));
-    // }
-    //
-    // if (interestedWarehouses.isEmpty) {
-    //   // If there are no interested warehouses, show a message or UI
-    //   return Center(
-    //     child: Column(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       children: [
-    //         Image.asset("assets/images/warehousegift.png", scale: 1.5),
-    //         const SizedBox(height: 20),
-    //         const Text(
-    //           "No Interested Warehouses found. Express interest to get a callback.",
-    //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-    //           textAlign: TextAlign.center,
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
-
-    // Build GridView if data is available
     return Column(
       children: [
         Container(
           height:  MediaQuery.of(context).size.height * 0.6,
-          child: GridView.builder(
+          child: shortlistedWarehouses.isEmpty?Center( // Show a static image if no data is available
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/warehousegift.png', // Replace with your static image path
+                  height: 200,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  "No Shortlisted Warehouses found.",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          )
+              :GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
               childAspectRatio: 0.8,
             ),
-            itemCount: interestedWarehouses.length,
+            itemCount: shortlistedWarehouses.length,
             itemBuilder: (context, index) {
-              final warehouse = interestedWarehouses[index];
+              final warehouse = shortlistedWarehouses[index];
               String whouseAddress = warehouse.whouse_address;
               // Example usage to get the distance
-             // double distance =  distanceCalculator.getDistanceFromCurrentToWarehouse(whouseAddress);
+              // double distance =  distanceCalculator.getDistanceFromCurrentToWarehouse(whouseAddress);
               return FutureBuilder(
                 future: distanceCalculator.getDistanceFromCurrentToWarehouse(whouseAddress),
                 builder: (context,snapshot){
@@ -436,9 +396,150 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
                                 width: double.infinity,
                                 height: 110,
                                 fit: BoxFit.cover,
-                              ),
+                                errorBuilder: (context, error, stackTrace) {
+                                  // Return a default image when an error occurs
+                                  return Image.asset(
+                                    ImageAssets.defaultImage, // Path to your default image
+                                    width: double.infinity,
+                                    height: 110,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              )
+                              ,
                             ),
                             const SizedBox(height: 5),
+                            Spacer(),
+                            Text(
+                              warehouse.whouseRent.toString() + " per sq.ft",
+                              style: const TextStyle(
+                                  fontSize: 10, fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              "Type: " + warehouse.whouseType1,
+                              style: const TextStyle(
+                                  fontSize: 10, fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              (distanceInKm != null
+                                  ? distanceInKm.toStringAsFixed(3) + " km away"
+                                  : "N/A km away"), // Handle null distance gracefully
+                              style: TextStyle(
+                                  fontSize: 8, fontWeight: FontWeight.w400),
+                            ),
+
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  InterestedWarehouseDetailsScreen(warehouses: warehouse)),
+                        );
+                      },
+                    );
+                  }
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Function to build the content for Interested section
+  Widget _buildInterestedContent() {
+    // Build GridView if data is available
+    return Column(
+      children: [
+        Container(
+          height:  MediaQuery.of(context).size.height * 0.6,
+          child: interestedWarehouses.isEmpty?Center( // Show a static image if no data is available
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/warehousegift.png', // Replace with your static image path
+                  height: 200,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                        "No Interested Warehouses found. Express interest to get a callback.",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.center,
+                      ),
+              ],
+            ),
+          )
+              :GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 0.8,
+            ),
+            itemCount: interestedWarehouses.length,
+            itemBuilder: (context, index) {
+              final warehouse = interestedWarehouses[index];
+              String whouseAddress = warehouse.whouse_address;
+              // Example usage to get the distance
+              // double distance =  distanceCalculator.getDistanceFromCurrentToWarehouse(whouseAddress);
+              return FutureBuilder(
+                future: distanceCalculator.getDistanceFromCurrentToWarehouse(whouseAddress),
+                builder: (context,snapshot){
+                  double distanceInKm = (snapshot.data ?? 0.0) / 1000; // Convert to km
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: SpinKitCircle(
+                      color: Colors.blue, // Specify a color for the spinner
+                      size: 50.0, //
+                    ));
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text(' calculating distance'));
+                  }else{
+                    return InkWell(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.25,
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.9),
+                              spreadRadius: 0.5,
+                              blurRadius: 0.5,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(
+                                "https://xpacesphere.com${warehouse.image}",
+                                width: double.infinity,
+                                height: 110,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  // Return a default image when an error occurs
+                                  return Image.asset(
+                                    ImageAssets.defaultImage, // Path to your default image
+                                    width: double.infinity,
+                                    height: 110,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              )
+                              ,
+                            ),
+                            const SizedBox(height: 5),
+                            Spacer(),
                             Text(
                               warehouse.whouseRent.toString() + " per sq.ft",
                               style: const TextStyle(

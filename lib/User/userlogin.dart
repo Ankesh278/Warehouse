@@ -1,23 +1,28 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:warehouse/Partner/VerifyOtpScreen.dart';
 import 'package:warehouse/User/UserProvider/AuthUserProvider.dart';
-import 'package:warehouse/User/userverifyotp.dart';
+import 'package:sim_data/sim_data.dart';
+
 
 class userlogin extends StatefulWidget {
+  const userlogin({super.key});
+
   @override
   State<userlogin> createState() => _userloginState();
 }
 
 class _userloginState extends State<userlogin> {
   final _formKey = GlobalKey<FormState>();
+  String? _detectedPhoneNumber;
 
   final TextEditingController _phoneController = TextEditingController();
 @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _fetchPhoneNumber();
     _phoneController.addListener(() {
       if (_phoneController.text.length == 10) {
         // Dismiss the keyboard when 10 digits are entered
@@ -25,6 +30,26 @@ class _userloginState extends State<userlogin> {
       }
     });
   }
+
+
+  Future<void> _fetchPhoneNumber() async {
+    try {
+      final simData = await SimDataPlugin.getSimData();
+      if (simData.cards.isNotEmpty) {
+        setState(() {
+          _detectedPhoneNumber = simData.cards[0].serialNumber;
+          print("Numberr"+_detectedPhoneNumber.toString());
+         // _phoneController.text = _detectedPhoneNumber ?? '';
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Failed to fetch phone number: $e');
+      }
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // Get screen dimensions

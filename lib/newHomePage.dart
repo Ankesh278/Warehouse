@@ -244,7 +244,7 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
           children: [
             Container(
               color: Colors.blue,
-              height: screenHeight * 0.18,
+              height: screenHeight * 0.125,
               child: Padding(
                 padding: EdgeInsets.only(
                   top: screenHeight * 0.0,
@@ -329,8 +329,6 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                             ),
                           ],
                         ),
-
-
                       ],
                     ),
 
@@ -352,129 +350,186 @@ class _newHomePageState extends State<newHomePage>with SingleTickerProviderState
                   padding: EdgeInsets.all(screenWidth * 0.04),
                   child: SingleChildScrollView(
                     child:Column(
-                     // crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Flexible(
-                              child:InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>userHomePage(longitude:widget.longitude,latitude:widget.latitude)));
-                                },
                               child: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: screenHeight*0.075,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: Colors.blue,
-                                        border: Border.all(color: Colors.grey)
-                                      ),
-                                      child: Image.asset(ImageAssets.warehouseIco),
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>userHomePage(longitude:widget.longitude,latitude:widget.latitude)));
+                                  },
+                                  child: Container(
+                                    height: screenHeight*0.15,
+                                    width: screenWidth*0.33,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.lightBlue.shade50,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.blue.withOpacity(0.3),
+                                          spreadRadius: 5,
+                                          blurRadius: 5,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ],
                                     ),
-                                     Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text(S.of(context).warehousing,style: const TextStyle(color: Colors.black,fontSize: 8),),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            ),
-                            Flexible(
-                              child: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: screenHeight*0.075,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
-                                          color: Colors.blue,
-                                          border: Border.all(color: Colors.grey)
-                                      ),
-                                      child: Image.asset(ImageAssets.SemiTruck),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          ImageAssets.warehousegif,
+                                          height: 60, // Smaller icon
+                                          width: 100,
+                                          fit: BoxFit.contain,
+                                        ),
+                                        const SizedBox(height: 0),
+                                         Text(
+                                          S.of(context).warehousing,
+                                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
                                     ),
-                                     Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text(S.of(context).transportation,style: const TextStyle(color: Colors.black,fontSize: 7),),
-                                    )
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),
                             Flexible(
                               child: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: screenHeight*0.075,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
-                                          color: Colors.blue,
-                                          border: Border.all(color: Colors.grey)
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  height: screenHeight*0.15,
+                                  width: screenWidth*0.33,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.lightBlue.shade50,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.blue.withOpacity(0.3),
+                                        spreadRadius: 5,
+                                        blurRadius: 5,
+                                        offset: const Offset(0, 3),
                                       ),
-                                      child: Image.asset(ImageAssets.group),
-                                    ),
-                                     Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text(S.of(context).manpower,style: const TextStyle(color: Colors.black,fontSize: 8),),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              child: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: screenHeight*0.075,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
-                                          color: Colors.blue,
-                                          border: Border.all(color: Colors.grey)
+                                    ],
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        ImageAssets.transportgif,
+                                        height: 60,
+                                        width: 100,
+                                        fit: BoxFit.contain,
                                       ),
-                                      child: Image.asset(ImageAssets.Tractor),
-                                    ),
-                                     Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text(S.of(context).agricultural,style: const TextStyle(color: Colors.black,fontSize: 8),),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              child: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: screenHeight*0.075,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
-                                          color: Colors.blue,
-                                          border: Border.all(color: Colors.grey)
+                                      const SizedBox(height: 5),
+                                       Text(
+                                        S.of(context).transportation,
+                                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                       ),
-                                      child: Image.asset(ImageAssets.threedots),
-                                    ),
-                                     Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text(S.of(context).more,style: const TextStyle(color: Colors.black,fontSize: 8),),
-                                    )
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ],
                         ),
+                        const SizedBox(height: 10), // Spacing between rows
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: (){
+                                   // Navigator.push(context, MaterialPageRoute(builder: (context)=>userHomePage(longitude:widget.longitude,latitude:widget.latitude)));
+                                  },
+                                  child: Container(
+                                    height: screenHeight*0.15,
+                                    width: screenWidth*0.33,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.lightBlue.shade50,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.blue.withOpacity(0.3),
+                                          spreadRadius: 5,
+                                          blurRadius: 5,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          ImageAssets.manpowergif,
+                                          height: 60,
+                                          width: 100,
+                                          fit: BoxFit.contain,
+                                        ),
+                                        const SizedBox(height: 5),
+                                         Text(
+                                          S.of(context).manpower,
+                                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: (){
+                                   // Navigator.push(context, MaterialPageRoute(builder: (context)=>userHomePage(longitude:widget.longitude,latitude:widget.latitude)));
+                                  },
+                                  child: Container(
+                                    height: screenHeight*0.15,
+                                    width: screenWidth*0.33,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.lightBlue.shade50,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.blue.withOpacity(0.3),
+                                          spreadRadius: 5,
+                                          blurRadius: 5,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          ImageAssets.agriculturalgif,
+                                          height: 60,
+                                          width: 100,
+                                          fit: BoxFit.contain,
+                                        ),
+                                        const SizedBox(height: 5),
+                                         Text(
+                                          S.of(context).agricultural,
+                                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+
+
                         SizedBox(height: screenHeight*0.025,),
                         SizedBox(
                           height: screenHeight * 0.18, // Adjust to the height you want

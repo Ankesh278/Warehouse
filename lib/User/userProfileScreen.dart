@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +30,8 @@ class _userProfileScreenState extends State<userProfileScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   late String phone='';
   late String Name='';
+   String userFile="";
+   String email="";
   @override
   void initState() {
     super.initState();
@@ -35,6 +40,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController additionalPhoneController = TextEditingController();
+  final TextEditingController emialController = TextEditingController();
 
   Future<void> _logoutAndRedirect(BuildContext context) async {
     try {
@@ -296,42 +302,58 @@ class _userProfileScreenState extends State<userProfileScreen> {
 
 
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                                    height: 35,
-                                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: Colors.grey),
-                                    ),
-                                    child: const Row(
+                                  GestureDetector(
+                                    onTap: (){
+                                      _showUploadDocumentDialog(context);
+                                      // if (userFile == null || userFile.isEmpty) {
+                                      //   // Call the upload dialog if userFile is empty or null
+                                      //
+                                      // } else {
+                                      //   // Show a toast indicating the file is already uploaded
+                                      //   Fluttertoast.showToast(
+                                      //     msg: "Already uploaded.",
+                                      //     toastLength: Toast.LENGTH_SHORT,
+                                      //     gravity: ToastGravity.BOTTOM,
+                                      //   );
+                                      // }
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                                      height: 35,
+                                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(color: Colors.grey),
+                                      ),
+                                      child: const Row(
 
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 4.0),
-                                          child: Icon(Icons.file_present_outlined,color: Colors.grey,),
-                                        ),
-                                        SizedBox(width: 15),
-                                        Text(
-                                          "Contract Documents",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w300,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 4.0),
+                                            child: Icon(Icons.file_present_outlined,color: Colors.grey,),
                                           ),
-                                        ),
-                                        Spacer(),
-                                        Padding(
-                                          padding: EdgeInsets.only(right: 8.0),
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child:  Icon(Icons.arrow_forward_ios,size: 15,color: Colors.grey,),
+                                          SizedBox(width: 15),
+                                          Text(
+                                            "Contract Documents",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w300,
+                                            ),
                                           ),
-                                        )
+                                          Spacer(),
+                                          Padding(
+                                            padding: EdgeInsets.only(right: 8.0),
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child:  Icon(Icons.arrow_forward_ios,size: 15,color: Colors.grey,),
+                                            ),
+                                          )
 
 
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: screenHeight*0.02,),
@@ -800,65 +822,77 @@ class _userProfileScreenState extends State<userProfileScreen> {
           ),
           // Red container on top of both blue and white sections
           Positioned(
-              top: screenHeight * 0.15, // Adjust this to move the container vertically
-              left: screenWidth / 2 - 125, // Center the container horizontally
-              child: Container(
-                height: screenHeight*0.24,
-                width: screenWidth*0.77,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey.shade600,
-                          spreadRadius: 1,
-                          blurRadius: 15
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.white)
-                ),
-                child: Column(
-                  //  mainAxisAlignment: MainAxisAlignment.center,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Spacer(),
-                     Text(Name.isNotEmpty?Name:'Guest',style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w800),),
-                    // SizedBox(height: 10,),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 25),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.wifi_calling_3_outlined,color: Colors.blue,),
-                          const SizedBox(width: 10,),
-                          Text(phone.isNotEmpty?phone:'',style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
-                        ],
-                      ),
+            top: screenHeight * 0.15, // Adjust this to move the container vertically based on screen size
+            left: screenWidth * 0.15, // Center the container horizontally based on screen width
+            child: Container(
+              height: screenHeight * 0.23, // Responsive height based on screen height
+              width: screenWidth * 0.7, // Responsive width based on screen width
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade600,
+                    spreadRadius: 1,
+                    blurRadius: 15,
+                  )
+                ],
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.white),
+              ),
+              child: Column(
+                children: [
+                  const Spacer(),
+                  Text(
+                    Name.isNotEmpty ? Name : 'Guest',
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 25),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.wifi_calling_3_outlined,
+                          color: Colors.blue,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          phone.isNotEmpty ? phone : '',
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                      ],
                     ),
-                    InkWell(
-                      onTap: (){
-                        _showEditDialog(context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 15,left: 13,right: 13),
-                        child: Container(
-                          alignment: Alignment.bottomCenter,
-                          width: double.infinity,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.blue)
+                  ),
+                  InkWell(
+                    onTap: () {
+                      _showEditDialog(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 15, left: 13, right: 13),
+                      child: Container(
+                        alignment: Alignment.bottomCenter,
+                        width: double.infinity,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.blue),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            "Edit Profile",
+                            style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w400, fontSize: 14),
                           ),
-                          child: const Center(child: Text("Edit Profile",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w400,fontSize: 14),)),
                         ),
                       ),
-                    )
-                  ],
-                ),
-              )
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
+
           Consumer<ProfileProvider>(
             builder: (context, profileProvider, child) {
               return Positioned(
@@ -1027,6 +1061,12 @@ class _userProfileScreenState extends State<userProfileScreen> {
           print("Relative Image URL: $relativeImageUrl");
         }
 
+         userFile= userData['userfile'] ?? "";
+         email= userData['Mailid'] ?? "";
+        print("USERFILE"+userFile);
+
+        SharedPreferences pref=await SharedPreferences.getInstance();
+       pref.setString("email", email.toString());
         // Concatenate the base URL with the relative image URL
         final String fullImageUrl = 'https://xpacesphere.com$relativeImageUrl';
         if (kDebugMode) {
@@ -1163,96 +1203,126 @@ class _userProfileScreenState extends State<userProfileScreen> {
                 style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      labelText: 'Name',
-                      labelStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  TextField(
-                    controller: phoneController,
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      labelText: 'Phone Number',
-                      labelStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  TextField(
-                    controller: additionalPhoneController,
-                    keyboardType: TextInputType.number,
-                    maxLength: 10,
-                    decoration: InputDecoration(
-                      labelText: 'Additional Phone Number',
-                      labelStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey[300],
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          ),
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text(
-                            'Cancel',
-                            style: TextStyle(color: Colors.black),
+            body: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          controller: nameController,
+                          decoration: InputDecoration(
+                            labelText: 'Name',
+                            labelStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        const SizedBox(height: 15),
+                        TextField(
+                          controller: phoneController,
+                          readOnly: true,
+                          decoration: InputDecoration(
+                            labelText: 'Phone Number',
+                            labelStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
-                          onPressed: () async {
-                            await _submitFormWithAnimation(
-                              context,
-                              nameController,
-                              phoneController,
-                              additionalPhoneController,
-                            );
-                          },
-                          child: const Text('Submit', style: TextStyle(color: Colors.white)),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 15),
+                        TextField(
+                          controller: additionalPhoneController,
+                          keyboardType: TextInputType.number,
+                          maxLength: 10,
+                          decoration: InputDecoration(
+                            labelText: 'Additional Phone Number',
+                            labelStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        TextField(
+                          controller: emialController,
+                          keyboardType: TextInputType.emailAddress,
+                          enableSuggestions: true,
+                          decoration: InputDecoration(
+                            labelText: 'Add email address',
+                            labelStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 100), // Ensure some space for scrolling past the form
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey[300],
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            ),
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            ),
+                            onPressed: () async {
+                              await _submitFormWithAnimation(
+                                context,
+                                nameController,
+                                phoneController,
+                                additionalPhoneController,
+                                emialController,
+                              );
+                            },
+                            child: const Text('Submit', style: TextStyle(color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -1266,6 +1336,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
       TextEditingController nameController,
       TextEditingController phoneController,
       TextEditingController additionalPhoneController,
+      TextEditingController emailController,
       ) async {
     // Show loading dialog
     showDialog(
@@ -1283,7 +1354,8 @@ class _userProfileScreenState extends State<userProfileScreen> {
     final request = http.MultipartRequest('PUT', uri)
       ..fields['Name'] = nameController.text
       ..fields['Mobile'] = phoneController.text
-      ..fields['OPMobile'] = additionalPhoneController.text;
+      ..fields['OPMobile'] = additionalPhoneController.text
+      ..fields['Mailid'] = emailController.text;
 
     bool success = false;
 
@@ -1298,6 +1370,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
         success = true; // Successful submission
         SharedPreferences pref= await SharedPreferences.getInstance();
         pref.setString("name", nameController.text.toString());
+        pref.setString("email", emailController.text.toString());
       } else {
         if (kDebugMode) {
           print("Error Message: $responseBody");
@@ -1365,6 +1438,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
                         onPressed: () {
                           if (mounted) {
                             additionalPhoneController.clear();
+                            emialController.clear();
                             Navigator.of(context).pop();
                             Navigator.of(context).pop(); // Close the form dialog first
                             setState(() {
@@ -1426,6 +1500,219 @@ class _userProfileScreenState extends State<userProfileScreen> {
       );
     }
   }
+
+
+
+  void _showUploadDocumentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: EdgeInsets.zero,
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFFF1F8E9), Color(0xFFFFFDE7), Color(0xFFFBE9E7)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                elevation: 1,
+                backgroundColor: Colors.transparent,
+                leading: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.black),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                title: const Text(
+                  'Upload Document',
+                  style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                centerTitle: true,
+              ),
+              body: Column(
+                children: [
+                  const Spacer(),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      'Please upload your document.',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          // Picking the file
+                          FilePickerResult? result = await FilePicker.platform.pickFiles(
+                            type: FileType.custom,
+                            allowedExtensions: ['jpg', 'pdf', 'docx'],
+                          );
+
+                          if (result != null) {
+                            PlatformFile file = result.files.first;
+                            String? filePath = file.path;
+
+                            if (filePath != null) {
+                              print('Selected file path: $filePath');
+                              print('Mobile number: $phone');
+
+                              // Display a loading indicator
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (_) =>  const Center(
+                                  child: SpinKitCircle(
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                              );
+
+                              // Upload the document
+                              var request = http.MultipartRequest(
+                                'POST',
+                                Uri.parse('https://xpacesphere.com/api/Wherehousedt/UploadDocuments'),
+                              );
+                              request.fields['mobile'] = phone;
+                              request.files.add(await http.MultipartFile.fromPath('UserFile', filePath));
+
+                              print('API Endpoint: ${request.url}');
+                              print('Request Fields: ${request.fields}');
+                              print('File Upload: ${filePath}');
+
+                              var response = await request.send();
+
+                              Navigator.of(context).pop(); // Close the loading indicator
+
+                              if (response.statusCode == 200) {
+                                var responseBody = await response.stream.bytesToString();
+                                print('Response (200): $responseBody');
+                                Navigator.of(context).pop(); // Close the loading indicator
+                                Fluttertoast.showToast(
+                                  msg: "Document uploaded successfully!",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                );
+                              } else {
+                                var errorBody = await response.stream.bytesToString();
+                                print('Error Response (${response.statusCode}): $errorBody');
+
+                                Fluttertoast.showToast(
+                                  msg: "Failed to upload document. Please try again.",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                );
+                              }
+                            } else {
+                              print('No file path available.');
+                              Fluttertoast.showToast(
+                                msg: "No file selected.",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            }
+                          } else {
+                            // User canceled the file picker
+                            print('File selection canceled.');
+                            Fluttertoast.showToast(
+                              msg: "File selection canceled.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                            );
+                          }
+                        } catch (e, stacktrace) {
+                          Navigator.of(context).pop(); // Close the loading indicator
+                         /// print('An error occurred: $e', error: e, stackTrace: stacktrace);
+                          Fluttertoast.showToast(
+                            msg: "An error occurred. Please try again.",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        elevation: 4,
+                        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 30),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: const BorderSide(color: Colors.blue,width: 3),
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.upload,color:Colors.black,size: 20,),
+                          Text(
+                            'Upload Document',
+                            style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              bottomNavigationBar: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey[300],
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                        onPressed: () {
+                          Fluttertoast.showToast(
+                            msg: "No document uploaded",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                          );
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Submit', style: TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+
+
+
+
+
 
 
 }

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'dart:convert';  // For jsonEncode
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/User/userHomePage.dart';
@@ -128,7 +128,7 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
                   Navigator.of(context).pop(); // Close the dialog
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => userHomePage(latitude:latitude ,longitude: longitude,)),
+                    MaterialPageRoute(builder: (context) => userHomePage(latitude:latitude! ,longitude: longitude!,)),
                         (Route<dynamic> route) => false,
                   );// Navigate to home page
                 },

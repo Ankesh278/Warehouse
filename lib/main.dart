@@ -16,6 +16,7 @@ import 'package:warehouse/Partner/Provider/warehouseProvider.dart';
 import 'package:warehouse/User/NotificationSetting.dart';
 import 'package:warehouse/User/UserProvider/AuthUserProvider.dart';
 import 'package:warehouse/User/UserProvider/FilterProvider.dart';
+import 'package:warehouse/User/UserProvider/InterestProvider.dart';
 import 'package:warehouse/User/UserProvider/photoProvider.dart';
 import 'package:warehouse/User/UserProvider/sortingProvider.dart';
 import 'package:warehouse/User/userlogin.dart';
@@ -74,6 +75,7 @@ void main() async {
         ChangeNotifierProvider<FilterProvider>(create: (_) => FilterProvider()),
         ChangeNotifierProvider<ProfileProvider>(create: (_) => ProfileProvider()),
         ChangeNotifierProvider<NotificationSettingsProvider>(create: (_) => NotificationSettingsProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: MyApp(
         isLoggedIn: isLoggedIn,
