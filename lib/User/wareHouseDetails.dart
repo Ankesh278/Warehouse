@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:warehouse/User/ExpressInterestScreen.dart';
 import 'package:warehouse/User/UserProvider/InterestProvider.dart';
@@ -39,6 +41,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
    @override
   void initState() {
     super.initState();
+
 
     // Fetch shortlist status on page load
     Provider.of<CartProvider>(context, listen: false)
@@ -177,11 +180,21 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                     height: 30,
                                     width: 25,
                                     margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.04),
-                                    child: isShortlisted?Icon(Icons.add_home_rounded,color: Colors.white,):Icon(Icons.add_home_outlined,color: Colors.white,)
+                                    child: isShortlisted?const Icon(Icons.favorite_outlined,color: Colors.red,):const Icon(Icons.favorite_border,color: Colors.white,)
                                   ),
                                 ),
 
                                 InkWell(
+                                  onTap: (){
+                                    const String baseUrl = 'https://xpacesphere.com';
+                                    ShareWarehouseHelper.shareWarehouse(
+                                        warehouseName: widget.warehouses.whouseName,
+                                        warehouseLocation: finalAddress.toString(),
+                                        warehouseDetailsUrl: "https://xpacesphere.com/",
+                                        warehousePhotoUrl: "$baseUrl${_uploadedImages[0]}",
+                                        context: context,
+                                    );
+                                  },
                                   child: Container(
                                     height: 30,
                                     width: 25,
@@ -192,17 +205,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                     child: Image.asset("assets/images/Shareicon.png")
                                   ),
                                 ),
-                                Container(
-                                  height: 20,
-                                  width: 20,
-                                  margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.1),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.white
-                                  ),
-                                 
-                                  child: const Center(child: Icon(Icons.file_download_outlined,color: Colors.blue,size: 16,)),
-                                ),
+
                               ],
                             )
                           ],
@@ -225,13 +228,13 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                               child: Column(
                                 children: [
                                   SizedBox(
-                                    height: screenHeight * 0.28, // Adjust to give some space for dots below the slider
+                                    height: screenHeight * 0.28,
                                     width: screenWidth,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         SizedBox(
-                                          height: screenHeight * 0.25, // Height for the PageView slider
+                                          height: screenHeight * 0.25,
                                           width: screenWidth,
                                           child: PageView.builder(
                                             controller: _pageControllerSlider,
@@ -244,20 +247,19 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                             itemBuilder: (context, index) {
                                               const String baseUrl = 'https://xpacesphere.com';
                                               return Container(
-                                                margin: const EdgeInsets.all(0), // No margin around the image
+                                                margin: const EdgeInsets.all(0),
                                                 decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(20), // Circular border radius
-                                                  border: Border.all(color: Colors.white, width: 0), // Optional border color
+                                                  borderRadius: BorderRadius.circular(20),
+                                                  border: Border.all(color: Colors.white, width: 0),
                                                 ),
                                                 child: ClipRRect(
-                                                  borderRadius: BorderRadius.circular(20), // Apply the same border radius here
+                                                  borderRadius: BorderRadius.circular(20),
                                                   child: Image.network(
                                                     Uri.encodeFull('$baseUrl${_uploadedImages[index]}'),
                                                     fit: BoxFit.cover,
                                                     width: double.infinity,
                                                     height: 250,
                                                     errorBuilder: (context, error, stackTrace) {
-                                                      // Return a default image when an error occurs
                                                       return Image.asset(
                                                         ImageAssets.defaultImage, // Path to your default image
                                                         width: double.infinity,
@@ -271,12 +273,12 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                             },
                                           ),
                                         ),
-                                        const SizedBox(height: 10), // Space between slider and dots
+                                        const SizedBox(height: 10),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: List.generate(_uploadedImages.length, (index) {
                                             return Container(
-                                              margin: const EdgeInsets.symmetric(horizontal: 5), // Space between dots
+                                              margin: const EdgeInsets.symmetric(horizontal: 5),
                                               child: AnimatedContainer(
                                                 duration: const Duration(milliseconds: 500),
                                                 width: _currentIndex == index ? 20 : 20,
@@ -294,6 +296,7 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                   ),
                                   const SizedBox(height: 10,),
                                   Container(
+                                    margin: const EdgeInsets.symmetric(horizontal: 8),
                                     height: screenHeight*0.05,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
@@ -304,22 +307,22 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
                                       children: [
                                         const SizedBox(width: 15,),
                                         Container(
-                                          constraints: const BoxConstraints(maxWidth: 40), // Adjust maxWidth as needed
+                                          constraints: const BoxConstraints(maxWidth: 40),
                                           child: FittedBox(
-                                            fit: BoxFit.scaleDown, // This will scale down the text if it overflows
-                                            child: Text("₹ ${widget.warehouses.whouseRent}", // Limit to 3 decimal places
+                                            fit: BoxFit.scaleDown,
+                                            child: Text("₹ ${widget.warehouses.whouseRent}",
                                               style: const TextStyle(fontWeight: FontWeight.w700,color: Colors.black),
-                                              textAlign: TextAlign.start, // Align text as needed
+                                              textAlign: TextAlign.start,
                                             ),
                                           ),
                                         ),
                                         const Text(" Rent sq.ft",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 10,color: Colors.grey),),
                                         const Spacer(),
                                         Tooltip(
-                                          message: 'This is a help icon', // The message you want to show in the tooltip
+                                          message: "The price range is based on the owner's expectations",
                                           child: Container(
                                             height: screenHeight * 0.05,
-                                            width: screenWidth * 0.13,
+                                            width: screenWidth * 0.10,
                                             decoration: const BoxDecoration(
                                               color: Colors.blue,
                                             ),
@@ -733,6 +736,73 @@ class _wareHouseDetailsState extends State<wareHouseDetails> {
 
 }
 
+
+
+class ShareWarehouseHelper {
+  /// Check for location permissions and fetch current location
+  static Future<String> getLocationUrl() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      throw Exception("Location services are disabled.");
+    }
+
+    // Check location permissions
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        throw Exception("Location permissions are denied.");
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      throw Exception(
+          "Location permissions are permanently denied, cannot access location.");
+    }
+
+    // Get the current position
+    Position position = await Geolocator.getCurrentPosition();
+    return "https://www.google.com/maps?q=${position.latitude},${position.longitude}";
+  }
+
+  /// Share Warehouse Details
+  static Future<void> shareWarehouse({
+    required String warehouseName,
+    required String warehouseLocation,
+    required String warehouseDetailsUrl,
+    required String warehousePhotoUrl,
+    required BuildContext context,
+  }) async {
+    try {
+      // Get the user's current location URL
+      String locationUrl = await getLocationUrl();
+
+      // Prepare the sharing message
+      String message = '''
+📦 Check out this Warehouse!
+
+🏢 Name: $warehouseName
+📍 Location: $warehouseLocation
+🌐 Warehouse Details: $warehouseDetailsUrl
+
+📸 Photo: $warehousePhotoUrl
+🗺️ Location URL: $locationUrl
+      ''';
+
+      // Share the message
+      Share.share(message);
+    } catch (e) {
+      // Show an error message if location or sharing fails
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.toString()}")),
+      );
+    }
+  }
+}
 
 
 

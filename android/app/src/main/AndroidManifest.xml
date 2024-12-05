@@ -58,12 +58,19 @@
               android:resource="@style/NormalTheme"
               />
 
+            <!-- Google Maps and Places API Key -->
             <meta-data
-                android:name="com.google.android.gms.auth.api.API_KEY"
+                android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyDxbkZhKCXDGPdtOWxTPxFBg_tjAd3jsTk" />
 
+            <!-- Google Authentication API Key -->
+            <meta-data
+                android:name="com.google.android.gms.auth.api.API_KEY"
+                android:value="AIzaSyAnotherKeyExampleForAuth" />
 
-<!--            &lt;!&ndash; Firebase Messaging Metadata &ndash;&gt;-->
+
+
+            <!--            &lt;!&ndash; Firebase Messaging Metadata &ndash;&gt;-->
 <!--            <meta-data-->
 <!--                android:name="com.google.firebase.messaging.default_notification_icon"-->
 <!--                android:resource="@mipmap/ic_launcher" />-->

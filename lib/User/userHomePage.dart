@@ -66,12 +66,14 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
+
     if (kDebugMode) {
       print("Curetn${widget.latitude}");
     }
     if (kDebugMode) {
       print("Curetn${widget.longitude}");
     }
+
     ///Warehouse Fetching
     futureWarehouses = fetchWarehouses(widget.latitude, widget.longitude,constructionTypes,warehouseTypes,rentRange);
 
@@ -177,6 +179,8 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
       String rentRange,
       ) async {
     const url = 'https://xpacesphere.com/api/Wherehousedt/GetNLocation';
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String? phone=pref.getString("phone");
 
     // Create the request body with the necessary parameters
     final Map<String, dynamic> body = {
@@ -185,6 +189,7 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
       "constructiontypes": constructionTypes.map((e) => "'$e'").join(','),
       "warehousetypes": warehouseTypes.map((e) => "'$e'").join(','),
       "rentrange": rentRange,
+      "mobile": phone,
     };
 
     // Make the POST request
@@ -201,7 +206,9 @@ class _userHomePageState extends State<userHomePage> with SingleTickerProviderSt
 
       if (responseData['data'] != null && responseData['data'].isNotEmpty) {
         List jsonResponse = responseData['data'];
-        print("Warehouses data"+jsonResponse.toString());
+        if (kDebugMode) {
+          print("Warehouses data$jsonResponse");
+        }
         // Count the number of warehouses
         warehouseCount = jsonResponse.length;
         if (kDebugMode) {

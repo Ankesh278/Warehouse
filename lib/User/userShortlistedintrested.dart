@@ -234,13 +234,13 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    isShortlisted = true; // Switch to Shortlisted
+                                    isShortlisted = true;
                                   });
                                 },
                                 child: Container(
                                   alignment: Alignment.center,
                                   width: 73, // Half the width of the toggle
-                                  padding: EdgeInsets.symmetric(vertical: 4), // Smaller padding for a more compact look
+                                  padding: EdgeInsets.symmetric(vertical: 4),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: isShortlisted ? Colors.blue : Colors.transparent,
@@ -257,13 +257,13 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    isShortlisted = false; // Switch to Interested
+                                    isShortlisted = false;
                                   });
                                 },
                                 child: Container(
                                   alignment: Alignment.center,
-                                  width: 75, // Half the width of the toggle
-                                  padding: EdgeInsets.symmetric(vertical: 4), // Smaller padding for a more compact look
+                                  width: 75,
+                                  padding: EdgeInsets.symmetric(vertical: 4),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: !isShortlisted ? Colors.blue : Colors.transparent,
@@ -272,7 +272,7 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
                                     "Interested",
                                     style: TextStyle(
                                       color: !isShortlisted ? Colors.white : Colors.blue,
-                                      fontSize: 12, // Smaller font size
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ),
@@ -302,7 +302,7 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
                             controller: _scrollController,
                             child: Column(
                               children: [
-                                // Display content based on the state of the toggle
+
                                 if (isShortlisted)
                                   _buildShortlistedContent()
                                 else
@@ -329,12 +329,12 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
       children: [
         Container(
           height:  MediaQuery.of(context).size.height * 0.6,
-          child: shortlistedWarehouses.isEmpty?Center( // Show a static image if no data is available
+          child: shortlistedWarehouses.isEmpty?Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/images/warehousegift.png', // Replace with your static image path
+                  'assets/images/warehousegift.png',
                   height: 200,
                 ),
                 const SizedBox(height: 20),
@@ -362,10 +362,10 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
               return FutureBuilder(
                 future: distanceCalculator.getDistanceFromCurrentToWarehouse(whouseAddress),
                 builder: (context,snapshot){
-                  double distanceInKm = (snapshot.data ?? 0.0) / 1000; // Convert to km
+                  double distanceInKm = (snapshot.data ?? 0.0) / 1000;
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: SpinKitCircle(
-                      color: Colors.blue, // Specify a color for the spinner
+                      color: Colors.blue,
                       size: 50.0, //
                     ));
                   } else if (snapshot.hasError) {

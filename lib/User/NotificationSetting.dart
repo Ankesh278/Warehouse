@@ -207,6 +207,7 @@ class NotificationSettingsProvider with ChangeNotifier {
     _pushNotifications = prefs.getBool('pushNotifications') ?? true;
     _phone = prefs.getString('phone');
     _email = prefs.getString('email');
+    print("emailll>>"+_email.toString());
 
     // Remove "+91" prefix from phone if present
     if (_phone != null && _phone!.startsWith("+91")) {

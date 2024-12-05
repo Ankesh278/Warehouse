@@ -15,6 +15,7 @@ class CartProvider with ChangeNotifier {
     try {
       final url = "$baseUrl/GetSortlist_warehouse?_mobile=$phoneNumber&Id=$warehouseId";
       final response = await http.get(Uri.parse(url));
+      print("URRRL"+url);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);

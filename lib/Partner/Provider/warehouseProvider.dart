@@ -15,7 +15,7 @@ class WarehouseProvider with ChangeNotifier {
   // Update warehouse availability status
   Future<void> updateWarehouseStatus(String warehouseId, bool status) async {
     final url = Uri.parse(
-        'http://xpacesphere.com/api/Wherehousedt/UpdIsAvailable'); // Updated to HTTPS
+        'http://xpacesphere.com/api/Wherehousedt/UpdIsAvailable');
 
     try {
       // Send the HTTP POST request

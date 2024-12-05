@@ -24,7 +24,6 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
 
   final ImagePicker _picker = ImagePicker();
 
-  // Function to pick images
   Future<void> _pickImage(ImageSource source) async {
     if (_photoCount >= 10) return;
 
@@ -35,16 +34,14 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
           totalmedia++;
           _photoCount++;
           _pickedImages.add(pickedFile );
-          _progress += 5;
+          _progress += 0.1;
         });
       }
     } catch (e) {
-      // Handle errors gracefully
       print("Error picking image: $e");
     }
   }
 
-  // Function to pick videos
   Future<void> _pickVideo() async {
     if (_videoCount >= 10) return;
     try {
@@ -61,7 +58,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
       print("Error picking video: $e");
     }
   }
-  // Function to upload files to server
+
   Future<void> _uploadMedia(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String phone = prefs.getString("phone")!;
@@ -73,27 +70,22 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
     if (_pickedImages.isEmpty && _pickedVideos.isEmpty) return;
 
     setState(() {
-      _isUploading = true; // Show progress indicator
+      _isUploading = true;
     });
 
     try {
       var request = http.MultipartRequest(
         'PUT',
-        Uri.parse('http://xpacesphere.com/api/Wherehousedt/Ins_whousefiledetails'),
+        Uri.parse('https://xpacesphere.com/api/Wherehousedt/Ins_whousefiledetails'),
       );
 
-      // Combine images and videos into a single list
       List<File> mediaFiles = [];
-      // Convert XFile (from image picker) to File
       mediaFiles.addAll(_pickedImages.map((xFile) => File(xFile.path)));
       mediaFiles.addAll(_pickedVideos.map((xFile) => File(xFile.path)));
 
-      // DEBUG: Print the number of media files being uploaded
       print("Number of media files: ${mediaFiles.length}");
 
-      // Attach all media files to the request under 'fileUpload'
       for (int i = 0; i < mediaFiles.length; i++) {
-        // DEBUG: Print each file's path and name before attaching
         print("Uploading file ${i + 1}: ${mediaFiles[i].path}");
         request.files.add(await http.MultipartFile.fromPath(
           'Filedata',
@@ -102,32 +94,29 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
         ));
       }
 
-      // Add the mobile number as form data
-     // request.fields['mobile'] = phone;
       request.fields['Id']=id;
+      print(("Url>>>"+request.url.toString()));
 
-      // DEBUG: Print form fields being sent
       print("Form fields: mobile=$phone, Id=$id");
 
-
-      // Send the request to the server
       var response = await request.send();
 
-      // Check the response status
       if (response.statusCode == 200) {
         setState(() {
           _isUploading = false;
         });
         print("Files uploaded successfully!");
-        // Read the response as a string and parse it if needed
         String responseString = await response.stream.bytesToString();
         print("Response body: $responseString");
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+              (Route<dynamic> route) => false,
+        );
 
-        // Optionally, parse the response as JSON if it's JSON-formatted
         try {
           var responseJson = jsonDecode(responseString);
-          String message = responseJson['message']; // Adjust the key based on your API response
-          int code = responseJson['status']; // Adjust the key based on your API response
+          String message = responseJson['message'];
+          int code = responseJson['status'];
           print("Message: $message");
           print("Status: $code");
         } catch (e) {
@@ -140,11 +129,11 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
             backgroundColor: Colors.green,
           ),
         );
-        _clearAllFields(); // Clear fields after successful upload
-        // Navigate to the Home Screen and remove back stack
+        _clearAllFields();
+
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomeScreen()), // Replace HomeScreen() with your actual HomeScreen widget
-              (Route<dynamic> route) => false, // Remove all previous routes
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+              (Route<dynamic> route) => false,
         );
       } else {
         setState(() {
@@ -159,14 +148,11 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
       print("Error uploading files: $e");
     } finally {
       setState(() {
-        _isUploading = false; // Hide progress indicator after upload
+        _isUploading = false;
       });
     }
   }
 
-
-
-  // Function to clear all fields after upload
   void _clearAllFields() {
     setState(() {
       totalmedia = 0;
@@ -187,17 +173,14 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
   Future<String?> getId() async {
     String apiUrl = "http://xpacesphere.com/api/Wherehousedt/GetWarehouseId";
 
-    // Retrieve the phone number from shared preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String phone = prefs.getString("phone")!;
 
-    // Strip out +91 if it's there
     if (phone.startsWith("+91")) {
       phone = phone.replaceFirst("+91", "");
     }
 
     try {
-      // Send GET request with mobile as a query parameter
       final response = await http.get(
         Uri.parse('$apiUrl?mobile=$phone'),
         headers: {
@@ -205,34 +188,17 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
         },
       );
 
-      // Check if the request was successful (status code 200)
       if (response.statusCode == 200) {
-        // Parse the response body
         var jsonResponse = jsonDecode(response.body);
-
-        // Check if the id is an int and convert it to a String if necessary
         Id = jsonResponse['id'];
         prefs.setString("id",Id.toString());
-
-        // Convert id to a String for printing or return
-        if (Id is int) {
-          print("Iddddd: ${Id.toString()}");
-          // Convert int to string for printing
-          return Id.toString();
-        } else if (Id is String) {
-          print("Iddddd: $Id");  // Already a string, print it directly
-          return Id.toString();
-        } else {
-          print('Unexpected id type: ${Id.runtimeType}');
-          return null;
-        }
-      } else {
-        // Handle error if status code is not 200
+        print("Iddddd: ${Id.toString()}");
+        return Id.toString();
+            } else {
         print('Failed to load data. Status code: ${response.statusCode}');
         return null;
       }
     } catch (e) {
-      // Handle any exceptions that occur during the HTTP request
       print('Error occurred: $e');
       return null;
     }
@@ -322,11 +288,9 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                               children: <Widget>[
                                 Text(
                                   'Warehouse Images $totalmedia/20',
-                                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: Colors.blue),
+                                  style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.blue),
                                 ),
                                 const SizedBox(height: 16),
-
-                                // Linear progress bar with increased width
                                 Container(
                                   width: double.infinity,
                                   height: 15,
@@ -339,14 +303,11 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                   ),
                                 ),
 
-
                                 const SizedBox(height: 16),
                                 Container(
                                     margin: EdgeInsets.only(right: screenWidth*0.4),
                                     child: const Text("Add files",style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w600),)),
                                 const SizedBox(height: 10),
-
-                                // Circle Avatars for upload buttons with increased size
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
@@ -363,7 +324,6 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
 
                                 const SizedBox(height: 16),
 
-                                // Counters for photos and videos
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
@@ -384,9 +344,9 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                           color: Colors.blue,
                                           borderRadius: BorderRadius.circular(6)
                                       ),
-                                      height: screenHeight * 0.055, // Adjusted for responsiveness
-                                      width: screenWidth * 0.47, // Adjusted for responsiveness
-                                      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.03), // Adjusted for responsiveness
+                                      height: screenHeight * 0.055,
+                                      width: screenWidth * 0.47,
+                                      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
                                       child: const Center(child: Text("Save & Next",style: TextStyle(color: Colors.white),))
                                   ),
                                   onTap: (){
@@ -396,7 +356,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                 ),
                                 const SizedBox(height: 10,),
                                 Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start, // Aligns image and text at the top
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(top: 4.0),
@@ -406,20 +366,18 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                         width: 15,
                                         color: Colors.red,
                                       ),
-                                    ), // Adds space between the image and text
+                                    ),
                                     const Flexible(
                                       child: Text(
                                         "Upload Warehouse Image Only and Please Ensure Clarity and Proper Lighting",
-                                        maxLines: 2, // Limits the text to two lines
-                                        overflow: TextOverflow.visible, // Ensures text wraps without truncation
+                                        maxLines: 2,
+                                        overflow: TextOverflow.visible,
                                         style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600,color: Colors.grey),
                                       ),
                                     ),
                                   ],
                                 ),
 
-
-                                //Row with three images of equal size
                                 SizedBox(
                                   height: 100,
                                   child: Row(
@@ -431,7 +389,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                           margin: const EdgeInsets.symmetric(horizontal: 3),
                                           child: Image.asset(
                                             "assets/images/demoimage1.png",
-                                            fit: BoxFit.contain, // Adjust the image to fit within the container
+                                            fit: BoxFit.contain,
                                           ),
                                         ),
                                       ),
@@ -441,7 +399,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                           margin: const EdgeInsets.symmetric(horizontal: 3),
                                           child: Image.asset(
                                             "assets/images/demoimage2.png",
-                                            fit: BoxFit.contain, // Adjust the image to fit within the container
+                                            fit: BoxFit.contain,
                                           ),
                                         ),
                                       ),
@@ -451,7 +409,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                           margin: const EdgeInsets.symmetric(horizontal: 3),
                                           child: Image.asset(
                                             "assets/images/demoimage3.png",
-                                            fit: BoxFit.contain, // Adjust the image to fit within the container
+                                            fit: BoxFit.contain,
                                           ),
                                         ),
                                       ),

@@ -32,6 +32,7 @@ class _userProfileScreenState extends State<userProfileScreen> {
   late String Name='';
    String userFile="";
    String email="";
+   String name="";
   @override
   void initState() {
     super.initState();
@@ -1062,11 +1063,13 @@ class _userProfileScreenState extends State<userProfileScreen> {
         }
 
          userFile= userData['userfile'] ?? "";
+         name= userData['name'] ?? "";
          email= userData['Mailid'] ?? "";
         print("USERFILE"+userFile);
 
         SharedPreferences pref=await SharedPreferences.getInstance();
-       pref.setString("email", email.toString());
+       pref.setString("email", email);
+       pref.setString("name", name);
         // Concatenate the base URL with the relative image URL
         final String fullImageUrl = 'https://xpacesphere.com$relativeImageUrl';
         if (kDebugMode) {
@@ -1144,24 +1147,18 @@ class _userProfileScreenState extends State<userProfileScreen> {
       if (response.statusCode == 200) {
         // Read the response body
         final responseBody = await response.stream.bytesToString();
-        if (kDebugMode) {
-          print("Response Code: ${response.statusCode}");
-        }
-        if (kDebugMode) {
-          print("Response Body: $responseBody");
-        }
+        print("Response Code: ${response.statusCode}");
+        print("Response Body: $responseBody");
 
-        // Assuming the server returns the URL of the uploaded image
         final responseData = json.decode(responseBody);
         if (responseData['status'] == 'success') {
 
-          // Extract the image URL from the response
-          return responseData['imageUrl'];  // Return the image URL
+          return responseData['imageUrl'];
         } else {
           if (kDebugMode) {
             print("Error: ${responseData['message']}");
           }
-          return null;  // If upload failed, return null
+          return null;
         }
       } else {
         if (kDebugMode) {
@@ -1171,13 +1168,13 @@ class _userProfileScreenState extends State<userProfileScreen> {
         if (kDebugMode) {
           print("Error response body: $responseBody");
         }
-        return null;  // If response status is not 200, return null
+        return null;
       }
     } catch (e) {
       if (kDebugMode) {
         print("Error uploading image: $e");
       }
-      return null;  // If an error occurred during upload, return null
+      return null;
     }
   }
 

@@ -34,14 +34,15 @@ class _ExpressInterestScreenState extends State<ExpressInterestScreen> {
   Future<void> _loadPrefilledValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? prefilledValue = prefs.getString('phone'); // Replace 'myKey' with your key
-    if (prefilledValue != null) {
+    phoneController.text=prefilledValue!;
+    print("Dataa"+prefilledValue.toString());
 
-      if (prefilledValue.startsWith("+91")) {
+      if (prefilledValue!.startsWith("+91")) {
         prefilledValue = prefilledValue.replaceFirst("+91", "");
         print("Prefilleeeed>>>>>>>>"+prefilledValue);
         phoneController.text = prefilledValue;
       }// Set the controller's text
-    }
+
 
   }
 
@@ -446,6 +447,7 @@ class _ExpressInterestScreenState extends State<ExpressInterestScreen> {
                                         child: ElevatedButton(
                                           onPressed: () {
                                             if (_formKey.currentState!.validate()) {
+                                              print("Phonee"+phoneController.text);
                                               // All validations passed
                                               Navigator.push(context, MaterialPageRoute(builder: (context) => Expressinterestdatetime(
                                                 name:nameController.text.toString(),

@@ -72,39 +72,46 @@ class AuthUserProvider extends ChangeNotifier {
       setLoading(false);
     }
   }
-
   Future<void> verifyPhoneNumber(String phoneNumber, BuildContext context) async {
-    setLoading(true);
+    setLoading(true);  // Start the loading indicator
     try {
       await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         verificationCompleted: (PhoneAuthCredential credential) async {
           await _auth.signInWithCredential(credential);
-          setLoading(false);
+          setLoading(false);  // Stop loading when verification is complete
         },
         verificationFailed: (FirebaseAuthException e) {
-          setErrorMessage(e.message);
-          setLoading(false);
+          print("Error occured here"+e.message.toString());
+          setErrorMessage("Some error occured here");  // Display error message
+          setLoading(false);  // Stop loading on failure
         },
         codeSent: (String verificationId, int? resendToken) {
+          String newPhone = phoneNumber;
+          if (newPhone.startsWith("+91")) {
+            newPhone = newPhone.replaceFirst("+91", "");
+          }
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => userverifyotp(
                 verificationId: verificationId,
-                phoneNumber: phoneNumber,
+                phoneNumber: newPhone,
               ),
             ),
           );
         },
         codeAutoRetrievalTimeout: (String verificationId) {
-          setLoading(false);
+          setLoading(false);  // Stop loading when auto retrieval times out
+          // Optionally, show a timeout message to the user
         },
         timeout: Duration(seconds: 60),
       );
     } catch (e) {
       setErrorMessage('Failed to verify phone number. Please try again.');
-      setLoading(false);
+      setLoading(false);  // Stop loading if there's an exception
     }
   }
+
 }
+

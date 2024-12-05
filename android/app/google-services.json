@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "731856525652",
     "project_id": "warehouse-8fd2e",
-    "storage_bucket": "warehouse-8fd2e.appspot.com"
+    "storage_bucket": "warehouse-8fd2e.firebasestorage.app"
   },
   "client": [
     {
@@ -13,14 +13,6 @@
         }
       },
       "oauth_client": [
-        {
-          "client_id": "731856525652-mt00d7vlf6pg8vmp2agjr8gmq050t54p.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.xspace.warehouse",
-            "certificate_hash": "ed3b3e502f3054e829274ac857386beb7c25aa6b"
-          }
-        },
         {
           "client_id": "731856525652-5p1p71o3n6rlka23dvt9pgm8vj0ovbi6.apps.googleusercontent.com",
           "client_type": 3

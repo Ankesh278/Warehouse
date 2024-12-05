@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -159,7 +160,9 @@ class _AddWareHouseState extends State<AddWareHouse> {
         //'Id':Id
       };
 
-      print("Alldatass " + data.toString());
+      if (kDebugMode) {
+        print("Alldatass $data");
+      }
 
       try {
         final response = await http.post(

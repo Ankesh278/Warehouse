@@ -1,6 +1,10 @@
 
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 
 class searchLocationUser extends StatefulWidget {
@@ -11,13 +15,44 @@ class searchLocationUser extends StatefulWidget {
 class _searchLocationUserState extends State<searchLocationUser> {
 
   final TextEditingController _controller = TextEditingController();
-  List<String> _suggestions = [];
-  List<String> _allSuggestions = ['Delhi', 'Delhi 1', 'Delhi 2']; // Your autocomplete data
+  var uuid=Uuid();
+  String _sessionToken='12345';
+  List<dynamic> placesList=[];
 
-  void _updateSuggestions(String query) {
+
+@override
+  void initState() {
+  _controller.addListener((){
+    onChanged();
+  });
+    super.initState();
+  }
+
+  void onChanged(){
+  if(_sessionToken!=null){
     setState(() {
-      _suggestions = _allSuggestions.where((item) => item.toLowerCase().contains(query.toLowerCase())).toList();
+      _sessionToken=uuid.v4();
     });
+
+  }
+  getSuggestion(_controller.text);
+  }
+  void getSuggestion(String input) async{
+  String PlacesApi="AIzaSyDxbkZhKCXDGPdtOWxTPxFBg_tjAd3jsTk";
+  String baseUrl="https://maps.googleapis.com/maps/api/place/autocomplete/json";
+  String request = '$baseUrl?input=$input&key=$PlacesApi&sessiontoken=$_sessionToken';
+
+  var response=await http.get(Uri.parse(request));
+  print("Placesss>>>>>>"+response.body.toString());
+  if(response.statusCode==200){
+
+    setState(() {
+      placesList=jsonDecode(response.body.toString())['predictions'];
+    });
+  }else{
+    throw Exception("Exception Occured check the api calling");
+  }
+
   }
 
   @override
@@ -94,7 +129,6 @@ class _searchLocationUserState extends State<searchLocationUser> {
                                     padding: const EdgeInsets.only(left: 20.0,right: 20),
                                     child: TextField(
                                       controller: _controller,
-                                      onChanged: _updateSuggestions,
                                       decoration: InputDecoration(
                                         hintText: 'Delhi',
                                         label: Text("Location",style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.w600),),
@@ -117,25 +151,6 @@ class _searchLocationUserState extends State<searchLocationUser> {
                                       ),
                                     ),
                                   ),
-                                  if (_suggestions.isNotEmpty) ...[
-                                    SizedBox(height: 8),
-                                    Container(
-                                      color: Colors.white,
-                                      child: Column(
-                                        children: _suggestions.map((suggestion) {
-                                          return ListTile(
-                                            title: Text(suggestion),
-                                            onTap: () {
-                                              _controller.text = suggestion;
-                                              setState(() {
-                                                _suggestions.clear(); // Hide suggestions
-                                              });
-                                            },
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ],
                                   SizedBox(height: 20),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 20.0),

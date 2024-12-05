@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:warehouse/User/UserProvider/AuthUserProvider.dart';
-import 'package:sim_data/sim_data.dart';
+// import 'package:sim_data/sim_data.dart';
 
 
 class userlogin extends StatefulWidget {
@@ -22,7 +22,7 @@ class _userloginState extends State<userlogin> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _fetchPhoneNumber();
+   // _fetchPhoneNumber();
     _phoneController.addListener(() {
       if (_phoneController.text.length == 10) {
         // Dismiss the keyboard when 10 digits are entered
@@ -32,22 +32,22 @@ class _userloginState extends State<userlogin> {
   }
 
 
-  Future<void> _fetchPhoneNumber() async {
-    try {
-      final simData = await SimDataPlugin.getSimData();
-      if (simData.cards.isNotEmpty) {
-        setState(() {
-          _detectedPhoneNumber = simData.cards[0].serialNumber;
-          print("Numberr"+_detectedPhoneNumber.toString());
-         // _phoneController.text = _detectedPhoneNumber ?? '';
-        });
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Failed to fetch phone number: $e');
-      }
-    }
-  }
+  // Future<void> _fetchPhoneNumber() async {
+  //   try {
+  //     final simData = await SimDataPlugin.getSimData();
+  //     if (simData.cards.isNotEmpty) {
+  //       setState(() {
+  //         _detectedPhoneNumber = simData.cards[0].serialNumber;
+  //         print("Numberr"+_detectedPhoneNumber.toString());
+  //        // _phoneController.text = _detectedPhoneNumber ?? '';
+  //       });
+  //     }
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print('Failed to fetch phone number: $e');
+  //     }
+  //   }
+  // }
 
 
   @override
@@ -249,14 +249,14 @@ class _userloginState extends State<userlogin> {
 
                                 SizedBox(
                                     height: screenHeight *
-                                        0.04), // Adjusted for responsiveness
+                                        0.04),
                                  Consumer<AuthUserProvider>(builder: (context,authProvider,child){
                                    return Container(
                                      height: screenHeight *
-                                         0.06, // Adjusted for responsiveness
+                                         0.06,
                                      margin: EdgeInsets.symmetric(
                                          horizontal: screenWidth *
-                                             0.03), // Adjusted for responsiveness
+                                             0.03),
                                      child: ElevatedButton(
                                        onPressed: () {
                                          if (_formKey.currentState!.validate()) {
