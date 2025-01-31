@@ -1,10 +1,7 @@
-import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:warehouse/Partner/AddWarehouse.dart';
-import 'package:warehouse/Partner/partnerRegistrationScreen.dart';
+import 'package:warehouse/generated/l10n.dart';
 
 class userNotificationScreen extends StatefulWidget {
   @override
@@ -50,7 +47,7 @@ class _userNotificationScreenState extends State<userNotificationScreen> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
 
-                                        Text("Notification",style: TextStyle(color: Colors.white,fontSize: 14),)
+                                        Text(S.of(context).notifications,style: TextStyle(color: Colors.white,fontSize: 14),)
                                       ],
                                     )
                                   ],
@@ -94,7 +91,7 @@ class _userNotificationScreenState extends State<userNotificationScreen> {
 
                                   ),
                                   SizedBox(height: 20,),
-                                  Text("No Notifications")
+                                  Text(S.of(context).no_notifications)
 
                                 ],
                               )

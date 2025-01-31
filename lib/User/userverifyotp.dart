@@ -9,16 +9,16 @@ import 'package:warehouse/Partner/partnerRegistrationScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:warehouse/User/getuserlocation.dart';
 
-class userverifyotp extends StatefulWidget {
+class UserVerifyOtp extends StatefulWidget {
   final String verificationId;
   final String phoneNumber;
 
-  userverifyotp({required this.verificationId,required this.phoneNumber});
+  const UserVerifyOtp.userVerifyOtp({super.key, required this.verificationId,required this.phoneNumber});
   @override
-  State<userverifyotp> createState() => _userverifyotpState();
+  State<UserVerifyOtp> createState() => UserVerifyOtpState();
 }
 
-class _userverifyotpState extends State<userverifyotp> {
+class UserVerifyOtpState extends State<UserVerifyOtp> {
   String? _errorMessage;
   bool isLoading=false;
 
@@ -49,28 +49,30 @@ class _userverifyotpState extends State<userverifyotp> {
     try {
       await _auth.signInWithCredential(credential);
 
-      String url = 'http://xpacesphere.com/api/Register/Registration?mobile=${widget.phoneNumber}';
-      print("Registration URL is $url");
-
-      final response = await http.post(Uri.parse(url));
-
+      String url = 'https://xpacesphere.com/api/Register/Registration?mobile=${widget.phoneNumber}';
       if (kDebugMode) {
-        print("Registration API URL: $url");
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
+        print("Registration URL is $url");
       }
-
+      final response = await http.post(Uri.parse(url));
+        if (kDebugMode) {
+          print("Registration API URL: $url");
+        }
+        if (kDebugMode) {
+          print('Response status: ${response.statusCode}');
+        }
+        if (kDebugMode) {
+          print('Response body: ${response.body}');
+        }
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-
-        if (responseData['message'] == "Mobile Number Already Exist") {
+        if (responseData['message'] == "Mobile Number Already Exist www") {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setBool('isUserLoggedIn', true);
           await prefs.setString('phone', widget.phoneNumber);
 
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => GetUserLocation()),
+            MaterialPageRoute(builder: (context) => const GetUserLocation()),
                 (Route<dynamic> route) => false,
           );
         } else if (responseData['message'] == "Register Successfully") {
@@ -116,7 +118,6 @@ class _userverifyotpState extends State<userverifyotp> {
     super.initState();
     startTimer();
   }
-
   void startTimer() {
     _isButtonDisabled = true;
     _start = 30;
@@ -131,7 +132,6 @@ class _userverifyotpState extends State<userverifyotp> {
       });
     });
   }
-
   @override
   void dispose() {
     _timer?.cancel();
@@ -142,7 +142,6 @@ class _userverifyotpState extends State<userverifyotp> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Stack(
         children: [
@@ -269,14 +268,8 @@ class _userverifyotpState extends State<userverifyotp> {
                                         ],
                                         enableActiveFill: true,
                                         onCompleted: (value) {
-
                                           FocusScope.of(context).unfocus();
                                           _verifyOtp();
-                                          // Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //         builder: (context) => getuserlocation()));
-                                          // // Handle OTP completion
                                         },
                                       ),
                                     ),
@@ -322,7 +315,6 @@ class _userverifyotpState extends State<userverifyotp> {
                                   onPressed: () {
                                     FocusScope.of(context).unfocus();
                                     _verifyOtp();
-                                    // Handle OTP verification
                                   },
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
@@ -333,7 +325,6 @@ class _userverifyotpState extends State<userverifyotp> {
                                 ),
                               ),
                               SizedBox(height: screenHeight * 0.017),
-
                               SizedBox(height: screenHeight * 0.1),
                               Text(
                                 "By continuing, you agree to our Terms and Conditions",

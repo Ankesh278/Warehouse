@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/User/userHelpPage.dart';
-import 'package:warehouse/newHomePage.dart';
+import 'package:warehouse/new_home_page.dart';
 class GetUserLocation extends StatefulWidget {
   const GetUserLocation({super.key});
 
@@ -58,7 +60,7 @@ class _GetUserLocationState extends State<GetUserLocation> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => newHomePage(
+              builder: (context) => NewHomePage(
                 longitude: position?.longitude,
                 latitude: position?.latitude,
               )));
@@ -67,7 +69,9 @@ class _GetUserLocationState extends State<GetUserLocation> {
         loading = false;
         _coordinates = 'Could not fetch location';
       });
-      print("Error fetching location: $e");
+      if (kDebugMode) {
+        print("Error fetching location: $e");
+      }
     }
   }
 
@@ -78,8 +82,8 @@ class _GetUserLocationState extends State<GetUserLocation> {
 
     return Scaffold(
       body: loading
-          ? const Center(child: CircularProgressIndicator()) // Show loader if loading
-          : buildLocationUI(screenHeight, screenWidth), // UI content
+          ? const Center(child: SpinKitCircle(color: Colors.blue,))
+          : buildLocationUI(screenHeight, screenWidth),
     );
   }
 

@@ -22,16 +22,363 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "agricultural": MessageLookupByLibrary.simpleMessage("কৃষি"),
-        "became_partner":
-            MessageLookupByLibrary.simpleMessage("একটি অংশীদার হয়ে"),
-        "hello": MessageLookupByLibrary.simpleMessage("হ্যালো"),
-        "manpower": MessageLookupByLibrary.simpleMessage("জনশক্তি"),
-        "more": MessageLookupByLibrary.simpleMessage("আরো"),
-        "seall": MessageLookupByLibrary.simpleMessage("সব দেখুন..."),
-        "transportation": MessageLookupByLibrary.simpleMessage("পরিবহন"),
-        "warehousing": MessageLookupByLibrary.simpleMessage("গুদামজাতকরণ"),
-        "welcome": MessageLookupByLibrary.simpleMessage(
-            "আমাদের অ্যাপ্লিকেশনে আপনাকে স্বাগতম!")
-      };
+    "account": MessageLookupByLibrary.simpleMessage("একাউন্ট"),
+    "add_additional_details": MessageLookupByLibrary.simpleMessage(
+      "আরও ক্লায়েন্ট আকৃষ্ট করার জন্য অতিরিক্ত বিশদ যোগ করুন",
+    ),
+    "add_additional_email": MessageLookupByLibrary.simpleMessage(
+      "অতিরিক্ত ইমেইল ঠিকানা যোগ করুন",
+    ),
+    "add_more_photos": MessageLookupByLibrary.simpleMessage("আরও ছবি যোগ করুন"),
+    "add_more_videos": MessageLookupByLibrary.simpleMessage(
+      "আরও ভিডিও যোগ করুন",
+    ),
+    "add_new": MessageLookupByLibrary.simpleMessage("নতুন যোগ করুন"),
+    "add_warehouse": MessageLookupByLibrary.simpleMessage("গুদাম যোগ করুন"),
+    "add_warehouse_details": MessageLookupByLibrary.simpleMessage(
+      "সম্ভাব্য গ্রাহকদের আকর্ষণ করতে গুদামের বিবরণ যোগ করুন",
+    ),
+    "add_warehouse_now": MessageLookupByLibrary.simpleMessage(
+      "এখন গুদাম যোগ করুন",
+    ),
+    "additional_phone_number": MessageLookupByLibrary.simpleMessage(
+      "অতিরিক্ত ফোন নম্বর",
+    ),
+    "advanced_filters": MessageLookupByLibrary.simpleMessage("উন্নত ফিল্টার"),
+    "agricultural": MessageLookupByLibrary.simpleMessage("কৃষি"),
+    "all_topics": MessageLookupByLibrary.simpleMessage("সকল বিষয়"),
+    "amenities": MessageLookupByLibrary.simpleMessage("সুবিধা"),
+    "apply_filters": MessageLookupByLibrary.simpleMessage(
+      "ফিল্টার প্রয়োগ করুন",
+    ),
+    "area_max_to_min": MessageLookupByLibrary.simpleMessage(
+      "এলাকা (সর্বোচ্চ থেকে সর্বনিম্ন)",
+    ),
+    "area_min_to_max": MessageLookupByLibrary.simpleMessage(
+      "এলাকা (সর্বনিম্ন থেকে সর্বোচ্চ)",
+    ),
+    "became_partner": MessageLookupByLibrary.simpleMessage("অংশীদার হন"),
+    "bids": MessageLookupByLibrary.simpleMessage("বিড"),
+    "bike_parking_slots": MessageLookupByLibrary.simpleMessage(
+      "বাইক পার্কিং স্লট",
+    ),
+    "bts": MessageLookupByLibrary.simpleMessage("বিটিএস"),
+    "call_for_assistance": MessageLookupByLibrary.simpleMessage(
+      "সহায়তার জন্য কল করুন",
+    ),
+    "cancel": MessageLookupByLibrary.simpleMessage("বাতিল করুন"),
+    "carpet_area": MessageLookupByLibrary.simpleMessage("কার্পেট এলাকা"),
+    "centre_height": MessageLookupByLibrary.simpleMessage(
+      "কেন্দ্রীয় উচ্চতা (ফুটে)",
+    ),
+    "changes_saved_successfully": MessageLookupByLibrary.simpleMessage(
+      "আপনার পরিবর্তন সফলভাবে সংরক্ষিত হয়েছে",
+    ),
+    "choose_from_camera": MessageLookupByLibrary.simpleMessage(
+      "ক্যামেরা থেকে নির্বাচন করুন",
+    ),
+    "choose_from_gallery": MessageLookupByLibrary.simpleMessage(
+      "গ্যালারি থেকে নির্বাচন করুন",
+    ),
+    "city": MessageLookupByLibrary.simpleMessage("শহর"),
+    "clear_all": MessageLookupByLibrary.simpleMessage("সব মুছে দিন"),
+    "close": MessageLookupByLibrary.simpleMessage("বন্ধ করুন"),
+    "cold_storage": MessageLookupByLibrary.simpleMessage("কোল্ড স্টোরেজ"),
+    "coming_soon": MessageLookupByLibrary.simpleMessage("শীঘ্রই আসছে"),
+    "company_name": MessageLookupByLibrary.simpleMessage("কোম্পানির নাম"),
+    "complete_kyc": MessageLookupByLibrary.simpleMessage(
+      "কেওয়াইসি সম্পূর্ণ করুন",
+    ),
+    "connect_with_whatsapp": MessageLookupByLibrary.simpleMessage(
+      "হোয়াটসঅ্যাপে সংযুক্ত করুন",
+    ),
+    "construction_age_in_months": MessageLookupByLibrary.simpleMessage(
+      "নির্মাণের বয়স (মাসে)",
+    ),
+    "construction_type": MessageLookupByLibrary.simpleMessage("নির্মাণ টাইপ"),
+    "construction_types": MessageLookupByLibrary.simpleMessage("নির্মাণের ধরণ"),
+    "contracts": MessageLookupByLibrary.simpleMessage("চুক্তি"),
+    "contracts_documents": MessageLookupByLibrary.simpleMessage("চুক্তির নথি"),
+    "dark_store": MessageLookupByLibrary.simpleMessage("ডার্ক স্টোর"),
+    "designation": MessageLookupByLibrary.simpleMessage("পদবী"),
+    "docks_height": MessageLookupByLibrary.simpleMessage("ডকের উচ্চতা (ফুটে)"),
+    "done": MessageLookupByLibrary.simpleMessage("সম্পন্ন"),
+    "edit_profile": MessageLookupByLibrary.simpleMessage(
+      "প্রোফাইল সম্পাদনা করুন",
+    ),
+    "edit_warehouse_details": MessageLookupByLibrary.simpleMessage(
+      "গুদামের বিশদ সম্পাদনা করুন",
+    ),
+    "electricity_in_kva": MessageLookupByLibrary.simpleMessage("বিদ্যুৎ (KVA)"),
+    "email_notifications": MessageLookupByLibrary.simpleMessage(
+      "ইমেইল বিজ্ঞপ্তি",
+    ),
+    "enter_address": MessageLookupByLibrary.simpleMessage("ঠিকানা লিখুন"),
+    "express_interest": MessageLookupByLibrary.simpleMessage(
+      "আগ্রহ প্রকাশ করুন",
+    ),
+    "express_interest_to_get_callback": MessageLookupByLibrary.simpleMessage(
+      "কোলব্যাক পেতে আগ্রহ প্রকাশ করুন",
+    ),
+    "factory": MessageLookupByLibrary.simpleMessage("ফ্যাক্টরি"),
+    "filter": MessageLookupByLibrary.simpleMessage("ফিল্টার করুন"),
+    "fire_noc": MessageLookupByLibrary.simpleMessage(
+      "ফায়ার NOC: আপনার গুদাম কি অগ্নি নিরাপদ?",
+    ),
+    "flexi_model_interest": MessageLookupByLibrary.simpleMessage(
+      "আপনি কি ফ্লেক্সি মডেলটি আগ্রহী?",
+    ),
+    "flooring_type": MessageLookupByLibrary.simpleMessage("ফ্লোরিং টাইপ"),
+    "follow_us_on": MessageLookupByLibrary.simpleMessage("আমাদের অনুসরণ করুন"),
+    "furnishing_type": MessageLookupByLibrary.simpleMessage("ফার্নিশিং টাইপ"),
+    "general": MessageLookupByLibrary.simpleMessage("সাধারণ"),
+    "get_address": MessageLookupByLibrary.simpleMessage("ঠিকানা পান"),
+    "ground_floor": MessageLookupByLibrary.simpleMessage("ভূমি তল"),
+    "have_clu_document": MessageLookupByLibrary.simpleMessage(
+      "আপনার কি CLU ডকুমেন্ট আছে?",
+    ),
+    "hello": MessageLookupByLibrary.simpleMessage("হ্যালো"),
+    "help": MessageLookupByLibrary.simpleMessage("সাহায্য"),
+    "help_and_support": MessageLookupByLibrary.simpleMessage(
+      "সাহায্য এবং সমর্থন",
+    ),
+    "immediate": MessageLookupByLibrary.simpleMessage("তাৎক্ষণিক"),
+    "industrial_shed": MessageLookupByLibrary.simpleMessage("শিল্প শেড"),
+    "inner_length": MessageLookupByLibrary.simpleMessage(
+      "অভ্যন্তরীণ দৈর্ঘ্য (ফুটে)",
+    ),
+    "inner_width": MessageLookupByLibrary.simpleMessage(
+      "অভ্যন্তরীণ প্রস্থ (ফুটে)",
+    ),
+    "interested": MessageLookupByLibrary.simpleMessage("আগ্রহী"),
+    "is_base_available_for_rent": MessageLookupByLibrary.simpleMessage(
+      "বেস কি ভাড়া পাওয়া যাচ্ছে?",
+    ),
+    "is_warehouse_available": MessageLookupByLibrary.simpleMessage(
+      "গুদাম কি উপলব্ধ?",
+    ),
+    "larger_collection_of_warehouses": MessageLookupByLibrary.simpleMessage(
+      "বড় সংগ্রহের গুদাম",
+    ),
+    "location": MessageLookupByLibrary.simpleMessage("অবস্থান"),
+    "lock_in_period": MessageLookupByLibrary.simpleMessage("লক-ইন সময়কাল"),
+    "log_out": MessageLookupByLibrary.simpleMessage("লগ আউট"),
+    "logout_confirmation": MessageLookupByLibrary.simpleMessage(
+      "আপনি কি লগআউট করতে চান?",
+    ),
+    "looking_for_rent_your_properties": MessageLookupByLibrary.simpleMessage(
+      "আপনি কি আপনার সম্পত্তি ভাড়া দিতে চান?",
+    ),
+    "maintenance_cost_per_sqft": MessageLookupByLibrary.simpleMessage(
+      "রক্ষণাবেক্ষণ খরচ (প্রতি বর্গফুট)",
+    ),
+    "manage_photos": MessageLookupByLibrary.simpleMessage("ফটো পরিচালনা করুন"),
+    "manage_videos": MessageLookupByLibrary.simpleMessage(
+      "ভিডিও পরিচালনা করুন",
+    ),
+    "manage_your_warehouse": MessageLookupByLibrary.simpleMessage(
+      "আপনার গুদাম দ্রুত পরিচালনা করুন!",
+    ),
+    "manpower": MessageLookupByLibrary.simpleMessage("জনশক্তি"),
+    "messenger": MessageLookupByLibrary.simpleMessage("মেসেঞ্জার"),
+    "more": MessageLookupByLibrary.simpleMessage("আরও"),
+    "multi_storey_building": MessageLookupByLibrary.simpleMessage("বহুতল ভবন"),
+    "my_account": MessageLookupByLibrary.simpleMessage("আমার অ্যাকাউন্ট"),
+    "my_profile": MessageLookupByLibrary.simpleMessage("আমার প্রোফাইল"),
+    "name": MessageLookupByLibrary.simpleMessage("নাম"),
+    "near_by": MessageLookupByLibrary.simpleMessage("কাছাকাছি"),
+    "need_assistance": MessageLookupByLibrary.simpleMessage(
+      "সাহায্যের প্রয়োজন",
+    ),
+    "no": MessageLookupByLibrary.simpleMessage("না"),
+    "no_interested_warehouse_found": MessageLookupByLibrary.simpleMessage(
+      "কোনও আগ্রহী গোডাউন পাওয়া যায়নি",
+    ),
+    "no_notifications": MessageLookupByLibrary.simpleMessage(
+      "কোনও বিজ্ঞপ্তি নেই",
+    ),
+    "no_shortlisted_warehouses_found": MessageLookupByLibrary.simpleMessage(
+      "কোনও শর্টলিস্ট করা গোডাউন পাওয়া যায়নি",
+    ),
+    "notification_setting": MessageLookupByLibrary.simpleMessage(
+      "নোটিফিকেশন সেটিং",
+    ),
+    "notification_settings": MessageLookupByLibrary.simpleMessage(
+      "বিজ্ঞপ্তি সেটিংস",
+    ),
+    "notifications": MessageLookupByLibrary.simpleMessage("বিজ্ঞপ্তি"),
+    "num_of_docks": MessageLookupByLibrary.simpleMessage("ডকের সংখ্যা"),
+    "num_of_fans": MessageLookupByLibrary.simpleMessage("পাখার সংখ্যা"),
+    "num_of_floors_including_ground_floors":
+        MessageLookupByLibrary.simpleMessage("ভূমি তল সহ মোট তলা"),
+    "num_of_lights": MessageLookupByLibrary.simpleMessage("আলোর সংখ্যা"),
+    "num_of_toilets": MessageLookupByLibrary.simpleMessage("টয়লেটের সংখ্যা"),
+    "open": MessageLookupByLibrary.simpleMessage("খুলুন"),
+    "open_space": MessageLookupByLibrary.simpleMessage("খোলা জায়গা"),
+    "others": MessageLookupByLibrary.simpleMessage("অন্যান্য"),
+    "owner_pan_card": MessageLookupByLibrary.simpleMessage(
+      "মালিকের প্যান কার্ড",
+    ),
+    "parking_land": MessageLookupByLibrary.simpleMessage("পার্কিং জমি"),
+    "payments": MessageLookupByLibrary.simpleMessage("পেমেন্ট"),
+    "peb": MessageLookupByLibrary.simpleMessage("পিইবি"),
+    "phone_notifications": MessageLookupByLibrary.simpleMessage(
+      "ফোন বিজ্ঞপ্তি",
+    ),
+    "phone_number": MessageLookupByLibrary.simpleMessage("ফোন নম্বর"),
+    "please_upload_document": MessageLookupByLibrary.simpleMessage(
+      "অনুগ্রহ করে আপনার নথি আপলোড করুন",
+    ),
+    "please_wait_for_sometime": MessageLookupByLibrary.simpleMessage(
+      "দয়া করে কিছু সময় অপেক্ষা করুন...",
+    ),
+    "post_your_property_free": MessageLookupByLibrary.simpleMessage(
+      "আপনার সম্পত্তি ফ্রি পোস্ট করুন",
+    ),
+    "price_max_to_min": MessageLookupByLibrary.simpleMessage(
+      "মূল্য (সর্বোচ্চ থেকে সর্বনিম্ন)",
+    ),
+    "price_min_to_max": MessageLookupByLibrary.simpleMessage(
+      "মূল্য (সর্বনিম্ন থেকে সর্বোচ্চ)",
+    ),
+    "privacy_policy": MessageLookupByLibrary.simpleMessage("গোপনীয়তা নীতি"),
+    "provide_office_space": MessageLookupByLibrary.simpleMessage(
+      "আপনি কি অফিস স্পেস প্রদান করেন?",
+    ),
+    "push_notifications": MessageLookupByLibrary.simpleMessage("পুশ বিজ্ঞপ্তি"),
+    "radius_in_km": MessageLookupByLibrary.simpleMessage("ত্রিজ্যা (কিমি-তে)"),
+    "rate_your_experience": MessageLookupByLibrary.simpleMessage(
+      "আপনার অভিজ্ঞতা রেট করুন",
+    ),
+    "rcc": MessageLookupByLibrary.simpleMessage("আরসিসি"),
+    "referral": MessageLookupByLibrary.simpleMessage("রেফারাল"),
+    "rent_per_sqft": MessageLookupByLibrary.simpleMessage(
+      "প্রতি বর্গফুট ভাড়া",
+    ),
+    "rent_range": MessageLookupByLibrary.simpleMessage("ভাড়ার পরিসর"),
+    "save": MessageLookupByLibrary.simpleMessage("সংরক্ষণ করুন"),
+    "seall": MessageLookupByLibrary.simpleMessage("সব দেখুন..."),
+    "search_by_location": MessageLookupByLibrary.simpleMessage(
+      "অবস্থান অনুযায়ী খুঁজুন",
+    ),
+    "security_deposit": MessageLookupByLibrary.simpleMessage(
+      "নিরাপত্তা জামানত",
+    ),
+    "select_date_of_possession": MessageLookupByLibrary.simpleMessage(
+      "মালিকানার তারিখ নির্বাচন করুন",
+    ),
+    "select_location": MessageLookupByLibrary.simpleMessage(
+      "অবস্থান নির্বাচন করুন",
+    ),
+    "select_rent_range": MessageLookupByLibrary.simpleMessage(
+      "ভাড়ার সীমা নির্বাচন করুন",
+    ),
+    "selfie_of_owner": MessageLookupByLibrary.simpleMessage("মালিকের সেলফি"),
+    "shed": MessageLookupByLibrary.simpleMessage("শেড"),
+    "shortlisted": MessageLookupByLibrary.simpleMessage("শর্টলিস্ট করা হয়েছে"),
+    "side_height": MessageLookupByLibrary.simpleMessage("পাশের উচ্চতা (ফুটে)"),
+    "skip_for_now": MessageLookupByLibrary.simpleMessage("এখনই এড়িয়ে যান"),
+    "sort": MessageLookupByLibrary.simpleMessage("সাজান"),
+    "start_adding_warehouse": MessageLookupByLibrary.simpleMessage(
+      "আপনার প্রথম গুদাম যোগ করে শুরু করুন",
+    ),
+    "stay_tuned": MessageLookupByLibrary.simpleMessage(
+      "কিছু চমৎকার কিছুর জন্য অপেক্ষা করুন!",
+    ),
+    "submit": MessageLookupByLibrary.simpleMessage("জমা দিন"),
+    "submit_feedback": MessageLookupByLibrary.simpleMessage(
+      "প্রতিক্রিয়া জমা দিন",
+    ),
+    "subscriptions": MessageLookupByLibrary.simpleMessage("সাবস্ক্রিপশন"),
+    "terms_and_conditions": MessageLookupByLibrary.simpleMessage("শর্তাবলী"),
+    "token_advance": MessageLookupByLibrary.simpleMessage("টোকেন অগ্রিম"),
+    "total_area": MessageLookupByLibrary.simpleMessage("মোট এলাকা"),
+    "transportation": MessageLookupByLibrary.simpleMessage("পরিবহন"),
+    "troubleshooting": MessageLookupByLibrary.simpleMessage("সমস্যা সমাধান"),
+    "truck_parking_slots": MessageLookupByLibrary.simpleMessage(
+      "ট্রাক পার্কিং স্লট",
+    ),
+    "update_and_next": MessageLookupByLibrary.simpleMessage(
+      "আপডেট করুন এবং পরবর্তী",
+    ),
+    "update_and_proceed": MessageLookupByLibrary.simpleMessage(
+      "আপডেট করুন এবং এগিয়ে যান",
+    ),
+    "update_warehouse": MessageLookupByLibrary.simpleMessage(
+      "গুদাম আপডেট করুন",
+    ),
+    "update_warehouse_address": MessageLookupByLibrary.simpleMessage(
+      "আপনার গুদাম ঠিকানা আপডেট করুন",
+    ),
+    "update_warehouse_amenities": MessageLookupByLibrary.simpleMessage(
+      "গুদাম সুবিধাগুলি আপডেট করুন",
+    ),
+    "update_warehouse_info": MessageLookupByLibrary.simpleMessage(
+      "আপনার গুদাম তথ্য আপডেট করুন!",
+    ),
+    "upload": MessageLookupByLibrary.simpleMessage("আপলোড করুন"),
+    "upload_aadhar_back": MessageLookupByLibrary.simpleMessage(
+      "আধার পিছনের দিক আপলোড করুন",
+    ),
+    "upload_aadhar_front": MessageLookupByLibrary.simpleMessage(
+      "আধার সামনের দিক আপলোড করুন",
+    ),
+    "upload_document": MessageLookupByLibrary.simpleMessage("নথি আপলোড করুন"),
+    "upload_media": MessageLookupByLibrary.simpleMessage("মিডিয়া আপলোড করুন"),
+    "uploaded_successfully": MessageLookupByLibrary.simpleMessage(
+      "সফলভাবে আপলোড হয়েছে",
+    ),
+    "verified_property_and_owner": MessageLookupByLibrary.simpleMessage(
+      "যাচাইকৃত সম্পত্তি এবং মালিক",
+    ),
+    "view_less": MessageLookupByLibrary.simpleMessage("কম দেখুন"),
+    "view_more": MessageLookupByLibrary.simpleMessage("আরও দেখুন"),
+    "view_request": MessageLookupByLibrary.simpleMessage("অনুরোধ দেখুন"),
+    "warehouse_dock_levelers": MessageLookupByLibrary.simpleMessage(
+      "আপনার গুদামে কি ডক লেভেলার্স আছে?",
+    ),
+    "warehouse_images": MessageLookupByLibrary.simpleMessage("গুদাম ছবি"),
+    "warehouse_name_owner_name": MessageLookupByLibrary.simpleMessage(
+      "গুদাম নাম / মালিকের নাম",
+    ),
+    "warehouse_near_you": MessageLookupByLibrary.simpleMessage(
+      "আপনার নিকটস্থ গুদাম..",
+    ),
+    "warehouse_power_backup": MessageLookupByLibrary.simpleMessage(
+      "আপনার গুদামে কি পাওয়ার ব্যাকআপ আছে?",
+    ),
+    "warehouse_type": MessageLookupByLibrary.simpleMessage("গুদাম টাইপ"),
+    "warehouse_types": MessageLookupByLibrary.simpleMessage("গুদামের ধরণ"),
+    "warehouse_updated": MessageLookupByLibrary.simpleMessage(
+      "গুদাম আপডেট হয়েছে",
+    ),
+    "warehouses_near_you": MessageLookupByLibrary.simpleMessage(
+      "আপনার কাছাকাছি গুদাম",
+    ),
+    "warehousing": MessageLookupByLibrary.simpleMessage("গুদামজাতকরণ"),
+    "we_are_happy_to_help": MessageLookupByLibrary.simpleMessage(
+      "আমরা আপনাকে সাহায্য করতে খুশি!",
+    ),
+    "we_value_your_feedback": MessageLookupByLibrary.simpleMessage(
+      "আমরা আপনার মতামতকে গুরুত্ব দিই",
+    ),
+    "welcome": MessageLookupByLibrary.simpleMessage(
+      "আমাদের অ্যাপে আপনাকে স্বাগতম!",
+    ),
+    "whose_partner_question": MessageLookupByLibrary.simpleMessage(
+      "আপনি কার অংশীদার হতে চান?",
+    ),
+    "within_15_days": MessageLookupByLibrary.simpleMessage("১৫ দিনের মধ্যে"),
+    "within_30_days": MessageLookupByLibrary.simpleMessage("৩০ দিনের মধ্যে"),
+    "within_60_days": MessageLookupByLibrary.simpleMessage("৬০ দিনের মধ্যে"),
+    "write_something_valuable": MessageLookupByLibrary.simpleMessage(
+      "কিছু মূল্যবান লিখুন...(যেমন: সেবা পছন্দ হয়েছে!)",
+    ),
+    "yes": MessageLookupByLibrary.simpleMessage("হ্যাঁ"),
+    "your_comment": MessageLookupByLibrary.simpleMessage("আপনার মন্তব্য"),
+    "your_comments_and_ratings_help_us_to_improve":
+        MessageLookupByLibrary.simpleMessage(
+          "আপনার মন্তব্য এবং রেটিং আমাদের উন্নত করতে সাহায্য করে",
+        ),
+  };
 }

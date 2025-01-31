@@ -3,7 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
-import 'package:warehouse/Partner/Provider/LocationProvider.dart'; // Adjust as needed
+import 'package:warehouse/Partner/Provider/location_provider.dart'; // Adjust as needed
 
 class LocationSelectionScreen extends StatefulWidget {
   @override

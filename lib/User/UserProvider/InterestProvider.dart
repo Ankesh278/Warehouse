@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:warehouse/User/userShortlistedintrested.dart';
+import 'package:warehouse/User/user_shortlisted_intrested.dart';
 
 class CartProvider with ChangeNotifier {
   final String baseUrl = "https://xpacesphere.com/api/Wherehousedt";
@@ -14,17 +14,28 @@ class CartProvider with ChangeNotifier {
   Future<void> fetchShortlistStatus(int warehouseId, String phoneNumber) async {
     try {
       final url = "$baseUrl/GetSortlist_warehouse?_mobile=$phoneNumber&Id=$warehouseId";
+      print("Iddd$warehouseId");
       final response = await http.get(Uri.parse(url));
-      print("URRRL"+url);
+      print("URL: $url");
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        print("Response Data: $data");
+
         if (data['status'] == 200 && data['data'] is List && data['data'].isNotEmpty) {
+
           final type = data['data'][0]['type'];
-          _shortlistedWarehouses[warehouseId] = (type == "Shortlist");
+
+          if (type == "Shortlisted") {
+            _shortlistedWarehouses[warehouseId] = true;
+          } else {
+            _shortlistedWarehouses[warehouseId] = false;
+          }
         } else {
           _shortlistedWarehouses[warehouseId] = false;
         }
+
+
         notifyListeners();
       } else {
         throw Exception("Failed to fetch shortlist status");
@@ -41,18 +52,31 @@ class CartProvider with ChangeNotifier {
     final isCurrentlyShortlisted = _shortlistedWarehouses[warehouseId] ?? false;
 
     try {
+      print("Toggling warehouse: $warehouseId, Phone: $phoneNumber, Undo: $isUndo");
+
       if (!isUndo) {
         final url = "$baseUrl/Sortlist_warehouse";
         final body = json.encode({
           "mobile": phoneNumber,
           "Warehouse_uid": warehouseId.toString(),
+          "Type": "Shortlisted"
         });
 
         final headers = {"Content-Type": "application/json"};
-        final response =
-        await http.post(Uri.parse(url), body: body, headers: headers);
+
+        // Printing the URL, body, and headers for debugging
+        print("URL: $url");
+        print("Request Body: $body");
+        print("Headers: $headers");
+
+        final response = await http.post(Uri.parse(url), body: body, headers: headers);
+
+        // Printing the response status code and body for debugging
+        print("Response Status Code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
 
         if (response.statusCode != 200 || json.decode(response.body)['status'] != 200) {
+          print("Response code for shortlist: ${response.body}");
           throw Exception("Failed to toggle shortlist status");
         }
       }
@@ -61,18 +85,19 @@ class CartProvider with ChangeNotifier {
       _shortlistedWarehouses[warehouseId] = !isCurrentlyShortlisted;
       notifyListeners();
 
+      // Show appropriate snackbar based on current status
       if (!isCurrentlyShortlisted && !isUndo) {
-        // Show added snackbar
+        print("Warehouse added to shortlist");
         showCustomSnackbar(
           context,
-          message: "Added to shorlist",
+          message: "Added to shortlist",
           actionLabel: "View",
           action: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>userShortlistedIntrested()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => userShortlistedIntrested()));
           },
         );
       } else if (isCurrentlyShortlisted && !isUndo) {
-        // Show removed snackbar with undo
+        print("Warehouse removed from shortlist");
         showCustomSnackbar(
           context,
           message: "Removed from shortlist",
@@ -87,6 +112,7 @@ class CartProvider with ChangeNotifier {
       print("Error toggling shortlist: $e");
     }
   }
+
 
   void showCustomSnackbar(
       BuildContext context, {

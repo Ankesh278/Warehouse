@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:warehouse/generated/l10n.dart';
 
 class HelpPage extends StatefulWidget {
   @override
@@ -49,7 +50,7 @@ class _HelpPageState extends State<HelpPage> {
                                           },
                                         ),
                                         SizedBox(width: 20,),
-                                        Text("Help",style: TextStyle(color: Colors.white,fontSize: 17,fontWeight: FontWeight.w600),)
+                                        Text(S.of(context).help,style: TextStyle(color: Colors.white,fontSize: 17,fontWeight: FontWeight.w600),)
                                       ],
                                     )
                                   ],
@@ -88,7 +89,7 @@ class _HelpPageState extends State<HelpPage> {
                                       color: Colors.blue,
                                       borderRadius: BorderRadius.circular(8)
                                     ),
-                                    child: Center(child: Text("All topics",style: TextStyle(fontSize: 10,color: Colors.white),)),
+                                    child: Center(child: Text(S.of(context).all_topics,style: TextStyle(fontSize: 10,color: Colors.white),)),
                                   ),
                                   // First Container with "Troubleshooting"
                                   Container(
@@ -102,7 +103,7 @@ class _HelpPageState extends State<HelpPage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "Troubleshooting",
+                                          S.of(context).troubleshooting,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
@@ -124,7 +125,7 @@ class _HelpPageState extends State<HelpPage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "Referral",
+                                          S.of(context).referral,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
@@ -146,7 +147,7 @@ class _HelpPageState extends State<HelpPage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "Payments",
+                                          S.of(context).payments,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
@@ -168,7 +169,7 @@ class _HelpPageState extends State<HelpPage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "Subscriptions",
+                                          S.of(context).subscriptions,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
@@ -190,7 +191,7 @@ class _HelpPageState extends State<HelpPage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "Add Warehouse Now",
+                                          S.of(context).add_warehouse_now,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
@@ -212,7 +213,7 @@ class _HelpPageState extends State<HelpPage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "My Account",
+                                          S.of(context).my_account,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
@@ -234,7 +235,7 @@ class _HelpPageState extends State<HelpPage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "Subscriptions",
+                                          S.of(context).subscriptions,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,

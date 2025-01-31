@@ -8,20 +8,23 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
-import 'package:warehouse/Connectivity/networkService.dart';
-import 'package:warehouse/Localization/Languages.dart';
-import 'package:warehouse/Partner/Provider/AuthProvider.dart';
-import 'package:warehouse/Partner/Provider/LocationProvider.dart';
-import 'package:warehouse/Partner/Provider/warehouseProvider.dart';
+import 'package:warehouse/Connectivity/network_service.dart';
+import 'package:warehouse/Localization/languages.dart';
+import 'package:warehouse/Partner/Provider/auth_provider.dart';
+import 'package:warehouse/Partner/Provider/location_provider.dart';
+import 'package:warehouse/Partner/Provider/warehouse_provider.dart';
+import 'package:warehouse/Partner/document_upload.dart';
 import 'package:warehouse/User/NotificationSetting.dart';
-import 'package:warehouse/User/UserProvider/AuthUserProvider.dart';
+import 'package:warehouse/User/UserProvider/DocumentProvider.dart';
+import 'package:warehouse/User/UserProvider/auth_user_provider.dart';
 import 'package:warehouse/User/UserProvider/FilterProvider.dart';
 import 'package:warehouse/User/UserProvider/InterestProvider.dart';
 import 'package:warehouse/User/UserProvider/photoProvider.dart';
+import 'package:warehouse/User/UserProvider/rating_provider.dart';
 import 'package:warehouse/User/UserProvider/sortingProvider.dart';
 import 'package:warehouse/User/userlogin.dart';
 import 'package:warehouse/generated/l10n.dart';
-import 'package:warehouse/newHomePage.dart';
+import 'package:warehouse/new_home_page.dart';
 import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -43,7 +46,7 @@ void main() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
   AndroidInitializationSettings('@mipmap/ic_launcher');
 
-  final InitializationSettings initializationSettings = InitializationSettings(
+  const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
   );
 
@@ -76,6 +79,8 @@ void main() async {
         ChangeNotifierProvider<ProfileProvider>(create: (_) => ProfileProvider()),
         ChangeNotifierProvider<NotificationSettingsProvider>(create: (_) => NotificationSettingsProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => PhotoProvider()),
+        ChangeNotifierProvider(create: (_) => RatingProvider()),
       ],
       child: MyApp(
         isLoggedIn: isLoggedIn,
@@ -96,13 +101,13 @@ class MyApp extends StatefulWidget {
   final double latitude;
 
   const MyApp({
-    Key? key,
+    super.key,
     required this.isLoggedIn,
     required this.name,
     required this.isUserLoggedIn,
     required this.longitude,
     required this.latitude,
-  }) : super(key: key);
+  });
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -131,7 +136,7 @@ class _MyAppState extends State<MyApp> {
           notification.hashCode,
           notification.title,
           notification.body,
-          NotificationDetails(
+          const NotificationDetails(
             android: AndroidNotificationDetails(
               'general_notifications', // Channel ID
               'General Notifications', // Channel Name
@@ -238,50 +243,59 @@ class _MyAppState extends State<MyApp> {
       },
     );
   }
-
   @override
   Widget build(BuildContext context) {
-    return Consumer<LanguageProvider>(
-      builder: (context, languageProvider, child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          locale: languageProvider.locale,
-          localizationsDelegates: const [
-            S.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [
-            Locale('en', ''),
-            Locale('hi', ''),
-            Locale('bn', ''),
-            Locale('kn', ''),
-            Locale('mr', ''),
-            Locale('ml', ''),
-            Locale('te', ''),
-            Locale('ta', ''),
-          ],
-          home: Scaffold(
-            body: StreamBuilder<bool>(
-              stream: Provider.of<NetworkConnectionService>(context).connectionStatusStream,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return const Center(child: Text("Something went wrong..."));
-                }
-                if (snapshot.data == false) {
-                  return Center(child: Image.asset(ImageAssets.noInternet));
-                }
+    return PopScope(
+        canPop: false,
+        child:Consumer<LanguageProvider>(
+          builder: (context, languageProvider, child) {
+            return MaterialApp(
+              theme: ThemeData(
+                fontFamily: 'EB Garamond', // Set global font
+                textTheme: TextTheme(
+                  displayLarge: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  bodyLarge: TextStyle(fontSize: 12),
+                ),
+              ),
+              debugShowCheckedModeBanner: false,
+              locale: languageProvider.locale,
+              localizationsDelegates: const [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                Locale('en', ''),
+                Locale('hi', ''),
+                Locale('bn', ''),
+                Locale('kn', ''),
+                Locale('mr', ''),
+                Locale('ml', ''),
+                Locale('te', ''),
+                Locale('ta', ''),
+                Locale('pa', ''),
+              ],
+              home: Scaffold(
+                body: StreamBuilder<bool>(
+                  stream: Provider.of<NetworkConnectionService>(context).connectionStatusStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Center(child: Text("Something went wrong..."));
+                    }
+                    if (snapshot.data == false) {
+                      return Center(child: Image.asset(ImageAssets.noInternet));
+                    }
 
-                return widget.isUserLoggedIn
-                    ? newHomePage(latitude: widget.latitude, longitude: widget.longitude)
-                    : userlogin();
-              },
-            ),
-          ),
-        );
-      },
-    );
+                    return widget.isUserLoggedIn
+                        ? NewHomePage(latitude: widget.latitude, longitude: widget.longitude)
+                        : const userlogin();
+                  },
+                ),
+              ),
+            );
+          },
+        ));
   }
 }
 
