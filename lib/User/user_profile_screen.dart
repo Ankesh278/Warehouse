@@ -1243,43 +1243,36 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             width: 2.0,
                           ),
                         ),
-                        child: profileProvider.profileImageUrl != null
-                            ? CachedNetworkImage(
-                                imageUrl: profileProvider.profileImageUrl!,
-                                imageBuilder: (context, imageProvider) {
-                                  return CircleAvatar(
-                                    radius: 45,
-                                    backgroundColor: Colors.blue,
-                                    backgroundImage: imageProvider,
-                                  );
-                                },
-                                placeholder: (context, url) =>
-                                    Shimmer.fromColors(
-                                  baseColor: Colors.grey[300]!,
-                                  highlightColor: Colors.grey[100]!,
-                                  child: const CircleAvatar(
-                                    radius: 45,
-                                    backgroundColor: Colors.blue,
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    const CircleAvatar(
-                                  radius: 45,
-                                  backgroundColor: Colors.blue,
-                                  backgroundImage:
-                                      AssetImage("assets/images/userround.png"),
-                                ),
-                              )
-                            : CircleAvatar(
-                                radius: 45,
-                                backgroundColor: Colors.blue,
-                                backgroundImage: profileProvider.profileImage !=
-                                        null
-                                    ? FileImage(profileProvider.profileImage!)
-                                    : const AssetImage(
-                                            "assets/images/userround.png")
-                                        as ImageProvider,
-                              ),
+                        child: profileProvider.profileImage != null
+                            ? CircleAvatar(
+                          radius: 45,
+                          backgroundColor: Colors.blue,
+                          backgroundImage: FileImage(profileProvider.profileImage!),
+                        )
+                            : CachedNetworkImage(
+                          imageUrl: profileProvider.profileImageUrl ?? "",
+                          imageBuilder: (context, imageProvider) {
+                            return CircleAvatar(
+                              radius: 45,
+                              backgroundColor: Colors.blue,
+                              backgroundImage: imageProvider,
+                            );
+                          },
+                          placeholder: (context, url) => Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: const CircleAvatar(
+                              radius: 45,
+                              backgroundColor: Colors.blue,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => const CircleAvatar(
+                            radius: 45,
+                            backgroundColor: Colors.blue,
+                            backgroundImage:
+                            AssetImage("assets/images/userround.png"),
+                          ),
+                        ),
                       ),
                       Positioned(
                         bottom: 3,
@@ -1302,13 +1295,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               );
             },
-          )
+          ),
+
         ],
       ),
     );
   }
 
   Widget _buildFeedbackSubmitted(RatingProvider ratingProvider) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -1322,27 +1318,33 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             color: Colors.black87,
           ),
         ),
-        const SizedBox(height: 10),
-        Text(
-          "Rating: ${ratingProvider.rating}",
-          style: const TextStyle(fontSize: 16, color: Colors.black54),
+         SizedBox(height: screenHeight*0.02),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Rating: ${ratingProvider.rating}/5",
+              style: const TextStyle(fontSize: 18, color: Colors.black54,fontWeight: FontWeight.w600),
+            ),
+            const Icon(Icons.star,color: Colors.amber,)
+          ],
         ),
-        const SizedBox(height: 5),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Text(
-            "Your words: ${ratingProvider.comment}",
-            style: const TextStyle(fontSize: 16, color: Colors.black54),
-          ),
-        ),
-        const SizedBox(height: 30),
+        // const SizedBox(height: 5),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        //   child: Text(
+        //     "Your words:   ${ratingProvider.comment}",
+        //     style: const TextStyle(fontSize: 10, color: Colors.black54,fontWeight: FontWeight.w400),
+        //   ),
+        // ),
+        SizedBox(height: screenHeight*0.02),
         AnimatedScale(
           scale: 1.1,
           duration: const Duration(milliseconds: 300),
           child: ElevatedButton(
             onPressed: () => ratingProvider.enableEditing(),
             style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+              padding:  EdgeInsets.symmetric(horizontal: screenWidth*0.02, vertical: screenHeight*0.005),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -1351,13 +1353,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             child: const Text(
               "Edit Feedback",
               style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
                   color: Colors.white),
             ),
           ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: screenHeight*0.035),
       ],
     );
   }

@@ -431,27 +431,25 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 Image.asset('assets/images/Worldwidelocation.png', width: 40, height: 40), // Replace with your image asset
-                                               // const SizedBox(height: 20),
                                                 Text(_address.isNotEmpty ? _address : 'Address not available', style: const TextStyle(color: Colors.grey, fontSize: 10)),
-                                               // const SizedBox(height: 10),
                                                 Container(
-                                                  height: 100, // Height of the map container
-                                                  width: double.infinity, // Width of the map container
-                                                  child: _latLng != null // Check if LatLng is available
+                                                  height: 100,
+                                                  width: double.infinity,
+                                                  child: _latLng != null
                                                       ? GoogleMap(
                                                     initialCameraPosition: CameraPosition(
                                                       target: _latLng!,
-                                                      zoom: 18.0, // Zoom level
+                                                      zoom: 18.0,
                                                     ),
                                                     markers: {
                                                       Marker(
                                                         markerId: const MarkerId('location'),
                                                         position: _latLng!,
-                                                        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed), // Set marker color to red
+                                                        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
                                                       ),
                                                     },
                                                   )
-                                                      : const Center(child: CircularProgressIndicator()), // Show loading indicator until LatLng is available
+                                                      : const Center(child: CircularProgressIndicator()),
                                                 ),
                                               ],
                                             ),
@@ -465,47 +463,32 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                         context,
                                         MaterialPageRoute(builder: (context) => LocationSelectionScreen()),
                                       );
-
-                                      // Check if the result is not null and is of type LocationData
                                       if (result != null && result is LocationData) {
                                         setState(() {
                                           finalAddress=result.latLng;
                                         });
-                                        // Extract latitude, longitude, and address from the result
                                         LatLng selectedLocation = result.latLng;
                                         String selectedAddress = result.address;
-
-                                        // Update your provider with the new location
                                         final locationProvider = Provider.of<LocationProvider>(context, listen: false);
                                         locationProvider.updateLocation(selectedAddress, selectedLocation);
-
-                                        // Update the display text with the selected location and address
-                                        setState(() {
-                                          //displayText = 'Selected Location: (${selectedLocation.latitude.toStringAsFixed(4)}, ${selectedLocation.longitude.toStringAsFixed(4)})';
-                                          // If you want to show the address as well, you can do it here
-                                         // displayText += '\nAddress: $selectedAddress';
-                                        });
-
-                                        // Optionally, do something with the result, e.g., update the UI
-                                        print("Selected Location: ${selectedLocation.latitude}, ${selectedLocation.longitude}");
-
+                                        if (kDebugMode) {
+                                          print("Selected Location: ${selectedLocation.latitude}, ${selectedLocation.longitude}");
+                                        }
                                       } else {
-                                        print("No location selected");
+                                        if (kDebugMode) {
+                                          print("No location selected");
+                                        }
                                       }
                                     },
-
-
-
                                   ),
                                   const SizedBox(height: 8,),
                                   Row(
                                     children: [
-                                       Text("${S.of(context).warehouse_name_owner_name}",style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
+                                       Text(S.of(context).warehouse_name_owner_name,style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
                                       Padding(
                                         padding: const EdgeInsets.only(right: 2.0),
                                         child: Image.asset("assets/images/InfoPopup.png",height: 18,width: 17,color: Colors.black,),
                                       )
-
                                     ],
                                   ),
                                   TextFormField(
@@ -524,18 +507,18 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                       ),
 
                                     ),
-                                    style: const TextStyle(fontSize: 14), // Set text size to 29
-                                    maxLength: _maxLength, // Limit text length
-                                    keyboardType: TextInputType.text, // If you expect numeric input
+                                    style: const TextStyle(fontSize: 14),
+                                    maxLength: _maxLength,
+                                    keyboardType: TextInputType.text,
                                   ),
-                                   Text("${S.of(context).total_area}",style: const TextStyle(color: Colors.grey,fontSize: 13,fontWeight: FontWeight.w600),),
+                                   Text(S.of(context).total_area,style: const TextStyle(color: Colors.grey,fontSize: 13,fontWeight: FontWeight.w600),),
                                   const SizedBox(height: 8,),
                                   TotalCarpetArea(totalcarpetArea:_totalArea),
                                   const SizedBox(height: 15,),
                                    Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("${S.of(context).carpet_area}",style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
+                                      Text(S.of(context).carpet_area,style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
                                     ],
                                   ),
                                   CarpetAreaTextFormField(controller: _carpetAreaController),
@@ -545,16 +528,16 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                     MainAxisAlignment.spaceAround,
                                     children: [
                                        Text(
-                                        "${S.of(context).ground_floor}",
+                                        S.of(context).ground_floor,
                                         style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w500),
                                       ),
                                       const SizedBox(width: 25,),
-                                       Text('${S.of(context).open}'),
+                                       Text(S.of(context).open),
                                       customCheckbox("Open"),
                                       const SizedBox(width: 15,),
-                                       Text('${S.of(context).close}'),
+                                       Text(S.of(context).close),
                                       customCheckbox("Close"),
                                     ],
                                   ),
@@ -562,10 +545,10 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                       Text("${S.of(context).num_of_floors_including_ground_floors}",style: const TextStyle(fontSize: 9,fontWeight: FontWeight.normal),),
+                                       Text(S.of(context).num_of_floors_including_ground_floors,style: const TextStyle(fontSize: 9,fontWeight: FontWeight.normal),),
                                       Container(
                                         height: 20,
-                                        width: 82, // Adjusted width
+                                        width: 82,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(1),
                                           color: Colors.blue,
@@ -576,44 +559,42 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                             GestureDetector(
                                               onTap: _decrease,
                                               child: Container(
-                                                width: 25, // Width for minus button
+                                                width: 25,
                                                 color: Colors.white,
                                                 alignment: Alignment.center,
                                                 child: const Text(
                                                   '-',
-                                                  style: TextStyle(fontSize: 14, color: Colors.red), // Adjusted font size
+                                                  style: TextStyle(fontSize: 14, color: Colors.red),
                                                 ),
                                               ),
                                             ),
                                             Container(
-                                              width: 30, // Width for number display
+                                              width: 30,
                                               color: Colors.blue,
                                               alignment: Alignment.center,
                                               child: Text(
                                                 _number.toString(),
-                                                style: const TextStyle(fontSize: 14, color: Colors.white), // Adjusted font size
+                                                style: const TextStyle(fontSize: 14, color: Colors.white),
                                               ),
                                             ),
                                             GestureDetector(
                                               onTap: _increase,
                                               child: Container(
-                                                width: 25, // Width for plus button
+                                                width: 25,
                                                 color: Colors.white,
                                                 alignment: Alignment.center,
                                                 child: const Text(
                                                   '+',
-                                                  style: TextStyle(fontSize: 14, color: Colors.green), // Adjusted font size
+                                                  style: TextStyle(fontSize: 14, color: Colors.green),
                                                 ),
                                               ),
                                             ),
                                           ],
                                         ),
                                       )
-
                                     ],
                                   ),
                                   const SizedBox(height: 15,),
-
                                   Row(
                                     children: [
                                       Checkbox(
@@ -623,28 +604,26 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                             _isChecked = newValue ?? false;
                                           });
                                         },
-                                        checkColor: Colors.blue, // Color of the check mark
-                                        fillColor: WidgetStateProperty.all(Colors.white), // Background color when checked
+                                        checkColor: Colors.blue,
+                                        fillColor: WidgetStateProperty.all(Colors.white),
                                         side: WidgetStateBorderSide.resolveWith((states) {
                                           if (states.contains(WidgetState.selected)) {
-                                            return const BorderSide(color: Colors.blue, width: 2); // Border color when checked
+                                            return const BorderSide(color: Colors.blue, width: 2);
                                           }
-                                          return const BorderSide(color: Colors.grey, width: 2); // Border color when unchecked
+                                          return const BorderSide(color: Colors.grey, width: 2);
                                         }),
                                       ),
-                                       Text("${S.of(context).is_base_available_for_rent}",style: const TextStyle(color: Colors.grey,fontSize: 13),)
+                                       Text(S.of(context).is_base_available_for_rent,style: const TextStyle(color: Colors.grey,fontSize: 13),)
                                     ],
                                   ),
-
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                       Text("${S.of(context).warehouse_type}",style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
+                                       Text(S.of(context).warehouse_type,style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
                                       Padding(
                                         padding: const EdgeInsets.only(right: 2.0),
                                         child: Image.asset("assets/images/InfoPopup.png",height: 14,width: 13,),
                                       )
-
                                     ],
                                   ),
                                   Container(
@@ -669,28 +648,25 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                       },
                                       validator: (value) => value == null ? 'Field is required' : null,
                                       decoration: const InputDecoration(
-                                        border: InputBorder.none, // Remove default border
-                                        // Padding to align text with underline
+                                        border: InputBorder.none,
                                       ),
                                       icon: const Icon(
                                         Icons.keyboard_arrow_down_outlined,
                                         color: Colors.grey,
                                       ),
                                       iconSize: 20.0,
-                                      isExpanded: true, // Make the dropdown take full width
+                                      isExpanded: true,
                                     ),
                                   ),
-                                  //WarehouseAnimatedDropDown(warehouseTypes: warehouseTypes,),
                                   const SizedBox(height: 15,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                       Text("${S.of(context).construction_type}",style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
+                                       Text(S.of(context).construction_type,style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
                                       Padding(
                                         padding: const EdgeInsets.only(right: 2.0),
                                         child: Image.asset("assets/images/InfoPopup.png",height: 14,width: 13,),
                                       )
-
                                     ],
                                   ),
                                   Container(
@@ -715,15 +691,14 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                       },
                                       validator: (value) => value == null ? 'Field is required' : null,
                                       decoration: const InputDecoration(
-                                        border: InputBorder.none, // Remove default border
-                                        // Padding to align text with underline
+                                        border: InputBorder.none,
                                       ),
                                       icon: const Icon(
                                         Icons.keyboard_arrow_down_outlined,
                                         color: Colors.grey,
                                       ),
                                       iconSize: 20.0,
-                                      isExpanded: true, // Make the dropdown take full width
+                                      isExpanded: true,
                                     ),
                                   ),
                                   const SizedBox(height: 12,),
@@ -731,7 +706,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                     children: [
-                                       Text("${S.of(context).construction_age_in_months}",
+                                       Text(S.of(context).construction_age_in_months,
                                         style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w500),
@@ -796,9 +771,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                    Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("${S.of(context).rent_per_sqft}",style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
-
-
+                                      Text(S.of(context).rent_per_sqft,style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
                                     ],
                                   ),
                                   rentPerSqFt(controller: _rentPerSqFt,),
@@ -806,7 +779,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                    Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("${S.of(context).maintenance_cost_per_sqft}",style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
+                                      Text(S.of(context).maintenance_cost_per_sqft,style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
                                     ],
                                   ),
                                   maintenanceCost(controller: _maintenanceCost),
@@ -818,7 +791,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                     MainAxisAlignment.spaceBetween,
                                     children: [
                                        Text(
-                                        "${S.of(context).security_deposit}",
+                                        S.of(context).security_deposit,
                                         style: const TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w500),
@@ -888,9 +861,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                    Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("${S.of(context).token_advance}",style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
-
-
+                                      Text(S.of(context).token_advance,style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
                                     ],
                                   ),
                                   TokenAdvance(controller: _tokenAdvance,),
@@ -900,7 +871,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                     MainAxisAlignment.spaceBetween,
                                     children: [
                                        Text(
-                                        "${S.of(context).lock_in_period}",
+                                        S.of(context).lock_in_period,
                                         style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w500),
@@ -984,7 +955,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                                 size: 50.0,
                                               )
                                                   :Text(
-                                                '${S.of(context).update_and_proceed}',
+                                                S.of(context).update_and_proceed,
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 16,
@@ -997,17 +968,6 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                     ),
                                     onTap: () {
                                       _submitForm();
-                                     //  if (_formKey.currentState!.validate()) {
-                                     //    // Process data if the form is valid
-                                     //
-                                     //   // print("Form Submitted Successfully!");
-                                     //    // You can navigate to the next screen or process the data here
-                                     //  } else {
-                                     //    print("Form is invalid!");
-                                     //  }
-                                     //  _submitForm;
-                                     //  Navigator.push(
-                                     //      context, MaterialPageRoute(builder: (context) => WarehouseImageScreen()));
                                     },
                                   ),
                                   InkWell(
@@ -1028,15 +988,15 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                                   :Row(
                                                     children: [
                                                       Text(
-                                                      '${S.of(context).skip_for_now}',
+                                                      S.of(context).skip_for_now,
                                                         style: const TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 16,
-                                                                                                      ),
-                                                                                                    ),
+                                                        ),
+                                                      ),
                                                       const Icon(Icons.skip_next_outlined,color: Colors.white,)
                                                     ],
-                                                  ),
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -1047,21 +1007,8 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                         context,
                                         MaterialPageRoute(builder: (context) => const HomeScreen()),
                                       );
-
-                                      //  if (_formKey.currentState!.validate()) {
-                                      //    // Process data if the form is valid
-                                      //
-                                      //   // print("Form Submitted Successfully!");
-                                      //    // You can navigate to the next screen or process the data here
-                                      //  } else {
-                                      //    print("Form is invalid!");
-                                      //  }
-                                      //  _submitForm;
-                                      //  Navigator.push(
-                                      //      context, MaterialPageRoute(builder: (context) => WarehouseImageScreen()));
                                     },
                                   ),
-
                                 ],
                               ),
                             ),
@@ -1074,20 +1021,19 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
               ),
             ),
           ),
-
         ],
       ),
     );
   }
-
   Widget customCheckbox(String label) {
     bool isChecked = groundFloor == label;
-
     return GestureDetector(
       onTap: () {
         setState(() {
           groundFloor = label;
-          print("option selected  $groundFloor");
+          if (kDebugMode) {
+            print("option selected  $groundFloor");
+          }
         });
       },
       child: Container(
@@ -1112,8 +1058,6 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
     );
   }
 }
-
-
 class CarpetAreaTextFormField extends StatelessWidget {
   final TextEditingController controller;
 
@@ -1351,77 +1295,3 @@ class ExpectedLockInPeriod extends StatelessWidget {
 }
 
 
-
-class DottedBorder extends StatelessWidget {
-  final Widget child;
-
-  const DottedBorder({super.key, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: DottedBorderPainter(),
-      child: child,
-    );
-  }
-}
-
-class DottedBorderPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blue
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0;
-
-    const double dashWidth = 4.0;
-    const double dashSpace = 4.0;
-    double startX = 0;
-
-
-    // Draw dotted border
-    while (startX < size.width) {
-      canvas.drawLine(
-        Offset(startX, 0),
-        Offset(startX + dashWidth, 0),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-
-    startX = 0; // Reset startX for the next side
-    while (startX < size.height) {
-      canvas.drawLine(
-        Offset(size.width, startX),
-        Offset(size.width, startX + dashWidth),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-
-    startX = 0; // Reset startX for the next side
-    while (startX < size.width) {
-      canvas.drawLine(
-        Offset(size.width - startX, size.height),
-        Offset(size.width - startX - dashWidth, size.height),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-
-    startX = 0; // Reset startX for the next side
-    while (startX < size.height) {
-      canvas.drawLine(
-        Offset(0, size.height - startX),
-        Offset(0, size.height - startX - dashWidth),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}
