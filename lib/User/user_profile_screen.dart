@@ -285,7 +285,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                       Alignment.centerLeft,
                                                   child: Container(
                                                     height: 25,
-                                                    width: screenWidth * 0.5,
+                                                    width: screenWidth * 0.6,
                                                     decoration: BoxDecoration(
                                                       color: Colors.white,
                                                       borderRadius:
@@ -294,14 +294,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                     ),
                                                     child: Center(
                                                         child: Text(
-                                                      S
-                                                          .of(context)
+                                                      S.of(context)
                                                           .post_your_property_free,
                                                       style: const TextStyle(
                                                           color: Colors.blue,
                                                           fontWeight:
-                                                              FontWeight.w800,
-                                                          fontSize: 12),
+                                                              FontWeight.w900,
+                                                          fontSize: 8),
                                                     )),
                                                   ),
                                                 ),

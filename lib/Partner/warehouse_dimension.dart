@@ -271,26 +271,30 @@ class _WarehouseServiceState extends State<WarehouseService> {
           Container(
             color: Colors.blue,
             height: screenHeight * 0.18,
+            width: double.infinity,
             padding: EdgeInsets.only(
                 left: screenWidth * 0.07, top: screenHeight * 0.08),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    InkWell(
-                      child: const Icon(Icons.arrow_back_ios_new_outlined,
-                          color: Colors.white),
-                      onTap: () => Navigator.pop(context),
-                    ),
-                    SizedBox(width: screenWidth * 0.01),
-                     Text(S.of(context).add_warehouse_details,
-                        style: const TextStyle(color: Colors.white, fontSize: 12)),
-                  ],
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      InkWell(
+                        child: const Icon(Icons.arrow_back_ios_new_outlined,
+                            color: Colors.white),
+                        onTap: () => Navigator.pop(context),
+                      ),
+                      SizedBox(width: screenWidth * 0.01),
+                       Text(S.of(context).add_warehouse_details,
+                          style: const TextStyle(color: Colors.white, fontSize: 12)),
+                    ],
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.03),
-                const Text("Warehouse dimensions 4/4",
-                    style: TextStyle(
+                 Text("${S.of(context).warehouse_dimensions} 4/4",
+                    style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
                         fontSize: 16)),
@@ -468,7 +472,7 @@ class _WarehouseServiceState extends State<WarehouseService> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.blue,
-                                    width: 2.0), // Focused border color
+                                    width: 2.0),
                               ),
                             ),
                             keyboardType: TextInputType.number,

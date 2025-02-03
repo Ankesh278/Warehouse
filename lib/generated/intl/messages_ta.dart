@@ -29,6 +29,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "add_additional_email": MessageLookupByLibrary.simpleMessage(
       "கூடுதல் மின்னஞ்சல் சேர்க்கவும்",
     ),
+    "add_files": MessageLookupByLibrary.simpleMessage(
+      "கோப்புகளைச் சேர்க்கவும்",
+    ),
     "add_more_photos": MessageLookupByLibrary.simpleMessage(
       "மேலும் புகைப்படங்கள் சேர்க்கவும்",
     ),
@@ -48,6 +51,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "additional_phone_number": MessageLookupByLibrary.simpleMessage(
       "கூடுதல் தொலைபேசி எண்",
     ),
+    "address": MessageLookupByLibrary.simpleMessage("முகவரி"),
     "advanced_filters": MessageLookupByLibrary.simpleMessage(
       "மேம்பட்ட வடிகட்டிகள்",
     ),
@@ -63,11 +67,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "area_min_to_max": MessageLookupByLibrary.simpleMessage(
       "பரப்பளவு (குறைந்தது முதல் அதிகம் வரை)",
     ),
+    "available_area": MessageLookupByLibrary.simpleMessage(
+      "கிடைக்கும் பரப்பளவு",
+    ),
     "became_partner": MessageLookupByLibrary.simpleMessage("பங்குதாரராகவும்"),
     "bids": MessageLookupByLibrary.simpleMessage("பிட்ஸ்"),
     "bike_parking_slots": MessageLookupByLibrary.simpleMessage(
       "பைக் பார்கிங் சில்லுகள்",
     ),
+    "bike_slot": MessageLookupByLibrary.simpleMessage("மோட்டார் சைக்கிள் இடம்"),
     "bts": MessageLookupByLibrary.simpleMessage("BTS"),
     "call_for_assistance": MessageLookupByLibrary.simpleMessage(
       "உதவிக்கு அழைக்கவும்",
@@ -84,6 +92,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "choose_from_gallery": MessageLookupByLibrary.simpleMessage(
       "கேலரியிலிருந்து தேர்ந்தெடுக்கவும்",
     ),
+    "choose_image_type": MessageLookupByLibrary.simpleMessage(
+      "நீங்கள் பதிவேற்றும் பட வகையை தேர்ந்தெடுக்கவும்",
+    ),
     "city": MessageLookupByLibrary.simpleMessage("நகரம்"),
     "clear_all": MessageLookupByLibrary.simpleMessage(
       "அனைத்தையும் நீக்குங்கள்",
@@ -97,6 +108,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "complete_kyc": MessageLookupByLibrary.simpleMessage(
       "கே.வைகே. முடிக்கவும்",
     ),
+    "congratulations": MessageLookupByLibrary.simpleMessage("வாழ்த்துகள்"),
     "connect_with_whatsapp": MessageLookupByLibrary.simpleMessage(
       "வாட்ஸ்அப்புடன் இணைக்கவும்",
     ),
@@ -105,12 +117,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "construction_type": MessageLookupByLibrary.simpleMessage("கட்டுமான வகை"),
     "construction_types": MessageLookupByLibrary.simpleMessage("கட்டிட வகைகள்"),
+    "continue_browsing": MessageLookupByLibrary.simpleMessage(
+      "தொடர்ந்து உலாவவும்",
+    ),
     "contracts": MessageLookupByLibrary.simpleMessage("ஒப்பந்தங்கள்"),
     "contracts_documents": MessageLookupByLibrary.simpleMessage(
       "ஒப்பந்த ஆவணங்கள்",
     ),
     "dark_store": MessageLookupByLibrary.simpleMessage("டார்க் ஸ்டோர்"),
     "designation": MessageLookupByLibrary.simpleMessage("பதவி"),
+    "dock_levelers": MessageLookupByLibrary.simpleMessage(
+      "டாக் நிலைப்படுத்திகள்",
+    ),
     "docks_height": MessageLookupByLibrary.simpleMessage("டாக்ஸ் உயரம் (அடி)"),
     "done": MessageLookupByLibrary.simpleMessage("முடிந்தது"),
     "edit_profile": MessageLookupByLibrary.simpleMessage(
@@ -119,11 +137,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "edit_warehouse_details": MessageLookupByLibrary.simpleMessage(
       "களஞ்சிய விவரங்களை திருத்தவும்",
     ),
+    "electricity": MessageLookupByLibrary.simpleMessage("மின்சாரம்"),
     "electricity_in_kva": MessageLookupByLibrary.simpleMessage(
       "மின்சாரம் (KVA)",
     ),
+    "email": MessageLookupByLibrary.simpleMessage("மின்னஞ்சல்"),
     "email_notifications": MessageLookupByLibrary.simpleMessage(
       "மின்னஞ்சல் அறிவிப்புகள்",
+    ),
+    "ensure_clarity_lighting": MessageLookupByLibrary.simpleMessage(
+      "தயவுசெய்து தெளிவுத்தன்மை & சரியான விளக்கத்தை உறுதிசெய்யவும்",
     ),
     "enter_address": MessageLookupByLibrary.simpleMessage("முகவரியை உள்ளிடுக"),
     "express_interest": MessageLookupByLibrary.simpleMessage(
@@ -133,10 +156,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "காலை பெற ஆர்வம் தெரிவிக்கவும்.",
     ),
     "factory": MessageLookupByLibrary.simpleMessage("தொழிற்சாலை"),
+    "failed_to_load_image": MessageLookupByLibrary.simpleMessage(
+      "புகைப்படத்தை ஏற்றுவது தோல்வியடைந்தது!",
+    ),
+    "fans": MessageLookupByLibrary.simpleMessage("விசிறிகள்"),
     "filter": MessageLookupByLibrary.simpleMessage("பிடுக்கி"),
     "fire_noc": MessageLookupByLibrary.simpleMessage(
       "பொருள் NOC: உங்கள் களஞ்சியத்தில் தீ பாதுகாப்பு உள்ளது என உறுதிப்படுத்தவும்",
     ),
+    "flexi_model": MessageLookupByLibrary.simpleMessage("ஃப்ளெக்ஸி மாடல்"),
     "flexi_model_interest": MessageLookupByLibrary.simpleMessage(
       "நீங்கள் flexible மாடலில் ஆர்வமுள்ளவரா?",
     ),
@@ -163,15 +191,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "inner_length": MessageLookupByLibrary.simpleMessage("உள்ள طول (அடி)"),
     "inner_width": MessageLookupByLibrary.simpleMessage("உள்ள அகலம் (அடி)"),
     "interested": MessageLookupByLibrary.simpleMessage("ஆர்வம் கொண்டது"),
+    "interior": MessageLookupByLibrary.simpleMessage("உள் அமைப்பு"),
     "is_base_available_for_rent": MessageLookupByLibrary.simpleMessage(
       "அடிப்படை வாடகைக்கு கிடைக்கின்றதா?",
     ),
     "is_warehouse_available": MessageLookupByLibrary.simpleMessage(
       "களஞ்சியம் கிடைக்கின்றதா?",
     ),
+    "km_away": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் தற்போதைய இடத்திலிருந்து km தொலைவில்",
+    ),
     "larger_collection_of_warehouses": MessageLookupByLibrary.simpleMessage(
       "பெரிய கிடங்கு சேகரிப்பு",
     ),
+    "lights": MessageLookupByLibrary.simpleMessage("விளக்குகள்"),
     "location": MessageLookupByLibrary.simpleMessage("இடம்"),
     "lock_in_period": MessageLookupByLibrary.simpleMessage("லாக்-இன் காலம்"),
     "log_out": MessageLookupByLibrary.simpleMessage("வெளியேறு"),
@@ -184,11 +217,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "maintenance_cost_per_sqft": MessageLookupByLibrary.simpleMessage(
       "பராமரிப்பு செலவு (ஒவ்வொரு சதுர அடி)",
     ),
+    "manage": MessageLookupByLibrary.simpleMessage("மேலாண்மை செய்யவும்"),
     "manage_photos": MessageLookupByLibrary.simpleMessage(
-      "புகைப்படங்களை நிர்வகிக்கவும்",
+      "புகைப்படங்களை மேலாண்மை செய்யவும்",
     ),
     "manage_videos": MessageLookupByLibrary.simpleMessage(
-      "வீடியோக்களை நிர்வகிக்கவும்",
+      "வீடியோக்களை மேலாண்மை செய்யவும்",
     ),
     "manage_your_warehouse": MessageLookupByLibrary.simpleMessage(
       "உங்கள் களஞ்சியத்தை விரைவாக நிர்வகிக்கவும்!",
@@ -214,6 +248,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_shortlisted_warehouses_found": MessageLookupByLibrary.simpleMessage(
       "சட்டியிடப்பட்ட களம் கிடைக்கவில்லை",
     ),
+    "no_warehouse_near_you": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் அருகில் கிடங்கு இல்லை",
+    ),
+    "none": MessageLookupByLibrary.simpleMessage("எதுவுமில்லை"),
     "notification_setting": MessageLookupByLibrary.simpleMessage(
       "அறிவிப்பு அமைப்பு",
     ),
@@ -233,12 +271,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "ஒளி மின்னல்கள் எண்ணிக்கை",
     ),
     "num_of_toilets": MessageLookupByLibrary.simpleMessage("சாக்கடை எண்ணிக்கை"),
+    "office_space": MessageLookupByLibrary.simpleMessage("அலுவலக இடம்"),
+    "ok": MessageLookupByLibrary.simpleMessage("சரி"),
     "open": MessageLookupByLibrary.simpleMessage("திறக்கவும்"),
     "open_space": MessageLookupByLibrary.simpleMessage("திறந்த இடம்"),
+    "other": MessageLookupByLibrary.simpleMessage("மற்றவை"),
     "others": MessageLookupByLibrary.simpleMessage("மற்றவை"),
+    "outer": MessageLookupByLibrary.simpleMessage("வெளிப்புறம்"),
     "owner_pan_card": MessageLookupByLibrary.simpleMessage(
       "உரிமையாளர் PAN கார்டு",
     ),
+    "parking": MessageLookupByLibrary.simpleMessage("நிறுத்தம்"),
     "parking_land": MessageLookupByLibrary.simpleMessage(
       "கார் நிறுத்தும் நிலம்",
     ),
@@ -248,6 +291,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "தொலைபேசி அறிவிப்புகள்",
     ),
     "phone_number": MessageLookupByLibrary.simpleMessage("தொலைபேசி எண்"),
+    "photos": MessageLookupByLibrary.simpleMessage("புகைப்படங்கள்"),
+    "pick_images": MessageLookupByLibrary.simpleMessage(
+      "படங்களைத் தேர்வு செய்க",
+    ),
+    "pick_videos": MessageLookupByLibrary.simpleMessage(
+      "வீடியோக்களைத் தேர்வு செய்க",
+    ),
     "please_upload_document": MessageLookupByLibrary.simpleMessage(
       "தயவுசெய்து உங்கள் ஆவணத்தை பதிவேற்றுக",
     ),
@@ -257,6 +307,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "post_your_property_free": MessageLookupByLibrary.simpleMessage(
       "உங்கள் சொத்தை இலவசமாகப் போஸ்ட் செய்யவும்",
     ),
+    "power_backup": MessageLookupByLibrary.simpleMessage("மின்சார காப்பகம்"),
     "price_max_to_min": MessageLookupByLibrary.simpleMessage(
       "விலை (அதிகம் முதல் குறைந்தது வரை)",
     ),
@@ -276,11 +327,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "rcc": MessageLookupByLibrary.simpleMessage("RCC"),
     "referral": MessageLookupByLibrary.simpleMessage("பரிந்துரை"),
+    "rent": MessageLookupByLibrary.simpleMessage("வாடகை"),
     "rent_per_sqft": MessageLookupByLibrary.simpleMessage(
       "ஒவ்வொரு சதுர அடி வாடகை",
     ),
     "rent_range": MessageLookupByLibrary.simpleMessage("வாடகை வரம்பு"),
     "save": MessageLookupByLibrary.simpleMessage("சேமி"),
+    "save_next": MessageLookupByLibrary.simpleMessage("சேமிக்கவும் & அடுத்தது"),
+    "schedule_a_visit": MessageLookupByLibrary.simpleMessage(
+      "ஒரு பார்வையை திட்டமிடுங்கள்",
+    ),
     "seall": MessageLookupByLibrary.simpleMessage("அனைத்தையும் காண்க..."),
     "search_by_location": MessageLookupByLibrary.simpleMessage(
       "இடம் மூலம் தேடு",
@@ -288,15 +344,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "security_deposit": MessageLookupByLibrary.simpleMessage(
       "பாதுகாப்பு டெபாசிட்",
     ),
+    "select_date": MessageLookupByLibrary.simpleMessage("தேதி தேர்வுசெய்க"),
     "select_date_of_possession": MessageLookupByLibrary.simpleMessage(
       "கைமாற்ற நாள் தேர்வு செய்யவும்",
+    ),
+    "select_filter": MessageLookupByLibrary.simpleMessage(
+      "வடிப்பானை தேர்வுசெய்க",
+    ),
+    "select_image_types": MessageLookupByLibrary.simpleMessage(
+      "பட வகைகளை தேர்ந்தெடுக்கவும்",
     ),
     "select_location": MessageLookupByLibrary.simpleMessage(
       "இடத்தை தேர்ந்தெடுக்கவும்",
     ),
+    "select_media": MessageLookupByLibrary.simpleMessage(
+      "மீடியாவை தேர்ந்தெடுக்கவும்",
+    ),
     "select_rent_range": MessageLookupByLibrary.simpleMessage(
       "வாடகை வரம்பை தேர்வு செய்யவும்",
     ),
+    "select_time": MessageLookupByLibrary.simpleMessage("நேரத்தை தேர்வு செய்க"),
     "selfie_of_owner": MessageLookupByLibrary.simpleMessage(
       "உரிமையாளர் செல்ஃபி",
     ),
@@ -306,6 +373,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "skip_for_now": MessageLookupByLibrary.simpleMessage(
       "இப்போது தவிர்க்கவும்",
     ),
+    "sorry": MessageLookupByLibrary.simpleMessage("மன்னிக்கவும்..."),
     "sort": MessageLookupByLibrary.simpleMessage("வழிமுறை"),
     "start_adding_warehouse": MessageLookupByLibrary.simpleMessage(
       "உங்கள் முதல் களஞ்சியத்தைச் சேர்க்கத் தொடங்கவும்",
@@ -321,6 +389,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "terms_and_conditions": MessageLookupByLibrary.simpleMessage(
       "விதிமுறைகள் மற்றும் நிபந்தனைகள்",
     ),
+    "toilets": MessageLookupByLibrary.simpleMessage("கழிப்பறைகள்"),
     "token_advance": MessageLookupByLibrary.simpleMessage(
       "டோக்கன் முன்னேற்றம்",
     ),
@@ -332,6 +401,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "truck_parking_slots": MessageLookupByLibrary.simpleMessage(
       "பிரத்யேக அட்டவணை சில்லுகள்",
     ),
+    "truck_slots": MessageLookupByLibrary.simpleMessage("டிரக் இடங்கள்"),
+    "type": MessageLookupByLibrary.simpleMessage("வகை"),
     "update_and_next": MessageLookupByLibrary.simpleMessage(
       "புதுப்பிக்கவும் மற்றும் அடுத்தது",
     ),
@@ -363,16 +434,32 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload_media": MessageLookupByLibrary.simpleMessage(
       "மீடியா அப்‌లోடு செய்யவும்",
     ),
+    "upload_warehouse_image": MessageLookupByLibrary.simpleMessage(
+      "கிடங்கின் புகைப்படம் மட்டும் பதிவேற்றவும்",
+    ),
+    "uploaded_media": MessageLookupByLibrary.simpleMessage(
+      "பதிவேற்றப்பட்ட மீடியா",
+    ),
     "uploaded_successfully": MessageLookupByLibrary.simpleMessage(
       "வெற்றிகரமாக பதிவேற்றப்பட்டது",
     ),
     "verified_property_and_owner": MessageLookupByLibrary.simpleMessage(
       "நிறுவிக்கப்பட்ட சொத்து மற்றும் உரிமையாளர்",
     ),
+    "videos": MessageLookupByLibrary.simpleMessage("வீடியோக்கள்"),
     "view_less": MessageLookupByLibrary.simpleMessage("குறைவாக பார்க்க"),
     "view_more": MessageLookupByLibrary.simpleMessage("மேலும் பார்க்க"),
     "view_request": MessageLookupByLibrary.simpleMessage(
       "விண்ணப்பத்தை பார்வையிடவும்",
+    ),
+    "warehouse_added_success": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் கிடங்கு வெற்றிகரமாக சேர்க்கப்பட்டது. எங்கள் குழு விரைவில் உங்களை தொடர்புகொள்கிறது!",
+    ),
+    "warehouse_amenities": MessageLookupByLibrary.simpleMessage(
+      "கிடங்கு வசதிகள்",
+    ),
+    "warehouse_dimensions": MessageLookupByLibrary.simpleMessage(
+      "கிடங்கின் பரிமாணங்கள்",
     ),
     "warehouse_dock_levelers": MessageLookupByLibrary.simpleMessage(
       "உங்கள் களஞ்சியத்தில் டாக் லெவலர்ஸ் உள்ளனவா?",
@@ -388,6 +475,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "warehouse_power_backup": MessageLookupByLibrary.simpleMessage(
       "உங்கள் களஞ்சியத்தில் மின் பின்பற்றுதலை உறுதிப்படுத்தவும்?",
+    ),
+    "warehouse_published_success": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் கிடங்கு வெற்றிகரமாக வெளியிடப்பட்டது",
     ),
     "warehouse_type": MessageLookupByLibrary.simpleMessage("களஞ்சிய வகை"),
     "warehouse_types": MessageLookupByLibrary.simpleMessage("களஞ்சிய வகைகள்"),

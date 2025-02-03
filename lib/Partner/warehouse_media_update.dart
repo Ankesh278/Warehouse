@@ -548,20 +548,23 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
                                 const SizedBox(width: 5),
                               ],
                             ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: screenHeight * 0.08, left: 20),
-                              child:  Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    S.of(context).add_additional_details,
-                                    style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.white),
-                                  ),
-                                ],
+                            SingleChildScrollView(
+                              scrollDirection:Axis.horizontal,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    top: screenHeight * 0.08, left: 20),
+                                child:  Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      S.of(context).add_additional_details,
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -662,9 +665,9 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
                                         color: Colors.blue,
                                         borderRadius: BorderRadius.circular(6)),
                                     height: screenHeight * 0.04,
-                                    width: screenWidth * 0.4,
+                                    width: screenWidth * 0.45,
                                     margin: EdgeInsets.symmetric(
-                                        horizontal: screenWidth * 0.05),
+                                        horizontal: screenWidth * 0.04),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [

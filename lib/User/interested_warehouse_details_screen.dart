@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:warehouse/DistanceCalculator.dart';
+import 'package:warehouse/distance_calculator.dart';
 import 'package:warehouse/User/express_interest_screen.dart';
 import 'package:warehouse/User/UserProvider/InterestProvider.dart';
 import 'package:warehouse/User/models/interestedDataModel.dart';
@@ -303,13 +303,13 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                           constraints: const BoxConstraints(maxWidth: 40),
                                           child: FittedBox(
                                             fit: BoxFit.scaleDown,
-                                            child: Text("₹ ${widget.warehouses.wHouseRentPerSQFT}",
+                                            child: Text("₹ ${widget.warehouses.wHouseRentPerSQFT} ",
                                               style: const TextStyle(fontWeight: FontWeight.w700,color: Colors.black),
                                               textAlign: TextAlign.start,
                                             ),
                                           ),
                                         ),
-                                        const Text(" Rent sq.ft",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 10,color: Colors.grey),),
+                                         Text(S.of(context).rent_per_sqft,style: TextStyle(fontWeight: FontWeight.normal,fontSize: 10,color: Colors.grey),),
                                         const Spacer(),
                                         Container(
                                           height: screenHeight*0.05,
@@ -352,9 +352,9 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                                 ),
                                               ),
                                             ),
-                                            const Padding(
+                                             Padding(
                                               padding: EdgeInsets.only(left: 4.0),
-                                              child: Text("Available area",style: TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
+                                              child: Text(S.of(context).available_area,style: TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
                                             ),
                                             const SizedBox(height: 4,),
                                             Padding(
@@ -371,9 +371,9 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                                 ),
                                               ),
                                             ),
-                                            const Padding(
-                                              padding: EdgeInsets.only(left: 4.0),
-                                              child: Text("Security deposit",style: TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
+                                             Padding(
+                                              padding: const EdgeInsets.only(left: 4.0),
+                                              child: Text(S.of(context).security_deposit,style: const TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
                                             ),
                                           ],
                                         ),
@@ -404,9 +404,9 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                                 ),
                                               ),
                                             ),
-                                            const Padding(
-                                              padding: EdgeInsets.only(left: 4.0),
-                                              child: Text("Warehouse Type",style: TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
+                                             Padding(
+                                              padding: const EdgeInsets.only(left: 4.0),
+                                              child: Text(S.of(context).warehouse_type,style: const TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
                                             ),
                                             const SizedBox(height: 4,),
                                             Padding(
@@ -422,9 +422,9 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                                   ),
                                                 )),
                                             ),
-                                            const Padding(
-                                              padding: EdgeInsets.only(left: 4.0),
-                                              child: Text("Floor type",style: TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
+                                             Padding(
+                                              padding: const EdgeInsets.only(left: 4.0),
+                                              child: Text(S.of(context).flooring_type,style: const TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
                                             ),
                                           ],
                                         ),
@@ -432,11 +432,11 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                     ],
                                   ),
                                   const SizedBox(height: 13,),
-                                  const Align(
+                                   Align(
                                     alignment: Alignment.centerLeft,
                                     child: Padding(
-                                      padding: EdgeInsets.only(left: 15.0),
-                                      child: Text("Address",style: TextStyle(
+                                      padding: const EdgeInsets.only(left: 15.0),
+                                      child: Text(S.of(context).address,style: const TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500
                                       ),),
@@ -551,7 +551,7 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                           });
                                         },
                                         child: Text(
-                                          _isExpanded ? "View Less" : "View More",
+                                          _isExpanded ? S.of(context).view_less : S.of(context).view_more,
                                           style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w800,color: Colors.blue),
                                         ),
                                       ),
@@ -642,13 +642,13 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                             border: Border.all(color: Colors.blue),
                                             borderRadius: BorderRadius.circular(10)
                                         ),
-                                        child: const Row(
+                                        child:  Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                            Icon(Icons.calendar_today_outlined,color: Colors.blue,size: 16,),
-                                            SizedBox(width: 4,),
-                                            Text("Schedule a visit",style: TextStyle(color: Colors.blue,fontSize: 10),)
+                                            const Icon(Icons.calendar_today_outlined,color: Colors.blue,size: 16,),
+                                            const SizedBox(width: 4,),
+                                            Text(S.of(context).schedule_a_visit,style: const TextStyle(color: Colors.blue,fontSize: 10),)
                                           ],
                                         ),
                                       ),

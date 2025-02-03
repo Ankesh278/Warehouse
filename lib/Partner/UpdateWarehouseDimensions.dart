@@ -327,7 +327,7 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
                  Text("${S.of(context).update_warehouse_amenities} 4/4", style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
-                    fontSize: 16)),
+                    fontSize: 14)),
               ],
             ),
           ),

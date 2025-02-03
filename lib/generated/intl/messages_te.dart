@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "add_additional_email": MessageLookupByLibrary.simpleMessage(
       "అదనపు ఈమెయిల్ చిరునామా జోడించండి",
     ),
+    "add_files": MessageLookupByLibrary.simpleMessage("ఫైళ్లను జోడించండి"),
     "add_more_photos": MessageLookupByLibrary.simpleMessage(
       "మరిన్ని ఫోటోలు జోడించండి",
     ),
@@ -46,6 +47,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "additional_phone_number": MessageLookupByLibrary.simpleMessage(
       "అదనపు ఫోన్ నంబర్",
     ),
+    "address": MessageLookupByLibrary.simpleMessage("చిరునామా"),
     "advanced_filters": MessageLookupByLibrary.simpleMessage("ఉన్నత ఫిల్టర్లు"),
     "agricultural": MessageLookupByLibrary.simpleMessage("వ్యవసాయం"),
     "all_topics": MessageLookupByLibrary.simpleMessage("అన్ని విషయాలు"),
@@ -59,11 +61,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "area_min_to_max": MessageLookupByLibrary.simpleMessage(
       "ప్రాంతం (తక్కువ నుండి ఎక్కువ వరకు)",
     ),
+    "available_area": MessageLookupByLibrary.simpleMessage(
+      "అందుబాటులో ఉన్న ప్రదేశం",
+    ),
     "became_partner": MessageLookupByLibrary.simpleMessage("భాగస్వామి అవ్వండి"),
     "bids": MessageLookupByLibrary.simpleMessage("బిడ్స్"),
     "bike_parking_slots": MessageLookupByLibrary.simpleMessage(
       "బైక్ పార్కింగ్ స్లాట్‌లు",
     ),
+    "bike_slot": MessageLookupByLibrary.simpleMessage("బైక్ స్లాట్"),
     "bts": MessageLookupByLibrary.simpleMessage("బీటీఎస్"),
     "call_for_assistance": MessageLookupByLibrary.simpleMessage(
       "సహాయం కోసం కాల్ చేయండి",
@@ -82,6 +88,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "choose_from_gallery": MessageLookupByLibrary.simpleMessage(
       "గ్యాలరీ నుండి ఎంచుకోండి",
     ),
+    "choose_image_type": MessageLookupByLibrary.simpleMessage(
+      "మీరు అప్‌లోడ్ చేస్తున్న చిత్రం రకాన్ని ఎంచుకోండి",
+    ),
     "city": MessageLookupByLibrary.simpleMessage("నగరం"),
     "clear_all": MessageLookupByLibrary.simpleMessage("అన్నీ క్లియర్ చేయండి"),
     "close": MessageLookupByLibrary.simpleMessage("మూసివేయండి"),
@@ -91,6 +100,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "complete_kyc": MessageLookupByLibrary.simpleMessage(
       "కేవైసీ పూర్తి చేయండి",
     ),
+    "congratulations": MessageLookupByLibrary.simpleMessage("అభినందనలు"),
     "connect_with_whatsapp": MessageLookupByLibrary.simpleMessage(
       "వాట్సాప్‌తో కనెక్ట్ చేయండి",
     ),
@@ -99,12 +109,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "construction_type": MessageLookupByLibrary.simpleMessage("నిర్మాణ రకం"),
     "construction_types": MessageLookupByLibrary.simpleMessage("నిర్మాణ రకాలు"),
+    "continue_browsing": MessageLookupByLibrary.simpleMessage(
+      "బ్రౌజింగ్ కొనసాగించండి",
+    ),
     "contracts": MessageLookupByLibrary.simpleMessage("కాంట్రాక్టులు"),
     "contracts_documents": MessageLookupByLibrary.simpleMessage(
       "ఒప్పంద పత్రాలు",
     ),
     "dark_store": MessageLookupByLibrary.simpleMessage("డార్క్ స్టోర్"),
     "designation": MessageLookupByLibrary.simpleMessage("హోదా"),
+    "dock_levelers": MessageLookupByLibrary.simpleMessage("డాక్ లెవలర్స్"),
     "docks_height": MessageLookupByLibrary.simpleMessage("డాక్ ఎత్తు (ఫీట్)"),
     "done": MessageLookupByLibrary.simpleMessage("పూర్తి"),
     "edit_profile": MessageLookupByLibrary.simpleMessage(
@@ -113,11 +127,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "edit_warehouse_details": MessageLookupByLibrary.simpleMessage(
       "గోదాము వివరాలను ఎడిట్ చేయండి",
     ),
+    "electricity": MessageLookupByLibrary.simpleMessage("విద్యుత్"),
     "electricity_in_kva": MessageLookupByLibrary.simpleMessage(
       "విద్యుత్ (KVA)",
     ),
+    "email": MessageLookupByLibrary.simpleMessage("ఈమెయిల్"),
     "email_notifications": MessageLookupByLibrary.simpleMessage(
       "ఈమెయిల్ నోటిఫికేషన్లు",
+    ),
+    "ensure_clarity_lighting": MessageLookupByLibrary.simpleMessage(
+      "దయచేసి స్పష్టత & సరైన కాంతిని నిర్ధారించండి",
     ),
     "enter_address": MessageLookupByLibrary.simpleMessage(
       "చిరునామా నమోదు చేయండి",
@@ -129,10 +148,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "కాల్ బ్యాక్ కోసం ఆసక్తిని వ్యక్తం చేయండి.",
     ),
     "factory": MessageLookupByLibrary.simpleMessage("ఫ్యాక్టరీ"),
+    "failed_to_load_image": MessageLookupByLibrary.simpleMessage(
+      "చిత్రాన్ని లోడ్ చేయడం విఫలమైంది!",
+    ),
+    "fans": MessageLookupByLibrary.simpleMessage("ఫ్యాన్స్"),
     "filter": MessageLookupByLibrary.simpleMessage("ఫిల్టర్"),
     "fire_noc": MessageLookupByLibrary.simpleMessage(
       "ఫైర్ NOC: మీ గోదాములో అగ్ని నిరోధకత ఉన్నదా?",
     ),
+    "flexi_model": MessageLookupByLibrary.simpleMessage("ఫ్లెక్సీ మోడల్"),
     "flexi_model_interest": MessageLookupByLibrary.simpleMessage(
       "మీరు ఫ్లెక్సి మోడల్‌లో ఆసక్తి ఉన్నారా?",
     ),
@@ -161,15 +185,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "ఆంతరిక వెడల్పు (ఫీట్)",
     ),
     "interested": MessageLookupByLibrary.simpleMessage("రుచికరమైన"),
+    "interior": MessageLookupByLibrary.simpleMessage("అంతర్గత"),
     "is_base_available_for_rent": MessageLookupByLibrary.simpleMessage(
       "అదరణ అద్దెకు అందుబాటులో ఉందా?",
     ),
     "is_warehouse_available": MessageLookupByLibrary.simpleMessage(
       "గోదాము లభ్యమా?",
     ),
+    "km_away": MessageLookupByLibrary.simpleMessage(
+      "మీ ప్రస్తుత స్థానానికి km దూరంలో ఉంది",
+    ),
     "larger_collection_of_warehouses": MessageLookupByLibrary.simpleMessage(
       "పెద్ద గిడ్డంగుల సేకరణ",
     ),
+    "lights": MessageLookupByLibrary.simpleMessage("లైట్లు"),
     "location": MessageLookupByLibrary.simpleMessage("స్థానం"),
     "lock_in_period": MessageLookupByLibrary.simpleMessage("లాక్-ఇన్ కాలం"),
     "log_out": MessageLookupByLibrary.simpleMessage("లాగ్ అవుట్"),
@@ -182,6 +211,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "maintenance_cost_per_sqft": MessageLookupByLibrary.simpleMessage(
       "రక్షణ ఖర్చు (ప్రతి చదరపు అడుగు)",
     ),
+    "manage": MessageLookupByLibrary.simpleMessage("నిర్వహించండి"),
     "manage_photos": MessageLookupByLibrary.simpleMessage(
       "ఫోటోలను నిర్వహించండి",
     ),
@@ -210,6 +240,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_shortlisted_warehouses_found": MessageLookupByLibrary.simpleMessage(
       "షార్ట్లిస్టు చేసిన గిడ్డంగులు కనుగొనలేదు",
     ),
+    "no_warehouse_near_you": MessageLookupByLibrary.simpleMessage(
+      "మీ దగ్గర గిడ్డంగి లేదు",
+    ),
+    "none": MessageLookupByLibrary.simpleMessage("ఏదీ లేదు"),
     "notification_setting": MessageLookupByLibrary.simpleMessage(
       "నోటిఫికేషన్ సెట్టింగ్",
     ),
@@ -225,10 +259,15 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "num_of_lights": MessageLookupByLibrary.simpleMessage("లైటుల సంఖ్య"),
     "num_of_toilets": MessageLookupByLibrary.simpleMessage("టాయిలెట్స్ సంఖ్య"),
+    "office_space": MessageLookupByLibrary.simpleMessage("ఆఫీస్ స్పేస్"),
+    "ok": MessageLookupByLibrary.simpleMessage("సరే"),
     "open": MessageLookupByLibrary.simpleMessage("తెరవండి"),
     "open_space": MessageLookupByLibrary.simpleMessage("ఓపెన్ స్పేస్"),
+    "other": MessageLookupByLibrary.simpleMessage("ఇతర"),
     "others": MessageLookupByLibrary.simpleMessage("ఇతర"),
+    "outer": MessageLookupByLibrary.simpleMessage("బాహ్య"),
     "owner_pan_card": MessageLookupByLibrary.simpleMessage("యజమాని PAN కార్డ్"),
+    "parking": MessageLookupByLibrary.simpleMessage("పార్కింగ్"),
     "parking_land": MessageLookupByLibrary.simpleMessage("పార్కింగ్ స్థలం"),
     "payments": MessageLookupByLibrary.simpleMessage("చెల్లింపులు"),
     "peb": MessageLookupByLibrary.simpleMessage("పీఈబీ"),
@@ -236,6 +275,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "ఫోన్ నోటిఫికేషన్లు",
     ),
     "phone_number": MessageLookupByLibrary.simpleMessage("ఫోన్ నంబర్"),
+    "photos": MessageLookupByLibrary.simpleMessage("ఫోటోలు"),
+    "pick_images": MessageLookupByLibrary.simpleMessage("చిత్రాలను ఎంచుకోండి"),
+    "pick_videos": MessageLookupByLibrary.simpleMessage("వీడియోలను ఎంచుకోండి"),
     "please_upload_document": MessageLookupByLibrary.simpleMessage(
       "దయచేసి మీ డాక్యుమెంట్ అప్‌లోడ్ చేయండి",
     ),
@@ -245,6 +287,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "post_your_property_free": MessageLookupByLibrary.simpleMessage(
       "మీ ప్రాపర్టీ ఉచితంగా పోస్ట్ చేయండి",
     ),
+    "power_backup": MessageLookupByLibrary.simpleMessage("పవర్ బ్యాకప్"),
     "price_max_to_min": MessageLookupByLibrary.simpleMessage(
       "ధర (ఎక్కువ నుండి తక్కువ వరకు)",
     ),
@@ -264,25 +307,37 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "rcc": MessageLookupByLibrary.simpleMessage("ఆర్సీసీ"),
     "referral": MessageLookupByLibrary.simpleMessage("రిఫరల్"),
+    "rent": MessageLookupByLibrary.simpleMessage("అద్దె"),
     "rent_per_sqft": MessageLookupByLibrary.simpleMessage(
       "ప్రతి చదరపు అడుగు అద్దె",
     ),
     "rent_range": MessageLookupByLibrary.simpleMessage("అద్దె పరిధి"),
     "save": MessageLookupByLibrary.simpleMessage("సేవ్"),
+    "save_next": MessageLookupByLibrary.simpleMessage("సేవ్ & నెక్స్ట్"),
+    "schedule_a_visit": MessageLookupByLibrary.simpleMessage(
+      "ఒక సందర్శనను షెడ్యూల్ చేయండి",
+    ),
     "seall": MessageLookupByLibrary.simpleMessage("అన్నింటిని చూడండి..."),
     "search_by_location": MessageLookupByLibrary.simpleMessage(
       "స్థానాన్ని ఆధారంగా శోధించండి",
     ),
     "security_deposit": MessageLookupByLibrary.simpleMessage("భద్రతా డిపాజిట్"),
+    "select_date": MessageLookupByLibrary.simpleMessage("తేదీ ఎంచుకోండి"),
     "select_date_of_possession": MessageLookupByLibrary.simpleMessage(
       "స్వాధీన తేదీని ఎంచుకోండి",
+    ),
+    "select_filter": MessageLookupByLibrary.simpleMessage("ఫిల్టర్ ఎంచుకోండి"),
+    "select_image_types": MessageLookupByLibrary.simpleMessage(
+      "చిత్ర రకాలను ఎంచుకోండి",
     ),
     "select_location": MessageLookupByLibrary.simpleMessage(
       "స్థానాన్ని ఎంచుకోండి",
     ),
+    "select_media": MessageLookupByLibrary.simpleMessage("మీడియాను ఎంచుకోండి"),
     "select_rent_range": MessageLookupByLibrary.simpleMessage(
       "అద్దె పరిధిని ఎంచుకోండి",
     ),
+    "select_time": MessageLookupByLibrary.simpleMessage("సమయం ఎంచుకోండి"),
     "selfie_of_owner": MessageLookupByLibrary.simpleMessage("యజమాని సెల్ఫీ"),
     "shed": MessageLookupByLibrary.simpleMessage("షెడ్"),
     "shortlisted": MessageLookupByLibrary.simpleMessage(
@@ -292,6 +347,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "skip_for_now": MessageLookupByLibrary.simpleMessage(
       "ఇప్పుడే స్కిప్ చేయండి",
     ),
+    "sorry": MessageLookupByLibrary.simpleMessage("క్షమించండి..."),
     "sort": MessageLookupByLibrary.simpleMessage("వర్గీకరించు"),
     "start_adding_warehouse": MessageLookupByLibrary.simpleMessage(
       "మీ మొదటి గిడ్డంగిని చేర్చడం ప్రారంభించండి",
@@ -307,6 +363,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "terms_and_conditions": MessageLookupByLibrary.simpleMessage(
       "నిబంధనలు మరియు షరతులు",
     ),
+    "toilets": MessageLookupByLibrary.simpleMessage("టాయిలెట్‌లు"),
     "token_advance": MessageLookupByLibrary.simpleMessage(
       "టోకెన్ ముందు చెల్లింపు",
     ),
@@ -316,6 +373,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "truck_parking_slots": MessageLookupByLibrary.simpleMessage(
       "ట్రక్కు పార్కింగ్ స్లాట్‌లు",
     ),
+    "truck_slots": MessageLookupByLibrary.simpleMessage("ట్రక్ స్లాట్లు"),
+    "type": MessageLookupByLibrary.simpleMessage("రకం"),
     "update_and_next": MessageLookupByLibrary.simpleMessage(
       "నవీకరించండి మరియు తరువాత",
     ),
@@ -347,15 +406,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload_media": MessageLookupByLibrary.simpleMessage(
       "మీడియా అప్‌లోడ్ చేయండి",
     ),
+    "upload_warehouse_image": MessageLookupByLibrary.simpleMessage(
+      "కేవలం గిడ్డంగి చిత్రాన్ని అప్‌లోడ్ చేయండి",
+    ),
+    "uploaded_media": MessageLookupByLibrary.simpleMessage(
+      "అప్‌లోడ్ చేయబడిన మీడియా",
+    ),
     "uploaded_successfully": MessageLookupByLibrary.simpleMessage(
       "విజయవంతంగా అప్‌లోడ్ చేయబడింది",
     ),
     "verified_property_and_owner": MessageLookupByLibrary.simpleMessage(
       "నిర్ధారిత ఆస్తి మరియు యజమాని",
     ),
+    "videos": MessageLookupByLibrary.simpleMessage("వీడియోలు"),
     "view_less": MessageLookupByLibrary.simpleMessage("తక్కువ చూపించండి"),
     "view_more": MessageLookupByLibrary.simpleMessage("ఇంకా చూడండి"),
     "view_request": MessageLookupByLibrary.simpleMessage("అర్జీని వీక్షించండి"),
+    "warehouse_added_success": MessageLookupByLibrary.simpleMessage(
+      "మీ గిడ్డంగి విజయవంతంగా జోడించబడింది. మా బృందం త్వరలో మిమ్మల్ని సంప్రదిస్తుంది!",
+    ),
+    "warehouse_amenities": MessageLookupByLibrary.simpleMessage(
+      "గిడ్డంగి సౌకర్యాలు",
+    ),
+    "warehouse_dimensions": MessageLookupByLibrary.simpleMessage(
+      "గిడ్డంగి కొలతలు",
+    ),
     "warehouse_dock_levelers": MessageLookupByLibrary.simpleMessage(
       "మీ గోదాములో డాక్ లెవలర్లున్నాయా?",
     ),
@@ -368,6 +443,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "warehouse_power_backup": MessageLookupByLibrary.simpleMessage(
       "మీ గోదాములో పవర్ బ్యాకప్ ఉందా?",
+    ),
+    "warehouse_published_success": MessageLookupByLibrary.simpleMessage(
+      "మీ గిడ్డంగి విజయవంతంగా ప్రచురించబడింది",
     ),
     "warehouse_type": MessageLookupByLibrary.simpleMessage("గోదాము రకం"),
     "warehouse_types": MessageLookupByLibrary.simpleMessage("గిడ్డంగి రకాలు"),

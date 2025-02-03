@@ -143,21 +143,25 @@ class _AmenitiesWarehouseState extends State<AmenitiesWarehouse> {
           Container(
             color: Colors.blue,
             height: screenHeight * 0.18,
-            padding:  EdgeInsets.only(left: screenWidth*0.07, top: screenHeight*0.08),
+            width: double.infinity,
+            padding:  EdgeInsets.only(left: screenWidth*0.05, top: screenHeight*0.08),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:  [
-                Row(
-                  children: [
-                    InkWell(child: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.white)
-                    ,onTap: ()=>Navigator.pop(context),
-                    ),
-                    SizedBox(width: screenWidth*0.02),
-                     Text(S.of(context).add_warehouse_details, style: const TextStyle(color: Colors.white, fontSize: 12)),
-                  ],
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      InkWell(child: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.white)
+                      ,onTap: ()=>Navigator.pop(context),
+                      ),
+                      SizedBox(width: screenWidth*0.02),
+                       Text(S.of(context).add_warehouse_details, style: const TextStyle(color: Colors.white, fontSize: 12,overflow: TextOverflow.ellipsis)),
+                    ],
+                  ),
                 ),
                 SizedBox(height: screenHeight*0.03),
-                const Text("Warehouse Amenities 3/4", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16)),
+                const Text("Warehouse Amenities 3/4", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14)),
               ],
             ),
           ),

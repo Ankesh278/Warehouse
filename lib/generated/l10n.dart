@@ -1659,6 +1659,351 @@ class S {
       args: [],
     );
   }
+
+  /// `Manage`
+  String get manage {
+    return Intl.message('Manage', name: 'manage', desc: '', args: []);
+  }
+
+  /// `Photos`
+  String get photos {
+    return Intl.message('Photos', name: 'photos', desc: '', args: []);
+  }
+
+  /// `Videos`
+  String get videos {
+    return Intl.message('Videos', name: 'videos', desc: '', args: []);
+  }
+
+  /// `Add Files`
+  String get add_files {
+    return Intl.message('Add Files', name: 'add_files', desc: '', args: []);
+  }
+
+  /// `Pick Images`
+  String get pick_images {
+    return Intl.message('Pick Images', name: 'pick_images', desc: '', args: []);
+  }
+
+  /// `Pick Videos`
+  String get pick_videos {
+    return Intl.message('Pick Videos', name: 'pick_videos', desc: '', args: []);
+  }
+
+  /// `Select Media`
+  String get select_media {
+    return Intl.message(
+      'Select Media',
+      name: 'select_media',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Uploaded Media`
+  String get uploaded_media {
+    return Intl.message(
+      'Uploaded Media',
+      name: 'uploaded_media',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save & Next`
+  String get save_next {
+    return Intl.message('Save & Next', name: 'save_next', desc: '', args: []);
+  }
+
+  /// `Upload Warehouse Image Only`
+  String get upload_warehouse_image {
+    return Intl.message(
+      'Upload Warehouse Image Only',
+      name: 'upload_warehouse_image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please ensure clarity & proper lighting`
+  String get ensure_clarity_lighting {
+    return Intl.message(
+      'Please ensure clarity & proper lighting',
+      name: 'ensure_clarity_lighting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Image Types`
+  String get select_image_types {
+    return Intl.message(
+      'Select Image Types',
+      name: 'select_image_types',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose the type of image you are uploading`
+  String get choose_image_type {
+    return Intl.message(
+      'Choose the type of image you are uploading',
+      name: 'choose_image_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Interior`
+  String get interior {
+    return Intl.message('Interior', name: 'interior', desc: '', args: []);
+  }
+
+  /// `Outer`
+  String get outer {
+    return Intl.message('Outer', name: 'outer', desc: '', args: []);
+  }
+
+  /// `Parking`
+  String get parking {
+    return Intl.message('Parking', name: 'parking', desc: '', args: []);
+  }
+
+  /// `Other`
+  String get other {
+    return Intl.message('Other', name: 'other', desc: '', args: []);
+  }
+
+  /// `Warehouse Amenities`
+  String get warehouse_amenities {
+    return Intl.message(
+      'Warehouse Amenities',
+      name: 'warehouse_amenities',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Congratulations`
+  String get congratulations {
+    return Intl.message(
+      'Congratulations',
+      name: 'congratulations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your warehouse has been published successfully`
+  String get warehouse_published_success {
+    return Intl.message(
+      'Your warehouse has been published successfully',
+      name: 'warehouse_published_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Warehouse Dimensions`
+  String get warehouse_dimensions {
+    return Intl.message(
+      'Warehouse Dimensions',
+      name: 'warehouse_dimensions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `None`
+  String get none {
+    return Intl.message('None', name: 'none', desc: '', args: []);
+  }
+
+  /// `Failed to load image!`
+  String get failed_to_load_image {
+    return Intl.message(
+      'Failed to load image!',
+      name: 'failed_to_load_image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Date`
+  String get select_date {
+    return Intl.message('Select Date', name: 'select_date', desc: '', args: []);
+  }
+
+  /// `Select Time`
+  String get select_time {
+    return Intl.message('Select Time', name: 'select_time', desc: '', args: []);
+  }
+
+  /// `Sorry...`
+  String get sorry {
+    return Intl.message('Sorry...', name: 'sorry', desc: '', args: []);
+  }
+
+  /// `No warehouse near you`
+  String get no_warehouse_near_you {
+    return Intl.message(
+      'No warehouse near you',
+      name: 'no_warehouse_near_you',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type`
+  String get type {
+    return Intl.message('Type', name: 'type', desc: '', args: []);
+  }
+
+  /// `Select a Filter`
+  String get select_filter {
+    return Intl.message(
+      'Select a Filter',
+      name: 'select_filter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Office Space`
+  String get office_space {
+    return Intl.message(
+      'Office Space',
+      name: 'office_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dock Levelers`
+  String get dock_levelers {
+    return Intl.message(
+      'Dock Levelers',
+      name: 'dock_levelers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Power Backup`
+  String get power_backup {
+    return Intl.message(
+      'Power Backup',
+      name: 'power_backup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Flexi Model`
+  String get flexi_model {
+    return Intl.message('Flexi Model', name: 'flexi_model', desc: '', args: []);
+  }
+
+  /// `Rent`
+  String get rent {
+    return Intl.message('Rent', name: 'rent', desc: '', args: []);
+  }
+
+  /// `Available Area`
+  String get available_area {
+    return Intl.message(
+      'Available Area',
+      name: 'available_area',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Address`
+  String get address {
+    return Intl.message('Address', name: 'address', desc: '', args: []);
+  }
+
+  /// `km away from your current location`
+  String get km_away {
+    return Intl.message(
+      'km away from your current location',
+      name: 'km_away',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Electricity`
+  String get electricity {
+    return Intl.message('Electricity', name: 'electricity', desc: '', args: []);
+  }
+
+  /// `Toilets`
+  String get toilets {
+    return Intl.message('Toilets', name: 'toilets', desc: '', args: []);
+  }
+
+  /// `Truck Slots`
+  String get truck_slots {
+    return Intl.message('Truck Slots', name: 'truck_slots', desc: '', args: []);
+  }
+
+  /// `Fans`
+  String get fans {
+    return Intl.message('Fans', name: 'fans', desc: '', args: []);
+  }
+
+  /// `Lights`
+  String get lights {
+    return Intl.message('Lights', name: 'lights', desc: '', args: []);
+  }
+
+  /// `Bike Slot`
+  String get bike_slot {
+    return Intl.message('Bike Slot', name: 'bike_slot', desc: '', args: []);
+  }
+
+  /// `Schedule a Visit`
+  String get schedule_a_visit {
+    return Intl.message(
+      'Schedule a Visit',
+      name: 'schedule_a_visit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get email {
+    return Intl.message('Email', name: 'email', desc: '', args: []);
+  }
+
+  /// `Your warehouse has been added successfully. Our team will connect with you shortly!`
+  String get warehouse_added_success {
+    return Intl.message(
+      'Your warehouse has been added successfully. Our team will connect with you shortly!',
+      name: 'warehouse_added_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue Browsing`
+  String get continue_browsing {
+    return Intl.message(
+      'Continue Browsing',
+      name: 'continue_browsing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ok`
+  String get ok {
+    return Intl.message('Ok', name: 'ok', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -171,7 +171,7 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
           Container(
             color: Colors.blue,
             height: screenHeight * 0.18,
-            padding:  EdgeInsets.only(left: screenWidth*0.07, top: screenHeight*0.08),
+            padding:  EdgeInsets.only(left: screenWidth*0.05, top: screenHeight*0.06),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:  [
@@ -185,7 +185,7 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
                   ],
                 ),
                 SizedBox(height: screenHeight*0.03),
-                 Text(" ${S.of(context).update_warehouse_amenities} 3/4", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16)),
+                 Text(" ${S.of(context).update_warehouse_amenities} 3/4", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14)),
               ],
             ),
           ),

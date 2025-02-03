@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:warehouse/DistanceCalculator.dart';
+import 'package:warehouse/distance_calculator.dart';
 import 'package:warehouse/User/interested_warehouse_details_screen.dart';
 import 'package:warehouse/User/models/ShortListModel.dart';
 import 'package:warehouse/User/models/WarehouseModel.dart';
@@ -16,6 +16,8 @@ import 'package:warehouse/generated/l10n.dart';
 import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
 class userShortlistedIntrested extends StatefulWidget {
+  const userShortlistedIntrested({super.key});
+
   @override
   State<userShortlistedIntrested> createState() => _userShortlistedIntrestedState();
 }
@@ -290,10 +292,6 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
                             ],
                           ),
                         )
-
-
-
-
                       ),
                     ),
                     Expanded(
@@ -311,7 +309,6 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
                           child: SingleChildScrollView(
                             child: Column(
                               children: [
-
                                 if (isShortlisted)
                                   _buildShortlistedContent()
                                 else
@@ -332,13 +329,12 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
     );
   }
 
-  // Function to build the content for Shortlisted section
   Widget _buildShortlistedContent() {
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+   // final screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
-        Container(
+        SizedBox(
           height:  MediaQuery.of(context).size.height * 0.6,
           child: shortlistedWarehouses.isEmpty?Center(
             child: Column(
@@ -406,9 +402,8 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
                                 height: screenHeight*0.16,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
-                                  // Return a default image when an error occurs
                                   return Image.asset(
-                                    ImageAssets.defaultImage, // Path to your default image
+                                    ImageAssets.defaultImage,
                                     width: double.infinity,
                                     height: screenHeight*0.16,
                                     fit: BoxFit.cover,
@@ -425,7 +420,7 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              "Type: ${warehouse.wHouseType}",
+                              "${S.of(context).type}: ${warehouse.wHouseType}",
                               style: const TextStyle(
                                   fontSize: 10, fontWeight: FontWeight.w600),
                             ),
@@ -553,7 +548,7 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              "Type: ${warehouse.wHouseType}",
+                              "${S.of(context).type} ${warehouse.wHouseType}",
                               style: const TextStyle(
                                   fontSize: 10, fontWeight: FontWeight.w600),
                             ),

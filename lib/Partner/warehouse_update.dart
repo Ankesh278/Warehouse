@@ -942,7 +942,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                   InkWell(
                                     child: Container(
                                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                                       child: DottedBorder(
                                         child: Container(
                                           color: Colors.blue,

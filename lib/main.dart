@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -150,7 +151,9 @@ class _MyAppState extends State<MyApp> {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print("Notification clicked: ${message.messageId}");
+      if (kDebugMode) {
+        print("Notification clicked: ${message.messageId}");
+      }
     });
   }
 
@@ -251,8 +254,8 @@ class _MyAppState extends State<MyApp> {
           builder: (context, languageProvider, child) {
             return MaterialApp(
               theme: ThemeData(
-                fontFamily: 'EB Garamond', // Set global font
-                textTheme: TextTheme(
+                fontFamily: 'Mulish',
+                textTheme: const TextTheme(
                   displayLarge: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                   bodyLarge: TextStyle(fontSize: 12),
                 ),
@@ -286,7 +289,6 @@ class _MyAppState extends State<MyApp> {
                     if (snapshot.data == false) {
                       return Center(child: Image.asset(ImageAssets.noInternet));
                     }
-
                     return widget.isUserLoggedIn
                         ? NewHomePage(latitude: widget.latitude, longitude: widget.longitude)
                         : const userlogin();
@@ -298,7 +300,6 @@ class _MyAppState extends State<MyApp> {
         ));
   }
 }
-
 Future<void> _createNotificationChannel() async {
   if (Platform.isAndroid) {
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();

@@ -827,8 +827,8 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Container(
-                                    height: screenHeight * 0.0415,
-                                    width: screenWidth * 0.34,
+                                    height: screenHeight * 0.045,
+                                    width: screenWidth * 0.4,
                                     decoration: BoxDecoration(
                                         border: Border.all(color: Colors.blue),
                                         borderRadius:
@@ -857,8 +857,8 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                   ),
                                   InkWell(
                                     child: Container(
-                                      height: screenHeight * 0.0415,
-                                      width: screenWidth * 0.34,
+                                      height: screenHeight * 0.045,
+                                      width: screenWidth * 0.4,
                                       decoration: BoxDecoration(
                                           color: Colors.blue,
                                           border:

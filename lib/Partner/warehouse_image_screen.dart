@@ -96,11 +96,6 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
         }
         Navigator.push(context, MaterialPageRoute(builder: (context)=>AmenitiesWarehouse(id: id)));
 
-        // Navigator.of(context).pushAndRemoveUntil(
-        //   MaterialPageRoute(builder: (context) =>  AmenitiesWarehouse(Id:id)),
-        //   (Route<dynamic> route) => false,
-        // );
-
         try {
           var responseJson = jsonDecode(responseString);
           String message = responseJson['message'];
@@ -210,7 +205,6 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Column(
         children: [
@@ -263,20 +257,23 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                 const SizedBox(width: 5),
                               ],
                             ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: screenHeight * 0.08, left: 20),
-                              child:  Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    S.of(context).add_additional_details,
-                                    style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.white),
-                                  ),
-                                ],
+                            SingleChildScrollView(
+                             scrollDirection: Axis.horizontal,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    top: screenHeight * 0.08, left: 15),
+                                child:  Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      S.of(context).add_additional_details,
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -325,9 +322,9 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                               Container(
                                   margin:
                                       EdgeInsets.only(right: screenWidth * 0.4),
-                                  child: const Text(
-                                    "Add files",
-                                    style: TextStyle(
+                                  child:  Text(
+                                    S.of(context).add_files,
+                                    style: const TextStyle(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w600),
                                   )),
@@ -349,15 +346,14 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                       );
 
                                       if (result != null && result.isNotEmpty) {
-                                        // Clear the current image list and assign the new picked images
                                         setState(() {
                                           _pickedImages = result;
                                           _photoCount = _pickedImages.length;
                                           totalMedia = _pickedImages.length + _pickedVideos.length;
-                                          _progress = (5.0 * totalMedia); // Update progress
+                                          _progress = (5.0 * totalMedia);
                                         });
                                         if (kDebugMode) {
-                                          print("Selected Images: ${result.length}");
+                                          print("${S.of(context).select_media}: ${result.length}");
                                         }
                                       }
                                     },
@@ -399,8 +395,8 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   _buildCounter(
-                                      'Photos ', _photoCount, "Uploaded Media"),
-                                  _buildCounter('Videos ', _videoCount, ""),
+                                      S.of(context).photos, _photoCount, S.of(context).uploaded_media),
+                                  _buildCounter('${S.of(context).videos} ', _videoCount, ""),
                                 ],
                               ),
                               const SizedBox(height: 16),
@@ -419,11 +415,11 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                           width: screenWidth * 0.47,
                                           margin: EdgeInsets.symmetric(
                                               horizontal: screenWidth * 0.03),
-                                          child: const Center(
+                                          child:  Center(
                                               child: Text(
-                                            "Save & Next",
+                                                S.of(context).save_next,
                                             style:
-                                                TextStyle(color: Colors.white),
+                                                const TextStyle(color: Colors.white),
                                           ))),
                                       onTap: () {
                                         _uploadMedia(context);
@@ -444,9 +440,9 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                       color: Colors.red,
                                     ),
                                   ),
-                                  const Flexible(
+                                   Flexible(
                                     child: Text(
-                                      "Upload Warehouse Image Only and Please Ensure Clarity and Proper Lighting",
+                                      S.of(context).upload_warehouse_image,
                                       maxLines: 2,
                                       overflow: TextOverflow.visible,
                                       style: TextStyle(

@@ -2,7 +2,6 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class DistanceCalculator {
-  // Function to parse latitude and longitude from the "whouse_address" string
   LatLng parseLatLng(String whouseAddress) {
     final regex = RegExp(r'LatLng\(([^,]+), ([^)]+)\)');
     final match = regex.firstMatch(whouseAddress);
@@ -16,13 +15,11 @@ class DistanceCalculator {
     }
   }
 
-  // Function to get the current location
   Future<Position> getCurrentLocation() async {
     return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
   }
 
-  // Function to calculate distance between two locations
   double calculateDistance(LatLng location1, LatLng location2) {
     return Geolocator.distanceBetween(
       location1.latitude,
@@ -39,11 +36,9 @@ class DistanceCalculator {
     LatLng currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
     return calculateDistance(currentLatLng, warehouseLatLng);
   }
-  // Function to get address from latitude and longitude
-
   Future<String> getAddressFromLatLng(String latLngString) async {
     try {
-      LatLng latLng = parseLatLng(latLngString); // Parse the string to get LatLng
+      LatLng latLng = parseLatLng(latLngString);
       List<Placemark> placemarks = await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
 
       if (placemarks.isNotEmpty) {

@@ -1600,7 +1600,7 @@ class AdvancedFiltersBottomSheetState
             padding: const EdgeInsets.only(bottom: 10),
             child: Container(
               height: screenHeight * 0.05,
-              width: screenWidth * 0.553,
+              width: screenWidth * 0.7,
               color: Colors.white,
               child: Padding(
                 padding: EdgeInsets.only(
@@ -1609,7 +1609,7 @@ class AdvancedFiltersBottomSheetState
                   bottom: screenWidth * 0.013,
                 ),
                 child: Container(
-                  width: screenWidth * 0.25,
+                  width: screenWidth * 0.28,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(20),
@@ -1631,7 +1631,7 @@ class AdvancedFiltersBottomSheetState
                         },
                         child: Container(
                           alignment: Alignment.center,
-                          width: screenWidth * 0.22,
+                          width: screenWidth * 0.26,
                           padding: EdgeInsets.symmetric(
                               vertical: screenHeight * 0.005),
                           decoration: BoxDecoration(
@@ -1642,7 +1642,7 @@ class AdvancedFiltersBottomSheetState
                             S.of(context).clear_all,
                             style: TextStyle(
                               color: Colors.grey,
-                              fontSize: screenHeight * 0.015,
+                              fontSize: screenHeight * 0.011,
                             ),
                           ),
                         ),
@@ -1658,7 +1658,7 @@ class AdvancedFiltersBottomSheetState
                         },
                         child: Container(
                           alignment: Alignment.center,
-                          width: screenWidth * 0.25,
+                          width: screenWidth * 0.34,
                           padding: EdgeInsets.symmetric(
                               vertical: screenHeight * 0.005),
                           decoration: BoxDecoration(
@@ -1669,7 +1669,7 @@ class AdvancedFiltersBottomSheetState
                             S.of(context).apply_filters,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: screenHeight * 0.015,
+                              fontSize: screenHeight * 0.011,
                             ),
                           ),
                         ),

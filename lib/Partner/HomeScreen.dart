@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:warehouse/DistanceCalculator.dart';
+import 'package:warehouse/distance_calculator.dart';
 import 'package:warehouse/Partner/add_warehouse.dart';
 import 'package:warehouse/Partner/HelpPage.dart';
 import 'package:warehouse/Partner/MyProfilePage.dart';

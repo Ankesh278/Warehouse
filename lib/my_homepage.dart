@@ -12,11 +12,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-
-  // Function to show the exit confirmation dialog
   Future<bool> _showExitConfirmationDialog(BuildContext context) async {
     bool shouldExit = await showDialog(
-      barrierDismissible: false, // Prevents dismissal by tapping outside
+      barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Exit App"),
@@ -24,13 +22,13 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(false); // Stay in the app
+              Navigator.of(context).pop(false);
             },
             child: const Text("No"),
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(true); // Exit the app
+              Navigator.of(context).pop(true);
             },
             child: const Text("Yes"),
           ),
@@ -38,14 +36,13 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
-    return shouldExit ?? false; // Ensure false is returned if dialog is dismissed
+    return shouldExit ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // Intercept the back button press and show the dialog
         return await _showExitConfirmationDialog(context);
       },
       child: Scaffold(
@@ -172,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               Positioned(
-                top: MediaQuery.of(context).padding.top + 40.0, // Adjust the margin from the top
+                top: MediaQuery.of(context).padding.top + 40.0,
                 left: 0,
                 right: 0,
                   child: Container(
@@ -181,8 +178,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10),bottomLeft: Radius.circular(25),bottomRight: Radius.circular(25)), // Adjust the radius as needed
                       child: Image.asset(
                         "assets/images/demoScreenImage.png",
-                        height: 170, // Adjust the height as needed
-                        fit: BoxFit.cover, // Adjust the fit as needed
+                        height: 170,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   )

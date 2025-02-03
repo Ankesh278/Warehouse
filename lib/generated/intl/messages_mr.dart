@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "add_additional_email": MessageLookupByLibrary.simpleMessage(
       "अतिरिक्त ईमेल पत्ता जोडा",
     ),
+    "add_files": MessageLookupByLibrary.simpleMessage("फायली जोडा"),
     "add_more_photos": MessageLookupByLibrary.simpleMessage("अधिक फोटो जोडा"),
     "add_more_videos": MessageLookupByLibrary.simpleMessage(
       "अधिक व्हिडिओ जोडा",
@@ -42,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "additional_phone_number": MessageLookupByLibrary.simpleMessage(
       "अतिरिक्त फोन नंबर",
     ),
+    "address": MessageLookupByLibrary.simpleMessage("पत्ता"),
     "advanced_filters": MessageLookupByLibrary.simpleMessage("प्रगत फिल्टर्स"),
     "agricultural": MessageLookupByLibrary.simpleMessage("कृषी"),
     "all_topics": MessageLookupByLibrary.simpleMessage("सर्व विषय"),
@@ -53,11 +55,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "area_min_to_max": MessageLookupByLibrary.simpleMessage(
       "क्षेत्रफळ (किमान ते कमाल)",
     ),
+    "available_area": MessageLookupByLibrary.simpleMessage("उपलब्ध क्षेत्र"),
     "became_partner": MessageLookupByLibrary.simpleMessage("भागीदार बना"),
     "bids": MessageLookupByLibrary.simpleMessage("बिड्स"),
     "bike_parking_slots": MessageLookupByLibrary.simpleMessage(
       "बाइक पार्किंग स्लॉट्स",
     ),
+    "bike_slot": MessageLookupByLibrary.simpleMessage("बाईक स्लॉट"),
     "bts": MessageLookupByLibrary.simpleMessage("बीटीएस"),
     "call_for_assistance": MessageLookupByLibrary.simpleMessage(
       "सहाय्यासाठी कॉल करा",
@@ -76,6 +80,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "choose_from_gallery": MessageLookupByLibrary.simpleMessage(
       "गॅलरीमधून निवडा",
     ),
+    "choose_image_type": MessageLookupByLibrary.simpleMessage(
+      "आपण अपलोड करत असलेल्या प्रतिमेचा प्रकार निवडा",
+    ),
     "city": MessageLookupByLibrary.simpleMessage("शहर"),
     "clear_all": MessageLookupByLibrary.simpleMessage("सर्व साफ करा"),
     "close": MessageLookupByLibrary.simpleMessage("बंद करा"),
@@ -83,6 +90,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "coming_soon": MessageLookupByLibrary.simpleMessage("लवकरच येत आहे"),
     "company_name": MessageLookupByLibrary.simpleMessage("कंपनीचे नाव"),
     "complete_kyc": MessageLookupByLibrary.simpleMessage("केवायसी पूर्ण करा"),
+    "congratulations": MessageLookupByLibrary.simpleMessage("अभिनंदन"),
     "connect_with_whatsapp": MessageLookupByLibrary.simpleMessage(
       "व्हॉट्सअॅपशी कनेक्ट करा",
     ),
@@ -95,12 +103,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "construction_types": MessageLookupByLibrary.simpleMessage(
       "बांधकाम प्रकार",
     ),
+    "continue_browsing": MessageLookupByLibrary.simpleMessage(
+      "ब्राउझिंग सुरू ठेवा",
+    ),
     "contracts": MessageLookupByLibrary.simpleMessage("करार"),
     "contracts_documents": MessageLookupByLibrary.simpleMessage(
       "करार कागदपत्रे",
     ),
     "dark_store": MessageLookupByLibrary.simpleMessage("डार्क स्टोअर"),
     "designation": MessageLookupByLibrary.simpleMessage("हुद्दा"),
+    "dock_levelers": MessageLookupByLibrary.simpleMessage("डॉक लेव्हलर्स"),
     "docks_height": MessageLookupByLibrary.simpleMessage("डॉक उंची (फूट)"),
     "done": MessageLookupByLibrary.simpleMessage("पूर्ण"),
     "edit_profile": MessageLookupByLibrary.simpleMessage(
@@ -109,8 +121,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "edit_warehouse_details": MessageLookupByLibrary.simpleMessage(
       "गोदामाची तपशील संपादित करा",
     ),
+    "electricity": MessageLookupByLibrary.simpleMessage("वीज"),
     "electricity_in_kva": MessageLookupByLibrary.simpleMessage("वीज (KVA)"),
+    "email": MessageLookupByLibrary.simpleMessage("ईमेल"),
     "email_notifications": MessageLookupByLibrary.simpleMessage("ईमेल सूचना"),
+    "ensure_clarity_lighting": MessageLookupByLibrary.simpleMessage(
+      "कृपया स्पष्टता आणि योग्य प्रकाश सुनिश्चित करा",
+    ),
     "enter_address": MessageLookupByLibrary.simpleMessage("पत्ता टाका"),
     "express_interest": MessageLookupByLibrary.simpleMessage(
       "स्वारस्य व्यक्त करा",
@@ -119,10 +136,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "कॉलबॅक मिळवण्यासाठी रुचि व्यक्त करा.",
     ),
     "factory": MessageLookupByLibrary.simpleMessage("कारखाना"),
+    "failed_to_load_image": MessageLookupByLibrary.simpleMessage(
+      "प्रतिमा लोड करण्यात अयशस्वी!",
+    ),
+    "fans": MessageLookupByLibrary.simpleMessage("पंखे"),
     "filter": MessageLookupByLibrary.simpleMessage("फिल्टर करा"),
     "fire_noc": MessageLookupByLibrary.simpleMessage(
       "आग NOC: तुमच्या गोदामात आग सुरक्षा आहे का?",
     ),
+    "flexi_model": MessageLookupByLibrary.simpleMessage("फ्लेक्सी मॉडेल"),
     "flexi_model_interest": MessageLookupByLibrary.simpleMessage(
       "तुम्हाला फ्लेक्सी मॉडेलात रुची आहे का?",
     ),
@@ -145,15 +167,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "inner_length": MessageLookupByLibrary.simpleMessage("आंतरंग लांबी (फूट)"),
     "inner_width": MessageLookupByLibrary.simpleMessage("आंतरंग रुंदी (फूट)"),
     "interested": MessageLookupByLibrary.simpleMessage("रुचि आहे"),
+    "interior": MessageLookupByLibrary.simpleMessage("अंतर्गत"),
     "is_base_available_for_rent": MessageLookupByLibrary.simpleMessage(
       "आधार भाड्याने उपलब्ध आहे का?",
     ),
     "is_warehouse_available": MessageLookupByLibrary.simpleMessage(
       "गोदाम उपलब्ध आहे का?",
     ),
+    "km_away": MessageLookupByLibrary.simpleMessage(
+      "तुमच्या सध्याच्या स्थानापासून km दूर",
+    ),
     "larger_collection_of_warehouses": MessageLookupByLibrary.simpleMessage(
       "मोठ्या प्रमाणावर गोदामांचा संग्रह",
     ),
+    "lights": MessageLookupByLibrary.simpleMessage("लाईट्स"),
     "location": MessageLookupByLibrary.simpleMessage("स्थान"),
     "lock_in_period": MessageLookupByLibrary.simpleMessage("लॉक-इन कालावधी"),
     "log_out": MessageLookupByLibrary.simpleMessage("लॉग आऊट"),
@@ -166,6 +193,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "maintenance_cost_per_sqft": MessageLookupByLibrary.simpleMessage(
       "देखभाल खर्च (प्रति चौरस फूट)",
     ),
+    "manage": MessageLookupByLibrary.simpleMessage("व्यवस्थापित करा"),
     "manage_photos": MessageLookupByLibrary.simpleMessage(
       "फोटो व्यवस्थापित करा",
     ),
@@ -196,6 +224,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_shortlisted_warehouses_found": MessageLookupByLibrary.simpleMessage(
       "कोणतीही शॉर्टलिस्ट केलेली गोदामे नाहीत",
     ),
+    "no_warehouse_near_you": MessageLookupByLibrary.simpleMessage(
+      "तुमच्या जवळ कोणतेही गोदाम नाही",
+    ),
+    "none": MessageLookupByLibrary.simpleMessage("काही नाही"),
     "notification_setting": MessageLookupByLibrary.simpleMessage(
       "सूचना सेटिंग",
     ),
@@ -211,15 +243,23 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "num_of_lights": MessageLookupByLibrary.simpleMessage("प्रकाशांची संख्या"),
     "num_of_toilets": MessageLookupByLibrary.simpleMessage("टॉयलेट्सची संख्या"),
+    "office_space": MessageLookupByLibrary.simpleMessage("कार्यालय जागा"),
+    "ok": MessageLookupByLibrary.simpleMessage("ठीक आहे"),
     "open": MessageLookupByLibrary.simpleMessage("उघडा"),
     "open_space": MessageLookupByLibrary.simpleMessage("मोकळे जागा"),
+    "other": MessageLookupByLibrary.simpleMessage("इतर"),
     "others": MessageLookupByLibrary.simpleMessage("इतर"),
+    "outer": MessageLookupByLibrary.simpleMessage("बाह्य"),
     "owner_pan_card": MessageLookupByLibrary.simpleMessage("मालकाचा PAN कार्ड"),
+    "parking": MessageLookupByLibrary.simpleMessage("पार्किंग"),
     "parking_land": MessageLookupByLibrary.simpleMessage("पार्किंग जमीन"),
     "payments": MessageLookupByLibrary.simpleMessage("भरणे"),
     "peb": MessageLookupByLibrary.simpleMessage("पीईबी"),
     "phone_notifications": MessageLookupByLibrary.simpleMessage("फोन सूचना"),
     "phone_number": MessageLookupByLibrary.simpleMessage("फोन नंबर"),
+    "photos": MessageLookupByLibrary.simpleMessage("फोटो"),
+    "pick_images": MessageLookupByLibrary.simpleMessage("प्रतिमा निवडा"),
+    "pick_videos": MessageLookupByLibrary.simpleMessage("व्हिडिओ निवडा"),
     "please_upload_document": MessageLookupByLibrary.simpleMessage(
       "कृपया आपले कागदपत्र अपलोड करा",
     ),
@@ -229,6 +269,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "post_your_property_free": MessageLookupByLibrary.simpleMessage(
       "आपली मालमत्ता फुकट पोस्ट करा",
     ),
+    "power_backup": MessageLookupByLibrary.simpleMessage("पॉवर बॅकअप"),
     "price_max_to_min": MessageLookupByLibrary.simpleMessage(
       "किंमत (कमाल ते किमान)",
     ),
@@ -248,28 +289,39 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "rcc": MessageLookupByLibrary.simpleMessage("आरसीसी"),
     "referral": MessageLookupByLibrary.simpleMessage("संदर्भ"),
+    "rent": MessageLookupByLibrary.simpleMessage("भाडे"),
     "rent_per_sqft": MessageLookupByLibrary.simpleMessage(
       "प्रति चौरस फूट भाडं",
     ),
     "rent_range": MessageLookupByLibrary.simpleMessage("भाड्याचा श्रेणी"),
     "save": MessageLookupByLibrary.simpleMessage("जतन करा"),
+    "save_next": MessageLookupByLibrary.simpleMessage("जतन करा आणि पुढे जा"),
+    "schedule_a_visit": MessageLookupByLibrary.simpleMessage("भेटीची वेळ ठरवा"),
     "seall": MessageLookupByLibrary.simpleMessage("सर्व पहा..."),
     "search_by_location": MessageLookupByLibrary.simpleMessage(
       "स्थानानुसार शोधा",
     ),
     "security_deposit": MessageLookupByLibrary.simpleMessage("सुरक्षा ठेव"),
+    "select_date": MessageLookupByLibrary.simpleMessage("तारीख निवडा"),
     "select_date_of_possession": MessageLookupByLibrary.simpleMessage(
       "मालकी तारीख निवडा",
     ),
+    "select_filter": MessageLookupByLibrary.simpleMessage("फिल्टर निवडा"),
+    "select_image_types": MessageLookupByLibrary.simpleMessage(
+      "प्रतिमा प्रकार निवडा",
+    ),
     "select_location": MessageLookupByLibrary.simpleMessage("स्थान निवडा"),
+    "select_media": MessageLookupByLibrary.simpleMessage("मीडिया निवडा"),
     "select_rent_range": MessageLookupByLibrary.simpleMessage(
       "भाड्याची श्रेणी निवडा",
     ),
+    "select_time": MessageLookupByLibrary.simpleMessage("वेळ निवडा"),
     "selfie_of_owner": MessageLookupByLibrary.simpleMessage("मालकाचा सेल्फी"),
     "shed": MessageLookupByLibrary.simpleMessage("शेड"),
     "shortlisted": MessageLookupByLibrary.simpleMessage("शॉर्टलिस्ट केले"),
     "side_height": MessageLookupByLibrary.simpleMessage("कडेची उंची (फूट)"),
     "skip_for_now": MessageLookupByLibrary.simpleMessage("आत्ता टाळा"),
+    "sorry": MessageLookupByLibrary.simpleMessage("माफ करा..."),
     "sort": MessageLookupByLibrary.simpleMessage("क्रमवारी करा"),
     "start_adding_warehouse": MessageLookupByLibrary.simpleMessage(
       "तुमचे पहिले गोदाम जोडणे सुरू करा",
@@ -285,6 +337,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "terms_and_conditions": MessageLookupByLibrary.simpleMessage(
       "अटी आणि शर्ती",
     ),
+    "toilets": MessageLookupByLibrary.simpleMessage("शौचालये"),
     "token_advance": MessageLookupByLibrary.simpleMessage("टोकन आगाऊ"),
     "total_area": MessageLookupByLibrary.simpleMessage("एकूण क्षेत्रफळ"),
     "transportation": MessageLookupByLibrary.simpleMessage("वाहतूक"),
@@ -292,6 +345,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "truck_parking_slots": MessageLookupByLibrary.simpleMessage(
       "ट्रक पार्किंग स्लॉट्स",
     ),
+    "truck_slots": MessageLookupByLibrary.simpleMessage("ट्रक स्लॉट"),
+    "type": MessageLookupByLibrary.simpleMessage("प्रकार"),
     "update_and_next": MessageLookupByLibrary.simpleMessage(
       "अद्यतन करा आणि पुढे जा",
     ),
@@ -321,15 +376,29 @@ class MessageLookup extends MessageLookupByLibrary {
       "कागदपत्र अपलोड करा",
     ),
     "upload_media": MessageLookupByLibrary.simpleMessage("मीडिया अपलोड करा"),
+    "upload_warehouse_image": MessageLookupByLibrary.simpleMessage(
+      "फक्त गोदामाची प्रतिमा अपलोड करा",
+    ),
+    "uploaded_media": MessageLookupByLibrary.simpleMessage(
+      "अपलोड केलेला मीडिया",
+    ),
     "uploaded_successfully": MessageLookupByLibrary.simpleMessage(
       "यशस्वीरित्या अपलोड झाले",
     ),
     "verified_property_and_owner": MessageLookupByLibrary.simpleMessage(
       "पुष्टीकृत मालमत्ता आणि मालक",
     ),
+    "videos": MessageLookupByLibrary.simpleMessage("व्हिडिओ"),
     "view_less": MessageLookupByLibrary.simpleMessage("कमी पहा"),
     "view_more": MessageLookupByLibrary.simpleMessage("अधिक पहा"),
     "view_request": MessageLookupByLibrary.simpleMessage("विनंती पहा"),
+    "warehouse_added_success": MessageLookupByLibrary.simpleMessage(
+      "तुमचे गोदाम यशस्वीरित्या जोडले गेले आहे. आमची टीम लवकरच तुमच्याशी संपर्क साधेल!",
+    ),
+    "warehouse_amenities": MessageLookupByLibrary.simpleMessage("गोदाम सुविधा"),
+    "warehouse_dimensions": MessageLookupByLibrary.simpleMessage(
+      "गोदामाचे परिमाण",
+    ),
     "warehouse_dock_levelers": MessageLookupByLibrary.simpleMessage(
       "तुमच्या गोदामात डॉक लेव्हलर्स आहेत का?",
     ),
@@ -344,6 +413,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "warehouse_power_backup": MessageLookupByLibrary.simpleMessage(
       "तुमच्या गोदामात वीज बॅकअप आहे का?",
+    ),
+    "warehouse_published_success": MessageLookupByLibrary.simpleMessage(
+      "तुमचे गोदाम यशस्वीरीत्या प्रकाशित झाले आहे",
     ),
     "warehouse_type": MessageLookupByLibrary.simpleMessage("गोदामाचा प्रकार"),
     "warehouse_types": MessageLookupByLibrary.simpleMessage("गोदाम प्रकार"),

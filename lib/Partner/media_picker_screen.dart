@@ -91,7 +91,7 @@ class MediaPickerPageState extends State<MediaPickerPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.isImagePicker ? 'Pick Images' : 'Pick Videos',
+          widget.isImagePicker ? S.of(context).pick_images : S.of(context).pick_videos,
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.blue,
@@ -206,9 +206,9 @@ class MediaPickerPageState extends State<MediaPickerPage> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       elevation: 4,
                     ),
-                    child: const Text(
-                      'Select Media',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    child:  Text(
+                      S.of(context).select_media,
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                 ),
@@ -226,8 +226,8 @@ class MediaPickerPageState extends State<MediaPickerPage> {
       context: context,
       builder: (BuildContext context) {
         return CupertinoActionSheet(
-          title: const Text('Select Image Type', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          message: const Text('Choose the type of image you are uploading'),
+          title:  Text(S.of(context).select_image_types, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          message:  Text(S.of(context).choose_image_type),
           actions: [
             for (String type in ['Interior', 'Outer', 'Side', 'Parking', 'Other'])
               CupertinoActionSheetAction(

@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "add_additional_email": MessageLookupByLibrary.simpleMessage(
       "അധിക ഇമെയിൽ ചേർക്കുക",
     ),
+    "add_files": MessageLookupByLibrary.simpleMessage("ഫയലുകൾ ചേർക്കുക"),
     "add_more_photos": MessageLookupByLibrary.simpleMessage(
       "കൂടുതൽ ഫോട്ടോകൾ ചേർക്കുക",
     ),
@@ -46,6 +47,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "additional_phone_number": MessageLookupByLibrary.simpleMessage(
       "അധിക ഫോൺ നമ്പർ",
     ),
+    "address": MessageLookupByLibrary.simpleMessage("വിലാസം"),
     "advanced_filters": MessageLookupByLibrary.simpleMessage(
       "അഡ്വാൻസ്ഡ് ഫിൽട്ടറുകൾ",
     ),
@@ -61,11 +63,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "area_min_to_max": MessageLookupByLibrary.simpleMessage(
       "പ്രദേശം (കുറഞ്ഞത് മുതൽ കൂടുതലുവരെ)",
     ),
+    "available_area": MessageLookupByLibrary.simpleMessage("ലഭ്യമായ വിസ്തീർണം"),
     "became_partner": MessageLookupByLibrary.simpleMessage("പങ്കാളിയാകുക"),
     "bids": MessageLookupByLibrary.simpleMessage("ബിഡ്"),
     "bike_parking_slots": MessageLookupByLibrary.simpleMessage(
       "ബൈക്ക് പാർക്കിംഗ് സ്ലോട്ടുകൾ",
     ),
+    "bike_slot": MessageLookupByLibrary.simpleMessage("ബൈക്ക് സ്ലോട്ട്"),
     "bts": MessageLookupByLibrary.simpleMessage("BTS"),
     "call_for_assistance": MessageLookupByLibrary.simpleMessage(
       "സഹായത്തിനായി വിളിക്കൂ",
@@ -84,6 +88,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "choose_from_gallery": MessageLookupByLibrary.simpleMessage(
       "ഗാലറിയിൽ നിന്ന് തിരഞ്ഞെടുക്കുക",
     ),
+    "choose_image_type": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങൾ അപ്‌ലോഡ് ചെയ്യുന്ന ചിത്രത്തിന്റെ തരം തിരഞ്ഞെടുക്കുക",
+    ),
     "city": MessageLookupByLibrary.simpleMessage("നഗരം"),
     "clear_all": MessageLookupByLibrary.simpleMessage("എല്ലാം മായ്ക്കുക"),
     "close": MessageLookupByLibrary.simpleMessage("പൂട്ടുക"),
@@ -93,6 +100,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "complete_kyc": MessageLookupByLibrary.simpleMessage(
       "കെവൈസി പൂർത്തിയാക്കുക",
     ),
+    "congratulations": MessageLookupByLibrary.simpleMessage("അഭിനന്ദനങ്ങൾ"),
     "connect_with_whatsapp": MessageLookupByLibrary.simpleMessage(
       "വാട്ട്സാപ്പുമായി ബന്ധിപ്പിക്കുക",
     ),
@@ -101,10 +109,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "construction_type": MessageLookupByLibrary.simpleMessage("നിർമ്മാണം തരം"),
     "construction_types": MessageLookupByLibrary.simpleMessage("നിർമാണ തരം"),
+    "continue_browsing": MessageLookupByLibrary.simpleMessage(
+      "തുടർന്ന് ബ്രൗസ് ചെയ്യുക",
+    ),
     "contracts": MessageLookupByLibrary.simpleMessage("കരാറുകൾ"),
     "contracts_documents": MessageLookupByLibrary.simpleMessage("കരാർ രേഖകൾ"),
     "dark_store": MessageLookupByLibrary.simpleMessage("ഡാർക്ക് സ്റ്റോർ"),
     "designation": MessageLookupByLibrary.simpleMessage("പദവി"),
+    "dock_levelers": MessageLookupByLibrary.simpleMessage("ഡോക്ക് ലെവലറുകൾ"),
     "docks_height": MessageLookupByLibrary.simpleMessage(
       "ഡോക്കുകളുടെ ഉയരം (ഫീറ്റിൽ)",
     ),
@@ -115,11 +127,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "edit_warehouse_details": MessageLookupByLibrary.simpleMessage(
       "ഗോഡാം വിശദാംശങ്ങൾ എഡിറ്റ് ചെയ്യുക",
     ),
+    "electricity": MessageLookupByLibrary.simpleMessage("വൈദ്യുതി"),
     "electricity_in_kva": MessageLookupByLibrary.simpleMessage(
       "വിദ്യുതി (KVA)",
     ),
+    "email": MessageLookupByLibrary.simpleMessage("ഇമെയിൽ"),
     "email_notifications": MessageLookupByLibrary.simpleMessage(
       "ഇമെയിൽ അറിയിപ്പുകൾ",
+    ),
+    "ensure_clarity_lighting": MessageLookupByLibrary.simpleMessage(
+      "ദയവായി വ്യക്തത & ശരിയായ വെളിച്ചം ഉറപ്പാക്കുക",
     ),
     "enter_address": MessageLookupByLibrary.simpleMessage("വിലാസം നൽകുക"),
     "express_interest": MessageLookupByLibrary.simpleMessage(
@@ -129,10 +146,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "കാൾ ബാക്ക് ലഭിക്കാൻ ആസ്വദിച്ചിരിക്കുക.",
     ),
     "factory": MessageLookupByLibrary.simpleMessage("ഫാക്ടറി"),
+    "failed_to_load_image": MessageLookupByLibrary.simpleMessage(
+      "ചിത്രം ലോഡുചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു!",
+    ),
+    "fans": MessageLookupByLibrary.simpleMessage("ഫാനുകൾ"),
     "filter": MessageLookupByLibrary.simpleMessage("ഫിൽറ്റർ"),
     "fire_noc": MessageLookupByLibrary.simpleMessage(
       "ഫയർ NOC: നിങ്ങളുടെ ഗോഡാം ഫയർ സുരക്ഷിതമാണോ?",
     ),
+    "flexi_model": MessageLookupByLibrary.simpleMessage("ഫ്ലെക്സി മോഡൽ"),
     "flexi_model_interest": MessageLookupByLibrary.simpleMessage(
       "നിങ്ങൾ ഫ്ലെക്സി മോഡൽ വേണ്ടോ?",
     ),
@@ -159,15 +181,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "അന്തരീക്ഷ വീതം (ഫീറ്റിൽ)",
     ),
     "interested": MessageLookupByLibrary.simpleMessage("ആസ്വദിക്കുന്നു"),
+    "interior": MessageLookupByLibrary.simpleMessage("ആന്തരികം"),
     "is_base_available_for_rent": MessageLookupByLibrary.simpleMessage(
       "ബേസ് വാടകയ്ക്ക് ലഭ്യമാണ് എങ്കിൽ?",
     ),
     "is_warehouse_available": MessageLookupByLibrary.simpleMessage(
       "ഗോഡാം ലഭ്യമാണ് എന്നോ?",
     ),
+    "km_away": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങളുടെ നിലവിലെ സ്ഥലത്തിൽ നിന്ന് km അകലെ",
+    ),
     "larger_collection_of_warehouses": MessageLookupByLibrary.simpleMessage(
       "വളരെ വലിപ്പമുള്ള ഗോദാമുകളുടെ ശേഖരം",
     ),
+    "lights": MessageLookupByLibrary.simpleMessage("ലൈറ്റുകൾ"),
     "location": MessageLookupByLibrary.simpleMessage("സ്ഥലം"),
     "lock_in_period": MessageLookupByLibrary.simpleMessage("ലോക്ക് ഇൻ കാലയളവ്"),
     "log_out": MessageLookupByLibrary.simpleMessage("ലോഗ് ഔട്ട്"),
@@ -180,6 +207,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "maintenance_cost_per_sqft": MessageLookupByLibrary.simpleMessage(
       "പാലനച്ചിലവ് (പ്രതി സ്ക്വയർഫീറ്റ്)",
     ),
+    "manage": MessageLookupByLibrary.simpleMessage("നിരവധി ചെയ്യുക"),
     "manage_photos": MessageLookupByLibrary.simpleMessage(
       "ഫോട്ടോകൾ മാനേജുചെയ്യുക",
     ),
@@ -212,6 +240,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_shortlisted_warehouses_found": MessageLookupByLibrary.simpleMessage(
       "ഷോർട്ട്ലിസ്റ്റ് ചെയ്ത ഗോദാമുകൾ കണ്ടെത്തിയില്ല",
     ),
+    "no_warehouse_near_you": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങളുടെ അടുത്തുള്ള വെയർഹൗസ് ഇല്ല",
+    ),
+    "none": MessageLookupByLibrary.simpleMessage("ഒന്നുമില്ല"),
     "notification_setting": MessageLookupByLibrary.simpleMessage(
       "അറിയിപ്പ് ക്രമീകരണം",
     ),
@@ -233,10 +265,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "num_of_toilets": MessageLookupByLibrary.simpleMessage(
       "ശൗചാലയങ്ങളുടെ എണ്ണം",
     ),
+    "office_space": MessageLookupByLibrary.simpleMessage("ഓഫീസ് സ്ഥലം"),
+    "ok": MessageLookupByLibrary.simpleMessage("ശരി"),
     "open": MessageLookupByLibrary.simpleMessage("തുറക്കുക"),
     "open_space": MessageLookupByLibrary.simpleMessage("തുറന്ന സ്ഥലത്ത്"),
+    "other": MessageLookupByLibrary.simpleMessage("മറ്റുള്ളവ"),
     "others": MessageLookupByLibrary.simpleMessage("മറ്റുള്ളവ"),
+    "outer": MessageLookupByLibrary.simpleMessage("ബാഹ്യ"),
     "owner_pan_card": MessageLookupByLibrary.simpleMessage("ഉടമയുടെ PAN കാർഡ്"),
+    "parking": MessageLookupByLibrary.simpleMessage("പാർക്കിംഗ്"),
     "parking_land": MessageLookupByLibrary.simpleMessage("പാർക്കിംഗ് ഭൂമി"),
     "payments": MessageLookupByLibrary.simpleMessage("പണം"),
     "peb": MessageLookupByLibrary.simpleMessage("PEB"),
@@ -244,6 +281,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "ഫോൺ അറിയിപ്പുകൾ",
     ),
     "phone_number": MessageLookupByLibrary.simpleMessage("ഫോൺ നമ്പർ"),
+    "photos": MessageLookupByLibrary.simpleMessage("ഫോട്ടോകൾ"),
+    "pick_images": MessageLookupByLibrary.simpleMessage(
+      "ഇമേജുകൾ തിരഞ്ഞെടുക്കുക",
+    ),
+    "pick_videos": MessageLookupByLibrary.simpleMessage(
+      "വീഡിയോകൾ തിരഞ്ഞെടുക്കുക",
+    ),
     "please_upload_document": MessageLookupByLibrary.simpleMessage(
       "ദയവായി നിങ്ങളുടെ ഡോക്യുമെന്റ് അപ്ലോഡ് ചെയ്യുക",
     ),
@@ -253,6 +297,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "post_your_property_free": MessageLookupByLibrary.simpleMessage(
       "നിങ്ങളുടെ പ്രോപ്പർട്ടി സൗജന്യമായി പോസ്റ്റ് ചെയ്യുക",
     ),
+    "power_backup": MessageLookupByLibrary.simpleMessage("പവർ ബാക്കപ്പ്"),
     "price_max_to_min": MessageLookupByLibrary.simpleMessage(
       "വില (കൂടുതൽ മുതൽ കുറവുവരെ)",
     ),
@@ -274,25 +319,41 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "rcc": MessageLookupByLibrary.simpleMessage("RCC"),
     "referral": MessageLookupByLibrary.simpleMessage("റഫറൽ"),
+    "rent": MessageLookupByLibrary.simpleMessage("കൂലി"),
     "rent_per_sqft": MessageLookupByLibrary.simpleMessage(
       "പ്രതി സ്ക്വയർഫീറ്റ് വാടക",
     ),
     "rent_range": MessageLookupByLibrary.simpleMessage("വാടക പരിധി"),
     "save": MessageLookupByLibrary.simpleMessage("സേവ് ചെയ്യുക"),
+    "save_next": MessageLookupByLibrary.simpleMessage("സേവ് & അടുത്തത്"),
+    "schedule_a_visit": MessageLookupByLibrary.simpleMessage(
+      "ഒരു സന്ദർശനം പ്ലാൻ ചെയ്യുക",
+    ),
     "seall": MessageLookupByLibrary.simpleMessage("എല്ലാം കാണുക..."),
     "search_by_location": MessageLookupByLibrary.simpleMessage(
       "സ്ഥാനം അനുസരിച്ച് തിരയുക",
     ),
     "security_deposit": MessageLookupByLibrary.simpleMessage("സുരക്ഷാ തുക"),
+    "select_date": MessageLookupByLibrary.simpleMessage("തിയതി തിരഞ്ഞെടുക്കുക"),
     "select_date_of_possession": MessageLookupByLibrary.simpleMessage(
       "സ്വത്തവകാശ തീയതി തിരഞ്ഞെടുക്കുക",
+    ),
+    "select_filter": MessageLookupByLibrary.simpleMessage(
+      "ഫിൽട്ടർ തിരഞ്ഞെടുക്കുക",
+    ),
+    "select_image_types": MessageLookupByLibrary.simpleMessage(
+      "ചിത്ര തരങ്ങൾ തിരഞ്ഞെടുക്കുക",
     ),
     "select_location": MessageLookupByLibrary.simpleMessage(
       "സ്ഥലം തിരഞ്ഞെടുക്കുക",
     ),
+    "select_media": MessageLookupByLibrary.simpleMessage(
+      "മീഡിയ തിരഞ്ഞെടുക്കുക",
+    ),
     "select_rent_range": MessageLookupByLibrary.simpleMessage(
       "വാടക പരിധി തിരഞ്ഞെടുക്കുക",
     ),
+    "select_time": MessageLookupByLibrary.simpleMessage("സമയം തിരഞ്ഞെടുക്കുക"),
     "selfie_of_owner": MessageLookupByLibrary.simpleMessage("ഉടമയുടെ സെൽഫി"),
     "shed": MessageLookupByLibrary.simpleMessage("ഷെഡ്"),
     "shortlisted": MessageLookupByLibrary.simpleMessage(
@@ -300,6 +361,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "side_height": MessageLookupByLibrary.simpleMessage("പങ്ക് ഉയരം (ഫീറ്റിൽ)"),
     "skip_for_now": MessageLookupByLibrary.simpleMessage("ഇപ്പോൾ ഒഴിവാക്കുക"),
+    "sorry": MessageLookupByLibrary.simpleMessage("ക്ഷമിക്കണം..."),
     "sort": MessageLookupByLibrary.simpleMessage("വരிசി"),
     "start_adding_warehouse": MessageLookupByLibrary.simpleMessage(
       "നിങ്ങളുടെ ആദ്യ ഗോഡൗൺ ചേർക്കാൻ ആരംഭിക്കുക",
@@ -315,6 +377,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "terms_and_conditions": MessageLookupByLibrary.simpleMessage(
       "നിബന്ധനകളും വ്യവസ്ഥകളും",
     ),
+    "toilets": MessageLookupByLibrary.simpleMessage("ശൗചാലയങ്ങൾ"),
     "token_advance": MessageLookupByLibrary.simpleMessage("ടോകൺ അഡ്വാൻസ്"),
     "total_area": MessageLookupByLibrary.simpleMessage("മൊത്തം പ്രദേശം"),
     "transportation": MessageLookupByLibrary.simpleMessage("ഗതാഗതം"),
@@ -324,6 +387,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "truck_parking_slots": MessageLookupByLibrary.simpleMessage(
       "ട്രക്ക് പാർക്കിംഗ് സ്ലോട്ടുകൾ",
     ),
+    "truck_slots": MessageLookupByLibrary.simpleMessage("ട്രക്ക് സ്ലോട്ടുകൾ"),
+    "type": MessageLookupByLibrary.simpleMessage("തരം"),
     "update_and_next": MessageLookupByLibrary.simpleMessage(
       "അപ്ഡേറ്റ് ചെയ്ത് അടുത്ത് പോവുക",
     ),
@@ -355,15 +420,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload_media": MessageLookupByLibrary.simpleMessage(
       "മീഡിയ അപ്ലോഡ് ചെയ്യുക",
     ),
+    "upload_warehouse_image": MessageLookupByLibrary.simpleMessage(
+      "വെയർഹൗസ് ചിത്രം മാത്രം അപ്‌ലോഡ് ചെയ്യുക",
+    ),
+    "uploaded_media": MessageLookupByLibrary.simpleMessage(
+      "അപ്‌ലോഡ് ചെയ്ത മീഡിയ",
+    ),
     "uploaded_successfully": MessageLookupByLibrary.simpleMessage(
       "വിജയകരമായി അപ്ലോഡ് ചെയ്തു",
     ),
     "verified_property_and_owner": MessageLookupByLibrary.simpleMessage(
       "പരിശോധിത പ്രോപ്പർട്ടി ಮತ್ತು ഉടമ",
     ),
+    "videos": MessageLookupByLibrary.simpleMessage("വീഡിയോകൾ"),
     "view_less": MessageLookupByLibrary.simpleMessage("കുറവ് കാണിക്കുക"),
     "view_more": MessageLookupByLibrary.simpleMessage("കൂടുതൽ കാണുക"),
     "view_request": MessageLookupByLibrary.simpleMessage("അനുരോധം കാണുക"),
+    "warehouse_added_success": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങളുടെ വെയർഹൗസ് വിജയകരമായി ചേർത്തു. ഞങ്ങളുടെ ടീം ഉടൻ നിങ്ങളുമായി ബന്ധപ്പെടും!",
+    ),
+    "warehouse_amenities": MessageLookupByLibrary.simpleMessage(
+      "വെയർഹൗസ് സൗകര്യങ്ങൾ",
+    ),
+    "warehouse_dimensions": MessageLookupByLibrary.simpleMessage(
+      "വെയർഹൗസ് അളവുകൾ",
+    ),
     "warehouse_dock_levelers": MessageLookupByLibrary.simpleMessage(
       "നിങ്ങളുടെ ഗോഡാമിൽ ഡോക്ക് ലെവലേഴ്സ് ഉണ്ടോ?",
     ),
@@ -376,6 +457,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "warehouse_power_backup": MessageLookupByLibrary.simpleMessage(
       "നിങ്ങളുടെ ഗോഡാമിന് പവർ ബാക്കപ്പ് ഉണ്ടോ?",
+    ),
+    "warehouse_published_success": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങളുടെ വെയർഹൗസ് വിജയകരമായി പ്രസിദ്ധീകരിച്ചു",
     ),
     "warehouse_type": MessageLookupByLibrary.simpleMessage("ഗോഡാം തരം"),
     "warehouse_types": MessageLookupByLibrary.simpleMessage("ഗോഡൗൺ തരം"),

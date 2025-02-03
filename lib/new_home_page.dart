@@ -488,11 +488,12 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                           ],
                         ),
                         SizedBox(height: screenHeight*0.025,),
+                        ///Warehouse Slider
                         Row(
                           children: [
                             SizedBox(
                               height: screenHeight * 0.18,
-                              width: screenWidth*0.8,
+                              width: screenWidth*0.9,
                               child: Stack(
                                 children: [
                                   PageView.builder(
@@ -556,18 +557,36 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                 ],
                               ),
                             ),
-                            SizedBox(width: screenWidth*0.005,),
-                            InkWell(
-                                onTap:()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>UserHomePage(longitude:widget.longitude,latitude:widget.latitude))) ,
-                                child: Text(S.of(context).seall,style: const TextStyle(color: Colors.blue,fontSize: 8),)),
+                            // SizedBox(width: screenWidth*0.004,),
+                            // InkWell(
+                            //   onTap: () => Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //       builder: (context) => UserHomePage(
+                            //         longitude: widget.longitude,
+                            //         latitude: widget.latitude,
+                            //       ),
+                            //     ),
+                            //   ),
+                            //   child: FittedBox(
+                            //     fit: BoxFit.scaleDown,
+                            //     child: Text(
+                            //       S.of(context).seall,
+                            //       style: const TextStyle(color: Colors.blue, fontSize: 8),
+                            //     ),
+                            //   ),
+                            // )
+
+
                           ],
                         ),
                         SizedBox(height: screenHeight*0.017,),
+                        ///Transportation Slider
                          Row(
                           children: [
                             SizedBox(
                               height: screenHeight*0.18,
-                              width: screenWidth*0.8,
+                              width: screenWidth*0.9,
                               child: Stack(
                                 children: [
                                   PageView.builder(
@@ -633,11 +652,10 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                 ],
                               ),
                             ),
-                            SizedBox(width: screenWidth*0.005,),
-                            Text(S.of(context).seall,style: const TextStyle(color: Colors.blue,fontSize: 8),),
                           ],
                         ),
                         SizedBox(height: screenHeight*0.02,),
+                        ///Horizontal Slider
                         Padding(
                           padding:  EdgeInsets.only(right: screenWidth*0.003),
                           child: Center(
@@ -712,11 +730,12 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                           ),
                         ),
                         SizedBox(height: screenHeight*0.02,),
+                        ///Agricultural Slider
                         Row(
                           children: [
                             SizedBox(
                               height: screenHeight*0.18,
-                              width: screenWidth*0.8,
+                              width: screenWidth*0.9,
                               child: Stack(
                                 children: [
                                   PageView.builder(
@@ -783,16 +802,15 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                 ],
                               ),
                             ),
-                            SizedBox(width: screenWidth*0.01,),
-                            Text(S.of(context).seall,style: const TextStyle(color: Colors.blue,fontSize: 8),),
                           ],
                         ),
                         SizedBox(height: screenHeight*0.02,),
+                        ///Manpower Slider
                         Row(
                           children: [
                             SizedBox(
                               height: screenHeight*0.18,
-                              width: screenWidth*0.8,
+                              width: screenWidth*0.9,
                               child: Stack(
                                 children: [
                                   PageView.builder(
@@ -859,16 +877,15 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                 ],
                               ),
                             ),
-                            SizedBox(width: screenWidth*0.01,),
-                            Text(S.of(context).seall,style: const TextStyle(color: Colors.blue,fontSize: 8),),
                           ],
                         ),
                         SizedBox(height: screenHeight*0.02,),
+                        ///Advertising Slider
                         Row(
                           children: [
                             SizedBox(
-                              height: screenHeight*0.18, // Adjust to the height you want
-                              width: screenWidth*0.8,
+                              height: screenHeight*0.18,
+                              width: screenWidth*0.9,
                               child: Stack(
                                 children: [
                                   PageView.builder(
@@ -892,7 +909,6 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                           placeholder: (context, url) => Shimmer(
                                             child: Container(
                                               width: double.infinity,
-                                              height: 250, // Adjust height as needed
                                               decoration: BoxDecoration(
                                                 color: Colors.grey,
                                                 borderRadius: BorderRadius.circular(6),
@@ -936,8 +952,6 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                 ],
                               ),
                             ),
-                            SizedBox(width: screenWidth*0.01,),
-                            Text(S.of(context).seall,style: const TextStyle(color: Colors.blue,fontSize: 8),),
                           ],
                         )
                       ],
