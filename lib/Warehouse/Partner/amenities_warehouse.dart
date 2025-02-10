@@ -1,6 +1,6 @@
+import 'package:Lisofy/Warehouse/Partner/warehouse_dimension.dart';
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:warehouse/Warehouse/Partner/warehouse_dimension.dart';
-import 'package:warehouse/generated/l10n.dart';
 class AmenitiesWarehouse extends StatefulWidget {
   final int id;
   const AmenitiesWarehouse({super.key, required this.id});

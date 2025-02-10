@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:Lisofy/Warehouse/Partner/amenities_warehouse.dart';
+import 'package:Lisofy/Warehouse/Partner/media_picker_screen.dart';
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,9 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:warehouse/Warehouse/Partner/amenities_warehouse.dart';
-import 'package:warehouse/Warehouse/Partner/media_picker_screen.dart';
-import 'package:warehouse/generated/l10n.dart';
+
 
 
 class WarehouseImageScreen extends StatefulWidget {

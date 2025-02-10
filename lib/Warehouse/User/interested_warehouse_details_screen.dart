@@ -1,15 +1,20 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:Lisofy/Warehouse/User/UserProvider/InterestProvider.dart';
+import 'package:Lisofy/Warehouse/User/warehouse_details.dart';
+import 'package:Lisofy/distance_calculator.dart';
+import 'package:Lisofy/generated/l10n.dart';
+import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:warehouse/Warehouse/User/UserProvider/InterestProvider.dart';
-import 'package:warehouse/Warehouse/User/warehouse_details.dart';
-import 'package:warehouse/distance_calculator.dart';
-import 'package:warehouse/generated/l10n.dart';
-import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
+// import 'package:warehouse/Warehouse/User/UserProvider/InterestProvider.dart';
+// import 'package:warehouse/Warehouse/User/warehouse_details.dart';
+// import 'package:warehouse/distance_calculator.dart';
+// import 'package:warehouse/generated/l10n.dart';
+// import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
 class InterestedWarehouseDetailsScreen extends StatefulWidget {
   final  warehouses;

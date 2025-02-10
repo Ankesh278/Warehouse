@@ -1,4 +1,11 @@
 import 'dart:convert';
+import 'package:Lisofy/Warehouse/Partner/HelpPage.dart';
+import 'package:Lisofy/Warehouse/Partner/HomeScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/MapScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/Provider/location_provider.dart';
+import 'package:Lisofy/Warehouse/Partner/models/warehouses_model.dart';
+import 'package:Lisofy/Warehouse/Partner/warehouse_media_update.dart';
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,13 +14,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:warehouse/Warehouse/Partner/HelpPage.dart';
-import 'package:warehouse/Warehouse/Partner/HomeScreen.dart';
-import 'package:warehouse/Warehouse/Partner/MapScreen.dart';
-import 'package:warehouse/Warehouse/Partner/Provider/location_provider.dart';
-import 'package:warehouse/Warehouse/Partner/models/warehouses_model.dart';
-import 'package:warehouse/Warehouse/Partner/warehouse_media_update.dart';
-import 'package:warehouse/generated/l10n.dart';
+
 
 class Warehouseupdate extends StatefulWidget {
   final Warehouse warehouse;

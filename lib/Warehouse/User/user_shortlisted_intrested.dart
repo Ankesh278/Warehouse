@@ -1,16 +1,22 @@
 import 'dart:convert';
+import 'package:Lisofy/Warehouse/User/interested_warehouse_details_screen.dart';
+import 'package:Lisofy/Warehouse/User/models/ShortListModel.dart';
+import 'package:Lisofy/Warehouse/User/models/interestedDataModel.dart';
+import 'package:Lisofy/distance_calculator.dart';
+import 'package:Lisofy/generated/l10n.dart';
+import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:warehouse/Warehouse/User/interested_warehouse_details_screen.dart';
-import 'package:warehouse/Warehouse/User/models/ShortListModel.dart';
-import 'package:warehouse/Warehouse/User/models/interestedDataModel.dart';
-import 'package:warehouse/distance_calculator.dart';
+// import 'package:warehouse/Warehouse/User/interested_warehouse_details_screen.dart';
+// import 'package:warehouse/Warehouse/User/models/ShortListModel.dart';
+// import 'package:warehouse/Warehouse/User/models/interestedDataModel.dart';
+// import 'package:warehouse/distance_calculator.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:warehouse/generated/l10n.dart';
-import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
+// import 'package:warehouse/generated/l10n.dart';
+// import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
 class userShortlistedIntrested extends StatefulWidget {
   const userShortlistedIntrested({super.key});
@@ -525,9 +531,8 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
                                 height: screenHeight*0.16,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
-                                  // Return a default image when an error occurs
                                   return Image.asset(
-                                    ImageAssets.defaultImage, // Path to your default image
+                                    ImageAssets.defaultImage,
                                     width: double.infinity,
                                     height: screenHeight*0.16,
                                     fit: BoxFit.cover,

@@ -1,8 +1,9 @@
 
+import 'package:Lisofy/Warehouse/Partner/HomeScreen.dart';
+import 'package:Lisofy/generated/l10n.dart';
+import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter/material.dart';
-import 'package:warehouse/Warehouse/Partner/HomeScreen.dart';
-import 'package:warehouse/generated/l10n.dart';
-import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
+
 
 class PartnerChooserScreen extends StatefulWidget {
   const PartnerChooserScreen({super.key});

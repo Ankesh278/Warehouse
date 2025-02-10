@@ -1,15 +1,21 @@
 import 'dart:async';
+import 'package:Lisofy/Animation/glitter_border.dart';
+import 'package:Lisofy/Warehouse/User/partner_chooser_screen.dart';
+import 'package:Lisofy/Warehouse/User/user_home_page.dart';
+import 'package:Lisofy/Warehouse/User/user_profile_screen.dart';
+import 'package:Lisofy/generated/l10n.dart';
+import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-import 'package:warehouse/Animation/glitter_border.dart';
-import 'package:warehouse/Transportation/User/choose_app_language.dart';
-import 'package:warehouse/Warehouse/User/partner_chooser_screen.dart';
-import 'package:warehouse/Warehouse/User/user_home_page.dart';
-import 'package:warehouse/Warehouse/User/user_profile_screen.dart';
-import 'package:warehouse/generated/l10n.dart';
-import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
+// import 'package:warehouse/Animation/glitter_border.dart';
+// import 'package:warehouse/Transportation/User/choose_app_language.dart';
+// import 'package:warehouse/Warehouse/User/partner_chooser_screen.dart';
+// import 'package:warehouse/Warehouse/User/user_home_page.dart';
+// import 'package:warehouse/Warehouse/User/user_profile_screen.dart';
+// import 'package:warehouse/generated/l10n.dart';
+// import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 class NewHomePage extends StatefulWidget {
   final  longitude;
   final latitude;

@@ -1,13 +1,12 @@
 import 'dart:async';
+import 'package:Lisofy/Warehouse/Partner/partnerRegistrationScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
-import 'package:warehouse/Warehouse/Partner/partnerRegistrationScreen.dart'; // For handling JSON responses
 
 class VerifyOtpScreen extends StatefulWidget {
   final String verificationId; // This will be passed from _submitForm

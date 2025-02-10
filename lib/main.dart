@@ -1,4 +1,21 @@
 import 'dart:io';
+import 'package:Lisofy/Connectivity/network_service.dart';
+import 'package:Lisofy/Localization/languages.dart';
+import 'package:Lisofy/Warehouse/Partner/Provider/auth_provider.dart';
+import 'package:Lisofy/Warehouse/Partner/Provider/location_provider.dart';
+import 'package:Lisofy/Warehouse/Partner/Provider/warehouse_provider.dart';
+import 'package:Lisofy/Warehouse/User/NotificationSetting.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/DocumentProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/FilterProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/InterestProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/auth_user_provider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/photoProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/rating_provider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/sortingProvider.dart';
+import 'package:Lisofy/Warehouse/User/userlogin.dart';
+import 'package:Lisofy/generated/l10n.dart';
+import 'package:Lisofy/new_home_page.dart';
+import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -9,23 +26,23 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
-import 'package:warehouse/Connectivity/network_service.dart';
-import 'package:warehouse/Localization/languages.dart';
-import 'package:warehouse/Warehouse/Partner/Provider/auth_provider.dart';
-import 'package:warehouse/Warehouse/Partner/Provider/location_provider.dart';
-import 'package:warehouse/Warehouse/Partner/Provider/warehouse_provider.dart';
-import 'package:warehouse/Warehouse/User/NotificationSetting.dart';
-import 'package:warehouse/Warehouse/User/UserProvider/DocumentProvider.dart';
-import 'package:warehouse/Warehouse/User/UserProvider/FilterProvider.dart';
-import 'package:warehouse/Warehouse/User/UserProvider/InterestProvider.dart';
-import 'package:warehouse/Warehouse/User/UserProvider/auth_user_provider.dart';
-import 'package:warehouse/Warehouse/User/UserProvider/photoProvider.dart';
-import 'package:warehouse/Warehouse/User/UserProvider/rating_provider.dart';
-import 'package:warehouse/Warehouse/User/UserProvider/sortingProvider.dart';
-import 'package:warehouse/Warehouse/User/userlogin.dart';
-import 'package:warehouse/generated/l10n.dart';
-import 'package:warehouse/new_home_page.dart';
-import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
+// import 'package:warehouse/Connectivity/network_service.dart';
+// import 'package:warehouse/Localization/languages.dart';
+// import 'package:warehouse/Warehouse/Partner/Provider/auth_provider.dart';
+// import 'package:warehouse/Warehouse/Partner/Provider/location_provider.dart';
+// import 'package:warehouse/Warehouse/Partner/Provider/warehouse_provider.dart';
+// import 'package:warehouse/Warehouse/User/NotificationSetting.dart';
+// import 'package:warehouse/Warehouse/User/UserProvider/DocumentProvider.dart';
+// import 'package:warehouse/Warehouse/User/UserProvider/FilterProvider.dart';
+// import 'package:warehouse/Warehouse/User/UserProvider/InterestProvider.dart';
+// import 'package:warehouse/Warehouse/User/UserProvider/auth_user_provider.dart';
+// import 'package:warehouse/Warehouse/User/UserProvider/photoProvider.dart';
+// import 'package:warehouse/Warehouse/User/UserProvider/rating_provider.dart';
+// import 'package:warehouse/Warehouse/User/UserProvider/sortingProvider.dart';
+// import 'package:warehouse/Warehouse/User/userlogin.dart';
+// import 'package:warehouse/generated/l10n.dart';
+// import 'package:warehouse/new_home_page.dart';
+// import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -59,14 +76,12 @@ void main() async {
 
   // Lock the app in portrait mode
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
   bool isUserLoggedIn = prefs.getBool('isUserLoggedIn') ?? false;
   String name = prefs.getString('name') ?? '';
   double latitude = prefs.getDouble('latitude') ?? 0.00;
   double longitude = prefs.getDouble('longitude') ?? 0.00;
-
   runApp(
     MultiProvider(
       providers: [
@@ -126,7 +141,7 @@ class _MyAppState extends State<MyApp> {
 
     FirebaseMessaging.instance.getToken().then((token) {
       if (kDebugMode) {
-        print("FCM Token: $token");
+        print("FCM Token:  $token");
       }
     });
 

@@ -1,7 +1,8 @@
+import 'package:Lisofy/Warehouse/Partner/UpdateWarehouseDimensions.dart';
+import 'package:Lisofy/Warehouse/Partner/models/warehouses_model.dart';
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:warehouse/Warehouse/Partner/UpdateWarehouseDimensions.dart';
-import 'package:warehouse/Warehouse/Partner/models/warehouses_model.dart';
-import 'package:warehouse/generated/l10n.dart';
+
 class AmenitiesUpdate extends StatefulWidget {
   final Warehouse warehouse;
   const AmenitiesUpdate({super.key, required this.warehouse});

@@ -1,5 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:Lisofy/Warehouse/Partner/partnerRegistrationScreen.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/photoProvider.dart';
+import 'package:Lisofy/Warehouse/User/getuserlocation.dart';
+import 'package:Lisofy/Warehouse/User/models/user_data_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +11,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:warehouse/Warehouse/Partner/partnerRegistrationScreen.dart';
-import 'package:warehouse/Warehouse/User/UserProvider/photoProvider.dart';
-import 'package:warehouse/Warehouse/User/getuserlocation.dart';
-import 'package:warehouse/Warehouse/User/models/user_data_model.dart';
+
 
 class UserVerifyOtp extends StatefulWidget {
   final String verificationId;

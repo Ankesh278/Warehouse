@@ -1,3 +1,12 @@
+import 'package:Lisofy/Warehouse/Partner/HelpPage.dart';
+import 'package:Lisofy/Warehouse/Partner/MyProfilePage.dart';
+import 'package:Lisofy/Warehouse/Partner/NotificationScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/Provider/warehouse_provider.dart';
+import 'package:Lisofy/Warehouse/Partner/add_warehouse.dart';
+import 'package:Lisofy/Warehouse/Partner/models/warehouses_model.dart';
+import 'package:Lisofy/Warehouse/Partner/warehouse_update.dart';
+import 'package:Lisofy/distance_calculator.dart';
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,14 +14,14 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:warehouse/Warehouse/Partner/HelpPage.dart';
-import 'package:warehouse/Warehouse/Partner/MyProfilePage.dart';
-import 'package:warehouse/Warehouse/Partner/NotificationScreen.dart';
-import 'package:warehouse/Warehouse/Partner/Provider/warehouse_provider.dart';
-import 'package:warehouse/Warehouse/Partner/add_warehouse.dart';
-import 'package:warehouse/Warehouse/Partner/models/warehouses_model.dart';
-import 'package:warehouse/Warehouse/Partner/warehouse_update.dart';
-import 'package:warehouse/distance_calculator.dart';
+// import 'package:warehouse/Warehouse/Partner/HelpPage.dart';
+// import 'package:warehouse/Warehouse/Partner/MyProfilePage.dart';
+// import 'package:warehouse/Warehouse/Partner/NotificationScreen.dart';
+// import 'package:warehouse/Warehouse/Partner/Provider/warehouse_provider.dart';
+// import 'package:warehouse/Warehouse/Partner/add_warehouse.dart';
+// import 'package:warehouse/Warehouse/Partner/models/warehouses_model.dart';
+// import 'package:warehouse/Warehouse/Partner/warehouse_update.dart';
+// import 'package:warehouse/distance_calculator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
@@ -20,7 +29,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
-import 'package:warehouse/generated/l10n.dart';
+// import 'package:warehouse/generated/l10n.dart';
 
 class HomeScreen extends StatefulWidget {
   final String name;

@@ -1,5 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:Lisofy/Localization/languages.dart';
+import 'package:Lisofy/Warehouse/Partner/document_upload.dart';
+import 'package:Lisofy/Warehouse/User/NotificationSetting.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/photoProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/rating_provider.dart';
+import 'package:Lisofy/Warehouse/User/userlogin.dart';
+import 'package:Lisofy/Warehouse/User/websiteViewer.dart';
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -15,15 +23,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:warehouse/Localization/languages.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:warehouse/Warehouse/Partner/document_upload.dart';
-import 'package:warehouse/Warehouse/User/NotificationSetting.dart';
-import 'package:warehouse/Warehouse/User/UserProvider/photoProvider.dart';
-import 'package:warehouse/Warehouse/User/UserProvider/rating_provider.dart';
-import 'package:warehouse/Warehouse/User/userlogin.dart';
-import 'package:warehouse/Warehouse/User/websiteViewer.dart';
-import 'package:warehouse/generated/l10n.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});

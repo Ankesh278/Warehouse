@@ -1,7 +1,7 @@
 
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-import 'package:warehouse/generated/l10n.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});

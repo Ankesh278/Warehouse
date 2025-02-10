@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:Lisofy/Warehouse/User/user_shortlisted_intrested.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:warehouse/Warehouse/User/user_shortlisted_intrested.dart';
+
 
 
 class CartProvider with ChangeNotifier {

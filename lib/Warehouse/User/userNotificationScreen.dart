@@ -1,7 +1,8 @@
 
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:warehouse/generated/l10n.dart';
+// import 'package:warehouse/generated/l10n.dart';
 
 class userNotificationScreen extends StatefulWidget {
   @override

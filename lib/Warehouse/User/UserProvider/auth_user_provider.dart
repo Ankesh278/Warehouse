@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'package:Lisofy/Warehouse/User/getuserlocation.dart';
+import 'package:Lisofy/Warehouse/User/userverifyotp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:warehouse/Warehouse/User/getuserlocation.dart';
-import 'package:warehouse/Warehouse/User/userverifyotp.dart';
+
 
 class AuthUserProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;

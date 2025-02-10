@@ -1,10 +1,11 @@
 import 'dart:io';
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-import 'package:warehouse/generated/l10n.dart';
+
 
 class MediaPickerPage extends StatefulWidget {
   final bool isImagePicker;

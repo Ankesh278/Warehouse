@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'package:Lisofy/Warehouse/Partner/VerifyOtpScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/partnerRegistrationScreen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:warehouse/Warehouse/Partner/VerifyOtpScreen.dart';
-import 'package:warehouse/Warehouse/Partner/partnerRegistrationScreen.dart';
+
 
 
 class AuthProvider extends ChangeNotifier {
