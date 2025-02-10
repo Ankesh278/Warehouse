@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:warehouse/Animation/glitter_border.dart';
-import 'package:warehouse/User/partner_chooser_screen.dart';
-import 'package:warehouse/User/user_home_page.dart';
-import 'package:warehouse/User/user_profile_screen.dart';
+import 'package:warehouse/Transportation/User/choose_app_language.dart';
+import 'package:warehouse/Warehouse/User/partner_chooser_screen.dart';
+import 'package:warehouse/Warehouse/User/user_home_page.dart';
+import 'package:warehouse/Warehouse/User/user_profile_screen.dart';
 import 'package:warehouse/generated/l10n.dart';
 import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 class NewHomePage extends StatefulWidget {
@@ -374,27 +375,32 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                     color: Colors.lightBlue.shade50,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.blue.withOpacity(0.3),
+                                        color: Colors.blue.withValues(alpha: 0.6),
                                         spreadRadius: 5,
                                         blurRadius: 5,
                                         offset: const Offset(0, 3),
                                       ),
                                     ],
                                   ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        ImageAssets.transportgif,
-                                        height: screenHeight*0.08,
-                                        width: screenWidth*0.25,
-                                        fit: BoxFit.contain,
-                                      ),
-                                       Text(
-                                        S.of(context).transportation,
-                                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
-                                      ),
-                                    ],
+                                  child: InkWell(
+                                    onTap: (){
+                                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChooseAppLanguage()));
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          ImageAssets.transportgif,
+                                          height: screenHeight*0.08,
+                                          width: screenWidth*0.25,
+                                          fit: BoxFit.contain,
+                                        ),
+                                         Text(
+                                          S.of(context).transportation,
+                                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

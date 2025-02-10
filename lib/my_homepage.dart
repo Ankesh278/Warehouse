@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:warehouse/Partner/OtpScreen.dart';
-import 'package:warehouse/User/userlogin.dart';
+import 'package:warehouse/Warehouse/Partner/OtpScreen.dart';
+import 'package:warehouse/Warehouse/User/userlogin.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});

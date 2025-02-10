@@ -11,19 +11,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:warehouse/Connectivity/network_service.dart';
 import 'package:warehouse/Localization/languages.dart';
-import 'package:warehouse/Partner/Provider/auth_provider.dart';
-import 'package:warehouse/Partner/Provider/location_provider.dart';
-import 'package:warehouse/Partner/Provider/warehouse_provider.dart';
-import 'package:warehouse/Partner/document_upload.dart';
-import 'package:warehouse/User/NotificationSetting.dart';
-import 'package:warehouse/User/UserProvider/DocumentProvider.dart';
-import 'package:warehouse/User/UserProvider/auth_user_provider.dart';
-import 'package:warehouse/User/UserProvider/FilterProvider.dart';
-import 'package:warehouse/User/UserProvider/InterestProvider.dart';
-import 'package:warehouse/User/UserProvider/photoProvider.dart';
-import 'package:warehouse/User/UserProvider/rating_provider.dart';
-import 'package:warehouse/User/UserProvider/sortingProvider.dart';
-import 'package:warehouse/User/userlogin.dart';
+import 'package:warehouse/Warehouse/Partner/Provider/auth_provider.dart';
+import 'package:warehouse/Warehouse/Partner/Provider/location_provider.dart';
+import 'package:warehouse/Warehouse/Partner/Provider/warehouse_provider.dart';
+import 'package:warehouse/Warehouse/User/NotificationSetting.dart';
+import 'package:warehouse/Warehouse/User/UserProvider/DocumentProvider.dart';
+import 'package:warehouse/Warehouse/User/UserProvider/FilterProvider.dart';
+import 'package:warehouse/Warehouse/User/UserProvider/InterestProvider.dart';
+import 'package:warehouse/Warehouse/User/UserProvider/auth_user_provider.dart';
+import 'package:warehouse/Warehouse/User/UserProvider/photoProvider.dart';
+import 'package:warehouse/Warehouse/User/UserProvider/rating_provider.dart';
+import 'package:warehouse/Warehouse/User/UserProvider/sortingProvider.dart';
+import 'package:warehouse/Warehouse/User/userlogin.dart';
 import 'package:warehouse/generated/l10n.dart';
 import 'package:warehouse/new_home_page.dart';
 import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
@@ -33,8 +32,10 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
-  // Handle background notifications here
+  if (kDebugMode) {
+    print("Handling a background message: ${message.messageId}");
+  }
+
 }
 
 void main() async {
@@ -124,8 +125,9 @@ class _MyAppState extends State<MyApp> {
     });
 
     FirebaseMessaging.instance.getToken().then((token) {
-
-      print("FCM Token: $token");
+      if (kDebugMode) {
+        print("FCM Token: $token");
+      }
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -156,7 +158,6 @@ class _MyAppState extends State<MyApp> {
       }
     });
   }
-
 
   Future<void> requestPermissions() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -219,7 +220,6 @@ class _MyAppState extends State<MyApp> {
       },
     );
   }
-
 
   void _showPermissionDeniedDialog() {
     showDialog(
