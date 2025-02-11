@@ -84,6 +84,7 @@ dependencies:
   shimmer: ^3.0.0
   path_provider: ^2.1.5
   toast: ^0.3.0
+  sms_autofill: ^2.4.1
 
 
 

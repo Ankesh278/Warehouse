@@ -11,6 +11,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:sms_autofill/sms_autofill.dart';
 
 
 class UserVerifyOtp extends StatefulWidget {
@@ -27,7 +28,7 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
   bool isLoading=false;
 
 
-  final TextEditingController _otpController = TextEditingController();
+   final TextEditingController _otpController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _verifyOtp() async {
@@ -160,7 +161,10 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
   void initState() {
     super.initState();
     startTimer();
+    listenForCode();
   }
+
+
   void startTimer() {
     _isButtonDisabled = true;
     _start = 30;
@@ -179,6 +183,21 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
   void dispose() {
     _timer?.cancel();
     super.dispose();
+    //cancel();
+  }
+  /// Listen for OTP automatically
+  void listenForCode() async {
+    await SmsAutoFill().listenForCode();
+  }
+  /// This method gets triggered when an OTP is received
+  @override
+  void codeUpdated(String? code) {
+    setState(() {
+      _otpController.text = code ?? "";
+    });
+    if (_otpController.text.isNotEmpty) {
+      print("Received OTP: $_otpController");
+    }
   }
 
   @override

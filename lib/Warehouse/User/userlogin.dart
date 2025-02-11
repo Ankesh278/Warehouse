@@ -1,7 +1,9 @@
 import 'package:Lisofy/Warehouse/User/UserProvider/auth_user_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 
 
@@ -18,11 +20,24 @@ class _UserLoginState extends State<UserLogin> {
 @override
   void initState() {
     super.initState();
+    _fetchPhoneNumber();
     _phoneController.addListener(() {
       if (_phoneController.text.length == 10) {
         FocusScope.of(context).unfocus();
       }
     });
+  }
+  Future<void> _fetchPhoneNumber() async {
+    try {
+      String? phoneNumber = await SmsAutoFill().hint;
+      if (phoneNumber != null && phoneNumber.startsWith('+91')) {
+        _phoneController.text = phoneNumber.substring(3).trim();
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error fetching phone number: $e");
+      }
+    }
   }
 
   @override

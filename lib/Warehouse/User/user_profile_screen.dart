@@ -426,60 +426,82 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   SizedBox(
                                     height: screenHeight * 0.02,
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const DocumentUpload()));
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      height: screenHeight*0.05,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 0, horizontal: 0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(6),
-                                        border: Border.all(color: Colors.grey),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          const Padding(
-                                            padding: EdgeInsets.only(left: 4.0),
-                                            child: Icon(
-                                              Icons.file_present_outlined,
-                                              color: Colors.grey,
-                                            ),
+                                  Consumer<RatingProvider>(
+                                    builder: (context, provider, child) {
+                                      bool isKYCComplete = provider.panCardStatus == 1 &&
+                                          provider.aadharCardStatus == 1 &&
+                                          provider.selfiStatus == 1;
+
+                                      return GestureDetector(
+                                        onTap: isKYCComplete
+                                            ? null // Disable tap if KYC is complete
+                                            : () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => const DocumentUpload()),
+                                          );
+                                        },
+                                        child: Container(
+                                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                                          height: screenHeight * 0.05,
+                                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(6),
+                                            border: Border.all(color: Colors.grey),
                                           ),
-                                           SizedBox(width: screenHeight * 0.02),
-                                          Text(
-                                            S.of(context).complete_kyc,
-                                            style: const TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w300,
-                                            ),
-                                          ),
-                                          const Spacer(),
-                                          const Padding(
-                                            padding:
-                                                EdgeInsets.only(right: 8.0),
-                                            child: Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Icon(
-                                                Icons.arrow_forward_ios,
-                                                size: 15,
-                                                color: Colors.grey,
+                                          child: Row(
+                                            children: [
+                                              const Padding(
+                                                padding: EdgeInsets.only(left: 4.0),
+                                                child: Icon(
+                                                  Icons.file_present_outlined,
+                                                  color: Colors.grey,
+                                                ),
                                               ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
+                                              SizedBox(width: screenHeight * 0.02),
+                                              Text(
+                                                S.of(context).complete_kyc,
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                              ),
+                                              const Spacer(),
+
+                                              // Show yellow warning icon if KYC is not complete
+                                              if (!isKYCComplete)
+                                                const Padding(
+                                                  padding: EdgeInsets.only(right: 8.0),
+                                                  child: Icon(
+                                                    Icons.warning_amber_rounded,
+                                                    size: 18,
+                                                    color: Colors.amber,
+                                                  ),
+                                                ),
+
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 8.0),
+                                                child: isKYCComplete
+                                                    ? const Icon(
+                                                  Icons.check_circle,
+                                                  size: 18,
+                                                  color: Colors.green,
+                                                )
+                                                    : const Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  size: 15,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
+
                                   SizedBox(
                                     height: screenHeight * 0.02,
                                   ),

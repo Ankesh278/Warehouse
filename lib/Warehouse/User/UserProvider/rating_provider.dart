@@ -8,14 +8,23 @@ class RatingProvider extends ChangeNotifier {
   String _comment = "";
   bool _isSubmitted = false;
   bool _isSubmitting = false;
+  bool isEditing = false;
+
+  int _panCardStatus = 0;
+  int _aadharCardStatus = 0;
+  int _selfiStatus = 0;
+
   double get rating => _rating;
   String get comment => _comment;
   bool get isSubmitted => _isSubmitted;
   bool get isSubmitting => _isSubmitting;
-  bool isEditing=false;
+  int get panCardStatus => _panCardStatus;
+  int get aadharCardStatus => _aadharCardStatus;
+  int get selfiStatus => _selfiStatus;
 
   TextEditingController commentController = TextEditingController();
-  /// Fetch existing rating & comment from API based on mobile number
+
+  /// Fetch existing rating & comment along with status fields
   Future<void> fetchUserFeedback(String mobile) async {
     if (mobile.isEmpty) {
       debugPrint("Error: Mobile number is empty.");
@@ -33,11 +42,18 @@ class RatingProvider extends ChangeNotifier {
 
           _rating = (latestFeedback['rating'] as num?)?.toDouble() ?? 0.0;
           _comment = latestFeedback['review'] ?? "";
+          _panCardStatus = latestFeedback['panCardStatus'] ?? 0;
+          _aadharCardStatus = latestFeedback['adharCardStatus'] ?? 0;
+          _selfiStatus = latestFeedback['selfiStatus'] ?? 0;
+
           _isSubmitted = _rating > 0.0 && _comment.isNotEmpty;
           commentController.text = _comment;
+
           debugPrint("Fetched Rating: $_rating");
           debugPrint("Fetched Comment: $_comment");
-          debugPrint("Is Submitted: $_isSubmitted");
+          debugPrint("Pan Card Status: $_panCardStatus");
+          debugPrint("Aadhar Status: $_aadharCardStatus");
+          debugPrint("Selfie Status: $_selfiStatus");
         } else {
           debugPrint("No feedback found.");
         }
@@ -49,13 +65,11 @@ class RatingProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
   /// Set rating
   void setRating(double rating) {
     _rating = rating;
     notifyListeners();
-  }
-  void getEditing(bool edit){
-    isEditing=edit;
   }
 
   /// Set comment
@@ -81,9 +95,6 @@ class RatingProvider extends ChangeNotifier {
       "RatingValue": _rating,
       "Review": _comment.trim(),
     };
-    if (kDebugMode) {
-      print("Api   $apiUrl");
-    }
 
     try {
       final response = await http.post(
@@ -91,12 +102,6 @@ class RatingProvider extends ChangeNotifier {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(bodyData),
       );
-      if (kDebugMode) {
-        print("Response   ${response.body}");
-      }
-      if (kDebugMode) {
-        print("Response   ${response.statusCode}");
-      }
 
       if (response.statusCode == 200) {
         _isSubmitted = true;
@@ -112,7 +117,7 @@ class RatingProvider extends ChangeNotifier {
     }
   }
 
-  /// Update Existing Feedback (PUT Method)
+  /// Update Existing Feedback
   Future<void> updateFeedback(String mobile) async {
     if (_rating < 1.0 || _rating > 5.0 || mobile.isEmpty) {
       debugPrint("Update Failed: Rating must be between 1 and 5. Current: $_rating");
@@ -128,28 +133,19 @@ class RatingProvider extends ChangeNotifier {
       "Review": _comment.trim(),
     };
 
-    if (kDebugMode) {
-      print("bodyData: $bodyData");
-    }
-
     try {
       var request = http.MultipartRequest('PUT', Uri.parse(apiUrl));
-
       bodyData.forEach((key, value) {
         request.fields[key] = value;
       });
 
-      // Send the request
       final response = await request.send();
-
-      // Read response body
       final responseBody = await response.stream.bytesToString();
       debugPrint("Response Status Code: ${response.statusCode}");
       debugPrint("Response Body: $responseBody");
 
       try {
         final Map<String, dynamic> responseData = json.decode(responseBody);
-
         if (response.statusCode == 200 && responseData["status"] == 200) {
           _isSubmitted = true;
           debugPrint("Feedback Updated Successfully: ${responseData["message"]}");
@@ -171,7 +167,7 @@ class RatingProvider extends ChangeNotifier {
   /// Reset state for editing feedback
   void enableEditing() {
     _isSubmitted = false;
-    isEditing=true;
+    isEditing = true;
     notifyListeners();
   }
 }
