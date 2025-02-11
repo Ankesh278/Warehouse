@@ -10,11 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:warehouse/Warehouse/User/UserProvider/InterestProvider.dart';
-// import 'package:warehouse/Warehouse/User/warehouse_details.dart';
-// import 'package:warehouse/distance_calculator.dart';
-// import 'package:warehouse/generated/l10n.dart';
-// import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
 class InterestedWarehouseDetailsScreen extends StatefulWidget {
   final  warehouses;
@@ -312,7 +307,7 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                             ),
                                           ),
                                         ),
-                                         Text(S.of(context).rent_per_sqft,style: TextStyle(fontWeight: FontWeight.normal,fontSize: 10,color: Colors.grey),),
+                                         Text(S.of(context).rent_per_sqft,style: const TextStyle(fontWeight: FontWeight.normal,fontSize: 10,color: Colors.grey),),
                                         const Spacer(),
                                         Container(
                                           height: screenHeight*0.05,
@@ -356,8 +351,8 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                               ),
                                             ),
                                              Padding(
-                                              padding: EdgeInsets.only(left: 4.0),
-                                              child: Text(S.of(context).available_area,style: TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
+                                              padding: const EdgeInsets.only(left: 4.0),
+                                              child: Text(S.of(context).available_area,style: const TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
                                             ),
                                             const SizedBox(height: 4,),
                                             Padding(
@@ -760,13 +755,13 @@ class CarpetAreaTextFormField2 extends StatelessWidget {
 
         decoration: InputDecoration(
           hintText: '0',
-          hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-          contentPadding: const EdgeInsets.only(left: 8,bottom: 10), // Adjust vertical padding
+          hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
+          contentPadding: const EdgeInsets.only(left: 8,bottom: 10),
           border: InputBorder.none,
 
 
           suffix: Container(
-            padding: const EdgeInsets.only(left: 8.0,right: 6), // Space between the text and the input
+            padding: const EdgeInsets.only(left: 8.0,right: 6),
             child: const Text(
               '|sqft',
               style: TextStyle(color: Colors.grey, fontSize: 13),
@@ -785,8 +780,7 @@ class CarpetAreaTextFormField3 extends StatelessWidget {
     return TextFormField(
       decoration: InputDecoration(
         hintText: '₹|ex.35',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
         border: InputBorder.none,
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -795,7 +789,7 @@ class CarpetAreaTextFormField3 extends StatelessWidget {
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
         ),
         suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          padding: const EdgeInsets.only(left: 8.0),
           child: const Text(
             '|per month',
             style: TextStyle(color: Colors.grey, fontSize: 13),
@@ -813,8 +807,7 @@ class CarpetAreaTextFormField4 extends StatelessWidget {
     return TextFormField(
       decoration: InputDecoration(
         hintText: '₹|ex.2',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
         border: InputBorder.none,
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -823,7 +816,7 @@ class CarpetAreaTextFormField4 extends StatelessWidget {
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
         ),
         suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          padding: const EdgeInsets.only(left: 8.0),
           child: const Text(
             '|per month',
             style: TextStyle(color: Colors.grey, fontSize: 13),
@@ -841,8 +834,7 @@ class CarpetAreaTextFormField5 extends StatelessWidget {
     return TextFormField(
       decoration: const InputDecoration(
         hintText: 'ex.2',
-        hintStyle: TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        hintStyle: TextStyle(color: Colors.grey,fontSize: 12),
         border: InputBorder.none,
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -850,27 +842,18 @@ class CarpetAreaTextFormField5 extends StatelessWidget {
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
         ),
-        // suffix: Container(
-        //   padding: EdgeInsets.only(left: 8.0), // Space between the text and the input
-        //   child: Text(
-        //     '|per month',
-        //     style: TextStyle(color: Colors.grey, fontSize: 13),
-        //   ),
-        // ),
       ),
     );
   }
 }
 class CarpetAreaTextFormField6 extends StatelessWidget {
   const CarpetAreaTextFormField6({super.key});
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       decoration: InputDecoration(
         hintText: 'ex.3',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
         border: InputBorder.none,
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -879,7 +862,7 @@ class CarpetAreaTextFormField6 extends StatelessWidget {
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
         ),
         suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          padding: const EdgeInsets.only(left: 8.0),
           child: const Text(
             '|per month',
             style: TextStyle(color: Colors.grey, fontSize: 13),
@@ -897,8 +880,7 @@ class CarpetAreaTextFormField7 extends StatelessWidget {
     return TextFormField(
       decoration: InputDecoration(
         hintText: 'ex.18',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
         border: InputBorder.none,
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -907,7 +889,7 @@ class CarpetAreaTextFormField7 extends StatelessWidget {
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
         ),
         suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          padding: const EdgeInsets.only(left: 8.0),
           child: const Text(
             '|per month',
             style: TextStyle(color: Colors.grey, fontSize: 13),
@@ -925,8 +907,7 @@ class CarpetAreaTextFormField8 extends StatelessWidget {
     return TextFormField(
       decoration: InputDecoration(
         hintText: 'ex.18',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
         border: InputBorder.none,
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -935,7 +916,7 @@ class CarpetAreaTextFormField8 extends StatelessWidget {
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
         ),
         suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          padding: const EdgeInsets.only(left: 8.0),
           child: const Text(
             '|per month',
             style: TextStyle(color: Colors.grey, fontSize: 13),

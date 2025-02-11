@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
 class WebViewScreen extends StatefulWidget {
   final String url;
   final String title;
   const WebViewScreen({super.key, required this.title, required this.url});
-
   @override
   State<WebViewScreen> createState() => _WebViewScreenState();
 }
 
 class _WebViewScreenState extends State<WebViewScreen> {
   late WebViewController controller;
-  bool _isLoading = true; // Track loading state
-
+  bool _isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -24,12 +21,12 @@ class _WebViewScreenState extends State<WebViewScreen> {
         NavigationDelegate(
           onPageStarted: (_) {
             setState(() {
-              _isLoading = true; // Page is loading
+              _isLoading = true;
             });
           },
           onPageFinished: (_) {
             setState(() {
-              _isLoading = false; // Page loaded
+              _isLoading = false;
             });
           },
         ),

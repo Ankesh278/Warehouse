@@ -1,15 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class Warehouseitemdesign extends StatefulWidget {
-  const Warehouseitemdesign({super.key});
-
+class WarehouseItemDesign extends StatefulWidget {
+  const WarehouseItemDesign({super.key});
   @override
-  State<Warehouseitemdesign> createState() => _WarehouseitemdesignState();
+  State<WarehouseItemDesign> createState() => _WarehouseItemDesignState();
 }
-
-class _WarehouseitemdesignState extends State<Warehouseitemdesign> {
-  bool light = true; // Default: Yes selected
+class _WarehouseItemDesignState extends State<WarehouseItemDesign> {
+  bool light = true;
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -56,7 +54,7 @@ class _WarehouseitemdesignState extends State<Warehouseitemdesign> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
-                              ". Vaccant",
+                              ". Vacant",
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   color: Colors.red,
@@ -171,14 +169,11 @@ class _WarehouseitemdesignState extends State<Warehouseitemdesign> {
                             children: [
                               const Text("No",style: TextStyle(color: Colors.grey,fontSize: 11,fontWeight: FontWeight.w500),),
                               Switch(
-                                // This bool value toggles the switch.
                                 value: light,
                                 activeColor: Colors.white,
                                 dragStartBehavior: DragStartBehavior.start,
                                 activeTrackColor: const Color(0xff48A103),
-              
                                 onChanged: (bool value) {
-                                  // This is called when the user toggles the switch.
                                   setState(() {
                                     light = value;
                                   });
@@ -187,7 +182,6 @@ class _WarehouseitemdesignState extends State<Warehouseitemdesign> {
                               const Text("Yes",style: TextStyle(fontSize: 11,color: Colors.grey,fontWeight: FontWeight.w500),),
                             ],
                           )
-                          
                         ],
                       )
                     ],
@@ -219,9 +213,7 @@ class _WarehouseitemdesignState extends State<Warehouseitemdesign> {
 
 class DottedBorder extends StatelessWidget {
   final Widget child;
-
-  DottedBorder({required this.child});
-
+  const DottedBorder({super.key, required this.child});
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
@@ -230,7 +222,6 @@ class DottedBorder extends StatelessWidget {
     );
   }
 }
-
 class DottedBorderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -243,7 +234,7 @@ class DottedBorderPainter extends CustomPainter {
     const double dashSpace = 4.0;
     double startX = 0;
 
-    final path = Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height));
+    Path().addRect(Rect.fromLTWH(0, 0, size.width, size.height));
 
     // Draw dotted border
     while (startX < size.width) {

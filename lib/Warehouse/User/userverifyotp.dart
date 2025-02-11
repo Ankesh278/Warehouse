@@ -129,13 +129,15 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
     await prefs.setString('email', user.mailid);
     await prefs.setString('profileImage', user.userProfile);
 
-    print("ImageUrl: ${user.userProfile}");
-
-    // Use Provider to update the profile image URL
+    if (kDebugMode) {
+      print("ImageUrl: ${user.userProfile}");
+    }
     Provider.of<ProfileProvider>(context, listen: false)
         .setProfileImageUrl("https://xpacesphere.com${user.userProfile}");
 
-    print("Updated Profile URL: https://xpacesphere.com${user.userProfile}");
+    if (kDebugMode) {
+      print("Updated Profile URL: https://xpacesphere.com${user.userProfile}");
+    }
   }
 
   Future<void> _storeUserData(bool isLoggedIn) async {

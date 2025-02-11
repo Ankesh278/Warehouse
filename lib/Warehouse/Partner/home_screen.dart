@@ -1,5 +1,5 @@
 import 'package:Lisofy/Warehouse/Partner/HelpPage.dart';
-import 'package:Lisofy/Warehouse/Partner/MyProfilePage.dart';
+import 'package:Lisofy/Warehouse/Partner/my_profile_page.dart';
 import 'package:Lisofy/Warehouse/Partner/NotificationScreen.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/warehouse_provider.dart';
 import 'package:Lisofy/Warehouse/Partner/add_warehouse.dart';
@@ -7,6 +7,8 @@ import 'package:Lisofy/Warehouse/Partner/models/warehouses_model.dart';
 import 'package:Lisofy/Warehouse/Partner/warehouse_update.dart';
 import 'package:Lisofy/distance_calculator.dart';
 import 'package:Lisofy/generated/l10n.dart';
+import 'package:Lisofy/new_home_page.dart';
+import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,22 +16,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:warehouse/Warehouse/Partner/HelpPage.dart';
-// import 'package:warehouse/Warehouse/Partner/MyProfilePage.dart';
-// import 'package:warehouse/Warehouse/Partner/NotificationScreen.dart';
-// import 'package:warehouse/Warehouse/Partner/Provider/warehouse_provider.dart';
-// import 'package:warehouse/Warehouse/Partner/add_warehouse.dart';
-// import 'package:warehouse/Warehouse/Partner/models/warehouses_model.dart';
-// import 'package:warehouse/Warehouse/Partner/warehouse_update.dart';
-// import 'package:warehouse/distance_calculator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
-
-// import 'package:warehouse/generated/l10n.dart';
 
 class HomeScreen extends StatefulWidget {
   final String name;
@@ -50,6 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final String appInfoText = 'Download WarehouseX app for amazing offers!';
   bool light = true;
   int _selectedIndex = 0;
+  late double latitude=0;
+  late double longitude=0;
   final PageController _pageController = PageController();
 
   void _onItemTapped(int index) {
@@ -58,14 +52,16 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     _pageController.jumpToPage(index);
   }
-
+  // LatLng? _latLng;
+  // late String _address = "Fetching address...";
   String? qrData;
-  LatLng? _latLng;
-  late String _address = "Fetching address...";
+
 
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     userName = pref.getString("name") ?? "Default Name";
+    latitude = pref.getDouble("latitude") ?? 0.0;
+    longitude = pref.getDouble("longitude") ?? 0.0;
   }
 
   @override
@@ -96,9 +92,9 @@ class _HomeScreenState extends State<HomeScreen> {
           return '${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.country}';
         }
       }
-      return 'No address found'; // Default fallback for invalid input
+      return 'No address found';
     } catch (e) {
-      return 'Error: $e'; // Return error message
+      return 'Error: $e';
     }
   }
 
@@ -163,22 +159,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _shareAppInfo() async {
     try {
-      // Load assets
       final ByteData logoData =
           await rootBundle.load('assets/images/house.png');
       final ByteData warehouseImageData =
           await rootBundle.load('assets/images/house1.png');
-
-      // Get temp directory and save the images as files
       final tempDir = await getTemporaryDirectory();
       final File logoFile = File('${tempDir.path}/house.png');
       final File warehouseImageFile = File('${tempDir.path}/house1.png');
-
       await logoFile.writeAsBytes(logoData.buffer.asUint8List());
       await warehouseImageFile
           .writeAsBytes(warehouseImageData.buffer.asUint8List());
-
-      // Use shareXFiles to share the files and additional text
       await Share.shareXFiles(
         [
           XFile(logoFile.path),
@@ -437,7 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Text(
                             S.of(context).manage_your_warehouse,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.normal,
                                 color: Colors.white),
@@ -447,8 +437,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Container(
                                 padding: EdgeInsets.zero,
-                                height: 30,
-                                width: 60,
+                                height: screenHeight*0.04,
+                                width: screenWidth*0.17,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   color: Colors.white,
@@ -461,7 +451,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: TextButton(
                                     child: Text(
                                       S.of(context).add_new,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 8,
                                           fontWeight: FontWeight.normal,
                                           color: Colors.blue),
@@ -476,10 +466,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
+                              SizedBox(width: screenWidth*0.01),
                               Container(
-                                margin: const EdgeInsets.only(right: 18),
-                                height: 30,
-                                width: 30,
+                                height: screenHeight*0.037,
+                                width: screenWidth*0.08,
                                 decoration: BoxDecoration(
                                   color: Colors.blue,
                                   border: Border.all(
@@ -507,6 +497,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
+                              SizedBox(width: screenWidth*0.02),
+                               InkWell(
+                                 onTap: (){
+                                   Navigator.push(
+                                       context,
+                                       MaterialPageRoute(
+                                           builder: (context) => NewHomePage(
+                                             longitude: longitude,
+                                             latitude: latitude,
+                                           )));
+                                 },
+                                   child: const Column(
+                                     children: [
+                                       ImageIcon(
+                                         AssetImage(
+                                             ImageAssets.back
+                                         ),
+                                         color: Colors.white,
+                                       ),
+                                       Text("Back",style: TextStyle(color: Colors.white,fontSize: 10,fontWeight: FontWeight.w100),)
+                                     ],
+                                   )
+                               ),
+                               SizedBox(width: screenWidth*0.04),
                             ],
                           )
                         ],
@@ -606,18 +620,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Center(
                                       child: Text(
                                         S.of(context).start_adding_warehouse,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14),
                                       ),
                                     ),
                                     const SizedBox(height: 15),
                                     Padding(
-                                      padding: EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.all(8.0),
                                       child: Center(
                                         child: Text(
                                           S.of(context).add_warehouse_details,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.normal,
                                               fontSize: 12,
                                               color: Colors.grey),
@@ -640,15 +654,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.add,
                                                   color: Colors.white,
                                                   size: 24,
                                                 ),
-                                                SizedBox(width: 8),
+                                                const SizedBox(width: 8),
                                                 Text(
                                                   S.of(context).add_warehouse,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 16,
                                                   ),
@@ -674,7 +688,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Center(
                                       child: Text(
                                         S.of(context).we_are_happy_to_help,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14),
                                       ),
@@ -683,7 +697,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Center(
                                       child: Text(
                                         S.of(context).need_assistance + " >>",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14,
                                             color: Colors.blue),
@@ -787,7 +801,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         MainAxisAlignment
                                                             .spaceEvenly,
                                                     children: [
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         width: 10,
                                                       ),
                                                       Text(
@@ -816,7 +830,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           fontSize: 10,
                                                         ),
                                                       ),
-                                                      Spacer(),
+                                                      const Spacer(),
                                                       FutureBuilder<String>(
                                                         future: _getAddressFromLatLng(warehouse.wHouseAddress),
                                                         builder: (context, snapshot) {
@@ -843,7 +857,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       ),
 
 
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         width: 10,
                                                       )
                                                     ],
@@ -902,7 +916,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ),
                                                 ),
                                                  Padding(
-                                                  padding: EdgeInsets.all(8.0),
+                                                  padding: const EdgeInsets.all(8.0),
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -910,24 +924,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     children: [
                                                       Text(
                                                         S.of(context).carpet_area+" Sq. ft.",
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             color: Colors.grey,
                                                             fontSize: 10),
                                                       ),
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         width: 10,
                                                       ),
                                                       Text(
                                                         "  | ${S.of(context).rent_per_sqft} ",
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             color: Colors.grey,
                                                             fontSize: 10),
                                                       ),
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         width: 5,
                                                       )
                                                     ],
@@ -1043,7 +1057,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       children: [
                                                          Text(
                                                           "${S.of(context).no}",
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                               color:
                                                                   Colors.grey,
                                                               fontSize: 11,
@@ -1105,7 +1119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         ),
                                                          Text(
                                                           "${S.of(context).yes}",
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                               fontSize: 11,
                                                               color:
                                                                   Colors.grey,
@@ -1141,7 +1155,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildNotificationPage(double screenWidth, double screenHeight) {
-    return NotificationScreen();
+    return const NotificationScreen();
   }
 
   Widget _buildAccountPage(double screenWidth, double screenHeight) {

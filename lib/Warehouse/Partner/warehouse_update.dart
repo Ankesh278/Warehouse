@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:Lisofy/Warehouse/Partner/HelpPage.dart';
-import 'package:Lisofy/Warehouse/Partner/HomeScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/home_screen.dart';
 import 'package:Lisofy/Warehouse/Partner/MapScreen.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/location_provider.dart';
 import 'package:Lisofy/Warehouse/Partner/models/warehouses_model.dart';

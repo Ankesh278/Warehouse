@@ -2,18 +2,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class userHelpPage extends StatefulWidget {
+class UserHelpPage extends StatefulWidget {
+  const UserHelpPage({super.key});
   @override
-  State<userHelpPage> createState() => _userHelpPageState();
+  State<UserHelpPage> createState() => _UserHelpPageState();
 }
-
-class _userHelpPageState extends State<userHelpPage> {
-
+class _UserHelpPageState extends State<UserHelpPage> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Column(
         children: [
@@ -43,24 +41,21 @@ class _userHelpPageState extends State<userHelpPage> {
                                   children: [
                                     Row(
                                       children: [
-                                        InkWell(child: Icon(Icons.arrow_back_ios_new,color: Colors.white,),
+                                        InkWell(child: const Icon(Icons.arrow_back_ios_new,color: Colors.white,),
                                           onTap: (){
                                             Navigator.pop(context);
                                           },
                                         ),
-                                        SizedBox(width: 20,),
-                                        Text("Help",style: TextStyle(color: Colors.white,fontSize: 17,fontWeight: FontWeight.w600),)
+                                        const SizedBox(width: 20,),
+                                        const Text("Help",style: TextStyle(color: Colors.white,fontSize: 17,fontWeight: FontWeight.w600),)
                                       ],
                                     )
                                   ],
                                 ),
-                                Spacer(),
-
-                                SizedBox(width: 5),
-
+                                const Spacer(),
+                                const SizedBox(width: 5),
                               ],
                             ),
-
                           ],
                         ),
                       ),
@@ -68,7 +63,7 @@ class _userHelpPageState extends State<userHelpPage> {
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.only(right: screenWidth * 0.005),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(0),
@@ -88,11 +83,10 @@ class _userHelpPageState extends State<userHelpPage> {
                                         color: Colors.blue,
                                         borderRadius: BorderRadius.circular(8)
                                     ),
-                                    child: Center(child: Text("All topics",style: TextStyle(fontSize: 10,color: Colors.white),)),
+                                    child: const Center(child: Text("All topics",style: TextStyle(fontSize: 10,color: Colors.white),)),
                                   ),
-                                  // First Container with "Troubleshooting"
                                   Container(
-                                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+                                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(6),
@@ -101,20 +95,20 @@ class _userHelpPageState extends State<userHelpPage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
+                                        const Text(
                                           "Troubleshooting",
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        IconButton(onPressed: (){}, icon: Icon(Icons.keyboard_double_arrow_right_rounded, size: 16, color: Colors.grey))
+                                        IconButton(onPressed: (){}, icon: const Icon(Icons.keyboard_double_arrow_right_rounded, size: 16, color: Colors.grey))
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   Container(
-                                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+                                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(6),
@@ -123,20 +117,20 @@ class _userHelpPageState extends State<userHelpPage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
+                                        const Text(
                                           "Referral",
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        IconButton(onPressed: (){}, icon: Icon(Icons.keyboard_double_arrow_right_rounded, size: 16, color: Colors.grey))
+                                        IconButton(onPressed: (){}, icon: const Icon(Icons.keyboard_double_arrow_right_rounded, size: 16, color: Colors.grey))
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   Container(
-                                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+                                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(6),
@@ -145,20 +139,20 @@ class _userHelpPageState extends State<userHelpPage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
+                                        const Text(
                                           "About Warehouse Now",
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        IconButton(onPressed: (){}, icon: Icon(Icons.keyboard_double_arrow_right_rounded, size: 16, color: Colors.grey))
+                                        IconButton(onPressed: (){}, icon: const Icon(Icons.keyboard_double_arrow_right_rounded, size: 16, color: Colors.grey))
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   Container(
-                                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+                                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(6),
@@ -167,21 +161,18 @@ class _userHelpPageState extends State<userHelpPage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
+                                        const Text(
                                           "My Account",
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        IconButton(onPressed: (){}, icon: Icon(Icons.keyboard_double_arrow_right_rounded, size: 16, color: Colors.grey))
+                                        IconButton(onPressed: (){}, icon: const Icon(Icons.keyboard_double_arrow_right_rounded, size: 16, color: Colors.grey))
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 10),
-
-
-
+                                  const SizedBox(height: 10),
                                 ],
                               )
                           ),
@@ -193,8 +184,7 @@ class _userHelpPageState extends State<userHelpPage> {
               ),
             ),
           ),
-
-        ],
+        ]
       ),
     );
   }

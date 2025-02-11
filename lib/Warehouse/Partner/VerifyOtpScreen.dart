@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:Lisofy/Warehouse/Partner/partnerRegistrationScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -9,8 +10,8 @@ import 'package:http/http.dart' as http;
 
 
 class VerifyOtpScreen extends StatefulWidget {
-  final String verificationId; // This will be passed from _submitForm
-  final String phoneNumber; // This will be passed from _submitForm
+  final String verificationId;
+  final String phoneNumber;
 
   const VerifyOtpScreen({super.key, required this.verificationId, required this.phoneNumber});
 
@@ -47,33 +48,28 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     );
 
     try {
-      // Verify the OTP using Firebase Authentication
       await _auth.signInWithCredential(credential);
-
-      // OTP verification successful, send the phone number to the server
-     // String phoneNumber = '7037406808'; // You can replace this with the actual phone number
       String url = 'http://xpacesphere.com/api/Register/Registration?mobile=${widget.phoneNumber}';
-
-      // Send the phone number to the server
       final response = await http.post(Uri.parse(url));
-      print("Registration api       "     +url);
-     // print("Response>>>>>>>>>>>"+response)
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
-      // Check the response status code
+      if (kDebugMode) {
+        print("Registration api       $url");
+      }
+      if (kDebugMode) {
+        print('Response status: ${response.statusCode}');
+      }
+      if (kDebugMode) {
+        print('Response body: ${response.body}');
+      }
       if (response.statusCode == 200) {
-        // User exists, navigate to HomeScreen
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
         await prefs.setString('phone', widget.phoneNumber);
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const PartnerRegistrationScreen(phone: '',)), // Replace HomeScreen() with your actual home screen widget
+          MaterialPageRoute(builder: (context) => const PartnerRegistrationScreen(phone: '',)),
               (Route<dynamic> route) => false,
         );
       } else if (response.statusCode == 201) {
-        // New user, navigate to PartnerRegistrationScreen
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
         await prefs.setString('phone', widget.phoneNumber);
@@ -84,7 +80,6 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
               (Route<dynamic> route) => false,
         );
       } else {
-        // Handle unexpected server responses
         setState(() {
           _errorMessage = 'Unexpected server response: ${response.statusCode}';
         });
@@ -255,8 +250,8 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                                         ),
                                         keyboardType: TextInputType.number,
                                         animationType: AnimationType.slide,
-                                        boxShadows: [
-                                          const BoxShadow(
+                                        boxShadows: const [
+                                          BoxShadow(
                                             color: Colors.white,
                                             blurRadius: 4,
                                           ),
@@ -283,7 +278,6 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                                               ? null
                                               : () {
                                             startTimer();
-                                            // Handle resend OTP logic here
                                           },
                                           child: Text(
                                             'Resend OTP',
@@ -307,16 +301,16 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                                   onPressed: () {
                                     _verifyOtp();
                                   },
-                                  child: isLoading?const SpinKitCircle(
-                                    color: Colors.white,
-                                    size: 50.0,
-                                  ):
-                                    const Text('Verify & Proceed'),
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
                                     backgroundColor: Colors.blue,
                                     minimumSize: Size(double.infinity, screenHeight * 0.06),
                                   ),
+                                  child: isLoading?const SpinKitCircle(
+                                    color: Colors.white,
+                                    size: 50.0,
+                                  ):
+                                    const Text('Verify & Proceed'),
                                 ),
                               ),
                               SizedBox(height: screenHeight * 0.017),

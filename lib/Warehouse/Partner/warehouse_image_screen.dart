@@ -11,14 +11,11 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
 class WarehouseImageScreen extends StatefulWidget {
   const WarehouseImageScreen({super.key});
   @override
   State<WarehouseImageScreen> createState() => _WarehouseImageScreenState();
 }
-
 class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
   int totalMedia = 0;
   int _photoCount = 0;
@@ -35,13 +32,10 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
     if (phone.startsWith("+91")) {
       phone = phone.replaceFirst("+91", "");
     }
-
     if (_pickedImages.isEmpty && _pickedVideos.isEmpty) return;
-
     setState(() {
       _isUploading = true;
     });
-
     try {
       var request = http.MultipartRequest(
         'PUT',
@@ -58,7 +52,6 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
       if (kDebugMode) {
         print("Number of media files: ${mediaFiles.length}");
       }
-
       for (int i = 0; i < mediaFiles.length; i++) {
         if (kDebugMode) {
           print("Uploading file ${i + 1}: ${mediaFiles[i].path}");
@@ -90,7 +83,6 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
         if (kDebugMode) {
           print("Files uploaded successfully!");
         }
-
         String responseString = await response.stream.bytesToString();
         if (kDebugMode) {
           print("Response body: $responseString");
@@ -159,7 +151,6 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getId();
   }
@@ -345,7 +336,6 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                           ),
                                         ),
                                       );
-
                                       if (result != null && result.isNotEmpty) {
                                         setState(() {
                                           _pickedImages = result;
@@ -372,9 +362,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                           ),
                                         ),
                                       );
-
                                       if (result != null && result.isNotEmpty) {
-                                        // Clear the current video list and assign the new picked videos
                                         setState(() {
                                           _pickedVideos = result;
                                           _videoCount = _pickedVideos.length;
@@ -446,7 +434,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                       S.of(context).upload_warehouse_image,
                                       maxLines: 2,
                                       overflow: TextOverflow.visible,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600,
                                           color: Colors.grey),
@@ -516,7 +504,6 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
 Widget _buildCounter(String label, int count, String name) {
   return GestureDetector(
     onTap: (){
-
     },
     child: Column(
       children: <Widget>[

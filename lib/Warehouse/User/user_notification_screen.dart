@@ -1,17 +1,13 @@
 
 import 'package:Lisofy/generated/l10n.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:warehouse/generated/l10n.dart';
 
-class userNotificationScreen extends StatefulWidget {
+class UserNotificationScreen extends StatefulWidget {
+  const UserNotificationScreen({super.key});
   @override
-  State<userNotificationScreen> createState() => _userNotificationScreenState();
+  State<UserNotificationScreen> createState() => _UserNotificationScreenState();
 }
-
-class _userNotificationScreenState extends State<userNotificationScreen> {
-
-
+class _UserNotificationScreenState extends State<UserNotificationScreen> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -47,19 +43,15 @@ class _userNotificationScreenState extends State<userNotificationScreen> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-
-                                        Text(S.of(context).notifications,style: TextStyle(color: Colors.white,fontSize: 14),)
+                                        Text(S.of(context).notifications,style: const TextStyle(color: Colors.white,fontSize: 14),)
                                       ],
                                     )
                                   ],
                                 ),
-                                Spacer(),
-
-                                SizedBox(width: 5),
-
+                                const Spacer(),
+                                const SizedBox(width: 5),
                               ],
                             ),
-
                           ],
                         ),
                       ),
@@ -67,7 +59,7 @@ class _userNotificationScreenState extends State<userNotificationScreen> {
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.only(right: screenWidth * 0.005),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(0),
@@ -79,7 +71,6 @@ class _userNotificationScreenState extends State<userNotificationScreen> {
                           child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  // Image.asset("assets/images/circle.png"),
                                   Container(
                                     height: screenHeight*0.4,
                                     width: double.infinity,
@@ -88,12 +79,10 @@ class _userNotificationScreenState extends State<userNotificationScreen> {
                                         color: Colors.blue,
                                         border: Border.all(color: Colors.grey,width: 3)
                                     ),
-                                    child: Icon(Icons.notifications_off_sharp,size: 100,color: Colors.white,),
-
+                                    child: const Icon(Icons.notifications_off_sharp,size: 100,color: Colors.white,),
                                   ),
-                                  SizedBox(height: 20,),
+                                  const SizedBox(height: 20,),
                                   Text(S.of(context).no_notifications)
-
                                 ],
                               )
                           ),
@@ -105,7 +94,6 @@ class _userNotificationScreenState extends State<userNotificationScreen> {
               ),
             ),
           ),
-
         ],
       ),
     );

@@ -15,11 +15,6 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:warehouse/Warehouse/User/UserProvider/InterestProvider.dart';
-// import 'package:warehouse/Warehouse/User/express_interest_screen.dart';
-// import 'package:warehouse/Warehouse/User/models/WarehouseModel.dart';
-// import 'package:warehouse/generated/l10n.dart';
-// import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
 class WareHouseDetails extends StatefulWidget {
   final WarehouseModel warehouses;
@@ -201,7 +196,7 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                   onTap: () {
                                     cartProvider.toggleWarehouse(
                                         widget.warehouses.id,
-                                        widget.warehouses.mobile,
+                                        widget.phone,
                                         context);
                                   },
                                   child: Container(

@@ -4,6 +4,7 @@ import 'package:Lisofy/Warehouse/Partner/partnerRegistrationScreen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -65,11 +66,14 @@ class AuthProvider extends ChangeNotifier {
             MaterialPageRoute(builder: (context) => const PartnerRegistrationScreen(phone: '',)),
                 (route) => false,
           );
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Signed in successfully with ${user.email}'),
+          Fluttertoast.showToast(
+              msg: "Signed in...",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
               backgroundColor: Colors.green,
-            ),
+              textColor: Colors.white,
+              fontSize: 16.0
           );
         }
       }

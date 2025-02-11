@@ -5,8 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:warehouse/Warehouse/User/express_interest_date_time.dart';
-// import 'package:warehouse/generated/l10n.dart';
 
 class ExpressInterestScreen extends StatefulWidget {
   final id;
@@ -57,7 +55,6 @@ class _ExpressInterestScreenState extends State<ExpressInterestScreen> {
   ];
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     nameController.dispose();
     emailController.dispose();
@@ -66,7 +63,6 @@ class _ExpressInterestScreenState extends State<ExpressInterestScreen> {
     designationController.dispose();
     messengerController.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -460,9 +456,7 @@ class _ExpressInterestScreenState extends State<ExpressInterestScreen> {
                                       children: [
                                         Expanded(
                                           child: Text(
-                                            _selectedPossession ??
-                                                S.of(context)
-                                                    .select_date_of_possession,
+                                            _selectedPossession,
                                             style: const TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600,
@@ -546,7 +540,7 @@ class _ExpressInterestScreenState extends State<ExpressInterestScreen> {
                                         if (_formKey.currentState!.validate()) {
                                           if (kDebugMode) {
                                             print(
-                                                "Phonee${phoneController.text}");
+                                                "Phone${phoneController.text}");
                                           }
                                           Navigator.push(
                                               context,

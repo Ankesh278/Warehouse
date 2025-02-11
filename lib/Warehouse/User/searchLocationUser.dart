@@ -107,7 +107,7 @@ class _searchLocationUserState extends State<searchLocationUser> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.arrow_back_ios_new_sharp,
                                 color: Colors.white,
                               ),
@@ -121,7 +121,7 @@ class _searchLocationUserState extends State<searchLocationUser> {
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.only(right: screenWidth * 0.005),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(0),
@@ -133,7 +133,7 @@ class _searchLocationUserState extends State<searchLocationUser> {
                           child: SingleChildScrollView(
                             child: Column(
                               children: [
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 // Input TextField
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -144,44 +144,44 @@ class _searchLocationUserState extends State<searchLocationUser> {
                                       hintText: 'Enter a location',
                                       label: Text(
                                         S.of(context).location,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                      hintStyle: TextStyle(
+                                      hintStyle: const TextStyle(
                                         color: Colors.grey,
                                         fontSize: 10,
                                       ),
                                       filled: true,
                                       fillColor: Colors.white,
-                                      contentPadding: EdgeInsets.symmetric(
+                                      contentPadding: const EdgeInsets.symmetric(
                                           vertical: 10, horizontal: 10),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(5),
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                             color: Colors.grey, width: 1.0),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(5),
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                             color: Colors.grey, width: 1.0),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(5),
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                             color: Colors.grey, width: 1.0),
                                       ),
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
 
                                 // Display Suggestions
                                 ListView.builder(
                                   shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   itemCount: _placeSuggestions.length,
                                   itemBuilder: (context, index) {
                                     final suggestion =
@@ -197,7 +197,7 @@ class _searchLocationUserState extends State<searchLocationUser> {
                                               suggestion['description'] ?? '';
                                           _placeSuggestions = [];
                                         });
-                                        Future.delayed(Duration(milliseconds: 300), () {
+                                        Future.delayed(const Duration(milliseconds: 300), () {
                                           _isUserSelection = false; // Re-enable listener
                                         });
                                         print(
@@ -206,14 +206,14 @@ class _searchLocationUserState extends State<searchLocationUser> {
                                     );
                                   },
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20.0),
                                   child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(S.of(context).radius_in_km,style: const TextStyle(fontWeight: FontWeight.w800,fontSize: 16),)),
                                 ),
-                                SizedBox(height: 0),
+                                const SizedBox(height: 0),
                                 Wrap(
                                   spacing: 10,
                                   runSpacing: 10,
@@ -227,11 +227,11 @@ class _searchLocationUserState extends State<searchLocationUser> {
                                       child: Container(
                                         width: 50,
                                         height: 40,
-                                        decoration: BoxDecoration(color: Color(0xffD9D9D9),border: Border.all(color: Color(0xff585858),),borderRadius: BorderRadius.circular(10)),
+                                        decoration: BoxDecoration(color: const Color(0xffD9D9D9),border: Border.all(color: const Color(0xff585858),),borderRadius: BorderRadius.circular(10)),
                                         alignment: Alignment.center,
                                         child: Text(
                                           '$value',
-                                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     );

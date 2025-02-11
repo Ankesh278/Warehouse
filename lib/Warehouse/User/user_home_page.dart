@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:Lisofy/Animation/glitter_border.dart';
-import 'package:Lisofy/Warehouse/Partner/HomeScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/home_screen.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/sortingProvider.dart';
 import 'package:Lisofy/Warehouse/User/models/WarehouseModel.dart';
 import 'package:Lisofy/Warehouse/User/searchLocationUser.dart';
-import 'package:Lisofy/Warehouse/User/userNotificationScreen.dart';
+import 'package:Lisofy/Warehouse/User/user_notification_screen.dart';
 import 'package:Lisofy/Warehouse/User/user_profile_screen.dart';
 import 'package:Lisofy/Warehouse/User/user_shortlisted_intrested.dart';
 import 'package:Lisofy/Warehouse/User/warehouse_details.dart';
@@ -14,24 +15,16 @@ import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
-// import 'package:warehouse/Animation/glitter_border.dart';
-// import 'package:warehouse/Warehouse/Partner/HomeScreen.dart';
-// import 'package:warehouse/Warehouse/User/UserProvider/sortingProvider.dart';
-// import 'package:warehouse/Warehouse/User/models/WarehouseModel.dart';
-// import 'package:warehouse/Warehouse/User/searchLocationUser.dart';
-// import 'package:warehouse/Warehouse/User/userNotificationScreen.dart';
-// import 'package:warehouse/Warehouse/User/user_profile_screen.dart';
-// import 'package:warehouse/Warehouse/User/user_shortlisted_intrested.dart';
-// import 'package:warehouse/Warehouse/User/warehouse_details.dart';
-// import 'package:warehouse/generated/l10n.dart';
-// import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
+
+
 
 class UserHomePage extends StatefulWidget {
    double latitude;
@@ -75,7 +68,6 @@ class UserHomePageState extends State<UserHomePage>
   bool isAreaMaxToMin = false;
   late AnimationController _controller;
   late Animation<double> _animation;
-
   List<String> constructionTypes = [''];
   List<String> warehouseTypes = [''];
   String rentRange = '';
@@ -83,18 +75,15 @@ class UserHomePageState extends State<UserHomePage>
   void initState() {
     super.initState();
     if (kDebugMode) {
-      print("CurrentLat ${widget.latitude}");
+      print("CurrentLat  ${widget.latitude}");
     }
     if (kDebugMode) {
-      print("CurrentLong ${widget.longitude}");
+      print("CurrentLong  ${widget.longitude}");
     }
 
     ///Warehouse Fetching
     futureWarehouses = fetchWarehouses(widget.latitude, widget.longitude,
         constructionTypes, warehouseTypes, rentRange);
-
-    // Start periodic location tracking to check if the user moved more than 1 km
-    _startLocationTracking();
     _pageControllerSlider = PageController(initialPage: _currentIndex);
     _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       if (_currentIndex < _images.length - 1) {
@@ -114,59 +103,12 @@ class UserHomePageState extends State<UserHomePage>
     )..repeat();
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
   }
-  void _startLocationTracking() {
-    Timer.periodic(const Duration(seconds: 10), (timer) async {
-      Position currentPosition = await _getCurrentLocation();
-      if (currentPosition != null) {
-        double distance = _calculateDistance(
-          widget.latitude,
-          widget.longitude,
-          currentPosition.latitude,
-          currentPosition.longitude,
-        );
-        if (distance >= 5.0) {
-          // moved more than 5 km
-          setState(() async {
-            widget.latitude = currentPosition.latitude;
-            widget.longitude = currentPosition.longitude;
-            SharedPreferences pref = await SharedPreferences.getInstance();
-            pref.setDouble("latitude", currentPosition.latitude);
-            pref.setDouble("longitude", currentPosition.longitude);
-          });
-          futureWarehouses = fetchWarehouses(
-            widget.latitude,
-            widget.longitude,
-            constructionTypes,
-            warehouseTypes,
-            rentRange,
-          );
-        }
-      }
-    });
+
+  Future<void> _refreshData() async {
+    fetchWarehouses(widget.latitude, widget.longitude,
+        constructionTypes, warehouseTypes, rentRange);
   }
-  Future<Position> _getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-    return await Geolocator.getCurrentPosition();
-  }
-  double _calculateDistance(
-      double startLat, double startLong, double endLat, double endLong) {
-    double distanceInMeters =
-        Geolocator.distanceBetween(startLat, startLong, endLat, endLong);
-    return distanceInMeters / 1000;
-  }
+
   Future<List<WarehouseModel>> fetchWarehouses(
       double latitude,
       double longitude,
@@ -577,7 +519,7 @@ class UserHomePageState extends State<UserHomePage>
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        userNotificationScreen()));
+                                        const UserNotificationScreen()));
                           },
                         ),
                       ],
@@ -914,410 +856,418 @@ class UserHomePageState extends State<UserHomePage>
                       SizedBox(height: screenHeight * 0.015),
                       /// Api data
                       Expanded(
-                        child: FutureBuilder<List<WarehouseModel>>(
+                        child: RefreshIndicator(
+                            color: Colors.blue,
+                            backgroundColor: Colors.white,
+                            onRefresh: _refreshData,
+                            child: FutureBuilder<List<WarehouseModel>>(
                           future: futureWarehouses,
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               return const Center(
                                   child: SpinKitCircle(
-                                color: Colors.blue,
-                              ));
+                                    color: Colors.blue,
+                                  ));
                             } else if (snapshot.hasError) {
                               return Center(
                                   child: Column(
-                                children: [
-                                  Image.asset(ImageAssets.something),
-                                  Text(
-                                    S.of(context).please_wait_for_sometime,
-                                    style: const TextStyle(
-                                        color: Colors.black, fontSize: 14),
-                                  )
-                                ],
-                              ));
+                                    children: [
+                                      Image.asset(ImageAssets.something),
+                                      Text(
+                                        S.of(context).please_wait_for_sometime,
+                                        style: const TextStyle(
+                                            color: Colors.black, fontSize: 14),
+                                      )
+                                    ],
+                                  ));
                             } else if (!snapshot.hasData ||
                                 snapshot.data!.isEmpty) {
                               return Center(
                                   child: Stack(
-                                children: [
-                                  Image.asset(ImageAssets.noWarehouse),
-                                  Container(
-                                      margin: EdgeInsets.only(
-                                          bottom: screenHeight * 0.1),
-                                      child: const Center(
+                                    children: [
+                                      Image.asset(ImageAssets.noWarehouse),
+                                      Container(
+                                          margin: EdgeInsets.only(
+                                              bottom: screenHeight * 0.1),
+                                          child: const Center(
+                                              child: Text(
+                                                "Sorry...",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w800,
+                                                    fontSize: 18),
+                                              ))),
+                                      const Center(
                                           child: Text(
-                                        "Sorry...",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w800,
-                                            fontSize: 18),
-                                      ))),
-                                  const Center(
-                                      child: Text(
-                                    "No Warehouse near you...",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 18),
-                                  ))
-                                ],
-                              ));
+                                            "No Warehouse near you...",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w800,
+                                                fontSize: 18),
+                                          ))
+                                    ],
+                                  ));
                             } else {
                               return Consumer<SortingProvider>(
                                   builder: (context, sortingProvider, child) {
-                                final List<WarehouseModel> warehouses =
+                                    final List<WarehouseModel> warehouses =
                                     List.from(snapshot.data!);
-                                if (sortingProvider.selectedSortOption ==
-                                    'PriceMinToMax') {
-                                  warehouses.sort((a, b) {
-                                    if (a.wHouseRent == null &&
-                                        b.wHouseRent == null) {
-                                      return 0;
+                                    if (sortingProvider.selectedSortOption ==
+                                        'PriceMinToMax') {
+                                      warehouses.sort((a, b) {
+                                        if (a.wHouseRent == null &&
+                                            b.wHouseRent == null) {
+                                          return 0;
+                                        }
+                                        if (a.wHouseRent == null) return 1;
+                                        if (b.wHouseRent == null) return -1;
+                                        return a.wHouseRent!
+                                            .compareTo(b.wHouseRent!);
+                                      });
+                                    } else if (sortingProvider.selectedSortOption ==
+                                        'PriceMaxToMin') {
+                                      warehouses.sort((a, b) {
+                                        if (a.wHouseRent == null &&
+                                            b.wHouseRent == null) {
+                                          return 0;
+                                        }
+                                        if (a.wHouseRent == null) return 1;
+                                        if (b.wHouseRent == null) return -1;
+                                        return b.wHouseRent!
+                                            .compareTo(a.wHouseRent!);
+                                      });
+                                    } else if (sortingProvider.selectedSortOption ==
+                                        'AreaMinToMax') {
+                                      warehouses.sort((a, b) {
+                                        if (a.warehouseCarpetArea == null &&
+                                            b.warehouseCarpetArea == null) {
+                                          return 0;
+                                        }
+                                        if (a.warehouseCarpetArea == null) return 1;
+                                        if (b.warehouseCarpetArea == null) {
+                                          return -1;
+                                        }
+                                        return a.warehouseCarpetArea!
+                                            .compareTo(b.warehouseCarpetArea!);
+                                      });
+                                    } else if (sortingProvider.selectedSortOption ==
+                                        'AreaMaxToMin') {
+                                      warehouses.sort((a, b) {
+                                        if (a.warehouseCarpetArea == null &&
+                                            b.warehouseCarpetArea == null) {
+                                          return 0;
+                                        }
+                                        if (a.warehouseCarpetArea == null) return 1;
+                                        if (b.warehouseCarpetArea == null) {
+                                          return -1;
+                                        }
+                                        return b.warehouseCarpetArea!
+                                            .compareTo(a.warehouseCarpetArea!);
+                                      });
                                     }
-                                    if (a.wHouseRent == null) return 1;
-                                    if (b.wHouseRent == null) return -1;
-                                    return a.wHouseRent!
-                                        .compareTo(b.wHouseRent!);
-                                  });
-                                } else if (sortingProvider.selectedSortOption ==
-                                    'PriceMaxToMin') {
-                                  warehouses.sort((a, b) {
-                                    if (a.wHouseRent == null &&
-                                        b.wHouseRent == null) {
-                                      return 0;
-                                    }
-                                    if (a.wHouseRent == null) return 1;
-                                    if (b.wHouseRent == null) return -1;
-                                    return b.wHouseRent!
-                                        .compareTo(a.wHouseRent!);
-                                  });
-                                } else if (sortingProvider.selectedSortOption ==
-                                    'AreaMinToMax') {
-                                  warehouses.sort((a, b) {
-                                    if (a.warehouseCarpetArea == null &&
-                                        b.warehouseCarpetArea == null) {
-                                      return 0;
-                                    }
-                                    if (a.warehouseCarpetArea == null) return 1;
-                                    if (b.warehouseCarpetArea == null) {
-                                      return -1;
-                                    }
-                                    return a.warehouseCarpetArea!
-                                        .compareTo(b.warehouseCarpetArea!);
-                                  });
-                                } else if (sortingProvider.selectedSortOption ==
-                                    'AreaMaxToMin') {
-                                  warehouses.sort((a, b) {
-                                    if (a.warehouseCarpetArea == null &&
-                                        b.warehouseCarpetArea == null) {
-                                      return 0;
-                                    }
-                                    if (a.warehouseCarpetArea == null) return 1;
-                                    if (b.warehouseCarpetArea == null) {
-                                      return -1;
-                                    }
-                                    return b.warehouseCarpetArea!
-                                        .compareTo(a.warehouseCarpetArea!);
-                                  });
-                                }
-                                return GridView.builder(
-                                  gridDelegate:
+                                    return GridView.builder(
+                                      gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
-                                    childAspectRatio: 0.8,
-                                  ),
-                                  itemCount: warehouses.length,
-                                  itemBuilder: (context, index) {
-                                    final warehouse = warehouses[index];
-                                    return InkWell(
-                                      child: Container(
-                                        margin: const EdgeInsets.only(right: 5),
-                                        height: screenHeight * 0.25,
-                                        width: screenWidth * 0.45,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 10,
+                                        mainAxisSpacing: 10,
+                                        childAspectRatio: 0.8,
+                                      ),
+                                      itemCount: warehouses.length,
+                                      itemBuilder: (context, index) {
+                                        final warehouse = warehouses[index];
+                                        return InkWell(
+                                          child: Container(
+                                            margin: const EdgeInsets.only(right: 5),
+                                            height: screenHeight * 0.25,
+                                            width: screenWidth * 0.45,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
                                               BorderRadius.circular(15),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.8),
-                                              spreadRadius: 0.5,
-                                              blurRadius: 0.8,
-                                              offset: const Offset(2, 2),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Stack(
-                                          children: [
-                                            Column(
-                                              children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        "https://xpacesphere.com${warehouse.image}",
-                                                    width: double.infinity,
-                                                    height: screenHeight * 0.15,
-                                                    fit: BoxFit.cover,
-                                                    placeholder:
-                                                        (context, url) =>
-                                                            Shimmer.fromColors(
-                                                      baseColor:
-                                                          Colors.grey[300]!,
-                                                      highlightColor:
-                                                          Colors.grey[100]!,
-                                                      child: Container(
-                                                        color: Colors.grey[300],
-                                                        width: double.infinity,
-                                                        height:
-                                                            screenHeight * 0.15,
-                                                      ),
-                                                    ),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Image.asset(
-                                                          ImageAssets
-                                                              .defaultImage,
-                                                          width:
-                                                              double.infinity,
-                                                          height: screenHeight *
-                                                              0.15,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                const Spacer(),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Row(children: [
-                                                      Container(
-                                                        constraints:
-                                                            const BoxConstraints(
-                                                                maxWidth: 40),
-                                                        child: FittedBox(
-                                                          fit: BoxFit.scaleDown,
-                                                          child: Text(
-                                                            warehouse
-                                                                .wHouseRentPerSQFT
-                                                                .toString(),
-                                                            style: const TextStyle(
-                                                                fontSize: 8,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700),
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const Text(
-                                                        "  per sq.ft",
-                                                        style: TextStyle(
-                                                            fontSize: 5,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            color:
-                                                                Colors.black),
-                                                      ),
-                                                    ]),
-                                                    Row(children: [
-                                                      const Text(
-                                                        "Type: ",
-                                                        style: TextStyle(
-                                                            fontSize: 7,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            color: Colors.grey),
-                                                      ),
-                                                      Container(
-                                                        constraints:
-                                                            const BoxConstraints(
-                                                                maxWidth: 40),
-                                                        child: FittedBox(
-                                                          fit: BoxFit.scaleDown,
-                                                          child: Text(
-                                                            warehouse
-                                                                .wHouseType,
-                                                            style: const TextStyle(
-                                                                fontSize: 7,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color: Colors
-                                                                    .black87),
-                                                            textAlign: TextAlign
-                                                                .start, // Align text as needed
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ]),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 5),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Row(children: [
-                                                      const SizedBox(width: 5),
-                                                      Image.asset(
-                                                          "assets/images/Scaleup.png",
-                                                          height: 20,
-                                                          width: 20),
-                                                      Container(
-                                                        constraints:
-                                                            const BoxConstraints(
-                                                                maxWidth:
-                                                                    40),
-                                                        child: FittedBox(
-                                                          fit: BoxFit
-                                                              .scaleDown,
-                                                          child: Text(
-                                                            warehouse
-                                                                .warehouseCarpetArea
-                                                                .toString(),
-                                                            style: const TextStyle(
-                                                                fontSize: 8,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w800),
-                                                            textAlign: TextAlign
-                                                                .start,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const Text(
-                                                        " per sq.ft",
-                                                        style: TextStyle(
-                                                            fontSize: 5,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            color:
-                                                                Colors.black),
-                                                      ),
-                                                    ]),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 5),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Row(children: [
-                                                      const Icon(
-                                                          Icons.location_on,
-                                                          size: 12,color: Colors.red,),
-                                                      Container(
-                                                        constraints:
-                                                            const BoxConstraints(
-                                                                maxWidth: 80),
-                                                        child: FittedBox(
-                                                          fit: BoxFit.scaleDown,
-                                                          child: Text(
-                                                            "${warehouse.distance.toStringAsFixed(3)}km away",
-                                                            style: const TextStyle(
-                                                                fontSize: 8,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                color: Colors
-                                                                    .grey),
-                                                            textAlign: TextAlign
-                                                                .start, // Align text as needed
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ]),
-                                                    Row(children: [
-                                                      Image.asset(
-                                                          "assets/images/people.png",
-                                                         ),
-                                                      const SizedBox(width: 5),
-                                                      Container(
-                                                        margin: const EdgeInsets
-                                                            .only(bottom: 3),
-                                                        padding:const EdgeInsets.symmetric(horizontal: 5),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(4),
-                                                          border: Border.all(
-                                                              color:
-                                                                  Colors.black,
-                                                              width: 2),
-                                                        ),
-                                                        child: const Center(
-                                                          child: Text(
-                                                            "P",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                                fontSize: 13),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ]),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    )
-                                                  ],
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color:
+                                                  Colors.grey.withValues(alpha: 0.8),
+                                                  spreadRadius: 0.5,
+                                                  blurRadius: 0.8,
+                                                  offset: const Offset(2, 2),
                                                 ),
                                               ],
                                             ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(4.0),
-                                              child: Align(
-                                                alignment: Alignment.topRight,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.white,
+                                            child: Stack(
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    ClipRRect(
                                                       borderRadius:
+                                                      BorderRadius.circular(15),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                        "https://xpacesphere.com${warehouse.image}",
+                                                        width: double.infinity,
+                                                        height: screenHeight * 0.15,
+                                                        fit: BoxFit.cover,
+                                                        placeholder:
+                                                            (context, url) =>
+                                                            Shimmer.fromColors(
+                                                              baseColor:
+                                                              Colors.grey[300]!,
+                                                              highlightColor:
+                                                              Colors.grey[100]!,
+                                                              child: Container(
+                                                                color: Colors.grey[300],
+                                                                width: double.infinity,
+                                                                height:
+                                                                screenHeight * 0.15,
+                                                              ),
+                                                            ),
+                                                        errorWidget:
+                                                            (context, url, error) =>
+                                                            Column(
+                                                              mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                              children: [
+                                                                Image.asset(
+                                                                  ImageAssets
+                                                                      .defaultImage,
+                                                                  width:
+                                                                  double.infinity,
+                                                                  height: screenHeight *
+                                                                      0.15,
+                                                                  fit: BoxFit.cover,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                      ),
+                                                    ),
+                                                    const Spacer(),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                      children: [
+                                                        Row(children: [
+                                                          Container(
+                                                            constraints:
+                                                            const BoxConstraints(
+                                                                maxWidth: 40),
+                                                            child: FittedBox(
+                                                              fit: BoxFit.scaleDown,
+                                                              child: Text(
+                                                                warehouse
+                                                                    .wHouseRentPerSQFT
+                                                                    .toString(),
+                                                                style: const TextStyle(
+                                                                    fontSize: 8,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                                textAlign:
+                                                                TextAlign.start,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const Text(
+                                                            "  per sq.ft",
+                                                            style: TextStyle(
+                                                                fontSize: 5,
+                                                                fontWeight:
+                                                                FontWeight.w400,
+                                                                color:
+                                                                Colors.black),
+                                                          ),
+                                                        ]),
+                                                        Row(children: [
+                                                          const Text(
+                                                            "Type: ",
+                                                            style: TextStyle(
+                                                                fontSize: 7,
+                                                                fontWeight:
+                                                                FontWeight.w400,
+                                                                color: Colors.grey),
+                                                          ),
+                                                          Container(
+                                                            constraints:
+                                                            const BoxConstraints(
+                                                                maxWidth: 40),
+                                                            child: FittedBox(
+                                                              fit: BoxFit.scaleDown,
+                                                              child: Text(
+                                                                warehouse
+                                                                    .wHouseType,
+                                                                style: const TextStyle(
+                                                                    fontSize: 7,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                    color: Colors
+                                                                        .black87),
+                                                                textAlign: TextAlign
+                                                                    .start, // Align text as needed
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ]),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                      children: [
+                                                        Row(children: [
+                                                          const SizedBox(width: 5),
+                                                          Image.asset(
+                                                              "assets/images/Scaleup.png",
+                                                              height: 20,
+                                                              width: 20),
+                                                          Container(
+                                                            constraints:
+                                                            const BoxConstraints(
+                                                                maxWidth:
+                                                                40),
+                                                            child: FittedBox(
+                                                              fit: BoxFit
+                                                                  .scaleDown,
+                                                              child: Text(
+                                                                warehouse
+                                                                    .warehouseCarpetArea
+                                                                    .toString(),
+                                                                style: const TextStyle(
+                                                                    fontSize: 8,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .w800),
+                                                                textAlign: TextAlign
+                                                                    .start,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const Text(
+                                                            " per sq.ft",
+                                                            style: TextStyle(
+                                                                fontSize: 5,
+                                                                fontWeight:
+                                                                FontWeight.w400,
+                                                                color:
+                                                                Colors.black),
+                                                          ),
+                                                        ]),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                      children: [
+                                                        Row(children: [
+                                                          const Icon(
+                                                            Icons.location_on,
+                                                            size: 12,color: Colors.red,),
+                                                          Container(
+                                                            constraints:
+                                                            const BoxConstraints(
+                                                                maxWidth: 80),
+                                                            child: FittedBox(
+                                                              fit: BoxFit.scaleDown,
+                                                              child: Text(
+                                                                "${warehouse.distance.toStringAsFixed(3)}km away",
+                                                                style: const TextStyle(
+                                                                    fontSize: 8,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                    color: Colors
+                                                                        .grey),
+                                                                textAlign: TextAlign
+                                                                    .start, // Align text as needed
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ]),
+                                                        Row(children: [
+                                                          Image.asset(
+                                                            "assets/images/people.png",
+                                                          ),
+                                                          const SizedBox(width: 5),
+                                                          Container(
+                                                            margin: const EdgeInsets
+                                                                .only(bottom: 3),
+                                                            padding:const EdgeInsets.symmetric(horizontal: 5),
+                                                            decoration:
+                                                            BoxDecoration(
+                                                              borderRadius:
+                                                              BorderRadius
+                                                                  .circular(4),
+                                                              border: Border.all(
+                                                                  color:
+                                                                  Colors.black,
+                                                                  width: 2),
+                                                            ),
+                                                            child: const Center(
+                                                              child: Text(
+                                                                "P",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                    fontSize: 13),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ]),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.all(4.0),
+                                                  child: Align(
+                                                    alignment: Alignment.topRight,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
                                                           BorderRadius.circular(
                                                               7)),
-                                                  child: const Icon(
-                                                      Icons
-                                                          .file_download_outlined,
-                                                      color: Colors.blue),
+                                                      child: InkWell(
+                                                        onTap:(){
+                                                          downloadImages();
+                                                          },
+                                                        child: const Icon(
+                                                            Icons.file_download_outlined,
+                                                            color: Colors.blue),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    WareHouseDetails(
-                                                        warehouses: warehouse,
-                                                        phone: phone!)));
+                                          ),
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        WareHouseDetails(
+                                                            warehouses: warehouse,
+                                                            phone: phone!)));
+                                          },
+                                        );
                                       },
                                     );
-                                  },
-                                );
-                              });
+                                  });
                             }
                           },
-                        ),
+                        )),
                       ),
                     ],
                   ),
@@ -1377,7 +1327,7 @@ class UserHomePageState extends State<UserHomePage>
 
   Widget _userShortListedInterestedPage(
       double screenWidth, double screenHeight) {
-    return userShortlistedIntrested();
+    return const userShortlistedIntrested();
   }
 
   Widget _buildAccountPage(double screenWidth, double screenHeight) {
@@ -1394,6 +1344,82 @@ class UserHomePageState extends State<UserHomePage>
       },
     );
   }
+
+  Future<void> downloadImages() async {
+    bool hasPermission = await _requestPermission();
+    if (!hasPermission) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Storage permission is required to save images.")),
+      );
+      return;
+    }
+
+    for (String url in _images) {
+      await _downloadAndSaveImageToGallery(url);
+    }
+
+    Fluttertoast.showToast(
+        msg: "All images saved to Gallery!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 14.0
+    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   const SnackBar(
+    //       backgroundColor: Colors.green,
+    //       content: Text("All images saved to Gallery!")),
+    // );
+  }
+
+
+  /// Request permission for accessing media
+  Future<bool> _requestPermission() async {
+    if (Platform.isAndroid) {
+      if (await Permission.storage.request().isGranted) return true; // For Android 10 and below
+      if (await Permission.manageExternalStorage.request().isGranted) return true; // For Android 11+
+      if (await Permission.photos.request().isGranted) return true; // For Android 13+
+    }
+    return false;
+  }
+
+  /// Save image directly in the Gallery (Public Pictures folder)
+  Future<void> _downloadAndSaveImageToGallery(String url) async {
+    try {
+      var response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        // Public directory where images should be saved
+        Directory directory = Directory("/storage/emulated/0/Pictures/Lisofy");
+        if (!directory.existsSync()) {
+          directory.createSync(recursive: true);
+        }
+
+        // Ensure filename is valid (remove query parameters)
+        String fileName = Uri.parse(url).pathSegments.last.split('?').first;
+        String filePath = "${directory.path}$fileName";
+
+        // Save the image file
+        File file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+
+        if (kDebugMode) {
+          print("Saved to Gallery: $filePath");
+        }
+      } else {
+        if (kDebugMode) {
+          print("Failed to download image: ${response.statusCode}");
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error saving image: $e");
+      }
+    }
+  }
+
+
 }
 
 class AdvancedFiltersBottomSheet extends StatefulWidget {

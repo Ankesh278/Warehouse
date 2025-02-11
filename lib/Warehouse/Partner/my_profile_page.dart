@@ -1,12 +1,10 @@
 import 'package:Lisofy/Warehouse/User/userlogin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-
-
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({super.key});
@@ -20,46 +18,37 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   Future<void> _logoutAndRedirect(BuildContext context) async {
     try {
-      // Sign out from Google
       await _googleSignIn.signOut();
-
-      // Sign out from Firebase Authentication (for phone auth)
       FirebaseAuth auth = FirebaseAuth.instance;
       User? currentUser = auth.currentUser;
       if (currentUser != null) {
         await auth.signOut();
       }
-
-      // Clear SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.remove('userEmail');
       await prefs.remove('userName');
       await prefs.setBool('isLoggedIn', false);
-
-      // Navigate to the Login Page and remove all previous routes
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) =>  userlogin()), // Replace with your login page
+        MaterialPageRoute(builder: (context) =>  const UserLogin()),
             (route) => false,
       );
     } catch (e) {
-      print("Error during logout: $e");
-      // Optionally, show an error message or handle the error
+      if (kDebugMode) {
+        print("Error during logout: $e");
+      }
     }
   }
-
-
-  // Function to show the confirmation dialog with Yes/No buttons
   Future<bool> _showLogoutConfirmationDialog(BuildContext context) async {
     return await showDialog(
       context: context,
-      barrierDismissible: false, // Disable dismiss on tapping outside
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text(
             "Log Out",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.red, // Red title for log out warning
+              color: Colors.red,
             ),
           ),
           content: const Row(
@@ -77,22 +66,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(false); // Stay logged in
+                Navigator.of(context).pop(false);
               },
               child: const Text(
                 "No",
                 style: TextStyle(
-                  color: Colors.green, // Green color for "No" button
+                  color: Colors.green,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(true); // Log out
+                Navigator.of(context).pop(true);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red, // Red color for "Yes" button
+                backgroundColor: Colors.red,
               ),
               child: const Text(
                 "Yes",
@@ -113,7 +102,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getShareData();
   }
@@ -121,25 +109,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
     SharedPreferences pref=await SharedPreferences.getInstance();
     name=pref.getString("name")!;
     phone=pref.getString("phone")!;
-
-    // Use setState to update the UI after data is loaded
     setState(() {
-      name = name  ?? 'Unknown User'; // Set a default value if null
-      phone = phone ?? 'No Phone';
+      name = name;
+      phone = phone;
     });
-
-    print("name::::::"+name);
-    print("[phone]::::::"+phone);
-
+    if (kDebugMode) {
+      print("name::::::$name");
+    }
+    if (kDebugMode) {
+      print("[phone]::::::$phone");
+    }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Stack(
         children: [
@@ -191,9 +176,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                         border: Border.all(color: Colors.blue),
                                       ),
                                       child: Row(
-
                                         children: [
-
                                           Container(
                                             height: 34,
                                             width: 34,
@@ -202,7 +185,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                               borderRadius: BorderRadius.circular(5)
                                             ),
                                             child: const Icon(Icons.wifi_calling_3_outlined,color: Colors.blue,),
-
                                           ),
                                           const SizedBox(width: 15),
                                           const Text(
@@ -213,7 +195,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                               fontWeight: FontWeight.w400,
                                             ),
                                           ),
-
                                         ],
                                       ),
                                     ),
@@ -229,8 +210,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                   const Padding(
                                     padding: EdgeInsets.only(left: 13.0,top: 10),
                                     child: Text("Account",style: TextStyle(fontWeight: FontWeight.w600),),
-
-
                                   ),
                                   Container(
                                     margin: const EdgeInsets.symmetric(horizontal: 13),
@@ -242,7 +221,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                       border: Border.all(color: Colors.grey),
                                     ),
                                     child: const Row(
-
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.only(left: 4.0),
@@ -265,8 +243,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                             child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
                                           ),
                                         )
-
-
                                       ],
                                     ),
                                   ),
@@ -281,7 +257,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                       border: Border.all(color: Colors.grey),
                                     ),
                                     child: const Row(
-
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.only(left: 8.0),
@@ -304,9 +279,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                             child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
                                           ),
                                         )
-
-
-
                                       ],
                                     ),
                                   ),
@@ -321,7 +293,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                       border: Border.all(color: Colors.grey),
                                     ),
                                     child: const Row(
-
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.only(left: 8.0),
@@ -344,17 +315,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                             child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
                                           ),
                                         )
-
-
-
                                       ],
                                     ),
                                   ),
                                   const Padding(
                                     padding: EdgeInsets.only(left: 13.0,top: 10,bottom: 10),
                                     child: Text("General",style: TextStyle(fontWeight: FontWeight.w600),),
-
-
                                   ),
                                   Container(
                                     margin: const EdgeInsets.symmetric(horizontal: 13),
@@ -366,7 +332,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                       border: Border.all(color: Colors.grey),
                                     ),
                                     child: const Row(
-
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.only(left: 4.0),
@@ -389,9 +354,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                             child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
                                           ),
                                         )
-
-
-
                                       ],
                                     ),
                                   ),
@@ -406,7 +368,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                       border: Border.all(color: Colors.grey),
                                     ),
                                     child: const Row(
-
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.only(left: 4.0),
@@ -429,9 +390,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                             child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
                                           ),
                                         )
-
-
-
                                       ],
                                     ),
                                   ),
@@ -446,7 +404,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                       border: Border.all(color: Colors.grey),
                                     ),
                                     child: const Row(
-
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.only(left: 4.0),
@@ -469,17 +426,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                             child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
                                           ),
                                         )
-
-
-
                                       ],
                                     ),
                                   ),
                                   const Padding(
                                     padding: EdgeInsets.only(left: 13.0,top: 10,bottom: 10),
                                     child: Text("General",style: TextStyle(fontWeight: FontWeight.w600),),
-
-
                                   ),
                                   SizedBox(height: screenHeight*0.01,),
                                   Container(
@@ -492,7 +444,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                       border: Border.all(color: Colors.grey),
                                     ),
                                     child: const Row(
-
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.only(left: 4.0),
@@ -515,9 +466,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                             child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
                                           ),
                                         )
-
-
-
                                       ],
                                     ),
                                   ),
@@ -532,7 +480,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                       border: Border.all(color: Colors.grey),
                                     ),
                                     child: const Row(
-
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.only(left: 4.0),
@@ -555,9 +502,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                             child:  Icon(Icons.arrow_forward_ios,size: 14,color: Colors.grey,),
                                           ),
                                         )
-
-
-
                                       ],
                                     ),
                                   ),
@@ -574,24 +518,20 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                             "Log out",
                                             style: TextStyle(
                                               fontWeight: FontWeight.w600,
-                                              color: Colors.red, // Red text for logout
+                                              color: Colors.red,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
                                     onTap: () async {
-                                      // Show the confirmation dialog before logout
                                       bool shouldLogout = await _showLogoutConfirmationDialog(context);
                                       if (shouldLogout) {
-                                        // Call the logout function
                                         await _logoutAndRedirect(context);
                                       }
                                     },
                                   ),
                                 ),
-
-
                                 Padding(
                                       padding: const EdgeInsets.only(left: 13.0,top: 0,bottom: 0),
                                       child:Row(
@@ -608,24 +548,17 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                           const SizedBox(width: 15,),
                                           const Text("Follow us on : ",style: TextStyle(fontWeight: FontWeight.w500),),
                                           const SizedBox(width: 15,),
-                                          InkWell(child: Image.asset("assets/images/Facebook.png"),
-                                          onTap: _openFacebookProfile,
+                                          InkWell(onTap: _openFacebookProfile,child: Image.asset("assets/images/Facebook.png"),
                                           ),
                                           const SizedBox(width: 15,),
-                                          InkWell(child: Image.asset("assets/images/Instagram.png"),
-                                          onTap: _openInstagramProfile,
+                                          InkWell(onTap: _openInstagramProfile,child: Image.asset("assets/images/Instagram.png"),
                                           ),
                                           const SizedBox(width: 15,),
-                                          InkWell(child: Image.asset("assets/images/TwitterX.png"),
-                                          onTap: _openTwitterProfile,
+                                          InkWell(onTap: _openTwitterProfile,child: Image.asset("assets/images/TwitterX.png"),
                                           )
-
-                                        ],
+                                        ]
                                       )
-
-
                                   ),
-
                                 ],
                               ),
                             ),
@@ -638,10 +571,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
               ),
             ],
           ),
-          // Red container on top of both blue and white sections
           Positioned(
-            top: screenHeight * 0.15, // Adjust this to move the container vertically
-            left: screenWidth / 2 - 125, // Center the container horizontally
+            top: screenHeight * 0.15,
+            left: screenWidth / 2 - 125,
             child: Container(
               height: 190,
               width: 250,
@@ -658,8 +590,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 border: Border.all(color: Colors.white)
               ),
               child: Column(
-              //  mainAxisAlignment: MainAxisAlignment.center,
-               // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Spacer(),
                   Text(
@@ -669,8 +599,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-
-                  // SizedBox(height: 10,),
                    Padding(
                     padding: const EdgeInsets.only(bottom: 25),
                     child: Row(
@@ -686,7 +614,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-
                       ],
                     ),
                   ),
@@ -709,31 +636,26 @@ class _MyProfilePageState extends State<MyProfilePage> {
             )
           ),
           Positioned(
-              top: screenHeight * 0.08, // Adjust this to move the container vertically
-              left: screenWidth / 2 - 45, // Center the container horizontally
+              top: screenHeight * 0.08,
+              left: screenWidth / 2 - 45,
               child: Image.asset("assets/images/userround.png")
           ),
         ],
       ),
     );
   }
-  // Function to launch Instagram app or web page
   void _openInstagramProfile() async {
     const String instagramUrl = 'instagram://user?username=a_tinyhunter';
     const String fallbackUrl = 'https://www.instagram.com/a_tinyhunter/';
-
     try {
       bool launched = await launchUrl(Uri.parse(instagramUrl), mode: LaunchMode.externalApplication);
       if (!launched) {
-        // If Instagram app isn't installed, open in browser
         await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
       }
     } catch (e) {
-      // In case any error occurs, open fallback URL in browser
       await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
     }
   }
-  // Function to launch Facebook app or web page
   void _openFacebookProfile() async {
     const String facebookAppUrl = 'fb://profile/100009158840334';
     const String fallbackUrl = 'https://www.facebook.com/profile.php?id=100009158840334';
@@ -741,27 +663,21 @@ class _MyProfilePageState extends State<MyProfilePage> {
     try {
       bool launched = await launchUrl(Uri.parse(facebookAppUrl), mode: LaunchMode.externalApplication);
       if (!launched) {
-        // If Facebook app isn't installed, open in browser
         await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
       }
     } catch (e) {
-      // In case any error occurs, open fallback URL in browser
       await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
     }
   }
-  // Function to launch Twitter app or web page
   void _openTwitterProfile() async {
     const String twitterAppUrl = 'twitter://user?screen_name=AnkeshYada78626';
     const String fallbackUrl = 'https://twitter.com/AnkeshYada78626';
-
     try {
       bool launched = await launchUrl(Uri.parse(twitterAppUrl), mode: LaunchMode.externalApplication);
       if (!launched) {
-        // If Twitter app isn't installed, open in browser
         await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
       }
     } catch (e) {
-      // In case any error occurs, open fallback URL in browser
       await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
     }
   }

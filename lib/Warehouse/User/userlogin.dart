@@ -1,66 +1,38 @@
 import 'package:Lisofy/Warehouse/User/UserProvider/auth_user_provider.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 
 
-class userlogin extends StatefulWidget {
-  const userlogin({super.key});
+class UserLogin extends StatefulWidget {
+  const UserLogin({super.key});
 
   @override
-  State<userlogin> createState() => _userloginState();
+  State<UserLogin> createState() => _UserLoginState();
 }
 
-class _userloginState extends State<userlogin> {
+class _UserLoginState extends State<UserLogin> {
   final _formKey = GlobalKey<FormState>();
-  String? _detectedPhoneNumber;
-
   final TextEditingController _phoneController = TextEditingController();
 @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-   // _fetchPhoneNumber();
     _phoneController.addListener(() {
       if (_phoneController.text.length == 10) {
-        // Dismiss the keyboard when 10 digits are entered
         FocusScope.of(context).unfocus();
       }
     });
   }
 
-
-  // Future<void> _fetchPhoneNumber() async {
-  //   try {
-  //     final simData = await SimDataPlugin.getSimData();
-  //     if (simData.cards.isNotEmpty) {
-  //       setState(() {
-  //         _detectedPhoneNumber = simData.cards[0].serialNumber;
-  //         print("Numberr"+_detectedPhoneNumber.toString());
-  //        // _phoneController.text = _detectedPhoneNumber ?? '';
-  //       });
-  //     }
-  //   } catch (e) {
-  //     if (kDebugMode) {
-  //       print('Failed to fetch phone number: $e');
-  //     }
-  //   }
-  // }
-
-
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     final authProvider = Provider.of<AuthUserProvider>(context);
-
     return Scaffold(
       body: Stack(
         children: [
-          // Full-screen blue background
           Container(
             color: Colors.blue,
             width: double.infinity,
@@ -68,15 +40,13 @@ class _userloginState extends State<userlogin> {
             child: SafeArea(
               child: Column(
                 children: [
-                  // Blue top section
                   Container(
                     color: Colors.blue,
-                    height: screenHeight * 0.285, // Adjusted for responsiveness
+                    height: screenHeight * 0.285,
                     child: Padding(
                       padding: EdgeInsets.only(
-                        top:
-                            screenHeight * 0.015, // Adjusted for responsiveness
-                        left: screenWidth * 0.03, // Adjusted for responsiveness
+                        top: screenHeight * 0.015,
+                        left: screenWidth * 0.03,
                       ),
                       child: Column(
                         children: [
@@ -95,12 +65,12 @@ class _userloginState extends State<userlogin> {
                             child: Container(
                               margin: EdgeInsets.only(
                                   left: screenWidth *
-                                      0.045), // Adjusted for responsiveness
+                                      0.045),
                               child: Text(
                                 "Sign in / Login",
                                 style: TextStyle(
                                   fontSize: screenWidth *
-                                      0.05, // Adjusted for responsiveness
+                                      0.05,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -112,16 +82,16 @@ class _userloginState extends State<userlogin> {
                             child: Container(
                               margin: EdgeInsets.only(
                                 left: screenWidth *
-                                    0.045, // Adjusted for responsiveness
+                                    0.045,
                                 top: screenHeight *
-                                    0.01, // Adjusted for responsiveness
+                                    0.01,
                               ),
                               child: Text(
                                 "Welcome back to the app",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: screenWidth *
-                                      0.04, // Adjusted for responsiveness
+                                      0.04,
                                 ),
                               ),
                             ),
@@ -131,13 +101,13 @@ class _userloginState extends State<userlogin> {
                             child: Container(
                               margin: EdgeInsets.only(
                                   right: screenWidth *
-                                      0.06), // Adjusted for responsiveness
+                                      0.06),
                               child: Image.asset(
                                 "assets/images/faceid.png",
                                 height: screenHeight *
-                                    0.12, // Adjusted for responsiveness
+                                    0.12,
                                 width: screenHeight *
-                                    0.12, // Adjusted for responsiveness
+                                    0.12,
                               ),
                             ),
                           ),
@@ -149,8 +119,7 @@ class _userloginState extends State<userlogin> {
                   Expanded(
                     child: Container(
                       margin: EdgeInsets.only(
-                          right: screenWidth *
-                              0.005), // Adjusted for responsiveness
+                          right: screenWidth * 0.005),
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
@@ -160,19 +129,18 @@ class _userloginState extends State<userlogin> {
                       ),
                       child: Padding(
                         padding: EdgeInsets.all(
-                            screenWidth * 0.04), // Adjusted for responsiveness
+                            screenWidth * 0.04),
                         child: SingleChildScrollView(
                           child: Form(
                             key: _formKey,
                             child: Column(
                               children: [
-                                // Country code and mobile number
                                 Container(
                                   padding: EdgeInsets.symmetric(
                                     horizontal: screenWidth *
-                                        0.065, // Adjusted for responsiveness
+                                        0.065,
                                     vertical: screenHeight *
-                                        0.015, // Adjusted for responsiveness
+                                        0.015,
                                   ),
                                   child: TextField(
                                     controller: TextEditingController(
@@ -180,31 +148,30 @@ class _userloginState extends State<userlogin> {
                                     readOnly: true,
                                     decoration: const InputDecoration(
                                       border: InputBorder
-                                          .none, // Remove the default border
+                                          .none,
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Colors
-                                                .blue), // Bottom border color
+                                                .blue),
                                       ),
                                       focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Colors
-                                                .blue), // Bottom border color when focused
+                                                .blue),
                                       ),
                                     ),
                                     style: TextStyle(
                                       color: Colors.blue,
                                       fontWeight: FontWeight.bold,
                                       fontSize: screenWidth *
-                                          0.04, // Adjusted for responsiveness
-                                    ), // Color of the text
+                                          0.04,
+                                    ),
                                   ),
                                 ),
-
                                 Container(
                                   margin: EdgeInsets.symmetric(
                                       horizontal: screenWidth *
-                                          0.05), // Adjusted for responsiveness
+                                          0.05),
                                   child: TextFormField(
                                     controller: _phoneController,
                                     keyboardType: TextInputType.phone,
@@ -212,23 +179,22 @@ class _userloginState extends State<userlogin> {
                                     decoration: InputDecoration(
                                       errorText: authProvider.errorMessage,
                                       hintText:
-                                          'Enter your mobile number', // Hint inside the text box
+                                          'Enter your mobile number',
                                       hintStyle: TextStyle(
                                         color: Colors.blue,
                                         fontSize: screenWidth *
-                                            0.03, // Adjusted for responsiveness
-                                      ), // Customize hint text color
+                                            0.03,
+                                      ),
                                       border: InputBorder
-                                          .none, // Remove the default border
+                                          .none,
                                       enabledBorder: const UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors
-                                                .blue), // Bottom border color
+                                            color: Colors.blue),
                                       ),
                                       focusedBorder: const UnderlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Colors
-                                                .blue), // Bottom border color when focused
+                                                .blue),
                                       ),
                                     ),
                                     validator: (value) {
@@ -246,7 +212,6 @@ class _userloginState extends State<userlogin> {
                                     },
                                   ),
                                 ),
-
                                 SizedBox(
                                     height: screenHeight *
                                         0.04),
@@ -263,45 +228,38 @@ class _userloginState extends State<userlogin> {
                                            String phoneNumber = '+91${_phoneController.text}';
                                            authProvider.verifyPhoneNumber(phoneNumber, context);
                                          }
-                                         // Navigator.push(
-                                         //     context,
-                                         //     MaterialPageRoute(
-                                         //         builder: (context) =>
-                                         //             userverifyotp()));
-                                         // Handle OTP request
                                        },
-                                       child: authProvider.isLoading?const SpinKitCircle(
-                                         color: Colors.white,
-                                         size: 50.0,
-                                       )
-                                         :const Text('Get OTP'),
                                        style: ElevatedButton.styleFrom(
                                          foregroundColor: Colors.white,
                                          backgroundColor: Colors.blue,
                                          minimumSize: Size(
                                              double.infinity,
                                              screenHeight *
-                                                 0.06), // Adjusted for responsiveness
+                                                 0.06),
                                        ),
+                                       child: authProvider.isLoading?const SpinKitCircle(
+                                         color: Colors.white,
+                                         size: 50.0,
+                                       )
+                                         :const Text('Get OTP'),
                                      ),
                                    );
                                  }),
                                 SizedBox(
-                                    height: screenHeight *
-                                        0.015), // Adjusted for responsiveness
+                                    height: screenHeight * 0.015),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Container(
-                                      margin: EdgeInsets.symmetric(
+                                      margin: const EdgeInsets.symmetric(
                                           vertical:
-                                              10.0), // Space around the line
+                                              10.0),
                                       width: 100.0,
-                                      height: 2, // Thickness of the line
-                                      color: Colors.blue, // Color of the line
+                                      height: 2,
+                                      color: Colors.blue,
                                     ),
                                     SizedBox(width: screenHeight * 0.02),
-                                    Text(
+                                    const Text(
                                       "or",
                                       style: TextStyle(
                                           color: Colors.blue,
@@ -309,58 +267,25 @@ class _userloginState extends State<userlogin> {
                                     ),
                                     SizedBox(width: screenHeight * 0.02),
                                     Container(
-                                      margin: EdgeInsets.symmetric(
-                                          vertical:
-                                              10.0), // Space around the line
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10.0),
                                       width: 100.0,
-                                      height: 2, // Thickness of the line
-                                      color: Colors.blue, // Color of the line
+                                      height: 2,
+                                      color: Colors.blue,
                                     ),
                                   ],
                                 ),
                                 SizedBox(height: screenHeight * 0.05),
-                                // Adjusted for responsiveness
-                                // You can replace "google" text with the intended widget
-                                // InkWell(
-                                //   child: Container(
-                                //     width: screenWidth * 0.75,
-                                //     height: screenHeight * 0.05,
-                                //     margin: EdgeInsets.symmetric(
-                                //         horizontal: screenWidth * 0.03),
-                                //     decoration: BoxDecoration(
-                                //       border: Border.all(color: Colors.blue),
-                                //       borderRadius: BorderRadius.circular(5),
-                                //     ),
-                                //     child: Center(
-                                //       child: Row(
-                                //         mainAxisAlignment:
-                                //             MainAxisAlignment.center,
-                                //         children: [
-                                //           Image.asset(
-                                //               "assets/images/Google.png"),
-                                //           const Text(
-                                //             "Continue with Google",
-                                //             style: TextStyle(fontSize: 12),
-                                //           )
-                                //         ],
-                                //       ),
-                                //     ),
-                                //   ),
-                                //   onTap: () {
-                                //     authProvider.signInWithGoogle(context);
-                                //   },
-                                // ),
                                 SizedBox(
-                                    height: screenHeight *
-                                        0.05), // Adjusted for responsiveness
+                                    height: screenHeight * 0.05),
                                 InkWell(
                                   child: Container(
                                     height: 25,
                                     width: screenWidth * 0.28,
                                     decoration: BoxDecoration(
-                                        color: Color(0xffD4E3FF),
+                                        color: const Color(0xffD4E3FF),
                                         borderRadius: BorderRadius.circular(5)),
-                                    child: Center(
+                                    child: const Center(
                                       child: Text(
                                         "Skip for Now >>",
                                         style: TextStyle(fontSize: 11),
@@ -368,17 +293,16 @@ class _userloginState extends State<userlogin> {
                                     ),
                                   ),
                                   onTap: () {
-                                    //onTapp skip for now
                                   },
                                 ),
                                 SizedBox(
                                     height: screenHeight *
-                                        0.025), // Adjusted for responsiveness
+                                        0.025),
                                 Text(
                                   "By continuing, you agree to our Terms and Conditions",
                                   style: TextStyle(
                                     fontSize: screenWidth *
-                                        0.025, // Adjusted for responsiveness
+                                        0.025,
                                     color: Colors.blue,
                                   ),
                                 ),

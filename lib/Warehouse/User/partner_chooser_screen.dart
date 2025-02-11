@@ -1,5 +1,5 @@
 
-import 'package:Lisofy/Warehouse/Partner/HomeScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/home_screen.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter/material.dart';

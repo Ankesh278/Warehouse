@@ -9,14 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:warehouse/Warehouse/User/interested_warehouse_details_screen.dart';
-// import 'package:warehouse/Warehouse/User/models/ShortListModel.dart';
-// import 'package:warehouse/Warehouse/User/models/interestedDataModel.dart';
-// import 'package:warehouse/distance_calculator.dart';
 import 'package:http/http.dart' as http;
-
-// import 'package:warehouse/generated/l10n.dart';
-// import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 
 class userShortlistedIntrested extends StatefulWidget {
   const userShortlistedIntrested({super.key});

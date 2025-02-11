@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:Lisofy/Warehouse/Partner/HomeScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/home_screen.dart';
 import 'package:Lisofy/Warehouse/Partner/amenities_update.dart';
 import 'package:Lisofy/Warehouse/Partner/models/warehouses_model.dart';
 import 'package:Lisofy/generated/l10n.dart';

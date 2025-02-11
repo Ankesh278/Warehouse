@@ -6,11 +6,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-
 class MediaPickerPage extends StatefulWidget {
   final bool isImagePicker;
   final List<XFile> initialMedia;
-
   const MediaPickerPage({
     super.key,
     required this.isImagePicker,
@@ -20,7 +18,6 @@ class MediaPickerPage extends StatefulWidget {
   @override
   MediaPickerPageState createState() => MediaPickerPageState();
 }
-
 class MediaPickerPageState extends State<MediaPickerPage> {
   final ImagePicker _picker = ImagePicker();
   List<XFile> _mediaFiles = [];
@@ -124,7 +121,7 @@ class MediaPickerPageState extends State<MediaPickerPage> {
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha: 0.2),
                               blurRadius: 6,
                               offset: const Offset(0, 2),
                             ),
@@ -152,10 +149,10 @@ class MediaPickerPageState extends State<MediaPickerPage> {
                           child: Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.redAccent.withOpacity(0.8),
+                              color: Colors.redAccent.withValues(alpha: 0.8),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
+                                  color: Colors.black.withValues(alpha: 0.2),
                                   blurRadius: 6,
                                   offset: const Offset(0, 2),
                                 ),
@@ -216,7 +213,6 @@ class MediaPickerPageState extends State<MediaPickerPage> {
               ),
             ],
           ),
-
         ],
       ),
     );
@@ -240,7 +236,7 @@ class MediaPickerPageState extends State<MediaPickerPage> {
           ],
           cancelButton: CupertinoActionSheetAction(
             isDestructiveAction: true,
-            child:  Text(S.of(context).cancel, style: TextStyle(fontSize: 16)),
+            child:  Text(S.of(context).cancel, style: const TextStyle(fontSize: 16)),
             onPressed: () {
               Navigator.pop(context, null);
             },

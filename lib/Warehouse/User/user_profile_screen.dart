@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:Lisofy/Localization/languages.dart';
 import 'package:Lisofy/Warehouse/Partner/document_upload.dart';
-import 'package:Lisofy/Warehouse/User/NotificationSetting.dart';
+import 'package:Lisofy/Warehouse/User/notification_setting.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/photoProvider.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/rating_provider.dart';
 import 'package:Lisofy/Warehouse/User/userlogin.dart';
@@ -35,10 +35,10 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   late String phone = '';
-  late String Name = '';
+  late String name = '';
   String userFile = "";
   String email = "";
-  String name = "";
+  //String name = "";
   @override
   void initState() {
     super.initState();
@@ -54,31 +54,26 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final TextEditingController emialController = TextEditingController();
   final String phoneNumber = '+917007221530';
   final TextEditingController _messageController = TextEditingController();
-
-
   Future<void> _logoutAndRedirect(BuildContext context) async {
     try {
-      // Sign out from Google
+      /// Sign out from Google
       await _googleSignIn.signOut();
 
-      // Sign out from Firebase Authentication (for phone auth)
+      /// Sign out from Firebase Authentication (for phone auth)
       FirebaseAuth auth = FirebaseAuth.instance;
       User? currentUser = auth.currentUser;
       if (currentUser != null) {
         await auth.signOut();
       }
-
-      // Clear SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.remove('email');
       await prefs.remove('phone');
       await prefs.remove('Name');
       await prefs.setBool('isUserLoggedIn', false);
-
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
             builder: (context) =>
-                const userlogin()),
+                const UserLogin()),
         (route) => false,
       );
     } catch (e) {
@@ -88,7 +83,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
-  // Function to show the confirmation dialog with Yes/No buttons
   Future<bool> _showLogoutConfirmationDialog(BuildContext context) async {
     return await showDialog(
       context: context,
@@ -165,7 +159,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   child: Column(
                     children: [
                       Container(
-                       // padding: const EdgeInsets.only(top: 40, left: 15),
                         alignment: Alignment.topLeft,
                         color: Colors.blue,
                         height: screenHeight * 0.28,
@@ -212,9 +205,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                     alignment:
                                                         Alignment.centerLeft,
                                                     child: Text(
-                                                      S
-                                                          .of(context)
-                                                          .looking_for_rent_your_properties,
+                                                      S.of(context).looking_for_rent_your_properties,
                                                       style: const TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 13,
@@ -1160,7 +1151,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 children: [
                   const Spacer(),
                   Text(
-                    Name.isNotEmpty ? Name : 'Guest',
+                    name.isNotEmpty ? name : 'Guest',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w800),
                   ),
@@ -1465,14 +1456,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       print("intialize v ho gya");
     }
     // Use a fallback value or handle null cases
-    Name = prefs.getString("name") ?? "Default Name";
+    name = prefs.getString("name") ?? "Default Name";
     phone = prefs.getString("phone") ?? "Default Phone";
     // Remove the '+91' prefix if it exists
     if (phone.startsWith("+91")) {
       phone = phone.substring(3);
     }
     phoneController.text = phone;
-    nameController.text = Name;
+    nameController.text = name;
     _fetchProfileImage();
     setState(() {});
   }

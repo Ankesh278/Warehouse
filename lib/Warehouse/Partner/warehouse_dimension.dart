@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:Lisofy/Warehouse/Partner/HomeScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/home_screen.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';

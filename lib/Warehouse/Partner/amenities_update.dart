@@ -297,15 +297,12 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                               ),
                               onPressed: () {
-                                // Validate all fields
                                 if (!_formKey.currentState!.validate()) {
-                                  // Show an error message if validation fails
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Please fill all required fields')),
                                   );
-                                  return; // Stop execution if validation fails
+                                  return;
                                 }
-                                // Proceed if validation is successful
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

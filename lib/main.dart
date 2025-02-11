@@ -4,7 +4,8 @@ import 'package:Lisofy/Localization/languages.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/auth_provider.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/location_provider.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/warehouse_provider.dart';
-import 'package:Lisofy/Warehouse/User/NotificationSetting.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/notification_setting.dart';
+import 'package:Lisofy/Warehouse/User/notification_setting.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/DocumentProvider.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/FilterProvider.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/InterestProvider.dart';
@@ -26,23 +27,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
-// import 'package:warehouse/Connectivity/network_service.dart';
-// import 'package:warehouse/Localization/languages.dart';
-// import 'package:warehouse/Warehouse/Partner/Provider/auth_provider.dart';
-// import 'package:warehouse/Warehouse/Partner/Provider/location_provider.dart';
-// import 'package:warehouse/Warehouse/Partner/Provider/warehouse_provider.dart';
-// import 'package:warehouse/Warehouse/User/NotificationSetting.dart';
-// import 'package:warehouse/Warehouse/User/UserProvider/DocumentProvider.dart';
-// import 'package:warehouse/Warehouse/User/UserProvider/FilterProvider.dart';
-// import 'package:warehouse/Warehouse/User/UserProvider/InterestProvider.dart';
-// import 'package:warehouse/Warehouse/User/UserProvider/auth_user_provider.dart';
-// import 'package:warehouse/Warehouse/User/UserProvider/photoProvider.dart';
-// import 'package:warehouse/Warehouse/User/UserProvider/rating_provider.dart';
-// import 'package:warehouse/Warehouse/User/UserProvider/sortingProvider.dart';
-// import 'package:warehouse/Warehouse/User/userlogin.dart';
-// import 'package:warehouse/generated/l10n.dart';
-// import 'package:warehouse/new_home_page.dart';
-// import 'package:warehouse/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -306,7 +290,7 @@ class _MyAppState extends State<MyApp> {
                     }
                     return widget.isUserLoggedIn
                         ? NewHomePage(latitude: widget.latitude, longitude: widget.longitude)
-                        : const userlogin();
+                        : const UserLogin();
                   },
                 ),
               ),

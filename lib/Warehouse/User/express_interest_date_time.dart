@@ -171,7 +171,6 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
       }
     });
   }
-
   void _selectDate(BuildContext context) async {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -476,12 +475,10 @@ class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
       ),
     );
   }
-
   @override
   void initState() {
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
