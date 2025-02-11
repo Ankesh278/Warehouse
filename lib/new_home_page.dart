@@ -36,8 +36,10 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
   int _agricultureIndex = 0;
   int sliderControllerIndex = 0;
   final List<String> _images = [
+
    'https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg?auto=compress&cs=tinysrgb&w=600',
-    'https://images.pexels.com/photos/221047/pexels-photo-221047.jpeg?auto=compress&cs=tinysrgb&w=600'
+    'https://xpacesphere.com/Content/NewFolder/warehouse_1.jpg'
+   // 'https://images.pexels.com/photos/221047/pexels-photo-221047.jpeg?auto=compress&cs=tinysrgb&w=600'
     ];
 
   late PageController _pageControllerSlider;
@@ -338,7 +340,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                       color: Colors.lightBlue.shade50,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.blue.withOpacity(0.3),
+                                          color: Colors.blue.withValues(alpha: 0.3),
                                           spreadRadius: 5,
                                           blurRadius: 5,
                                           offset: const Offset(0, 3),
@@ -425,7 +427,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                       color: Colors.lightBlue.shade50,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.blue.withOpacity(0.3),
+                                          color: Colors.blue.withValues(alpha: 0.3),
                                           spreadRadius: 5,
                                           blurRadius: 5,
                                           offset: const Offset(0, 3),
@@ -465,7 +467,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                       color: Colors.lightBlue.shade50,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.blue.withOpacity(0.3),
+                                          color: Colors.blue.withValues(alpha: 0.3),
                                           spreadRadius: 5,
                                           blurRadius: 5,
                                           offset: const Offset(0, 3),
@@ -563,27 +565,6 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                 ],
                               ),
                             ),
-                            // SizedBox(width: screenWidth*0.004,),
-                            // InkWell(
-                            //   onTap: () => Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //       builder: (context) => UserHomePage(
-                            //         longitude: widget.longitude,
-                            //         latitude: widget.latitude,
-                            //       ),
-                            //     ),
-                            //   ),
-                            //   child: FittedBox(
-                            //     fit: BoxFit.scaleDown,
-                            //     child: Text(
-                            //       S.of(context).seall,
-                            //       style: const TextStyle(color: Colors.blue, fontSize: 8),
-                            //     ),
-                            //   ),
-                            // )
-
-
                           ],
                         ),
                         SizedBox(height: screenHeight*0.017,),
@@ -840,7 +821,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                           placeholder: (context, url) => Shimmer(
                                             child: Container(
                                               width: double.infinity,
-                                              height: screenHeight*0.07, // Adjust height as needed
+                                              height: screenHeight*0.07,
                                               decoration: BoxDecoration(
                                                 color: Colors.grey,
                                                 borderRadius: BorderRadius.circular(6),

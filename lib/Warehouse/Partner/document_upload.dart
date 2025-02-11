@@ -1,42 +1,31 @@
 
-import 'dart:convert';
 import 'dart:io';
-import 'package:Lisofy/Warehouse/User/UserProvider/DocumentProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/document_provider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/rating_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:http/http.dart' as http;
 
 class DocumentUpload extends StatefulWidget {
   const DocumentUpload({super.key});
-
   @override
   State<DocumentUpload> createState() => DocumentUploadState();
 }
-
 class DocumentUploadState extends State<DocumentUpload> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _cityController = TextEditingController();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   late final String? phone;
   late final String? name;
-  List<dynamic> _placeSuggestions = [];
-  bool _isUserSelection = false;
 @override
   void initState() {
     super.initState();
     getSharedData();
-    _cityController.addListener(() {
-      if (!_isUserSelection) {
-        _onSearchChanged(_cityController.text);
-      }
-    });
   }
-
   void getSharedData() async{
   SharedPreferences pref= await SharedPreferences.getInstance();
   phone=pref.getString("phone");
@@ -46,51 +35,6 @@ class DocumentUploadState extends State<DocumentUpload> {
   }
   _phoneController.text=phone??"";
   _nameController.text=name??"";
-  }
-  void _onSearchChanged(String input) async {
-    print("User input: $input"); // Debugging input value
-    if (input.isNotEmpty) {
-      try {
-        final suggestions = await fetchPlaceSuggestions(input);
-        print("Fetched suggestions: $suggestions"); // Log API response data
-        setState(() {
-          _placeSuggestions = suggestions;
-        });
-      } catch (e) {
-        print("Error fetching suggestions: $e"); // Error log
-      }
-    } else {
-      setState(() {
-        _placeSuggestions = [];
-      });
-    }
-  }
-
-  Future<List> fetchPlaceSuggestions(String input) async {
-    const String apiKey = "AIzaSyDxbkZhKCXDGPdtOWxTPxFBg_tjAd3jsTk";
-    const String baseUrl =
-        "https://maps.googleapis.com/maps/api/place/autocomplete/json";
-    final requestUrl = "$baseUrl?input=$input&key=$apiKey&components=country:in";
-
-    print("Request URL: $requestUrl"); // Debugging the API request URL
-
-    try {
-      final response = await http.get(Uri.parse(requestUrl));
-      print("API Response Code: ${response.statusCode}"); // Log response code
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        print("API Response Body: ${response.body}"); // Log response body
-        return data['predictions'] ?? [];
-      } else {
-        print(
-            "Failed to fetch suggestions. Status Code: ${response.statusCode}"); // Log if response code is not 200
-        throw Exception("Failed to fetch suggestions");
-      }
-    } catch (e) {
-      print("Exception during API call: $e"); // Log any exceptions
-      return [];
-    }
   }
   @override
   Widget build(BuildContext context) {
@@ -137,10 +81,8 @@ class DocumentUploadState extends State<DocumentUpload> {
                                     )
                                   ],
                                 ),
-
                               ],
                             ),
-
                           ],
                         ),
                       ),
@@ -211,181 +153,150 @@ class DocumentUploadState extends State<DocumentUpload> {
                                       },
                                     ),
                                     SizedBox(height: screenHeight*0.02,),
-                                    TextFormField(
-                                      controller: _cityController,
-                                      decoration: InputDecoration(
-                                        labelText: 'City',
-                                        labelStyle: const TextStyle(color: Colors.black,fontWeight: FontWeight.w600),
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                          borderSide: const BorderSide(color: Colors.grey,width: 1.5),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                          borderSide: const BorderSide(color: Colors.blue,width: 1.5),
-                                        ),
-                                      ),
-                                      keyboardType: TextInputType.text,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter city';
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                    // Padding(
-                                    //   padding: const EdgeInsets.symmetric(
-                                    //       horizontal: 20.0),
-                                    //   child: TextField(
-                                    //     controller: _controller,
-                                    //     decoration: InputDecoration(
-                                    //       hintText: 'Enter a location',
-                                    //       label: Text(
-                                    //         S.of(context).location,
-                                    //         style: TextStyle(
-                                    //           color: Colors.black,
-                                    //           fontSize: 14,
-                                    //           fontWeight: FontWeight.w600,
-                                    //         ),
-                                    //       ),
-                                    //       hintStyle: TextStyle(
-                                    //         color: Colors.grey,
-                                    //         fontSize: 10,
-                                    //       ),
-                                    //       filled: true,
-                                    //       fillColor: Colors.white,
-                                    //       contentPadding: EdgeInsets.symmetric(
-                                    //           vertical: 10, horizontal: 10),
-                                    //       border: OutlineInputBorder(
-                                    //         borderRadius: BorderRadius.circular(5),
-                                    //         borderSide: BorderSide(
-                                    //             color: Colors.grey, width: 1.0),
-                                    //       ),
-                                    //       enabledBorder: OutlineInputBorder(
-                                    //         borderRadius: BorderRadius.circular(5),
-                                    //         borderSide: BorderSide(
-                                    //             color: Colors.grey, width: 1.0),
-                                    //       ),
-                                    //       focusedBorder: OutlineInputBorder(
-                                    //         borderRadius: BorderRadius.circular(5),
-                                    //         borderSide: BorderSide(
-                                    //             color: Colors.grey, width: 1.0),
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    SizedBox(height: 20),
 
-                                    // Display Suggestions
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemCount: _placeSuggestions.length,
-                                      itemBuilder: (context, index) {
-                                        final suggestion =
-                                        _placeSuggestions[index];
-                                        return ListTile(
-                                          title: Text(
-                                            suggestion['description'] ?? '',
+                                    SizedBox(height: screenHeight*0.02,),
+                                    Consumer2<PhotoProvider, RatingProvider>(
+                                      builder: (context, photoProvider, ratingProvider, child) {
+                                        bool isPanCardUploaded = photoProvider.arepancardPhotosUploaded || ratingProvider.panCardStatus == 1;
+                                        return Container(
+                                          height: screenHeight * 0.07,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            color: Colors.white,
+                                            border: Border.all(
+                                              color: isPanCardUploaded ? Colors.green : Colors.grey,
+                                              width: 2,
+                                            ),
                                           ),
-                                          onTap: () {
-                                            setState(() {
-                                              _isUserSelection = true; // Prevent listener
-                                              _cityController.text =
-                                                  suggestion['description'] ?? '';
-                                              _placeSuggestions = [];
-                                            });
-                                            Future.delayed(Duration(milliseconds: 300), () {
-                                              _isUserSelection = false; // Re-enable listener
-                                            });
-                                            print(
-                                                "Selected Place: ${suggestion['description']}"); // Log selected place
-                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              if (!isPanCardUploaded)
+                                                Container(
+                                                  height: double.infinity,
+                                                  width: screenWidth * 0.3,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(7),
+                                                    color: Colors.white,
+                                                    border: Border.all(color: Colors.grey, width: 1),
+                                                  ),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      if (!isPanCardUploaded) {
+                                                        showCameraDialog(context);
+                                                      }
+                                                    },
+                                                    child: Row(
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        const Icon(Icons.camera_alt, color: Colors.blue),
+                                                        SizedBox(width: screenWidth * 0.02),
+                                                        const Text(
+                                                          "Upload",
+                                                          style: TextStyle(
+                                                            color: Colors.blue,
+                                                            fontWeight: FontWeight.w600,
+                                                            fontSize: 16,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              Expanded(
+                                                child: Center(
+                                                  child: Text(
+                                                    isPanCardUploaded ? "Pan Card Uploaded*" : "Owner PAN CARD*",
+                                                    style: TextStyle(
+                                                      color: isPanCardUploaded ? Colors.green : Colors.black,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: screenWidth * 0.1),
+                                            ],
+                                          ),
                                         );
                                       },
                                     ),
                                     SizedBox(height: screenHeight*0.02,),
-                                    Consumer<PhotoProvider>(builder: (context,photoProvider,child){
-                                      return Container(
-                                        height: screenHeight*0.07,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
+                                    Consumer2<PhotoProvider, RatingProvider>(
+                                      builder: (context, photoProvider, ratingProvider, child) {
+                                        bool isSelfieUploaded = photoProvider.areselfiePhotosUploaded || ratingProvider.selfiStatus == 1;
+                                        return Container(
+                                          height: screenHeight * 0.07,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(10),
                                             color: Colors.white,
-                                            border: Border.all(color: photoProvider.arepancardPhotosUploaded?Colors.green:Colors.grey,width: 2)
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            photoProvider.arepancardPhotosUploaded?Container():Container(
-                                              height: double.infinity,
-                                              width: screenWidth*0.3,
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(7),
-                                                  color: Colors.white,
-                                                  border: Border.all(color: Colors.grey,width: 1)
-                                              ),
-                                              child: GestureDetector(
-                                                onTap: ()=>showCameraDialog(context),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    const Icon(Icons.camera_alt,color: Colors.blue,),
-                                                    SizedBox(width: screenWidth*0.02,),
-                                                    const Text("Upload",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w600,fontSize: 16),)
-                                                  ],
+                                            border: Border.all(
+                                              color: isSelfieUploaded ? Colors.green : Colors.grey,
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              if (!isSelfieUploaded)
+                                                Container(
+                                                  height: double.infinity,
+                                                  width: screenWidth * 0.3,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(7),
+                                                    color: Colors.white,
+                                                    border: Border.all(color: Colors.grey, width: 1),
+                                                  ),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      if (!isSelfieUploaded) {
+                                                        showSelfieCameraDialog(context);
+                                                      }
+                                                    },
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        const Icon(Icons.camera_alt, color: Colors.blue),
+                                                        SizedBox(width: screenWidth * 0.02),
+                                                        const Text(
+                                                          "Upload",
+                                                          style: TextStyle(
+                                                            color: Colors.blue,
+                                                            fontWeight: FontWeight.w600,
+                                                            fontSize: 16,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              Expanded(
+                                                child: Center(
+                                                  child: Text(
+                                                    isSelfieUploaded ? "Selfie Uploaded*" : "Selfie Of Owner*",
+                                                    style: TextStyle(
+                                                      color: isSelfieUploaded ? Colors.green : Colors.black,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            photoProvider.arepancardPhotosUploaded?const Text("Pan Card Uploaded*",style: TextStyle(color: Colors.green,fontSize: 16,fontWeight: FontWeight.w600),):const Text("Owner PAN CARD*",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w600),),
-                                            SizedBox(width: screenWidth*0.1,)
-                                          ],
-                                        ),
-                                      );
-                                    }),
+                                              SizedBox(width: screenWidth * 0.1),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
                                     SizedBox(height: screenHeight*0.02,),
-                                    Consumer<PhotoProvider>(builder: (context,photoprovider,child){
-                                      return Container(
-                                        height: screenHeight*0.07,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                            color: Colors.white,
-                                            border: Border.all(color: photoprovider.areselfiePhotosUploaded?Colors.green:Colors.grey,width: 2)
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            photoprovider.areselfiePhotosUploaded?Container():Container(
-                                              height: double.infinity,
-                                              width: screenWidth*0.3,
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(7),
-                                                  color: Colors.white,
-                                                  border: Border.all(color: Colors.grey,width: 1)
-                                              ),
-                                              child: GestureDetector(
-                                                onTap: ()=>showSelfieCameraDialog(context),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    const Icon(Icons.camera_alt,color: Colors.blue,),
-                                                    SizedBox(width: screenWidth*0.02,),
-                                                    const Text("Upload",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w600,fontSize: 16),)
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            photoprovider.areselfiePhotosUploaded?const Text("Selfie Uploaded*",style: TextStyle(color: Colors.green,fontSize: 16,fontWeight: FontWeight.w600),):const Text("Selfie Of Owner*",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w600),),
-                                            SizedBox(width: screenWidth*0.1,)
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                                    SizedBox(height: screenHeight*0.02,),
-                                    Consumer<PhotoProvider>(
-                                      builder: (context, aadharPhotoProvider, child) {
+                                    Consumer2<PhotoProvider, RatingProvider>(
+                                      builder: (context, aadharPhotoProvider, ratingProvider, child) {
                                         bool areBothUploaded = aadharPhotoProvider.areFrontAadharUploaded && aadharPhotoProvider.areBackAadharUploaded;
+                                        bool isAadharApproved = ratingProvider.aadharCardStatus == 1;
+
                                         return Container(
                                           height: screenHeight * 0.2,
                                           padding: const EdgeInsets.all(10),
@@ -393,7 +304,7 @@ class DocumentUploadState extends State<DocumentUpload> {
                                             borderRadius: BorderRadius.circular(10),
                                             color: Colors.white,
                                             border: Border.all(
-                                              color: areBothUploaded ? Colors.green : Colors.grey,
+                                              color: (areBothUploaded || isAadharApproved) ? Colors.green : Colors.grey,
                                               width: 2,
                                             ),
                                           ),
@@ -405,26 +316,23 @@ class DocumentUploadState extends State<DocumentUpload> {
                                                 aadharPhotoProvider.aadharPhotoFront,
                                                 "Upload Front Side",
                                                     () {
-                                                  // Disable click if both photos are uploaded
-                                                  if (!areBothUploaded) {
+                                                  if (!areBothUploaded && !isAadharApproved) {
                                                     _pickAadharPhoto(context, ImageSource.gallery, isFront: true);
                                                   }
                                                 },
-                                                isClickable: !areBothUploaded, // Disable if both are uploaded
+                                                isClickable: !areBothUploaded && !isAadharApproved,
                                               ),
-                                               SizedBox(height: screenHeight*0.013),
-                                              // Back Photo
+                                              SizedBox(height: screenHeight * 0.013),
                                               _photoUploadSection(
                                                 context,
                                                 aadharPhotoProvider.aadharPhotoBack,
                                                 "Upload Back Side",
                                                     () {
-                                                  // Disable click if both photos are uploaded
-                                                  if (!areBothUploaded) {
+                                                  if (!areBothUploaded && !isAadharApproved) {
                                                     _pickAadharPhoto(context, ImageSource.gallery, isFront: false);
                                                   }
                                                 },
-                                                isClickable: !areBothUploaded, // Disable if both are uploaded
+                                                isClickable: !areBothUploaded && !isAadharApproved,
                                               ),
                                             ],
                                           ),
@@ -433,19 +341,34 @@ class DocumentUploadState extends State<DocumentUpload> {
                                     ),
                                     SizedBox(height: screenHeight*0.04,),
                                     ElevatedButton(
-                                      onPressed: (){
-                                        providerPhoto.uploadPhotos(phone!);
+                                      onPressed: ()async {
+                                        await providerPhoto.uploadPhotos(phone!).then((success) {
+                                          if (success) {
+                                            Fluttertoast.showToast(
+                                              msg: " uploaded !",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              backgroundColor: Colors.grey
+                                            );
+                                            Navigator.popUntil(context, (route) => route.isFirst);
+
+                                          } else {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(content: Text("Upload failed. Please try again.")),
+                                            );
+                                          }
+                                        });
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        foregroundColor: Colors.white, backgroundColor: Colors.blue, // Text color
+                                        foregroundColor: Colors.white, backgroundColor: Colors.blue,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12.0), // Circular border radius
-                                          side: const BorderSide(color: Colors.grey), // Border color
+                                          borderRadius: BorderRadius.circular(12.0),
+                                          side: const BorderSide(color: Colors.grey),
                                         ),
                                         elevation: 5, // Shadow effect
-                                        shadowColor: Colors.black.withOpacity(0.2), // Shadow color
-                                        padding:  EdgeInsets.symmetric(vertical: screenHeight*0.01, horizontal: screenWidth*0.1), // Button padding
-                                        minimumSize: Size(screenWidth*0.85, screenWidth*0.1), // Button size
+                                        shadowColor: Colors.black.withValues(alpha: 0.2),
+                                        padding:  EdgeInsets.symmetric(vertical: screenHeight*0.01, horizontal: screenWidth*0.1),
+                                        minimumSize: Size(screenWidth*0.85, screenWidth*0.1),
                                       ),
                                       child: const Text(
                                         "Upload",
@@ -455,7 +378,6 @@ class DocumentUploadState extends State<DocumentUpload> {
                                         ),
                                       ),
                                     )
-
                                   ]
                                 )
                               )

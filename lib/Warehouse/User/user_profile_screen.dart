@@ -141,7 +141,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       },
     );
   }
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -224,12 +223,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                         alignment: Alignment
                                                             .centerLeft,
                                                         child: Text(
-                                                          S
-                                                              .of(context)
-                                                              .verified_property_and_owner,
+                                                          S.of(context).verified_property_and_owner,
                                                           style: const TextStyle(
                                                               color:
-                                                                  Colors.white,
+                                                              Colors.white,
                                                               fontSize: 10,
                                                               fontWeight:
                                                                   FontWeight
@@ -461,10 +458,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                               ),
                                               SizedBox(width: screenHeight * 0.02),
                                               Text(
-                                                S.of(context).complete_kyc,
-                                                style: const TextStyle(
+                                                isKYCComplete?"Already Completed":S.of(context).complete_kyc,
+                                                style: TextStyle(
                                                   fontSize: 12,
-                                                  color: Colors.black,
+                                                  color: isKYCComplete?Colors.green:Colors.black,
                                                   fontWeight: FontWeight.w300,
                                                 ),
                                               ),

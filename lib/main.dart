@@ -6,7 +6,7 @@ import 'package:Lisofy/Warehouse/Partner/Provider/location_provider.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/warehouse_provider.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/notification_setting.dart';
 import 'package:Lisofy/Warehouse/User/notification_setting.dart';
-import 'package:Lisofy/Warehouse/User/UserProvider/DocumentProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/document_provider.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/FilterProvider.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/InterestProvider.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/auth_user_provider.dart';
