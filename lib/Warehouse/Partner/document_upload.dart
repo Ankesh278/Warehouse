@@ -9,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class DocumentUpload extends StatefulWidget {
   const DocumentUpload({super.key});
   @override
@@ -341,34 +340,36 @@ class DocumentUploadState extends State<DocumentUpload> {
                                     ),
                                     SizedBox(height: screenHeight*0.04,),
                                     ElevatedButton(
-                                      onPressed: ()async {
-                                        await providerPhoto.uploadPhotos(phone!).then((success) {
-                                          if (success) {
-                                            Fluttertoast.showToast(
-                                              msg: " uploaded !",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              backgroundColor: Colors.grey
-                                            );
-                                            Navigator.popUntil(context, (route) => route.isFirst);
-
-                                          } else {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text("Upload failed. Please try again.")),
-                                            );
-                                          }
-                                        });
+                                      onPressed: () async {
+                                        final navigator = Navigator.of(context);
+                                        final messenger = ScaffoldMessenger.of(context);
+                                        bool success = await providerPhoto.uploadPhotos(phone!);
+                                        if (!context.mounted) return;
+                                        if (success) {
+                                          Fluttertoast.showToast(
+                                            msg: "Uploaded!",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            backgroundColor: Colors.grey,
+                                          );
+                                          navigator.pop();
+                                        } else {
+                                          messenger.showSnackBar(
+                                            const SnackBar(content: Text("Upload failed. Please try again.")),
+                                          );
+                                        }
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        foregroundColor: Colors.white, backgroundColor: Colors.blue,
+                                        foregroundColor: Colors.white,
+                                        backgroundColor: Colors.blue,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(12.0),
                                           side: const BorderSide(color: Colors.grey),
                                         ),
                                         elevation: 5, // Shadow effect
                                         shadowColor: Colors.black.withValues(alpha: 0.2),
-                                        padding:  EdgeInsets.symmetric(vertical: screenHeight*0.01, horizontal: screenWidth*0.1),
-                                        minimumSize: Size(screenWidth*0.85, screenWidth*0.1),
+                                        padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01, horizontal: screenWidth * 0.1),
+                                        minimumSize: Size(screenWidth * 0.85, screenWidth * 0.1),
                                       ),
                                       child: const Text(
                                         "Upload",
@@ -396,27 +397,41 @@ class DocumentUploadState extends State<DocumentUpload> {
   }
 
   Future<void> _pickSelfiePhotoGallery(BuildContext context, ImageSource source) async {
+    final navigator = Navigator.of(context);
+    final provider = Provider.of<PhotoProvider>(context, listen: false);
     final picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: source);
+    if (!context.mounted) return;
     if (pickedFile != null) {
       final file = File(pickedFile.path);
-      bool isConfirmed = await _showImagePreviewDialog(context, file);
-      if (isConfirmed) {
-        Provider.of<PhotoProvider>(context, listen: false).selfieOfOwnerPhotoUpdate(file);
-      }
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        bool isConfirmed = await _showImagePreviewDialog(navigator.context, file);
+        if (!context.mounted) return;
+        if (isConfirmed) {
+          provider.selfieOfOwnerPhotoUpdate(file);
+        }
+      });
     }
   }
+
   Future<void> _pickPhotoGallery(BuildContext context, ImageSource source) async {
+    final navigator = Navigator.of(context);
+    final provider = Provider.of<PhotoProvider>(context, listen: false);
     final picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: source);
+    if (!context.mounted) return;
     if (pickedFile != null) {
       final file = File(pickedFile.path);
-      bool isConfirmed = await _showImagePreviewDialog(context, file);
-      if (isConfirmed) {
-        Provider.of<PhotoProvider>(context, listen: false).updatePanPhoto(file);
-      }
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        bool isConfirmed = await _showImagePreviewDialog(navigator.context, file);
+        if (!context.mounted) return;
+        if (isConfirmed) {
+          provider.updatePanPhoto(file);
+        }
+      });
     }
   }
+
   void showCameraDialog(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -577,18 +592,18 @@ class DocumentUploadState extends State<DocumentUpload> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
-      onTap: isClickable ? onTap : null, // Disable tap when not clickable
+      onTap: isClickable ? onTap : null,
       child: Container(
         height: screenHeight * 0.078,
         width: double.infinity,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(screenWidth * 0.02), // Outer border radius
+          borderRadius: BorderRadius.circular(screenWidth * 0.02),
           color: Colors.white,
           border: Border.all(color: photo != null ? Colors.green : Colors.grey, width: 1),
         ),
         child: photo != null
             ? ClipRRect(
-          borderRadius: BorderRadius.circular(screenWidth * 0.02), // Inner circular border for photo
+          borderRadius: BorderRadius.circular(screenWidth * 0.02),
           child: Image.file(photo, fit: BoxFit.cover),
         )
             : Row(
@@ -611,26 +626,27 @@ class DocumentUploadState extends State<DocumentUpload> {
 
 
   Future<void> _pickAadharPhoto(BuildContext context, ImageSource source, {required bool isFront}) async {
+    final navigator = Navigator.of(context);
+    final provider = Provider.of<PhotoProvider>(context, listen: false);
     final picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: source);
-
+    if (!context.mounted) return;
     if (pickedFile != null) {
       final file = File(pickedFile.path);
-
-      // Show preview dialog
-      bool isConfirmed = await _showImagePreviewDialog(context, file);
-
-      if (isConfirmed) {
-        final provider = Provider.of<PhotoProvider>(context, listen: false);
-
-        if (isFront) {
-          provider.aadharCardPhotoFront(file);
-        } else {
-          provider.aadharCardPhotoback(file);
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        bool isConfirmed = await _showImagePreviewDialog(navigator.context, file);
+        if (!context.mounted) return;
+        if (isConfirmed) {
+          if (isFront) {
+            provider.aadharCardPhotoFront(file);
+          } else {
+            provider.aadharCardPhotoback(file);
+          }
         }
-      }
+      });
     }
   }
+
   void showAadharCameraDialog(BuildContext context, {required bool isFront}) {
     final screenHeight = MediaQuery.of(context).size.height;
     showModalBottomSheet(

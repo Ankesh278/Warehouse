@@ -1,23 +1,27 @@
+import 'dart:math';
+
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class DistanceCalculator {
-  LatLng parseLatLng(String whouseAddress) {
+  LatLng parseLatLng(String wHouseAddress) {
     final regex = RegExp(r'LatLng\(([^,]+), ([^)]+)\)');
-    final match = regex.firstMatch(whouseAddress);
-
+    final match = regex.firstMatch(wHouseAddress);
     if (match != null) {
       double latitude = double.parse(match.group(1)!);
       double longitude = double.parse(match.group(2)!);
       return LatLng(latitude, longitude);
     } else {
-      throw Exception("Invalid format for whouse_address");
+      throw Exception("Invalid format for whose_address");
     }
   }
 
   Future<Position> getCurrentLocation() async {
     return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+        locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+    ),
+    );
   }
 
   double calculateDistance(LatLng location1, LatLng location2) {
@@ -29,18 +33,28 @@ class DistanceCalculator {
     );
   }
 
-  // Function to get distance from current location to warehouse location
   Future<double> getDistanceFromCurrentToWarehouse(String whouseAddress) async {
     LatLng warehouseLatLng = parseLatLng(whouseAddress);
     Position currentPosition = await getCurrentLocation();
     LatLng currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
+
+    // Generate a small random offset between -0.005 and 0.005
+    double offset = (Random().nextDouble() * 0.01 - 0.005); // Range: [-0.005, 0.005]
+
+    // Randomly decide whether to modify latitude or longitude
+    if (Random().nextBool()) {
+      warehouseLatLng = LatLng(warehouseLatLng.latitude + offset, warehouseLatLng.longitude);
+    } else {
+      warehouseLatLng = LatLng(warehouseLatLng.latitude, warehouseLatLng.longitude + offset);
+    }
+
     return calculateDistance(currentLatLng, warehouseLatLng);
   }
+
   Future<String> getAddressFromLatLng(String latLngString) async {
     try {
       LatLng latLng = parseLatLng(latLngString);
       List<Placemark> placemarks = await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
-
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
         return "${place.subLocality}, ${place.locality},${place.administrativeArea}, ${place.postalCode}, ${place.country}";

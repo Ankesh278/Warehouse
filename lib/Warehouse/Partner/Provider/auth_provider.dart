@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:Lisofy/Warehouse/Partner/VerifyOtpScreen.dart';
-import 'package:Lisofy/Warehouse/Partner/partnerRegistrationScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/verify_otp_screen.dart';
+import 'package:Lisofy/Warehouse/Partner/partner_registration_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,7 +53,7 @@ class AuthProvider extends ChangeNotifier {
         final User? user = userCredential.user;
         String? p=user?.phoneNumber.toString();
         if (kDebugMode) {
-          print("ppppp${p!}");
+          print("ppp pp${p!}");
         }
 
         if (user != null) {
@@ -62,10 +62,12 @@ class AuthProvider extends ChangeNotifier {
           await prefs.setString('userName', user.displayName ?? '');
           await prefs.setBool('isLoggedIn', true);
 
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const PartnerRegistrationScreen(phone: '',)),
-                (route) => false,
-          );
+          if (context.mounted) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const PartnerRegistrationScreen(phone: '',)),
+                  (route) => false,
+            );
+          }
           Fluttertoast.showToast(
               msg: "Signed in...",
               toastLength: Toast.LENGTH_SHORT,

@@ -13,7 +13,7 @@ class UserData {
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-      mobile: json['mobile'] ?? '',  // Default empty string if null
+      mobile: json['mobile'] ?? '',
       name: json['name'] ?? 'Unknown',
       userProfile: json['userProfile'] ?? '',
       mailid: json['mailid'] ?? 'Not Provided',

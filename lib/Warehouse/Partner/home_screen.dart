@@ -1,11 +1,10 @@
-import 'package:Lisofy/Warehouse/Partner/HelpPage.dart';
+import 'package:Lisofy/Warehouse/Partner/help_page.dart';
 import 'package:Lisofy/Warehouse/Partner/my_profile_page.dart';
-import 'package:Lisofy/Warehouse/Partner/NotificationScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/notification_screen.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/warehouse_provider.dart';
 import 'package:Lisofy/Warehouse/Partner/add_warehouse.dart';
 import 'package:Lisofy/Warehouse/Partner/models/warehouses_model.dart';
 import 'package:Lisofy/Warehouse/Partner/warehouse_update.dart';
-import 'package:Lisofy/distance_calculator.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:Lisofy/new_home_page.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
@@ -33,7 +32,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<WarehouseResponse> futureWarehouseResponse;
-  final TextEditingController _searchcontroller = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   late String userName = "";
   final String warehouseName = 'WarehouseX';
@@ -52,11 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     _pageController.jumpToPage(index);
   }
-  // LatLng? _latLng;
-  // late String _address = "Fetching address...";
   String? qrData;
-
-
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     userName = pref.getString("name") ?? "Default Name";
@@ -74,21 +69,19 @@ class _HomeScreenState extends State<HomeScreen> {
     futureWarehouseResponse = fetchWarehouseData();
   }
 
-  Future<String> _getAddressFromLatLng(String latlong) async {
+  Future<String> _getAddressFromLatLng(String latLong) async {
     try {
-      // Extract latitude and longitude from the string
       RegExp regExp = RegExp(r'LatLng\(([^,]+), ([^,]+)\)');
-      Match? match = regExp.firstMatch(latlong);
+      Match? match = regExp.firstMatch(latLong);
 
       if (match != null && match.groupCount == 2) {
         double latitude = double.parse(match.group(1)!.trim());
         double longitude = double.parse(match.group(2)!.trim());
 
-        // Get the address from latitude and longitude
-        List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+        List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
 
-        if (placemarks.isNotEmpty) {
-          Placemark place = placemarks[0];
+        if (placeMarks.isNotEmpty) {
+          Placemark place = placeMarks[0];
           return '${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.country}';
         }
       }
@@ -97,9 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
       return 'Error: $e';
     }
   }
-
-
-
 
   String _limitDigits(int count) {
     if (count >= 1000) {
@@ -154,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _searchcontroller.dispose();
+    _searchController.dispose();
   }
 
   Future<void> _shareAppInfo() async {
@@ -358,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: SizedBox(
                               height: 35,
                               child: TextFormField(
-                                controller: _searchcontroller,
+                                controller: _searchController,
                                 decoration: InputDecoration(
                                   hintText: S.of(context).search_by_location,
                                   hintStyle: const TextStyle(
@@ -415,7 +405,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HelpPage()));
+                                    builder: (context) => const HelpPage()));
                           },
                         ),
                       ],
@@ -615,8 +605,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Center(
                                         child: Image.asset(
                                             "assets/images/house.png",
-                                            height: 150,
-                                            width: 223)),
+                                            height: screenHeight*0.3,
+                                            width: screenWidth*0.6)),
                                     Center(
                                       child: Text(
                                         S.of(context).start_adding_warehouse,
@@ -625,7 +615,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             fontSize: 14),
                                       ),
                                     ),
-                                    const SizedBox(height: 15),
+                                     SizedBox(height: screenHeight*0.03),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Center(
@@ -684,7 +674,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Center(
                                         child: Image.asset(
                                             "assets/images/man.png")),
-                                    const SizedBox(height: 10),
+                                     SizedBox(height: screenHeight*0.013),
                                     Center(
                                       child: Text(
                                         S.of(context).we_are_happy_to_help,
@@ -693,10 +683,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             fontSize: 14),
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
+                                    SizedBox(height: screenHeight*0.013),
                                     Center(
                                       child: Text(
-                                        S.of(context).need_assistance + " >>",
+                                        "${S.of(context).need_assistance} >>",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14,
@@ -711,8 +701,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               itemCount: warehouseList.length,
                               itemBuilder: (context, index) {
                                 final warehouse = warehouseList[index];
-                                print(
+                                if (kDebugMode) {
+                                  print(
                                     "availability${warehouse.isAvailableForRent}");
+                                }
                                 bool isavail = warehouseProvider
                                         .warehouseStatus[warehouse.id] ??
                                     warehouse.isAvailableForRent;
@@ -723,7 +715,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                Warehouseupdate(
+                                                WarehouseUpdate(
                                                   warehouse: warehouse,
                                                 )));
                                   },
@@ -755,10 +747,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             ? (warehouse.wHouseName
                                                                         .length >
                                                                     7
-                                                                ? '${warehouse.wHouseName.substring(0, 7)}...' // Truncate after 7 characters
+                                                                ? '${warehouse.wHouseName.substring(0, 7)}...'
                                                                 : warehouse
-                                                                    .wHouseName) // Show full name if it's 7 or fewer characters
-                                                            : 'N/A', // Provide a fallback if the name is empty
+                                                                    .wHouseName)
+                                                            : 'N/A',
                                                         style: const TextStyle(
                                                           fontSize: 16,
                                                           fontWeight:
@@ -780,11 +772,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         child: Image.asset(
                                                             "assets/images/QrCode.png"),
                                                         onTap: () {
-                                                          // Set QR data to the specific warehouse information
                                                           String data =
-                                                              'Warehouse Name: ${warehouse.wHouseName}\nLocation: ${warehouse.wHouseAddress}\nContact: ${warehouse.mobile}'; // Customize this
+                                                              'Warehouse Name: ${warehouse.wHouseName}\nLocation: ${warehouse.wHouseAddress}\nContact: ${warehouse.mobile}';
                                                           _showQrDialog(
-                                                              data); // Show the QR dialog
+                                                              data);
                                                         },
                                                       ),
                                                       const SizedBox(
@@ -811,8 +802,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         .toString()] ??
                                                                 warehouse
                                                                     .isAvailable
-                                                            ? ". Vaccant" // Display text based on availability
-                                                            : ". Rented", // Optional, in case you want different text when unavailable
+                                                            ? ". Vacant"
+                                                            : ". Rented",
                                                         style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.w500,
@@ -824,9 +815,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   warehouse
                                                                       .isAvailable
                                                               ? Colors
-                                                                  .red // Red when available (true)
+                                                                  .red
                                                               : Colors
-                                                                  .green, // Grey when unavailable (false)
+                                                                  .green,
                                                           fontSize: 10,
                                                         ),
                                                       ),
@@ -834,8 +825,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       FutureBuilder<String>(
                                                         future: _getAddressFromLatLng(warehouse.wHouseAddress),
                                                         builder: (context, snapshot) {
-                                                          return Container(
-                                                            width: MediaQuery.of(context).size.width * 0.5, // Limit the width (adjust percentage as needed)
+                                                          return SizedBox(
+                                                            width: MediaQuery.of(context).size.width * 0.5,
                                                             child: Text(
                                                               snapshot.connectionState == ConnectionState.waiting
                                                                   ? "Getting address..."
@@ -849,14 +840,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 color: Colors.grey,
                                                                 fontSize: 10,
                                                               ),
-                                                              overflow: TextOverflow.ellipsis, // This adds the ellipsis if text exceeds the width
-                                                              maxLines: 1, // Limits text to a single line
+                                                              overflow: TextOverflow.ellipsis,
+                                                              maxLines: 1,
                                                             ),
                                                           );
                                                         },
                                                       ),
-
-
                                                       const SizedBox(
                                                         width: 10,
                                                       )
@@ -879,8 +868,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 null
                                                             ? (warehouse.warehouseCarpetArea
                                                                         .toString()
-                                                                        .length >
-                                                                    6
+                                                                        .length > 6
                                                                 ? '${warehouse.warehouseCarpetArea.toString().substring(0, 6)}... sq.ft'
                                                                 : '${warehouse.warehouseCarpetArea} sq.ft')
                                                             : 'N/A',
@@ -923,7 +911,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             .spaceEvenly,
                                                     children: [
                                                       Text(
-                                                        S.of(context).carpet_area+" Sq. ft.",
+                                                        "${S.of(context).carpet_area} Sq. ft.",
                                                         style: const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
@@ -969,7 +957,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           ),
                                                           child: Center(
                                                             child: Text(
-                                                              "${S.of(context).view_request} | ${_limitDigits(0)}", // Limit to 3 digits
+                                                              "${S.of(context).view_request} | ${_limitDigits(0)}",
                                                               style:
                                                                   const TextStyle(
                                                                 color: Colors
@@ -998,7 +986,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           ),
                                                           child: Center(
                                                             child: Text(
-                                                              "${S.of(context).bids} | ${_limitDigits(0)}", // Limit to 3 digits
+                                                              "${S.of(context).bids} | ${_limitDigits(0)}",
                                                               style:
                                                                   const TextStyle(
                                                                 color: Colors
@@ -1027,7 +1015,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           ),
                                                           child: Center(
                                                             child: Text(
-                                                              "${S.of(context).contracts} | ${_limitDigits(0)}", // Limit to 3 digits
+                                                              "${S.of(context).contracts} | ${_limitDigits(0)}",
                                                               style:
                                                                   const TextStyle(
                                                                 color: Colors
@@ -1052,11 +1040,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       CrossAxisAlignment.center,
                                                   children: [
                                                      Text(
-                                                        "${S.of(context).is_warehouse_available}"),
+                                                        S.of(context).is_warehouse_available),
                                                     Row(
                                                       children: [
                                                          Text(
-                                                          "${S.of(context).no}",
+                                                          S.of(context).no,
                                                           style: const TextStyle(
                                                               color:
                                                                   Colors.grey,
@@ -1074,9 +1062,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           focusColor:
                                                               Colors.white,
                                                           activeColor: Colors
-                                                              .white, // Green color when switch is on
+                                                              .white,
                                                           inactiveThumbColor: Colors
-                                                              .grey, // Grey color when switch is off
+                                                              .grey,
                                                           value: warehouseProvider
                                                                       .warehouseStatus[
                                                                   warehouse.id
@@ -1085,14 +1073,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   .isAvailable,
                                                           onChanged:
                                                               (bool value) {
-                                                            // Immediately reflect the change in the UI
                                                             warehouseProvider
                                                                 .initializeStatus(
                                                                     warehouse.id
                                                                         .toString(),
                                                                     value);
-
-                                                            // Call the provider method to update the status on the server
                                                             warehouseProvider
                                                                 .updateWarehouseStatus(
                                                                     warehouse.id
@@ -1100,7 +1085,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     value)
                                                                 .catchError(
                                                                     (error) {
-                                                              // Optionally revert the change if the API call fails
                                                               warehouseProvider
                                                                   .initializeStatus(
                                                                       warehouse
@@ -1118,7 +1102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           },
                                                         ),
                                                          Text(
-                                                          "${S.of(context).yes}",
+                                                          S.of(context).yes,
                                                           style: const TextStyle(
                                                               fontSize: 11,
                                                               color:
@@ -1208,66 +1192,66 @@ class DottedBorder extends StatelessWidget {
   }
 }
 
-class DottedBorderPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blue
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0;
-
-    const double dashWidth = 4.0;
-    const double dashSpace = 4.0;
-    double startX = 0;
-
-    final path = Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height));
-
-    // Draw dotted border
-    while (startX < size.width) {
-      canvas.drawLine(
-        Offset(startX, 0),
-        Offset(startX + dashWidth, 0),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-
-    startX = 0; // Reset startX for the next side
-    while (startX < size.height) {
-      canvas.drawLine(
-        Offset(size.width, startX),
-        Offset(size.width, startX + dashWidth),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-
-    startX = 0; // Reset startX for the next side
-    while (startX < size.width) {
-      canvas.drawLine(
-        Offset(size.width - startX, size.height),
-        Offset(size.width - startX - dashWidth, size.height),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-
-    startX = 0; // Reset startX for the next side
-    while (startX < size.height) {
-      canvas.drawLine(
-        Offset(0, size.height - startX),
-        Offset(0, size.height - startX - dashWidth),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}
+// class DottedBorderPainter extends CustomPainter {
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final paint = Paint()
+//       ..color = Colors.blue
+//       ..style = PaintingStyle.stroke
+//       ..strokeWidth = 2.0;
+//
+//     const double dashWidth = 4.0;
+//     const double dashSpace = 4.0;
+//     double startX = 0;
+//
+//     final path = Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height));
+//
+//     // Draw dotted border
+//     while (startX < size.width) {
+//       canvas.drawLine(
+//         Offset(startX, 0),
+//         Offset(startX + dashWidth, 0),
+//         paint,
+//       );
+//       startX += dashWidth + dashSpace;
+//     }
+//
+//     startX = 0; // Reset startX for the next side
+//     while (startX < size.height) {
+//       canvas.drawLine(
+//         Offset(size.width, startX),
+//         Offset(size.width, startX + dashWidth),
+//         paint,
+//       );
+//       startX += dashWidth + dashSpace;
+//     }
+//
+//     startX = 0; // Reset startX for the next side
+//     while (startX < size.width) {
+//       canvas.drawLine(
+//         Offset(size.width - startX, size.height),
+//         Offset(size.width - startX - dashWidth, size.height),
+//         paint,
+//       );
+//       startX += dashWidth + dashSpace;
+//     }
+//
+//     startX = 0; // Reset startX for the next side
+//     while (startX < size.height) {
+//       canvas.drawLine(
+//         Offset(0, size.height - startX),
+//         Offset(0, size.height - startX - dashWidth),
+//         paint,
+//       );
+//       startX += dashWidth + dashSpace;
+//     }
+//   }
+//
+//   @override
+//   bool shouldRepaint(covariant CustomPainter oldDelegate) {
+//     return false;
+//   }
+// }
 
 class AnimatedQrDialog extends StatefulWidget {
   final String data;
@@ -1294,12 +1278,12 @@ class AnimatedQrDialogState extends State<AnimatedQrDialog>
       parent: _controller,
       curve: Curves.easeInOut,
     );
-    _controller.forward(); // Start animation
+    _controller.forward();
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // Clean up controller
+    _controller.dispose();
     super.dispose();
   }
 
@@ -1318,7 +1302,7 @@ class AnimatedQrDialogState extends State<AnimatedQrDialog>
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 10,
               spreadRadius: 2,
             ),
@@ -1342,15 +1326,13 @@ class AnimatedQrDialogState extends State<AnimatedQrDialog>
               data: widget.data,
               version: QrVersions.auto,
               size: 200.0,
-              backgroundColor: Colors.white.withOpacity(0),
-              foregroundColor: Colors.white,
+              backgroundColor: Colors.white.withValues(alpha: 0),
+              eyeStyle: const QrEyeStyle(color: Colors.white),
+              dataModuleStyle: const QrDataModuleStyle(color: Colors.white),
             ),
-
             const SizedBox(height: 20),
-
-            // Close button
             TextButton(
-                onPressed: () => Navigator.of(context).pop(), // Close dialog
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Icon(
                   Icons.cancel_outlined,
                   color: Colors.white,

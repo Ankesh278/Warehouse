@@ -5,14 +5,13 @@ import 'package:Lisofy/Warehouse/Partner/Provider/auth_provider.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/location_provider.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/warehouse_provider.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/notification_setting.dart';
-import 'package:Lisofy/Warehouse/User/notification_setting.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/document_provider.dart';
-import 'package:Lisofy/Warehouse/User/UserProvider/FilterProvider.dart';
-import 'package:Lisofy/Warehouse/User/UserProvider/InterestProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/filter_provider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/interest_provider.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/auth_user_provider.dart';
-import 'package:Lisofy/Warehouse/User/UserProvider/photoProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/photo_provider.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/rating_provider.dart';
-import 'package:Lisofy/Warehouse/User/UserProvider/sortingProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/sorting_provider.dart';
 import 'package:Lisofy/Warehouse/User/userlogin.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:Lisofy/new_home_page.dart';
@@ -115,7 +114,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
+
   @override
   void initState() {
     super.initState();
@@ -140,24 +139,22 @@ class _MyAppState extends State<MyApp> {
           notification.body,
           const NotificationDetails(
             android: AndroidNotificationDetails(
-              'general_notifications', // Channel ID
-              'General Notifications', // Channel Name
+              'general_notifications',
+              'General Notifications',
               importance: Importance.high,
               priority: Priority.high,
-              icon: '@mipmap/ic_launcher',
+              icon: '@drawable/ic_stat_push_notification',
             ),
           ),
         );
       }
     });
-
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       if (kDebugMode) {
         print("Notification clicked: ${message.messageId}");
       }
     });
   }
-
   Future<void> requestPermissions() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;

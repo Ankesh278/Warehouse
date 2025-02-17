@@ -1,19 +1,17 @@
 import 'dart:async';
-import 'dart:math';
-import 'package:Lisofy/Warehouse/User/UserProvider/InterestProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/interest_provider.dart';
 import 'package:Lisofy/Warehouse/User/warehouse_details.dart';
 import 'package:Lisofy/distance_calculator.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 class InterestedWarehouseDetailsScreen extends StatefulWidget {
-  final  warehouses;
-
+  final dynamic warehouses;
   const InterestedWarehouseDetailsScreen({super.key, required this.warehouses});
   @override
   State<InterestedWarehouseDetailsScreen> createState() => _InterestedWarehouseDetailsScreenState();
@@ -148,8 +146,15 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                       height: screenHeight*0.04,
                                       width: screenWidth*0.1,
                                       margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.04),
-                                      child: isShortlisted?const Icon(Icons.favorite_outlined,color: Colors.red,):const Icon(Icons.favorite_border,color: Colors.white,)
-                                  ),
+                                      child: isShortlisted
+                                          ? const Icon(
+                                        Icons.favorite_outlined,
+                                        color: Colors.red,
+                                      )
+                                          : const Icon(
+                                        Icons.favorite_border,
+                                        color: Colors.white,
+                                      )),
                                 ),
                                 InkWell(
                                   child: Container(
@@ -181,11 +186,11 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.only(right: screenWidth * 0.005),
-                        decoration: const BoxDecoration(
+                        decoration:  BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(30),
+                            topLeft: const Radius.circular(0),
+                            topRight: Radius.circular(screenWidth*0.1),
                           ),
                         ),
                         child: Padding(
@@ -215,11 +220,11 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                               return Container(
                                                 margin: const EdgeInsets.all(0),
                                                 decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(20),
+                                                  borderRadius: BorderRadius.circular(screenWidth*0.06),
                                                   border: Border.all(color: Colors.white, width: 0),
                                                 ),
                                                 child: ClipRRect(
-                                                  borderRadius: BorderRadius.circular(20),
+                                                  borderRadius: BorderRadius.circular(screenWidth*0.06),
                                                   child: CachedNetworkImage(
                                                     imageUrl: Uri.encodeFull('$baseUrl${_uploadedImages[index]}'),
                                                     fit: BoxFit.cover,
@@ -240,7 +245,7 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                                       height: screenHeight*0.5,
                                                       decoration: BoxDecoration(
                                                         color: Colors.red.shade100,
-                                                        borderRadius: BorderRadius.circular(20),
+                                                        borderRadius: BorderRadius.circular(screenWidth*0.06),
                                                         border: Border.all(color: Colors.red.shade200, width: 2),
                                                       ),
                                                       child: Column(
@@ -265,12 +270,12 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                             },
                                           ),
                                         ),
-                                        const SizedBox(height: 10), // Space between slider and dots
+                                        SizedBox(height: screenHeight*0.01),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: List.generate(_uploadedImages.length, (index) {
                                             return Container(
-                                              margin: const EdgeInsets.symmetric(horizontal: 5), // Space between dots
+                                              margin: const EdgeInsets.symmetric(horizontal: 5),
                                               child: AnimatedContainer(
                                                 duration: const Duration(milliseconds: 500),
                                                 width: _currentIndex == index ? 20 : 20,
@@ -286,7 +291,7 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(height: 10,),
+                                  SizedBox(height: screenHeight*0.01),
                                   Container(
                                     height: screenHeight*0.05,
                                     width: double.infinity,
@@ -320,7 +325,7 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(height: 10,),
+                                  SizedBox(height: screenHeight*0.01),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
@@ -443,67 +448,123 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                   const SizedBox(height: 13,),
                                   Container(
                                     margin: const EdgeInsets.symmetric(horizontal: 15),
-                                    height: screenHeight*0.07,
+                                    height: screenHeight * 0.15,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey,width: 1.5),
-                                        borderRadius: BorderRadius.circular(5)
+                                      border: Border.all(color: Colors.grey, width: 1.5),
+                                      borderRadius: BorderRadius.circular(5),
                                     ),
                                     child: Row(
                                       children: [
-                                        const SizedBox(width: 10),
+                                         SizedBox(width: screenWidth*0.05),
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 10.0),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                constraints: const BoxConstraints(maxWidth: 150),
-                                                child: FittedBox(
-                                                  fit: BoxFit.scaleDown,
+                                          padding:  EdgeInsets.only(top: screenHeight*0.03),
+                                          child: Flexible(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02, vertical: 6),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius: BorderRadius.circular(screenWidth*0.03),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.grey.withValues(alpha: 0.2),
+                                                        spreadRadius: 1,
+                                                        blurRadius: 2,
+                                                        offset: const Offset(0, 1),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  constraints: BoxConstraints(maxWidth: screenWidth * 0.5),
                                                   child: FutureBuilder<String>(
-                                                    future: distanceCalculator.getAddressFromLatLng(widget.warehouses.wHouseAddress), // Replace with actual coordinates
+                                                    future: distanceCalculator.getAddressFromLatLng(widget.warehouses.wHouseAddress),
                                                     builder: (context, snapshot) {
                                                       if (snapshot.connectionState == ConnectionState.waiting) {
-                                                        return const Text("Loading address...", style: TextStyle(color: Colors.grey, fontSize: 12));
+                                                        return const Text(
+                                                          "Loading address...",
+                                                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                                                        );
                                                       } else if (snapshot.hasError) {
-                                                        return Text("Error: ${snapshot.error}", style: const TextStyle(color: Colors.red, fontSize: 12));
+                                                        return Text(
+                                                          "Error: ${snapshot.error}",
+                                                          style: const TextStyle(color: Colors.red, fontSize: 12),
+                                                        );
                                                       } else {
-                                                        return Text(snapshot.data!, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14));
+                                                        return Text(
+                                                          snapshot.data!,
+                                                          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow.ellipsis,
+                                                        );
                                                       }
                                                     },
                                                   ),
                                                 ),
-                                              ),
-                                              Container(
-                                                constraints: BoxConstraints(maxWidth: screenWidth*0.5),
-                                                child: FittedBox(
-                                                  fit: BoxFit.scaleDown,
+                                                 SizedBox(height: screenHeight*0.03),
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03, vertical: 6),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius: BorderRadius.circular(screenWidth*0.03),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.grey.withValues(alpha: 0.2),
+                                                        spreadRadius: 1,
+                                                        blurRadius: 2,
+                                                        offset: const Offset(0, 1),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  constraints: BoxConstraints(maxWidth: screenWidth * 0.5),
                                                   child: FutureBuilder<double>(
-                                                    future: distanceCalculator.getDistanceFromCurrentToWarehouse(widget.warehouses.wHouseAddress), // Replace with actual data
+                                                    future: Permission.location.isGranted.then((granted) {
+                                                      if (granted) {
+                                                        return distanceCalculator.getDistanceFromCurrentToWarehouse(widget.warehouses.wHouseAddress);
+                                                      } else {
+                                                        return Future.error("Location permission denied");
+                                                      }
+                                                    }),
                                                     builder: (context, snapshot) {
                                                       if (snapshot.connectionState == ConnectionState.waiting) {
-                                                        return const Text("Calculating distance...", style: TextStyle(color: Colors.grey, fontSize: 12));
+                                                        return const Text(
+                                                          "Calculating distance...",
+                                                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                                                        );
                                                       } else if (snapshot.hasError) {
-                                                        return Text("Error: ${snapshot.error}", style: const TextStyle(color: Colors.red, fontSize: 12));
+                                                        return TextButton.icon(
+                                                          onPressed: () => requestLocationPermission(context),
+                                                          icon: const Icon(Icons.location_on, size: 16, color: Colors.blue),
+                                                          label: const Text(
+                                                            "Enable location to see distance",
+                                                            style: TextStyle(fontSize: 12, color: Colors.blue, fontWeight: FontWeight.w600),
+                                                          ),
+                                                        );
                                                       } else {
                                                         double distanceInKm = snapshot.data! / 1000;
-                                                        return Text("${distanceInKm.toStringAsFixed(3)} km away from your current location",
-                                                            style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.grey, fontSize: 15));
+                                                        return Text(
+                                                          "${distanceInKm.toStringAsFixed(3)} km away from your current location",
+                                                          style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.grey, fontSize: 15),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow.ellipsis,
+                                                        );
                                                       }
                                                     },
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
+                                       // Expanded(child: Container()),
                                         const Spacer(),
                                         Padding(
-                                          padding: const EdgeInsets.only(right: 5.0,top: 3,bottom: 3),
+                                          padding: const EdgeInsets.only(right: 5.0, top: 3, bottom: 3),
                                           child: InkWell(
-                                            onTap: (){
-                                              if (widget.warehouses.latitude != null && widget.warehouses.longitude != null) {
-                                                _openMap(widget.warehouses.latitude!, widget.warehouses.longitude!);
+                                            onTap: () {
+                                              if(widget.warehouses.wHouseAddress!=null){
+                                                _openMapFromAddress(widget.warehouses.wHouseAddress);
                                               } else {
                                                 ScaffoldMessenger.of(context).showSnackBar(
                                                   const SnackBar(content: Text("Location information is missing.")),
@@ -513,23 +574,28 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                             child: ClipOval(
                                               child: Image.asset(
                                                 ImageAssets.map,
-                                                height: screenHeight*0.06,
-                                                width: screenWidth*0.13,
+                                                height: screenHeight * 0.06,
+                                                width: screenWidth * 0.13,
                                                 fit: BoxFit.cover,
                                               ),
-                                            ),),
-                                        )
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
                                   const SizedBox(height: 13,),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 15),
+                                    margin:  EdgeInsets.symmetric(horizontal: screenWidth*0.08),
                                     height: screenHeight*0.12,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                         border: Border.all(color: Colors.grey,width: 1.5),
                                         borderRadius: BorderRadius.circular(5)
+                                    ),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Messages"),
                                     ),
                                   ),
                                   Row(
@@ -564,7 +630,7 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                           {"icon": ImageAssets.truckSlot, "value": "Truck Slot | ${widget.warehouses.truckParkingSlot}"},
                                         ],
                                       ),
-                                      const SizedBox(height: 20),
+                                       SizedBox(height: screenHeight*0.04),
                                       WarehouseFeaturesRow(
                                         features: [
                                           {"icon": ImageAssets.fansNumber, "value": "Fans | ${widget.warehouses.numberOfFans}"},
@@ -686,246 +752,106 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                 ),
               ),
             ),
-          ),
-
+          )
         ],
       ),
     );
   }
-  Future<void> _openMap(double lat, double lng) async {
-    final random = Random();
 
-    // Generate random offsets (±1 to 2 km)
-    double latOffset = (random.nextDouble() * 0.018) - 0.009; // ±1 to 2 km in latitude
-    double lngOffset = (random.nextDouble() * 0.018) - 0.009; // ±1 to 2 km in longitude
-
-    // Adjust the coordinates
-    double newLat = lat + latOffset;
-    double newLng = lng + lngOffset;
-    final url = "https://www.google.com/maps/search/?api=1&query=$newLat,$newLng";
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
+  Future<void> requestLocationPermission(BuildContext context) async {
+    final navigator = Navigator.of(context);
+    PermissionStatus status = await Permission.location.request();
+    if (!context.mounted) return;
+    if (status.isDenied || status.isPermanentlyDenied) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: navigator.context,
+          builder: (_) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            title: const Row(
+              children: [
+                Icon(Icons.location_on, color: Colors.blue, size: 28),
+                SizedBox(width: 8),
+                Text(
+                  "Enable Location",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Get the most accurate distance to warehouses near you.\n\n"
+                      "✅ Find the best locations quickly\n"
+                      "✅ Get estimated travel distances\n"
+                      "✅ Improve your experience",
+                  style: TextStyle(fontSize: 14, height: 1.4),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.info_outline, color: Colors.blue, size: 20),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          "We respect your privacy and do not store or share your location data.",
+                          style: TextStyle(fontSize: 12, color: Colors.black87),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => navigator.pop(), // ✅ Safe usage
+                child: const Text("Not Now", style: TextStyle(color: Colors.grey)),
+              ),
+              ElevatedButton.icon(
+                onPressed: () => openAppSettings(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+                icon: const Icon(Icons.settings),
+                label: const Text("Open Settings"),
+              ),
+            ],
+          ),
+        );
+      });
     }
   }
-}
 
-class CarpetAreaTextFormField extends StatelessWidget {
-  const CarpetAreaTextFormField({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: 'Enter carpet area',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
-        border: InputBorder.none,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
-          child: const Text(
-            '|sqft',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
+  void _openMapFromAddress(String wHouseAddress) {
+    DistanceCalculator distanceCalculator=DistanceCalculator();
+    try {
+      LatLng warehouseLatLng = distanceCalculator.parseLatLng(wHouseAddress);
+      String googleMapsUrl =
+          "https://www.google.com/maps/search/?api=1&query=${warehouseLatLng.latitude},${warehouseLatLng.longitude}";
+      launchUrl(Uri.parse(googleMapsUrl));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Invalid location format: $e")),
+      );
+    }
   }
+
 }
-class CarpetAreaTextFormField2 extends StatelessWidget {
-  const CarpetAreaTextFormField2({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 33,
-      decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(6)
-      ),
-
-      child: TextFormField(
-
-        decoration: InputDecoration(
-          hintText: '0',
-          hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
-          contentPadding: const EdgeInsets.only(left: 8,bottom: 10),
-          border: InputBorder.none,
 
 
-          suffix: Container(
-            padding: const EdgeInsets.only(left: 8.0,right: 6),
-            child: const Text(
-              '|sqft',
-              style: TextStyle(color: Colors.grey, fontSize: 13),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField3 extends StatelessWidget {
-  const CarpetAreaTextFormField3({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: '₹|ex.35',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
-        border: InputBorder.none,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: const Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField4 extends StatelessWidget {
-  const CarpetAreaTextFormField4({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: '₹|ex.2',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
-        border: InputBorder.none,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: const Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField5 extends StatelessWidget {
-  const CarpetAreaTextFormField5({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: const InputDecoration(
-        hintText: 'ex.2',
-        hintStyle: TextStyle(color: Colors.grey,fontSize: 12),
-        border: InputBorder.none,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField6 extends StatelessWidget {
-  const CarpetAreaTextFormField6({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: 'ex.3',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
-        border: InputBorder.none,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: const Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField7 extends StatelessWidget {
-  const CarpetAreaTextFormField7({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: 'ex.18',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
-        border: InputBorder.none,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: const Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class CarpetAreaTextFormField8 extends StatelessWidget {
-  const CarpetAreaTextFormField8({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: 'ex.18',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
-        border: InputBorder.none,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-        ),
-        suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: const Text(
-            '|per month',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 
 

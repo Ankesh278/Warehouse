@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:Lisofy/Localization/languages.dart';
 import 'package:Lisofy/Warehouse/Partner/document_upload.dart';
 import 'package:Lisofy/Warehouse/User/notification_setting.dart';
-import 'package:Lisofy/Warehouse/User/UserProvider/photoProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/photo_provider.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/rating_provider.dart';
 import 'package:Lisofy/Warehouse/User/userlogin.dart';
-import 'package:Lisofy/Warehouse/User/websiteViewer.dart';
+import 'package:Lisofy/Warehouse/User/website_viewer.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
@@ -24,28 +24,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http_parser/http_parser.dart';
-
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
-
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
-
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   late String phone = '';
   late String name = '';
   String userFile = "";
   String email = "";
-  //String name = "";
   @override
   void initState() {
     super.initState();
     getSharedPreference();
+    final ratingProvider = Provider.of<RatingProvider>(context, listen: false);
     Future.microtask(() {
-      Provider.of<RatingProvider>(context, listen: false)
-          .fetchUserFeedback(phone);
+      ratingProvider.fetchUserFeedback(phone);
     });
   }
   final TextEditingController nameController = TextEditingController();
@@ -55,6 +51,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final String phoneNumber = '+917007221530';
   final TextEditingController _messageController = TextEditingController();
   Future<void> _logoutAndRedirect(BuildContext context) async {
+    final navigator = Navigator.of(context);
     try {
       /// Sign out from Google
       await _googleSignIn.signOut();
@@ -70,11 +67,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       await prefs.remove('phone');
       await prefs.remove('Name');
       await prefs.setBool('isUserLoggedIn', false);
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) =>
-                const UserLogin()),
-        (route) => false,
+      if (!context.mounted) return;
+      navigator.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const UserLogin()),
+            (route) => false,
       );
     } catch (e) {
       if (kDebugMode) {
@@ -82,6 +78,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       }
     }
   }
+
 
   Future<bool> _showLogoutConfirmationDialog(BuildContext context) async {
     return await showDialog(
@@ -1015,13 +1012,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                         ),
                                       ),
                                       onTap: () async {
-                                        // Show the confirmation dialog before logout
-                                        bool shouldLogout =
-                                            await _showLogoutConfirmationDialog(
-                                                context);
+                                        final navigator = Navigator.of(context);
+                                        bool shouldLogout = await _showLogoutConfirmationDialog(navigator.context);
+                                        if (!context.mounted) return;
                                         if (shouldLogout) {
-                                          // Call the logout function
-                                          await _logoutAndRedirect(context);
+                                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                                            _logoutAndRedirect(navigator.context);
+                                          });
                                         }
                                       },
                                     ),
@@ -1297,7 +1294,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               );
             },
           ),
-
         ],
       ),
     );
@@ -1503,8 +1499,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     final response = await http.get(
       Uri.parse('https://xpacesphere.com/api/Register/GetRegistr?mobile=$phone'),
     );
-
-    print("API Response: ${response.body}");
+    if (kDebugMode) {
+      print("API Response: ${response.body}");
+    }
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -1515,56 +1512,71 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         final String relativeImageUrl = userData['userProfile'] ?? "";
         final String userFile = userData['userfile'] ?? "";
         final String name = userData['name'] ?? "";
-        final String email = userData['mailid'] ?? ""; // FIX: mailid (lowercase)
+        final String email = userData['mailid'] ?? "";
 
-        print("Relative Image URL: $relativeImageUrl");
-        print("USERFILE: $userFile");
-        print("User Name: $name");
-        print("User Email: $email");
+        if (kDebugMode) {
+          print("Relative Image URL: $relativeImageUrl");
+        }
+        if (kDebugMode) {
+          print("USERFILE: $userFile");
+        }
+        if (kDebugMode) {
+          print("User Name: $name");
+        }
+        if (kDebugMode) {
+          print("User Email: $email");
+        }
 
         SharedPreferences pref = await SharedPreferences.getInstance();
         await pref.setString("email", email);
         await pref.setString("name", name);
 
-        print("Saved Email: ${pref.getString("email")}");
-        print("Saved Name: ${pref.getString("name")}");
-
+        if (kDebugMode) {
+          print("Saved Email: ${pref.getString("email")}");
+        }
+        if (kDebugMode) {
+          print("Saved Name: ${pref.getString("name")}");
+        }
         if (relativeImageUrl.isNotEmpty) {
           final String fullImageUrl = 'https://xpacesphere.com$relativeImageUrl';
-          print("Full Image URL: $fullImageUrl");
+          if (kDebugMode) {
+            print("Full Image URL: $fullImageUrl");
+          }
           profileProvider.setProfileImageUrl(fullImageUrl);
         } else {
-          print("User profile image is null or empty.");
+          if (kDebugMode) {
+            print("User profile image is null or empty.");
+          }
         }
       } else {
-        print("No user data or userProfile found in the response.");
+        if (kDebugMode) {
+          print("No user data or userProfile found in the response.");
+        }
       }
     } else {
-      print('Failed to load profile image with status code: ${response.statusCode}');
+      if (kDebugMode) {
+        print('Failed to load profile image with status code: ${response.statusCode}');
+      }
     }
   }
 
 
   Future<void> _pickImage(BuildContext context) async {
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
+    if (!context.mounted) return;
     if (pickedFile != null) {
-      final profileProvider =
-          Provider.of<ProfileProvider>(context, listen: false);
       final imageFile = File(pickedFile.path);
       if (kDebugMode) {
         print('Picked image: ${imageFile.path}');
       }
-
-      // Update the image in the Provider immediately
       profileProvider.setProfileImage(imageFile);
       if (kDebugMode) {
         print('Updated profile image in provider.');
       }
-
-      // Start uploading the image to the server in the background
       _uploadImage(imageFile, phone).then((uploadedImageUrl) {
+        if (!context.mounted) return;
         if (uploadedImageUrl != null) {
           profileProvider.setProfileImageUrl(uploadedImageUrl);
           if (kDebugMode) {
@@ -1579,15 +1591,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
+
   Future<String?> _uploadImage(File imageFile, String phone) async {
     final uri = Uri.parse('https://xpacesphere.com/api/Register/UPDRegistr');
     final request = http.MultipartRequest('PUT', uri)
-      ..fields['Mobile'] = phone // Add the phone number field to the request
+      ..fields['Mobile'] = phone
       ..files.add(await http.MultipartFile.fromPath(
-        'UserProfile', // form-data field name
+        'UserProfile',
         imageFile.path,
         contentType:
-            MediaType('image', 'jpeg'), // Set content type if necessary
+            MediaType('image', 'jpeg'),
       ));
 
     try {
@@ -1792,26 +1805,25 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Future<void> _submitFormWithAnimation(
-    BuildContext context,
-    TextEditingController nameController,
-    TextEditingController phoneController,
-    TextEditingController additionalPhoneController,
-    TextEditingController emailController,
-  ) async {
-    // Show loading dialog
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const Center(
+      BuildContext context,
+      TextEditingController nameController,
+      TextEditingController phoneController,
+      TextEditingController additionalPhoneController,
+      TextEditingController emailController,
+      ) async {
+    final navigator = Navigator.of(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        context: navigator.context,
+        barrierDismissible: false,
+        builder: (_) => const Center(
           child: SpinKitCircle(
             color: Colors.blue,
           ),
-        );
-      },
-    );
+        ),
+      );
+    });
 
-    // Submit form and get the result
     final uri = Uri.parse('https://xpacesphere.com/api/Register/UPDRegistr');
     final request = http.MultipartRequest('PUT', uri)
       ..fields['Name'] = nameController.text
@@ -1822,15 +1834,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     try {
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
-
       if (response.statusCode == 200) {
         if (kDebugMode) {
           print("Response Status Code: ${response.statusCode}");
         }
-        success = true; // Successful submission
+        success = true;
         SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString("name", nameController.text.toString());
-        pref.setString("email", emailController.text.toString());
+        await pref.setString("name", nameController.text.toString());
+        await pref.setString("email", emailController.text.toString());
       } else {
         if (kDebugMode) {
           print("Error Message: $responseBody");
@@ -1843,104 +1854,99 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       }
       success = false;
     }
-    // Close the loading dialog after a small delay
-    if (mounted) {
-      Navigator.of(context).pop();
-    }
-    // Show success/error dialog after form submission
-    if (mounted) {
+    if (!context.mounted) return;
+    navigator.pop();
+    if (!context.mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       showDialog(
-        context: context,
+        context: navigator.context,
         barrierDismissible: true,
-        builder: (context) {
-          return Center(
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-              padding: const EdgeInsets.all(20),
-              child: Material(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 500),
-                        child: success
-                            ? const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                                size: 80,
-                                key: ValueKey('success'),
-                              )
-                            : const Icon(
-                                Icons.error,
-                                color: Colors.red,
-                                size: 80,
-                                key: ValueKey('error'),
-                              ),
+        builder: (_) => Center(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            padding: const EdgeInsets.all(20),
+            child: Material(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      child: success
+                          ? const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 80,
+                        key: ValueKey('success'),
+                      )
+                          : const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                        size: 80,
+                        key: ValueKey('error'),
                       ),
-                      const SizedBox(height: 20),
-                      Text(
-                        success
-                            ? "Profile updated successfully!"
-                            : "Failed to update profile.",
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (mounted) {
-                            additionalPhoneController.clear();
-                            emialController.clear();
-                            Navigator.of(context).pop();
-                            Navigator.of(context)
-                                .pop();
-                            setState(() {});
-                          }
-                        },
-                        child: const Text("OK"),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      success
+                          ? "Profile updated successfully!"
+                          : "Failed to update profile.",
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        additionalPhoneController.clear();
+                        emailController.clear();
+                        navigator.pop();
+                        navigator.pop();
+                      },
+                      child: const Text("OK"),
+                    ),
+                  ],
                 ),
               ),
             ),
-          );
-        },
+          ),
+        ),
       );
-    }
+    });
   }
+
+
   void _sendWhatsAppMessage() async {
     String message = _messageController.text.trim();
     String encodedMessage = Uri.encodeComponent(message);
     String url = 'https://wa.me/$phoneNumber?text=$encodedMessage';
-
-    // Launch WhatsApp or show error
+    final messenger = ScaffoldMessenger.of(context);
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
+      if (!context.mounted) return;
+      messenger.showSnackBar(
         const SnackBar(content: Text('Could not open WhatsApp!')),
       );
     }
   }
+
   Future<void> _sendEmail(BuildContext context) async {
     final Uri emailUri = Uri(
       scheme: 'mailto',
       path: 'yankesh278@gmail.com',
       query: 'subject=Help%20Request',
     );
+    final messenger = ScaffoldMessenger.of(context);
     try {
       if (await canLaunchUrl(emailUri)) {
         await launchUrl(emailUri);
-
-        ScaffoldMessenger.of(context).showSnackBar(
+        if (!context.mounted) return;
+        messenger.showSnackBar(
           const SnackBar(
             content: Text("Our team will connect with you soon."),
             backgroundColor: Colors.green,
@@ -1950,7 +1956,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         throw 'Could not launch email app';
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      if (!context.mounted) return;
+      messenger.showSnackBar(
         const SnackBar(
           content: Text("Unable to open email app. Please try again."),
           backgroundColor: Colors.red,
@@ -1958,6 +1965,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       );
     }
   }
+
   void _showUploadDocumentDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -2011,16 +2019,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     child: ElevatedButton(
                       onPressed: () async {
                         try {
-                          FilePickerResult? result =
-                              await FilePicker.platform.pickFiles(
+                          final navigator = Navigator.of(context);
+                          FilePickerResult? result = await FilePicker.platform.pickFiles(
                             type: FileType.custom,
                             allowedExtensions: ['jpg', 'pdf', 'docx'],
                           );
-
+                          if (!context.mounted) return;
                           if (result != null) {
                             PlatformFile file = result.files.first;
                             String? filePath = file.path;
-
                             if (filePath != null) {
                               if (kDebugMode) {
                                 print('Selected file path: $filePath');
@@ -2028,27 +2035,23 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               if (kDebugMode) {
                                 print('Mobile number: $phone');
                               }
-
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (_) => const Center(
-                                  child: SpinKitCircle(
-                                    color: Colors.blue,
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                showDialog(
+                                  context: navigator.context,
+                                  barrierDismissible: false,
+                                  builder: (_) => const Center(
+                                    child: SpinKitCircle(
+                                      color: Colors.blue,
+                                    ),
                                   ),
-                                ),
-                              );
-
+                                );
+                              });
                               var request = http.MultipartRequest(
                                 'POST',
-                                Uri.parse(
-                                    'https://xpacesphere.com/api/Wherehousedt/UploadDocuments'),
+                                Uri.parse('https://xpacesphere.com/api/Wherehousedt/UploadDocuments'),
                               );
                               request.fields['mobile'] = phone;
-                              request.files.add(
-                                  await http.MultipartFile.fromPath(
-                                      'UserFile', filePath));
-
+                              request.files.add(await http.MultipartFile.fromPath('UserFile', filePath));
                               if (kDebugMode) {
                                 print('API Endpoint: ${request.url}');
                               }
@@ -2058,36 +2061,28 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               if (kDebugMode) {
                                 print('File Upload: $filePath');
                               }
-
                               var response = await request.send();
 
-                              Navigator.of(context)
-                                  .pop();
-
+                              if (!context.mounted) return;
+                              navigator.pop();
                               if (response.statusCode == 200) {
-                                var responseBody =
-                                    await response.stream.bytesToString();
+                                var responseBody = await response.stream.bytesToString();
                                 if (kDebugMode) {
                                   print('Response (200): $responseBody');
                                 }
-                                Navigator.of(context)
-                                    .pop();
+                                navigator.pop();
                                 Fluttertoast.showToast(
                                   msg: "Document uploaded successfully!",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                 );
                               } else {
-                                var errorBody =
-                                    await response.stream.bytesToString();
+                                var errorBody = await response.stream.bytesToString();
                                 if (kDebugMode) {
-                                  print(
-                                    'Error Response (${response.statusCode}): $errorBody');
+                                  print('Error Response (${response.statusCode}): $errorBody');
                                 }
-
                                 Fluttertoast.showToast(
-                                  msg:
-                                      "Failed to upload document. Please try again.",
+                                  msg: "Failed to upload document. Please try again.",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                 );
@@ -2113,9 +2108,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             );
                           }
                         } catch (e) {
-                          Navigator.of(context)
-                              .pop();
-                          /// print('An error occurred: $e', error: e, stackTrace: stacktrace);
+                          if (!context.mounted) return;
+                          Navigator.of(context).pop();
                           Fluttertoast.showToast(
                             msg: "An error occurred. Please try again.",
                             toastLength: Toast.LENGTH_LONG,
@@ -2126,8 +2120,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         elevation: 4,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 14, horizontal: 30),
+                        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 30),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                           side: const BorderSide(color: Colors.blue, width: 3),
@@ -2144,13 +2137,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           Text(
                             'Upload Document',
                             style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ],
                       ),
-                    ),
+                    )
                   ),
                   const Spacer(),
                 ],
@@ -2208,7 +2202,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 }
-// Function to launch Instagram app or web page
+
 void _openInstagramProfile() async {
   const String instagramUrl = 'instagram://user?username=a_tinyhunter';
   const String fallbackUrl = 'https://www.instagram.com/a_tinyhunter/';
@@ -2227,7 +2221,7 @@ void _openInstagramProfile() async {
         mode: LaunchMode.externalApplication);
   }
 }
-// Function to launch Facebook app or web page
+
 void _openFacebookProfile() async {
   const String facebookAppUrl = 'fb://profile/100009158840334';
   const String fallbackUrl =
@@ -2247,7 +2241,7 @@ void _openFacebookProfile() async {
         mode: LaunchMode.externalApplication);
   }
 }
-// Function to launch Twitter app or web page
+
 void _openTwitterProfile() async {
   const String twitterAppUrl = 'twitter://user?screen_name=AnkeshYada78626';
   const String fallbackUrl = 'https://twitter.com/AnkeshYada78626';

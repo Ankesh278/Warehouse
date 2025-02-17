@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:Lisofy/Warehouse/Partner/HelpPage.dart';
+import 'package:Lisofy/Warehouse/Partner/help_page.dart';
 import 'package:Lisofy/Warehouse/Partner/home_screen.dart';
-import 'package:Lisofy/Warehouse/Partner/MapScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/map_screen.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/location_provider.dart';
 import 'package:Lisofy/Warehouse/Partner/models/warehouses_model.dart';
 import 'package:Lisofy/Warehouse/Partner/warehouse_media_update.dart';
@@ -16,13 +16,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 
-class Warehouseupdate extends StatefulWidget {
+class WarehouseUpdate extends StatefulWidget {
   final Warehouse warehouse;
-  const Warehouseupdate({super.key,required this.warehouse});
+  const WarehouseUpdate({super.key,required this.warehouse});
   @override
-  State<Warehouseupdate> createState() => _WarehouseupdateState();
+  State<WarehouseUpdate> createState() => _WarehouseUpdateState();
 }
-class _WarehouseupdateState extends State<Warehouseupdate> {
+class _WarehouseUpdateState extends State<WarehouseUpdate> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _carpetAreaController=TextEditingController();
   final TextEditingController _totalArea=TextEditingController();
@@ -123,9 +123,9 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
         double latitude = double.parse(match.group(1)!.trim());
         double longitude = double.parse(match.group(2)!.trim());
         _latLng = LatLng(latitude, longitude);
-        List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
-        Placemark place = placemarks[0];
-        if (placemarks.isNotEmpty) {
+        List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
+        Placemark place = placeMarks[0];
+        if (placeMarks.isNotEmpty) {
           setState(() {
             _address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.country}';
            if (kDebugMode) {
@@ -376,7 +376,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                     ),
                                   ),
                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>HelpPage()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const HelpPage()));
                                   },
                                 ),
                               ],
@@ -462,7 +462,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                       // Navigate to the LocationSelectionScreen
                                       final result = await Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => LocationSelectionScreen()),
+                                        MaterialPageRoute(builder: (context) => const LocationSelectionScreen()),
                                       );
                                       if (result != null && result is LocationData) {
                                         setState(() {
@@ -775,7 +775,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                       Text(S.of(context).rent_per_sqft,style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
                                     ],
                                   ),
-                                  rentPerSqFt(controller: _rentPerSqFt,),
+                                  RentPerSqFt(controller: _rentPerSqFt,),
                                   const SizedBox(height: 15,),
                                    Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -783,7 +783,7 @@ class _WarehouseupdateState extends State<Warehouseupdate> {
                                       Text(S.of(context).maintenance_cost_per_sqft,style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),),
                                     ],
                                   ),
-                                  maintenanceCost(controller: _maintenanceCost),
+                                  MaintenanceCost(controller: _maintenanceCost),
                                   const SizedBox(
                                     height: 15,
                                   ),
@@ -1072,8 +1072,7 @@ class CarpetAreaTextFormField extends StatelessWidget {
       validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
       decoration: InputDecoration(
         hintText: 'Enter carpet area',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
         border: InputBorder.none,
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -1082,7 +1081,7 @@ class CarpetAreaTextFormField extends StatelessWidget {
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
         ),
         suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          padding: const EdgeInsets.only(left: 8.0),
           child: const Text(
             '|sqft',
             style: TextStyle(color: Colors.grey, fontSize: 13),
@@ -1112,13 +1111,11 @@ class TotalCarpetArea extends StatelessWidget {
         validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
         decoration: InputDecoration(
           hintText: '0',
-          hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-          contentPadding: const EdgeInsets.only(left: 8,bottom: 10), // Adjust vertical padding
+          hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
+          contentPadding: const EdgeInsets.only(left: 8,bottom: 10),
           border: InputBorder.none,
-
-
           suffix: Container(
-            padding: const EdgeInsets.only(left: 8.0,right: 6), // Space between the text and the input
+            padding: const EdgeInsets.only(left: 8.0,right: 6),
             child: const Text(
               '|sqft',
               style: TextStyle(color: Colors.grey, fontSize: 13),
@@ -1129,10 +1126,10 @@ class TotalCarpetArea extends StatelessWidget {
     );
   }
 }
-class rentPerSqFt extends StatelessWidget {
+class RentPerSqFt extends StatelessWidget {
   final TextEditingController controller;
 
-  const rentPerSqFt({super.key, required this.controller});
+  const RentPerSqFt({super.key, required this.controller});
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -1142,8 +1139,7 @@ class rentPerSqFt extends StatelessWidget {
       validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
       decoration: InputDecoration(
         hintText: '₹|ex.35',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
         border: InputBorder.none,
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -1152,7 +1148,7 @@ class rentPerSqFt extends StatelessWidget {
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
         ),
         suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          padding: const EdgeInsets.only(left: 8.0),
           child: const Text(
             '|per month',
             style: TextStyle(color: Colors.grey, fontSize: 13),
@@ -1162,10 +1158,9 @@ class rentPerSqFt extends StatelessWidget {
     );
   }
 }
-class maintenanceCost extends StatelessWidget {
+class MaintenanceCost extends StatelessWidget {
   final TextEditingController controller;
-
-  const maintenanceCost({super.key, required this.controller});
+  const MaintenanceCost({super.key, required this.controller});
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -1175,8 +1170,7 @@ class maintenanceCost extends StatelessWidget {
       validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
       decoration: InputDecoration(
         hintText: '₹|ex.2',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
         border: InputBorder.none,
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -1185,7 +1179,7 @@ class maintenanceCost extends StatelessWidget {
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
         ),
         suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          padding: const EdgeInsets.only(left: 8.0),
           child: const Text(
             '|per month',
             style: TextStyle(color: Colors.grey, fontSize: 13),
@@ -1197,7 +1191,6 @@ class maintenanceCost extends StatelessWidget {
 }
 class ExpectedSecurityDeposit extends StatelessWidget {
   final TextEditingController controller;
-
   const ExpectedSecurityDeposit({super.key, required this.controller});
   @override
   Widget build(BuildContext context) {
@@ -1208,8 +1201,7 @@ class ExpectedSecurityDeposit extends StatelessWidget {
       validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
       decoration: const InputDecoration(
         hintText: 'ex.2',
-        hintStyle: TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        hintStyle: TextStyle(color: Colors.grey,fontSize: 12),
         border: InputBorder.none,
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -1217,20 +1209,12 @@ class ExpectedSecurityDeposit extends StatelessWidget {
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
         ),
-        // suffix: Container(
-        //   padding: EdgeInsets.only(left: 8.0), // Space between the text and the input
-        //   child: Text(
-        //     '|per month',
-        //     style: TextStyle(color: Colors.grey, fontSize: 13),
-        //   ),
-        // ),
       ),
     );
   }
 }
 class TokenAdvance extends StatelessWidget {
   final TextEditingController controller;
-
   const TokenAdvance({super.key, required this.controller});
   @override
   Widget build(BuildContext context) {
@@ -1241,8 +1225,7 @@ class TokenAdvance extends StatelessWidget {
       validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
       decoration: InputDecoration(
         hintText: 'ex.3',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
         border: InputBorder.none,
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -1251,7 +1234,7 @@ class TokenAdvance extends StatelessWidget {
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
         ),
         suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          padding: const EdgeInsets.only(left: 8.0),
           child: const Text(
             '|per month',
             style: TextStyle(color: Colors.grey, fontSize: 13),
@@ -1274,8 +1257,7 @@ class ExpectedLockInPeriod extends StatelessWidget {
       validator: (value) => value == null || value.isEmpty ? 'Field is required' : null,
       decoration: InputDecoration(
         hintText: 'ex.18',
-        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12), // Hint text color
-        // contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding
+        hintStyle: const TextStyle(color: Colors.grey,fontSize: 12),
         border: InputBorder.none,
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -1284,7 +1266,7 @@ class ExpectedLockInPeriod extends StatelessWidget {
           borderSide: BorderSide(color: Colors.blue, width: 1.0),
         ),
         suffix: Container(
-          padding: const EdgeInsets.only(left: 8.0), // Space between the text and the input
+          padding: const EdgeInsets.only(left: 8.0),
           child: const Text(
             '|per month',
             style: TextStyle(color: Colors.grey, fontSize: 13),

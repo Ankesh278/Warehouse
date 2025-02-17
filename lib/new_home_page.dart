@@ -11,8 +11,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class NewHomePage extends StatefulWidget {
-  final  longitude;
-  final latitude;
+  final dynamic longitude;
+  final dynamic latitude;
   const NewHomePage({super.key,required this.latitude,required this.longitude});
 
   @override
@@ -31,22 +31,28 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
     _pageController.jumpToPage(index);
   }
   int _currentIndex = 0;
-  int _trnasportIndex = 0;
-  int _manpowertIndex = 0;
+  int _transportIndex = 0;
+  int _manpowerIndex = 0;
   int _agricultureIndex = 0;
   int sliderControllerIndex = 0;
-  final List<String> _images = [
-
-   'https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg?auto=compress&cs=tinysrgb&w=600',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_1.jpg'
-   // 'https://images.pexels.com/photos/221047/pexels-photo-221047.jpeg?auto=compress&cs=tinysrgb&w=600'
+  final List<String> _warehouseImages = [
+    'https://xpacesphere.com/Content/NewFolder/warehouse_6.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_5.jpg'
     ];
+  final List<String> _transportImages = [
+    'https://xpacesphere.com/Content/NewFolder/warehouse_7.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_8.jpg'
+  ];
+  final List<String> _manPowerImages = [
+    'https://xpacesphere.com/Content/NewFolder/warehouse_13.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_14.jpg'
+  ];
 
   late PageController _pageControllerSlider;
-  late PageController _trnasportConmtroller;
+  late PageController _transportController;
   late PageController _manpowerController;
   late PageController _agricultureController;
-  late PageController sliderController;
+  late PageController _advertisingController;
   late Timer _timer;
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -63,55 +69,53 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
     super.initState();
 
     _pageControllerSlider = PageController(initialPage: _currentIndex);
-    _trnasportConmtroller = PageController(initialPage: _trnasportIndex);
-    _manpowerController = PageController(initialPage: _manpowertIndex);
+    _transportController = PageController(initialPage: _transportIndex);
+    _manpowerController = PageController(initialPage: _manpowerIndex);
     _agricultureController = PageController(initialPage: _agricultureIndex);
-    sliderController = PageController(initialPage: sliderControllerIndex);
+    _advertisingController = PageController(initialPage: sliderControllerIndex);
     _startAutoSlide(_pageControllerSlider, () {
-      if (_currentIndex < _images.length - 1) {
+      if (_currentIndex < _warehouseImages.length - 1) {
         _currentIndex++;
       } else {
         _currentIndex = 0;
       }
     }, 3, const Duration(milliseconds: 3000), Curves.easeInOutCubicEmphasized);
 
-    _startAutoSlide(_trnasportConmtroller, () {
-      if (_trnasportIndex < _images.length - 1) {
-        _trnasportIndex++;
+    _startAutoSlide(_transportController, () {
+      if (_transportIndex < _transportImages.length - 1) {
+        _transportIndex++;
       } else {
-        _trnasportIndex = 0;
+        _transportIndex = 0;
       }
     }, 4, const Duration(milliseconds: 200), Curves.slowMiddle);
 
     _startAutoSlide(_manpowerController, () {
-      if (_manpowertIndex < _images.length - 1) {
-        _manpowertIndex++;
+      if (_manpowerIndex < _manPowerImages.length - 1) {
+        _manpowerIndex++;
       } else {
-        _manpowertIndex = 0;
+        _manpowerIndex = 0;
       }
     }, 5, const Duration(milliseconds: 400), Curves.slowMiddle);
 
     _startAutoSlide(_agricultureController, () {
-      if (_agricultureIndex < _images.length - 1) {
+      if (_agricultureIndex < _warehouseImages.length - 1) {
         _agricultureIndex++;
       } else {
         _agricultureIndex = 0;
       }
     }, 4, const Duration(milliseconds: 3000), Curves.easeInOutCubicEmphasized);
 
-    _startAutoSlide(sliderController, () {
-      if (sliderControllerIndex < _images.length - 1) {
+    _startAutoSlide(_advertisingController, () {
+      if (sliderControllerIndex < _warehouseImages.length - 1) {
         sliderControllerIndex++;
       } else {
         sliderControllerIndex = 0;
       }
     }, 3, const Duration(milliseconds: 2000), Curves.easeOut);
-
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
     )..repeat();
-
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
   }
 
@@ -141,16 +145,16 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
     _controller.dispose();
     _timer.cancel();
     _pageControllerSlider.dispose();
-    _trnasportConmtroller.dispose();
+    _transportController.dispose();
     _manpowerController.dispose();
     _agricultureController.dispose();
-    sliderController.dispose();
+    _advertisingController.dispose();
     super.dispose();
   }
   List<String> horizontalSliderImages = [
-    'https://images.pexels.com/photos/3354584/pexels-photo-3354584.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    'https://images.pexels.com/photos/4484072/pexels-photo-4484072.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    'https://images.pexels.com/photos/2868982/pexels-photo-2868982.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_10.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_11.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_12.jpg',
     'https://images.pexels.com/photos/3806252/pexels-photo-3806252.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'https://images.pexels.com/photos/4484150/pexels-photo-4484150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   ];
@@ -230,8 +234,13 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                 padding: EdgeInsets.only(
                   left: screenWidth * 0.015,
                 ),
-                child: Column(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Padding(
+                      padding:  EdgeInsets.all(screenWidth*0.03),
+                      child: Image.asset(ImageAssets.appLogo),
+                    ),
                     Padding(
                       padding:  EdgeInsets.only(right: screenWidth*0.04,top: screenHeight*0.02),
                       child: Align(
@@ -279,28 +288,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                         ),
                       ),
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(left: screenWidth * 0.045),
-                              child: Text(
-                                "Logo,",
-                                style: TextStyle(
-                                  fontSize: screenWidth * 0.05,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                    //
                   ],
                 ),
               ),
@@ -386,7 +374,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                   ),
                                   child: InkWell(
                                     onTap: (){
-                                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChooseAppLanguage()));
+
                                     },
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -506,7 +494,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                 children: [
                                   PageView.builder(
                                     controller: _pageControllerSlider,
-                                    itemCount: _images.length,
+                                    itemCount: _warehouseImages.length,
                                     onPageChanged: (int index) {
                                       setState(() {
                                         _currentIndex = index;
@@ -519,7 +507,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                           border: Border.all(color: Colors.grey, width: 3),
                                         ),
                                         child: CachedNetworkImage(
-                                          imageUrl: _images[index],
+                                          imageUrl: _warehouseImages[index],
                                           fit: BoxFit.cover,
                                           width: double.infinity,
                                           placeholder: (context, url) => Shimmer(
@@ -577,11 +565,11 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                               child: Stack(
                                 children: [
                                   PageView.builder(
-                                    controller: _trnasportConmtroller,
-                                    itemCount: _images.length,
+                                    controller: _transportController,
+                                    itemCount: _transportImages.length,
                                     onPageChanged: (int index) {
                                       setState(() {
-                                        _trnasportIndex = index;
+                                        _transportIndex = index;
                                       });
                                     },
                                     itemBuilder: (context, index) {
@@ -591,7 +579,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                           border: Border.all(color: Colors.grey, width: 3),
                                         ),
                                         child: CachedNetworkImage(
-                                          imageUrl: _images[index],
+                                          imageUrl: _transportImages[index],
                                           fit: BoxFit.cover,
                                           width: double.infinity,
                                           placeholder: (context, url) => Shimmer(
@@ -727,10 +715,10 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                 children: [
                                   PageView.builder(
                                     controller: _manpowerController,
-                                    itemCount: _images.length,
+                                    itemCount: _manPowerImages.length,
                                     onPageChanged: (int index) {
                                       setState(() {
-                                        _manpowertIndex = index;
+                                        _manpowerIndex = index;
                                       });
                                     },
                                     itemBuilder: (context, index) {
@@ -740,8 +728,8 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                           border: Border.all(color: Colors.grey, width: 3),
                                         ),
                                         child: CachedNetworkImage(
-                                          imageUrl: _images[index],
-                                          fit: BoxFit.cover,
+                                          imageUrl: _manPowerImages[index],
+                                          fit: BoxFit.fitWidth,
                                           width: double.infinity,
                                           placeholder: (context, url) => Shimmer(
                                             child: Container(
@@ -802,7 +790,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                 children: [
                                   PageView.builder(
                                     controller: _agricultureController,
-                                    itemCount: _images.length,
+                                    itemCount: _warehouseImages.length,
                                     onPageChanged: (int index) {
                                       setState(() {
                                         _agricultureIndex = index;
@@ -815,7 +803,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                           border: Border.all(color: Colors.grey, width: 3),
                                         ),
                                         child: CachedNetworkImage(
-                                          imageUrl: _images[index],
+                                          imageUrl: _warehouseImages[index],
                                           fit: BoxFit.cover,
                                           width: double.infinity,
                                           placeholder: (context, url) => Shimmer(
@@ -876,8 +864,8 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                               child: Stack(
                                 children: [
                                   PageView.builder(
-                                    controller: sliderController,
-                                    itemCount: _images.length,
+                                    controller: _advertisingController,
+                                    itemCount: _warehouseImages.length,
                                     onPageChanged: (int index) {
                                       setState(() {
                                         sliderControllerIndex = index;
@@ -890,7 +878,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                           border: Border.all(color: Colors.grey, width: 3),
                                         ),
                                         child: CachedNetworkImage(
-                                          imageUrl: _images[index],
+                                          imageUrl: _warehouseImages[index],
                                           fit: BoxFit.cover,
                                           width: double.infinity,
                                           placeholder: (context, url) => Shimmer(

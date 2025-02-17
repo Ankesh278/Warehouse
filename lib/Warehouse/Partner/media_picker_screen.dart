@@ -41,14 +41,19 @@ class MediaPickerPageState extends State<MediaPickerPage> {
     }
 
     if (pickedFiles != null && pickedFiles.isNotEmpty) {
-      if (widget.isImagePicker) {
-        _showImageTypeSelector(this.context);
+      if (mounted) {
+        if (widget.isImagePicker) {
+          _showImageTypeSelector(context);
+        }
+
+        setState(() {
+          _mediaFiles.addAll(pickedFiles!);
+        });
       }
-      setState(() {
-        _mediaFiles.addAll(pickedFiles!);
-      });
     }
   }
+
+
 
   void _deleteMedia(int index) {
     setState(() {

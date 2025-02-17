@@ -44,13 +44,24 @@
     <application
         android:usesCleartextTraffic="true"
         android:allowBackup="false"
-        android:label="warehouse"
+        android:label="Lisofy"
         android:requestLegacyExternalStorage="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCfeZLavp4yFzzh9u_nFTPsoSXqhGi52CM" />
+        <!-- Firebase Default Notification Icon -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_push_notification" />
+
+        <!-- Firebase Default Notification Color -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_color" />
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:Lisofy/Warehouse/User/UserProvider/InterestProvider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/interest_provider.dart';
 import 'package:Lisofy/Warehouse/User/express_interest_screen.dart';
-import 'package:Lisofy/Warehouse/User/models/WarehouseModel.dart';
+import 'package:Lisofy/Warehouse/User/models/warehouse_model.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -929,14 +929,13 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
     double newLat = lat + latOffset;
     double newLng = lng + lngOffset;
 
-    final url =
-        "https://www.google.com/maps/search/?api=1&query=$newLat,$newLng";
-
-    if (await canLaunch(url)) {
-      await launch(url);
+    final Uri url = Uri.parse("https://www.google.com/maps/search/?api=1&query=$newLat,$newLng");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
     } else {
       throw 'Could not launch $url';
     }
+
   }
 }
 
@@ -945,13 +944,10 @@ class ShareWarehouseHelper {
   static Future<String> getLocationUrl() async {
     bool serviceEnabled;
     LocationPermission permission;
-
-    // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       throw Exception("Location services are disabled.");
     }
-    // Check location permissions
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -963,7 +959,6 @@ class ShareWarehouseHelper {
       throw Exception(
           "Location permissions are permanently denied, cannot access location.");
     }
-    // Get the current position
     Position position = await Geolocator.getCurrentPosition();
     return "https://www.google.com/maps?q=${position.latitude},${position.longitude}";
   }
@@ -976,29 +971,30 @@ class ShareWarehouseHelper {
     required String warehousePhotoUrl,
     required BuildContext context,
   }) async {
+    final messenger = ScaffoldMessenger.of(context);
     try {
-      // Get the user's current location URL
       String locationUrl = await getLocationUrl();
+
       String message = '''
 📦 Check out this Warehouse!
-
 🏢 Name: $warehouseName
 📍 Location: $warehouseLocation
 🌐 Warehouse Details: $warehouseDetailsUrl
 
 📸 Photo: $warehousePhotoUrl
 🗺️ Location URL: $locationUrl
-      ''';
+    ''';
       Share.share(message);
     } catch (e) {
       if (kDebugMode) {
         print("Error: ${e.toString()}");
       }
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         const SnackBar(content: Text("Something went wrong...")),
       );
     }
   }
+
 }
 
 class WarehouseFeaturesRow extends StatelessWidget {

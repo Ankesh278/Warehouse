@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:Lisofy/Warehouse/Partner/partnerRegistrationScreen.dart';
-import 'package:Lisofy/Warehouse/User/UserProvider/photoProvider.dart';
+import 'package:Lisofy/Warehouse/Partner/partner_registration_screen.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/photo_provider.dart';
 import 'package:Lisofy/Warehouse/User/getuserlocation.dart';
 import 'package:Lisofy/Warehouse/User/models/user_data_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -93,7 +93,9 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
             setError('Unexpected response message: ${responseData['message']}');
           }
         } catch (e) {
-          print("JSON Parsing Exception: $e");
+          if (kDebugMode) {
+            print("JSON Parsing Exception: $e");
+          }
           setError("Error processing API response: ${e.toString()}");
         }
       } else {
@@ -190,13 +192,14 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
     await SmsAutoFill().listenForCode();
   }
   /// This method gets triggered when an OTP is received
-  @override
   void codeUpdated(String? code) {
     setState(() {
       _otpController.text = code ?? "";
     });
     if (_otpController.text.isNotEmpty) {
-      print("Received OTP: $_otpController");
+      if (kDebugMode) {
+        print("Received OTP: $_otpController");
+      }
     }
   }
 

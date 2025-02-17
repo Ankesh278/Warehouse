@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-import 'dart:typed_data';
+
 
 class WarehouseMediaUpdate extends StatefulWidget {
   final Warehouse warehouse;
@@ -226,12 +226,6 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
   }
 
 
-
-
-
-
-
-  // Function to generate a thumbnail for a video
   Future<Uint8List?> _generateThumbnail(String videoPath, bool isLocalFile) async {
     if (isLocalFile) {
       return await VideoThumbnail.thumbnailData(
@@ -241,7 +235,6 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
         quality: 75,
       );
     } else {
-      // For videos from the server
       return await VideoThumbnail.thumbnailData(
         video: videoPath,
         imageFormat: ImageFormat.JPEG,
@@ -251,7 +244,7 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
     }
   }
 
-  // Widget to display a video thumbnail
+
   Widget _buildVideoThumbnail(String videoPath, bool isLocalFile) {
     return FutureBuilder<Uint8List?>(
       future: _generateThumbnail(videoPath, isLocalFile),
@@ -276,7 +269,6 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
             ],
           );
         } else {
-          // If there's an error generating the thumbnail, show a fallback image or icon
           return Stack(
             alignment: Alignment.center,
             children: [
@@ -294,26 +286,21 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
     );
   }
 
-  // Function to remove media from the lists
   void _removeMedia(String mediaType, int index) {
     setState(() {
       if (mediaType == 'Photos') {
         if (index < _uploadedImages.length) {
-          // Remove from uploaded images
           _uploadedImages.removeAt(index);
           _photoCount--;
         } else {
-          // Remove from picked images
           _pickedImages.removeAt(index - _uploadedImages.length);
           _photoCount--;
         }
       } else if (mediaType == 'Videos') {
         if (index < _uploadedVideos.length) {
-          // Remove from uploaded videos
           _uploadedVideos.removeAt(index);
           _videoCount--;
         } else {
-          // Remove from picked videos
           _pickedVideos.removeAt(index - _uploadedVideos.length);
           _videoCount--;
         }
@@ -323,7 +310,6 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
     });
   }
 
-  // Show a dialog to manage photos or videos
   void _showMediaDialog(BuildContext context, String mediaType) {
     showDialog(
       context: context,
@@ -354,7 +340,6 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
                                 itemCount: _uploadedImages.length + _pickedImages.length,
                                 itemBuilder: (context, index) {
                                   if (index < _uploadedImages.length) {
-                                    // Fetch images from server
                                     String imageUrl = "https://xpacesphere.com${_uploadedImages[index]}";
                                     return Stack(
                                       children: [
@@ -377,7 +362,6 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
                                       ],
                                     );
                                   } else {
-                                    // Display picked images from gallery
                                     return Stack(
                                       children: [
                                         ClipRRect(
@@ -424,11 +408,10 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
                                 itemCount: _uploadedVideos.length + _pickedVideos.length,
                                 itemBuilder: (context, index) {
                                   if (index < _uploadedVideos.length) {
-                                    // Display server video thumbnails
                                     String videoUrl = "https://xpacesphere.com${_uploadedVideos[index]}";
                                     return Stack(
                                       children: [
-                                        _buildVideoThumbnail(videoUrl, false),  // False for non-local files
+                                        _buildVideoThumbnail(videoUrl, false),
                                         Positioned(
                                           top: 5,
                                           right: 5,
@@ -444,7 +427,6 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
                                       ],
                                     );
                                   } else {
-                                    // Display locally picked video thumbnails
                                     String videoPath = _pickedVideos[index - _uploadedVideos.length].path;
                                     return Stack(
                                       children: [

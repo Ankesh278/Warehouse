@@ -10,16 +10,16 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-class Expressinterestdatetime extends StatefulWidget {
-  final name;
-  final email;
-  final phone;
-  final companyName;
-  final designation;
-  final dateOfPossession;
-  final msg;
-  final id;
-  const Expressinterestdatetime(
+class ExpressInterestDateTime extends StatefulWidget {
+  final dynamic name;
+  final dynamic email;
+  final dynamic phone;
+  final dynamic companyName;
+  final dynamic designation;
+  final dynamic dateOfPossession;
+  final dynamic msg;
+  final  dynamic id;
+  const ExpressInterestDateTime(
       {super.key,
       required this.id,
       required this.name,
@@ -30,16 +30,15 @@ class Expressinterestdatetime extends StatefulWidget {
       required this.msg,
       this.dateOfPossession});
   @override
-  State<Expressinterestdatetime> createState() =>
-      _ExpressinterestdatetimeState();
+  State<ExpressInterestDateTime> createState() =>
+      _ExpressInterestDateTimeState();
 }
 
-class _ExpressinterestdatetimeState extends State<Expressinterestdatetime> {
+class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
   final TextEditingController _dateController = TextEditingController();
   DateTime? _selectedDate;
 
   ///Post intrest data of the user
-
   Future<void> postWarehouseData() async {
     Map<String, dynamic> data = {
       "warehouse_Id": widget.id,

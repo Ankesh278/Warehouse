@@ -1,4 +1,4 @@
-import 'package:Lisofy/Warehouse/Partner/UpdateWarehouseDimensions.dart';
+import 'package:Lisofy/Warehouse/Partner/update_warehouse_dimensions.dart';
 import 'package:Lisofy/Warehouse/Partner/models/warehouses_model.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -38,19 +38,14 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
     provideOffice = widget.warehouse.officeSpace ? "Yes" : "No";
     cluDocument = widget.warehouse.cluDocument ? "Yes" : "No";
     dockLevelers = widget.warehouse.dockLevelers ? "Yes" : "No";
-
     _numberOfToilets=widget.warehouse.numberOfToilets;
-    // _maintenanceCost.text=widget.warehouse.whouseMaintenance.toString();
     electricityController.text=widget.warehouse.electricity;
     bikeSlotsController.text=widget.warehouse.bikeParkingSlot.toString();
     parkingSlotsController.text=widget.warehouse.truckParkingSlot.toString();
     lightsController.text=widget.warehouse.numberOfLights.toString();
     fansController.text=widget.warehouse.numberOfFans.toString();
 
-
   }
-
-
 
   void _increase() {
     setState(() {
@@ -211,7 +206,6 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
                       // buildTextField(label: "Previous Tenants", controller: tenantsController, hint: 'ex. Amazon, 2 yrs contact details'),
                       buildToggleButtons(S.of(context).provide_office_space, provideOffice, (value) => setState(() => provideOffice = value)),
                       buildToggleButtons(S.of(context).warehouse_dock_levelers, dockLevelers, (value) => setState(() => dockLevelers = value)),
-                      // buildTextField(label: "No. of Toilets*", controller: toiletsController, hint: 'ex. 23'),
                       Row(children: [
                         Padding(
                           padding:  EdgeInsets.symmetric(vertical: screenHeight*0.015, horizontal: screenWidth*0.037),
@@ -280,9 +274,7 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
                         ),
                       ],),
                       buildTextField(label: "${S.of(context).truck_parking_slots} *", controller: parkingSlotsController, hint: 'ex. 23'),
-                      //buildTextField(label: "Construction age*", controller: constructionAgeController, hint: 'ex. 23 Years'),
                       buildTextField(label: "${S.of(context).bike_parking_slots}*", controller: bikeSlotsController, hint: 'ex. 23'),
-
                       SizedBox(height: screenHeight*0.02),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -313,8 +305,8 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
                                       parkingSlots: parkingSlotsController.text,
                                       constructionAge: constructionAgeController.text,
                                       bikeSlots: bikeSlotsController.text,
-                                      fans: int.parse(fansController.text.trim())??0,
-                                      lights: int.parse(lightsController.text.trim())??0,
+                                      fans: int.parse(fansController.text.trim()),
+                                      lights: int.parse(lightsController.text.trim()),
                                       powerBackup: powerBackup,
                                       provideOffice: provideOffice,
                                       dockLevelers: dockLevelers,

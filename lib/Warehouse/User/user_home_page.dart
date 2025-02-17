@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:Lisofy/Animation/glitter_border.dart';
 import 'package:Lisofy/Warehouse/Partner/home_screen.dart';
-import 'package:Lisofy/Warehouse/User/UserProvider/sortingProvider.dart';
-import 'package:Lisofy/Warehouse/User/models/WarehouseModel.dart';
-import 'package:Lisofy/Warehouse/User/searchLocationUser.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/sorting_provider.dart';
+import 'package:Lisofy/Warehouse/User/models/warehouse_model.dart';
+import 'package:Lisofy/Warehouse/User/search_location_user.dart';
 import 'package:Lisofy/Warehouse/User/user_notification_screen.dart';
 import 'package:Lisofy/Warehouse/User/user_profile_screen.dart';
 import 'package:Lisofy/Warehouse/User/user_shortlisted_intrested.dart';
@@ -24,25 +24,26 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
-
-
 class UserHomePage extends StatefulWidget {
-   double latitude;
-   double longitude;
-   UserHomePage({super.key, required this.latitude, required this.longitude});
-
+  final double latitude;
+  final double longitude;
+   const UserHomePage({super.key, required this.latitude, required this.longitude});
   @override
   State<UserHomePage> createState() => UserHomePageState();
 }
-
 class UserHomePageState extends State<UserHomePage>
     with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
+  bool isLoading = false;
   final PageController _pageController = PageController();
   late Future<List<WarehouseModel>> futureWarehouses;
   int warehouseCount = 0;
   String address = "";
   String? phone;
+  double searchedLatitude=0.0;
+  double searchedLongitude=0.0;
+  int searchedDistance=0;
+  String searchedLoc="";
 
   void _onItemTapped(int index) {
     setState(() {
@@ -53,13 +54,14 @@ class UserHomePageState extends State<UserHomePage>
 
   int _currentIndex = 0;
   final List<String> _images = [
-    'https://media.istockphoto.com/id/685841598/photo/new-warehouse-building.jpg?s=2048x2048&w=is&k=20&c=k5-eD3CAVSudgl9vCeTWjdplL4GwpbgdWIY8qmuleNA=',
-    'https://media.istockphoto.com/id/901492852/photo/factory-building-warehouse.jpg?s=2048x2048&w=is&k=20&c=57LzhQqITd8q1Vj140s_8AuJAyceM-ugZwN8JK_1UfI='
+    // 'https://media.istockphoto.com/id/685841598/photo/new-warehouse-building.jpg?s=2048x2048&w=is&k=20&c=k5-eD3CAVSudgl9vCeTWjdplL4GwpbgdWIY8qmuleNA=',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_1.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_2.jpg'
+    // 'https://media.istockphoto.com/id/901492852/photo/factory-building-warehouse.jpg?s=2048x2048&w=is&k=20&c=57LzhQqITd8q1Vj140s_8AuJAyceM-ugZwN8JK_1UfI='
   ];
 
   late PageController _pageControllerSlider;
   late Timer _timer;
-
   bool isSortApplied = false;
   bool isNearbyEnabled = false;
   bool isPriceEnabled = false;
@@ -80,10 +82,9 @@ class UserHomePageState extends State<UserHomePage>
     if (kDebugMode) {
       print("CurrentLong  ${widget.longitude}");
     }
-
     ///Warehouse Fetching
-    futureWarehouses = fetchWarehouses(widget.latitude, widget.longitude,
-        constructionTypes, warehouseTypes, rentRange);
+    futureWarehouses = fetchWarehouses(widget.latitude, widget.longitude,20,
+        [], [], rentRange);
     _pageControllerSlider = PageController(initialPage: _currentIndex);
     _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       if (_currentIndex < _images.length - 1) {
@@ -104,14 +105,39 @@ class UserHomePageState extends State<UserHomePage>
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
   }
 
-  Future<void> _refreshData() async {
-    fetchWarehouses(widget.latitude, widget.longitude,
-        constructionTypes, warehouseTypes, rentRange);
+  double getValidCoordinate(double? searchedValue, double fallbackValue) {
+    return (searchedValue != null && searchedValue != 0.0) ? searchedValue : fallbackValue;
   }
+
+  int getValidDistance(int? searchedValue, int fallbackValue) {
+    return (searchedValue != null && searchedValue != 0) ? searchedValue : fallbackValue;
+  }
+
+  Future<void> _refreshData() async {
+    double latitude = getValidCoordinate(searchedLatitude, widget.latitude);
+    double longitude = getValidCoordinate(searchedLongitude, widget.longitude);
+    int distance = getValidDistance(searchedDistance, 20); // Default to 20 if 0
+
+    setState(() {
+      isLoading = true;
+    });
+
+    List<WarehouseModel> updatedWarehouses = await fetchWarehouses(
+        latitude, longitude, distance, [], [], rentRange
+    );
+
+    setState(() {
+      futureWarehouses = Future.value(updatedWarehouses);
+      isLoading = false;
+    });
+  }
+
+
 
   Future<List<WarehouseModel>> fetchWarehouses(
       double latitude,
       double longitude,
+      int distance,
       List<String> constructionTypes,
       List<String> warehouseTypes,
       String rentRange) async {
@@ -121,8 +147,11 @@ class UserHomePageState extends State<UserHomePage>
     final Map<String, dynamic> body = {
       "latitude": latitude.toString(),
       "longitude": longitude.toString(),
+      "distance": distance
     };
-
+if (kDebugMode) {
+  print("Body $body");
+}
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -424,45 +453,23 @@ class UserHomePageState extends State<UserHomePage>
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              margin:
-                                  EdgeInsets.only(left: screenWidth * 0.045),
-                              child: Text(
-                                "Logo,",
-                                style: TextStyle(
-                                  fontSize: screenWidth * 0.05,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                         const Spacer(),
                         GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => searchLocationUser()),
-                            );
-                          },
+                          onTap: _openSearchLocationPage,
                           child: SizedBox(
                             width: screenWidth * 0.55,
                             height: screenHeight * 0.09,
                             child: Align(
                               alignment: Alignment.center,
                               child: SizedBox(
-                                height: 35,
+                                height: screenHeight*0.04,
                                 child: TextFormField(
                                   enabled:
                                       false,
                                   decoration: InputDecoration(
-                                    hintText: S.of(context).search_by_location,
+                                    hintText: searchedLoc.isNotEmpty
+                                        ? searchedLoc
+                                        : S.of(context).search_by_location,
                                     hintStyle: const TextStyle(
                                         color: Colors.blueGrey, fontSize: 12),
                                     filled: true,
@@ -495,8 +502,8 @@ class UserHomePageState extends State<UserHomePage>
                         const SizedBox(width: 3),
                         InkWell(
                           child: Container(
-                            height: 30,
-                            width: 30,
+                            height: screenHeight*0.04,
+                            width: screenWidth*0.08,
                             margin: const EdgeInsets.only(right: 15),
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -1327,7 +1334,7 @@ class UserHomePageState extends State<UserHomePage>
 
   Widget _userShortListedInterestedPage(
       double screenWidth, double screenHeight) {
-    return const userShortlistedIntrested();
+    return const UserShortListedInterested();
   }
 
   Widget _buildAccountPage(double screenWidth, double screenHeight) {
@@ -1348,6 +1355,7 @@ class UserHomePageState extends State<UserHomePage>
   Future<void> downloadImages() async {
     bool hasPermission = await _requestPermission();
     if (!hasPermission) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Storage permission is required to save images.")),
       );
@@ -1367,11 +1375,6 @@ class UserHomePageState extends State<UserHomePage>
         textColor: Colors.white,
         fontSize: 14.0
     );
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   const SnackBar(
-    //       backgroundColor: Colors.green,
-    //       content: Text("All images saved to Gallery!")),
-    // );
   }
 
 
@@ -1390,20 +1393,14 @@ class UserHomePageState extends State<UserHomePage>
     try {
       var response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
-        // Public directory where images should be saved
         Directory directory = Directory("/storage/emulated/0/Pictures/Lisofy");
         if (!directory.existsSync()) {
           directory.createSync(recursive: true);
         }
-
-        // Ensure filename is valid (remove query parameters)
         String fileName = Uri.parse(url).pathSegments.last.split('?').first;
         String filePath = "${directory.path}$fileName";
-
-        // Save the image file
         File file = File(filePath);
         await file.writeAsBytes(response.bodyBytes);
-
         if (kDebugMode) {
           print("Saved to Gallery: $filePath");
         }
@@ -1418,6 +1415,47 @@ class UserHomePageState extends State<UserHomePage>
       }
     }
   }
+
+
+
+  void _openSearchLocationPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SearchLocationUser(
+          initialLatitude: searchedLatitude,
+          initialLongitude: searchedLongitude,
+          initialDistance: searchedDistance,
+          initialLoc: searchedLoc,
+        ),
+      ),
+    );
+
+    if (result != null) {
+      double latitude = result['latitude'];
+      double longitude = result['longitude'];
+      int distance = result['distance'];
+      String place = result['loc'];
+
+      if (kDebugMode) {
+        print("Received Data:");
+        print("Latitude: $latitude");
+        print("Longitude: $longitude");
+        print("Distance: $distance ");
+        print("Place: $place ");
+      }
+
+      setState(() {
+        searchedLatitude = latitude;
+        searchedLongitude = longitude;
+        searchedDistance = distance;
+        searchedLoc = place;
+        isLoading = true;
+        futureWarehouses = fetchWarehouses(latitude, longitude, distance, [], [], "");
+      });
+    }
+  }
+
 
 
 }
@@ -1724,9 +1762,7 @@ class AdvancedFiltersBottomSheetState
 
 class DottedBorder extends StatelessWidget {
   final Widget child;
-
   const DottedBorder({super.key, required this.child});
-
   @override
   Widget build(BuildContext context) {
     return CustomPaint(

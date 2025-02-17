@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -45,7 +45,6 @@ class RatingProvider extends ChangeNotifier {
           _panCardStatus = latestFeedback['panCardStatus'] ?? 0;
           _aadharCardStatus = latestFeedback['adharCardStatus'] ?? 0;
           _selfiStatus = latestFeedback['selfiStatus'] ?? 0;
-
           _isSubmitted = _rating > 0.0 && _comment.isNotEmpty;
           commentController.text = _comment;
 
@@ -85,10 +84,8 @@ class RatingProvider extends ChangeNotifier {
       debugPrint("Submit Failed: Rating = $_rating, Mobile = $mobile");
       return;
     }
-
     _isSubmitting = true;
     notifyListeners();
-
     const String apiUrl = "https://xpacesphere.com/api/Register/RatingReview";
     final Map<String, dynamic> bodyData = {
       "UserMobile": mobile,
@@ -125,7 +122,6 @@ class RatingProvider extends ChangeNotifier {
     }
     _isSubmitting = true;
     notifyListeners();
-
     const String apiUrl = "https://xpacesphere.com/api/Register/UpdateRating";
     final Map<String, String> bodyData = {
       "UserMobile": mobile,

@@ -33,5 +33,7 @@ class ImageAssets{
   static const String feedback = 'assets/images/feedback.gif';
   static const String value = 'assets/images/value.gif';
   static const String back = 'assets/images/back_button_with_border.png';
+  static const String appLogo = 'assets/images/appLogo.png';
+  static const String worldWideLocation = 'assets/images/Worldwidelocation.png';
 
 }

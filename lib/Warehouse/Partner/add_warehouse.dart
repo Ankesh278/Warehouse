@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'package:Lisofy/Warehouse/Partner/HelpPage.dart';
-import 'package:Lisofy/Warehouse/Partner/MapScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/help_page.dart';
+import 'package:Lisofy/Warehouse/Partner/map_screen.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/location_provider.dart';
 import 'package:Lisofy/Warehouse/Partner/warehouse_image_screen.dart';
 import 'package:Lisofy/generated/l10n.dart';
+import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -160,13 +161,9 @@ class _AddWareHouseState extends State<AddWareHouse> {
       if (kDebugMode) {
         print("ShareDataMobile :$phone");
       }
-      // Validate the form
       if (!_formKey.currentState!.validate()) return;
-
-      // Show loading indicator
       setState(() => isLoading = true);
 
-      // Prepare data payload
       final Map<String, dynamic> data = {
         'SecurityDeposit': _securityDepositNumber,
         'whouse_type': _selectedWarehouseType?.trim() ?? "",
@@ -204,8 +201,8 @@ class _AddWareHouseState extends State<AddWareHouse> {
       }
 
       final Map<String, dynamic> responseData = jsonDecode(response.body);
+      if (!mounted) return;
       if (response.statusCode == 200 && responseData['status'] == 200) {
-        //_clearFormFields();
         Navigator.push(context, MaterialPageRoute(builder: (context)=>const WarehouseImageScreen()));
       } else {
         _showErrorMessage(responseData['message'] ?? 'Failed to upload data.');
@@ -214,9 +211,13 @@ class _AddWareHouseState extends State<AddWareHouse> {
       if (kDebugMode) {
         print('Error: $e');
       }
-      _showErrorMessage('An error occurred. Please try again.');
+      if (context.mounted) {
+        _showErrorMessage('An error occurred. Please try again.');
+      }
     } finally {
-      setState(() => isLoading = false);
+      if (context.mounted) {
+        setState(() => isLoading = false);
+      }
     }
   }
   void _showErrorMessage(String message) {
@@ -233,7 +234,6 @@ class _AddWareHouseState extends State<AddWareHouse> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Column(
         children: [
@@ -375,7 +375,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 Image.asset(
-                                                    'assets/images/Worldwidelocation.png',
+                                                    ImageAssets.worldWideLocation,
                                                     width: screenWidth * 0.2,
                                                     height:
                                                         screenHeight * 0.04),
@@ -408,10 +408,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                         });
                                         LatLng selectedLocation = result.latLng;
                                         String selectedAddress = result.address;
-                                        final locationProvider =
-                                            Provider.of<LocationProvider>(
-                                                context,
-                                                listen: false);
+                                        final locationProvider = Provider.of<LocationProvider>(context, listen: false);
                                         locationProvider.updateLocation(
                                             selectedAddress, selectedLocation);
                                         setState(() {
@@ -803,7 +800,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                           ? 'Field is required'
                                           : null,
                                       dropdownColor:
-                                          Colors.white.withOpacity(0.9),
+                                          Colors.white.withValues(alpha: 0.9),
                                       menuMaxHeight: screenHeight * 0.4,
                                       borderRadius: BorderRadius.circular(10),
                                       isExpanded: true,

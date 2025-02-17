@@ -1,39 +1,36 @@
 import 'dart:convert';
 import 'package:Lisofy/Warehouse/User/interested_warehouse_details_screen.dart';
-import 'package:Lisofy/Warehouse/User/models/ShortListModel.dart';
-import 'package:Lisofy/Warehouse/User/models/interestedDataModel.dart';
+import 'package:Lisofy/Warehouse/User/models/short_list_model.dart';
+import 'package:Lisofy/Warehouse/User/models/interested_data_model.dart';
 import 'package:Lisofy/distance_calculator.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class userShortlistedIntrested extends StatefulWidget {
-  const userShortlistedIntrested({super.key});
-
+class UserShortListedInterested extends StatefulWidget {
+  const UserShortListedInterested({super.key});
   @override
-  State<userShortlistedIntrested> createState() => _userShortlistedIntrestedState();
+  State<UserShortListedInterested> createState() => _UserShortListedInterestedState();
 }
-
-class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
+class _UserShortListedInterestedState extends State<UserShortListedInterested> {
   bool isShortlisted = true;
   List<InterestedModel> interestedWarehouses = [];
   List<ShortListModel> shortlistedWarehouses = [];
   bool isLoading = true;
   String phone="";
-
   @override
   void initState() {
     super.initState();
     fetchShortlistedWarehouses();
-    //Interested data
+    ///Interested data
     fetchWarehouses();
   }
 
-  // Fetch data from API and filter based on type
+  /// Fetch data from API and filter based on type
   Future<void> fetchWarehouses() async {
     setState(() {
       isLoading = true;
@@ -200,12 +197,12 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
       });
     }
   }
+
   DistanceCalculator distanceCalculator = DistanceCalculator();
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Column(
         children: [
@@ -327,7 +324,7 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
 
   Widget _buildShortlistedContent() {
     final screenHeight = MediaQuery.of(context).size.height;
-   // final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
         SizedBox(
@@ -359,88 +356,118 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
             itemCount: shortlistedWarehouses.length,
             itemBuilder: (context, index) {
               final warehouse = shortlistedWarehouses[index];
-              String whouseAddress = warehouse.wHouseAddress;
-              return FutureBuilder(
-                future: distanceCalculator.getDistanceFromCurrentToWarehouse(whouseAddress),
-                builder: (context,snapshot){
-                  double distanceInKm = (snapshot.data ?? 0.0) / 1000;
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: SpinKitCircle(
-                      color: Colors.blue,
-                      size: 50.0, //
-                    ));
-                  } else if (snapshot.hasError) {
-                    return const Center(child: Text(' calculating distance'));
-                  }else{
-                    return InkWell(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.25,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.9),
-                              spreadRadius: 0.5,
-                              blurRadius: 0.5,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Image.network(
-                                "https://xpacesphere.com${warehouse.image}",
-                                width: double.infinity,
-                                height: screenHeight*0.16,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Image.asset(
-                                    ImageAssets.defaultImage,
-                                    width: double.infinity,
-                                    height: screenHeight*0.16,
-                                    fit: BoxFit.cover,
-                                  );
-                                },
-                              )
-                              ,
-                            ),
-                            const SizedBox(height: 5),
-                            const Spacer(),
-                            Text("${warehouse.wHouseRentPerSQFT} per sq.ft",
-                              style: const TextStyle(
-                                  fontSize: 10, fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              "${S.of(context).type}: ${warehouse.wHouseType}",
-                              style: const TextStyle(
-                                  fontSize: 10, fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              (distanceInKm != null
-                                  ? "${distanceInKm.toStringAsFixed(3)} km away"
-                                  : "N/A km away"),
-                              style: const TextStyle(
-                                  fontSize: 8, fontWeight: FontWeight.w400),
-                            ),
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  InterestedWarehouseDetailsScreen(warehouses: warehouse)),
-                        );
-                      },
-                    );
+              String wHouseAddress = warehouse.wHouseAddress;
+              return FutureBuilder<double>(
+                future: Permission.location.isGranted.then((granted) {
+                  if (granted) {
+                    return distanceCalculator.getDistanceFromCurrentToWarehouse(wHouseAddress);
+                  } else {
+                    return Future.error("Location permission denied");
                   }
+                }),
+                builder: (context, snapshot) {
+                  double? distanceInKm = snapshot.hasData ? (snapshot.data ?? 0.0) / 1000 : null;
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => InterestedWarehouseDetailsScreen(warehouses: warehouse),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: screenHeight * 0.27,
+                      width: screenWidth * 0.45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withValues(alpha: 0.4),
+                            spreadRadius: 0.5,
+                            blurRadius: 0.5,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                            child: Image.network(
+                              "https://xpacesphere.com${warehouse.image}",
+                              width: double.infinity,
+                              height: screenHeight * 0.15,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  ImageAssets.defaultImage,
+                                  width: double.infinity,
+                                  height: screenHeight * 0.16,
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(height: screenHeight*0.005,),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Rent : ${warehouse.wHouseRentPerSQFT} per sq.ft",
+                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          SizedBox(height: screenHeight*0.005,),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "${S.of(context).type} : ${warehouse.wHouseType}",
+                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const Spacer(),
+                          Center(
+                            child: snapshot.connectionState == ConnectionState.waiting
+                                ? const FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "Calculating distance...",
+                                style: TextStyle(fontSize: 8, fontWeight: FontWeight.w400),
+                              ),
+                            )
+                                : snapshot.hasError
+                                ? TextButton(
+                              onPressed: () => requestLocationPermission(context),
+                              style: ButtonStyle(
+                                padding: WidgetStateProperty.all(EdgeInsets.zero),
+                                minimumSize: WidgetStateProperty.all(const Size(0, 0)),
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              child: const Text(
+                                "\u00a9 Enable location to see distance",
+                                style: TextStyle(fontSize: 10, color: Colors.blue,fontWeight: FontWeight.w600),
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                                : FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "${distanceInKm!.toStringAsFixed(3)} km away",
+                                style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: screenHeight*0.005,),
+                        ],
+                      ),
+                    ),
+                  );
                 },
               );
             },
@@ -450,20 +477,19 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
     );
   }
 
-  // Function to build the content for Interested section
   Widget _buildInterestedContent() {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
-        Container(
+        SizedBox(
           height:  MediaQuery.of(context).size.height*0.99,
-          child: interestedWarehouses.isEmpty?Center( // Show a static image if no data is available
+          child: interestedWarehouses.isEmpty?Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/images/warehousegift.png', // Replace with your static image path
+                  'assets/images/warehousegift.png',
                   height: screenHeight*0.3,
                 ),
                 SizedBox(height: screenHeight*0.05),
@@ -486,88 +512,122 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
             itemBuilder: (context, index) {
               final warehouse = interestedWarehouses[index];
               String whouseAddress = warehouse.wHouseAddress;
-              return FutureBuilder(
-                future: distanceCalculator.getDistanceFromCurrentToWarehouse(whouseAddress),
-                builder: (context,snapshot){
-                  double distanceInKm = (snapshot.data ?? 0.0) / 1000;
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: SpinKitCircle(
-                      color: Colors.blue,
-                      size: 50.0,
-                    ));
-                  } else if (snapshot.hasError) {
-                    return const Center(child: Text(' calculating distance'));
-                  }else{
-                    return InkWell(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.25,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.9),
-                              spreadRadius: 0.5,
-                              blurRadius: 0.5,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Image.network(
-                                "https://xpacesphere.com${warehouse.image}",
-                                width: double.infinity,
-                                height: screenHeight*0.16,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Image.asset(
-                                    ImageAssets.defaultImage,
-                                    width: double.infinity,
-                                    height: screenHeight*0.16,
-                                    fit: BoxFit.cover,
-                                  );
-                                },
-                              )
-                              ,
-                            ),
-                            const SizedBox(height: 5),
-                            const Spacer(),
-                            Text(
-                              "${warehouse.wHouseRentPerSQFT} per sq.ft",
-                              style: const TextStyle(
-                                  fontSize: 10, fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              "${S.of(context).type} ${warehouse.wHouseType}",
-                              style: const TextStyle(
-                                  fontSize: 10, fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              (distanceInKm != null
-                                  ? "${distanceInKm.toStringAsFixed(3)} km away"
-                                  : "N/A km away"),
-                              style: const TextStyle(
-                                  fontSize: 8, fontWeight: FontWeight.w400),
-                            ),
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  InterestedWarehouseDetailsScreen(warehouses: warehouse)),
-                        );
-                      },
-                    );
+              return FutureBuilder<double>(
+                future: Permission.location.isGranted.then((granted) {
+                  if (granted) {
+                    return distanceCalculator.getDistanceFromCurrentToWarehouse(whouseAddress);
+                  } else {
+                    return Future.error("Location permission denied");
                   }
+                }),
+                builder: (context, snapshot) {
+                  double? distanceInKm = snapshot.hasData ? (snapshot.data ?? 0.0) / 1000 : null;
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => InterestedWarehouseDetailsScreen(warehouses: warehouse),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withValues(alpha: 0.9),
+                            spreadRadius: 0.5,
+                            blurRadius: 0.5,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                            child: Image.network(
+                              "https://xpacesphere.com${warehouse.image}",
+                              width: double.infinity,
+                              height: screenHeight * 0.16,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  ImageAssets.defaultImage,
+                                  width: double.infinity,
+                                  height: screenHeight * 0.16,
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(height: screenHeight*0.005,),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Rent : ${warehouse.wHouseRentPerSQFT} per sq.ft",
+                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          SizedBox(height: screenHeight*0.005,),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "${S.of(context).type} : ${warehouse.wHouseType}",
+                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                if (snapshot.connectionState == ConnectionState.waiting)
+                                  const FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      "Calculating distance...",
+                                      style: TextStyle(fontSize: 8, fontWeight: FontWeight.w400),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )
+                                else if (snapshot.hasError)
+                                  TextButton(
+                                    onPressed: () => requestLocationPermission(context),
+                                    style: ButtonStyle(
+                                      padding: WidgetStateProperty.all(EdgeInsets.zero),
+                                      minimumSize: WidgetStateProperty.all(const Size(0, 0)),
+                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                    child: const Text(
+                                      "\u00a9 Enable location to see distance",
+                                      style: TextStyle(fontSize: 10, color: Colors.blue,fontWeight: FontWeight.w600),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )
+                                else
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      "${distanceInKm!.toStringAsFixed(3)} km away",
+                                      style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w400),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 },
               );
             },
@@ -575,6 +635,82 @@ class _userShortlistedIntrestedState extends State<userShortlistedIntrested> {
         ),
       ],
     );
+  }
+
+  Future<void> requestLocationPermission(BuildContext context) async {
+    final navigator = Navigator.of(context);
+    PermissionStatus status = await Permission.location.request();
+    if (!context.mounted) return;
+    if (status.isDenied || status.isPermanentlyDenied) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: navigator.context,
+          builder: (_) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            title: const Row(
+              children: [
+                Icon(Icons.location_on, color: Colors.blue, size: 28),
+                SizedBox(width: 8),
+                Text(
+                  "Enable Location",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Get the most accurate distance to warehouses near you.\n\n"
+                      "✅ Find the best locations quickly\n"
+                      "✅ Get estimated travel distances\n"
+                      "✅ Improve your experience",
+                  style: TextStyle(fontSize: 14, height: 1.4),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.info_outline, color: Colors.blue, size: 20),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          "We respect your privacy and do not store or share your location data.",
+                          style: TextStyle(fontSize: 12, color: Colors.black87),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => navigator.pop(),
+                child: const Text("Not Now", style: TextStyle(color: Colors.grey)),
+              ),
+              ElevatedButton.icon(
+                onPressed: () => openAppSettings(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+                icon: const Icon(Icons.settings),
+                label: const Text("Open Settings"),
+              ),
+            ],
+          ),
+        );
+      });
+    }
   }
 }
 
