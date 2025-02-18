@@ -54,10 +54,8 @@ class UserHomePageState extends State<UserHomePage>
 
   int _currentIndex = 0;
   final List<String> _images = [
-    // 'https://media.istockphoto.com/id/685841598/photo/new-warehouse-building.jpg?s=2048x2048&w=is&k=20&c=k5-eD3CAVSudgl9vCeTWjdplL4GwpbgdWIY8qmuleNA=',
     'https://xpacesphere.com/Content/NewFolder/warehouse_1.jpg',
     'https://xpacesphere.com/Content/NewFolder/warehouse_2.jpg'
-    // 'https://media.istockphoto.com/id/901492852/photo/factory-building-warehouse.jpg?s=2048x2048&w=is&k=20&c=57LzhQqITd8q1Vj140s_8AuJAyceM-ugZwN8JK_1UfI='
   ];
 
   late PageController _pageControllerSlider;
@@ -381,7 +379,7 @@ if (kDebugMode) {
           children: [
             Container(
               color: Colors.blue,
-              height: screenHeight * 0.18,
+              height: screenHeight * 0.21,
               child: Padding(
                 padding: EdgeInsets.only(
                   top: screenHeight * 0.0,
@@ -389,66 +387,72 @@ if (kDebugMode) {
                 ),
                 child: Column(
                   children: [
-                    Padding(
-                      padding:  EdgeInsets.only(right: screenWidth*0.06, top: screenHeight*0.01),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: AnimatedBuilder(
-                          animation: _animation,
-                          builder: (context, child) {
-                            return Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                CustomPaint(
-                                  painter:GlitterBorderPainter(_animation.value),
-                                  child: SizedBox(
-                                    width: screenWidth * 0.32,
-                                    height: screenHeight * 0.037,
-                                    child: TextButton(
-                                      onPressed: () async {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const HomeScreen()));
-                                      },
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(screenWidth*0.03),
-                                          side: const BorderSide(
-                                              color: Colors.grey,
-                                              width: 1),
+                    Row(
+                      children: [
+                        Image.asset(ImageAssets.appLogo,fit: BoxFit.fill,height: 60,width: 100,),
+                        const Spacer(),
+                        Padding(
+                          padding:  EdgeInsets.only(right: screenWidth*0.06, top: screenHeight*0.01),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: AnimatedBuilder(
+                              animation: _animation,
+                              builder: (context, child) {
+                                return Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    CustomPaint(
+                                      painter:GlitterBorderPainter(_animation.value),
+                                      child: SizedBox(
+                                        width: screenWidth * 0.32,
+                                        height: screenHeight * 0.037,
+                                        child: TextButton(
+                                          onPressed: () async {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const HomeScreen()));
+                                          },
+                                          style: TextButton.styleFrom(
+                                            backgroundColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(screenWidth*0.03),
+                                              side: const BorderSide(
+                                                  color: Colors.grey,
+                                                  width: 1),
+                                            ),
+                                          ),
+                                          child: Animate(
+                                              effects: const [
+                                                FadeEffect(),
+                                                ScaleEffect()
+                                              ],
+                                              child: Text(
+                                                S.of(context).became_partner,
+                                                style: const TextStyle(
+                                                  fontSize: 9,
+                                                  color: Colors.blue,
+                                                ),
+                                              )
+                                                  .animate(
+                                                    delay: 500
+                                                        .ms,
+                                                    onPlay: (controller) =>
+                                                        controller.repeat(),
+                                                  )
+                                                  .tint(color: Colors.purple)),
                                         ),
                                       ),
-                                      child: Animate(
-                                          effects: const [
-                                            FadeEffect(),
-                                            ScaleEffect()
-                                          ],
-                                          child: Text(
-                                            S.of(context).became_partner,
-                                            style: const TextStyle(
-                                              fontSize: 9,
-                                              color: Colors.blue,
-                                            ),
-                                          )
-                                              .animate(
-                                                delay: 500
-                                                    .ms,
-                                                onPlay: (controller) =>
-                                                    controller.repeat(),
-                                              )
-                                              .tint(color: Colors.purple)),
                                     ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -534,9 +538,6 @@ if (kDebugMode) {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                         SizedBox(
-                          width: screenWidth*0.0,
-                        ),
                         Text(
                           "$warehouseCount ${S.of(context).warehouse_near_you}",
                           style: const TextStyle(

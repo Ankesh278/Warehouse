@@ -1192,7 +1192,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      _showEditDialog(context);
+                      _showEditDialog(context,phone);
                     },
                     child: Padding(
                       padding:  EdgeInsets.only(
@@ -1643,7 +1643,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
-  void _showEditDialog(BuildContext context) {
+  void _showEditDialog(BuildContext context,String phone) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1747,6 +1747,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                   ),
                 ),
+                 DeleteAccountButton(phone: phone,),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
@@ -2260,3 +2261,189 @@ void _openTwitterProfile() async {
         mode: LaunchMode.externalApplication);
   }
 }
+
+class DeleteAccountButton extends StatelessWidget {
+  final dynamic phone;
+  const DeleteAccountButton({super.key, this.phone});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Center(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(screenWidth*0.3),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: screenWidth*0.05),
+          elevation: 5,
+          shadowColor: Colors.black.withValues(alpha: 0.3),
+        ),
+        onPressed: () {
+          _showDeleteConfirmationDialog(context);
+        },
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.delete,color: Colors.white,),
+            SizedBox(width: 5,),
+            Text(
+              'Delete Account',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent closing the dialog by tapping outside
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(screenWidth * 0.07),
+          ),
+          elevation: 16,
+          child: AnimatedOpacity(
+            opacity: 1.0,
+            duration: const Duration(milliseconds: 300),
+            child: Padding(
+              padding: EdgeInsets.all(screenWidth * 0.1),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.warning_amber_outlined,
+                    size: screenWidth * 0.15,
+                    color: Colors.orangeAccent,
+                  ),
+                  SizedBox(height: screenHeight * 0.03),
+                  const Text(
+                    'Are you sure?',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: screenHeight * 0.01),
+                  Text(
+                    'Do you really want to delete your account? This action cannot be undone.',
+                    style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: screenHeight * 0.03),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      _buildDialogButton(
+                        context,
+                        label: 'Cancel',
+                        color: Colors.grey,
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close dialog
+                        },
+                      ),
+                      _buildDialogButton(
+                        context,
+                        label: 'Delete',
+                        color: Colors.red,
+                        onPressed: () async {
+                          var response = await _deleteAccount(phone);
+                          if (context.mounted) {
+                            Navigator.of(context).pop();
+                          }
+                          if (response == 200) {
+                            if (kDebugMode) {
+                              print("Clearing data$response");
+                            }
+                            await _clearData();
+                            if (context.mounted) {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (_) => const UserLogin()),
+                              );
+                            }
+                          } else {
+                            if (context.mounted) {
+                             // _showErrorDialog(context);
+                            }
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+
+
+  Future<int> _deleteAccount(String phoneNumber) async {
+    if (kDebugMode) {
+      print("Delete account is called ");
+    }
+    try {
+      final Uri apiUrl = Uri.parse('https://xpacesphere.com/api/Register/RegistrDeletes');
+      final Map<String, String> formData = {'Mobile': phoneNumber};
+      if (kDebugMode) {
+        print("Mobile$formData");
+      }
+      final response = await http.delete(
+        apiUrl,
+        body: formData,
+      );
+      if (kDebugMode) {
+        print("Response${response.statusCode}");
+        print("Response${response.body}");
+      }
+      return response.statusCode;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error deleting account: $e');
+      }
+      return 500;
+    }
+  }
+  Future<void> _clearData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+  Widget _buildDialogButton(BuildContext context, {required String label, required Color color, required VoidCallback onPressed}) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white, backgroundColor: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(screenWidth*0.1),
+        ),
+        padding: EdgeInsets.symmetric(vertical: screenHeight*0.01, horizontal: screenWidth*0.07),
+        elevation: 5,
+        shadowColor: Colors.black.withValues(alpha: 0.3),
+      ),
+      onPressed: onPressed,
+      child: Text(
+        label,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+
+}
+

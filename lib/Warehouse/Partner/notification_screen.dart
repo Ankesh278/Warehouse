@@ -62,11 +62,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.only(right: screenWidth * 0.005),
-                        decoration: const BoxDecoration(
+                        decoration:  BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(30),
+                            topLeft: const Radius.circular(0),
+                            topRight: Radius.circular(screenWidth*0.2),
                           ),
                         ),
                         child: Padding(

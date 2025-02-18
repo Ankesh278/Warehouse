@@ -12,7 +12,6 @@ class _UserNotificationScreenState extends State<UserNotificationScreen> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Column(
         children: [
@@ -59,11 +58,11 @@ class _UserNotificationScreenState extends State<UserNotificationScreen> {
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.only(right: screenWidth * 0.005),
-                        decoration: const BoxDecoration(
+                        decoration:  BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(30),
+                            topLeft: const Radius.circular(0),
+                            topRight: Radius.circular(screenWidth*0.2),
                           ),
                         ),
                         child: Padding(
@@ -75,13 +74,13 @@ class _UserNotificationScreenState extends State<UserNotificationScreen> {
                                     height: screenHeight*0.4,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(screenWidth*0.6),
+                                        borderRadius: BorderRadius.circular(screenWidth*0.8),
                                         color: Colors.blue,
                                         border: Border.all(color: Colors.grey,width: 3)
                                     ),
-                                    child: const Icon(Icons.notifications_off_sharp,size: 100,color: Colors.white,),
+                                    child:  Icon(Icons.notifications_off_sharp,size: screenHeight*0.1,color: Colors.white,),
                                   ),
-                                  const SizedBox(height: 20,),
+                                   SizedBox(height: screenHeight*0.1,),
                                   Text(S.of(context).no_notifications)
                                 ],
                               )

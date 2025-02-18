@@ -94,7 +94,7 @@ class AuthUserProvider extends ChangeNotifier {
           String newPhone = phoneNumber;
           if (newPhone.startsWith("+91")) {
             newPhone = newPhone.replaceFirst("+91", "");
-          }
+          }setLoading(false);
           Navigator.push(
             context,
             MaterialPageRoute(

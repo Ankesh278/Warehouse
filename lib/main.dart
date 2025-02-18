@@ -40,13 +40,19 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    if (kDebugMode) {
+      print("Firebase Initialization Error: $e");
+    }
+  }
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // Android-specific initialization
   const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
+  AndroidInitializationSettings('@drawable/ic_stat_push_notification');
 
   const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
@@ -298,19 +304,27 @@ class _MyAppState extends State<MyApp> {
 }
 Future<void> _createNotificationChannel() async {
   if (Platform.isAndroid) {
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    try {
+      // Define notification channel for Android 8+ (API 26+)
+      const AndroidNotificationChannel channel = AndroidNotificationChannel(
+        'general_notifications',
+        'General Notifications',
+        description: 'Warehouse App Notifications',
+        importance: Importance.high,
+      );
 
-    // Define notification channel for Android 8+
-    const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      'general_notifications', // Same as used in AndroidNotificationDetails
-      'General Notifications',
-      description: 'Warehouse App Notifications',
-      importance: Importance.high,
-    );
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(channel);
 
-    // Initialize the plugin with the defined channel
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
+      if (kDebugMode) {
+        print("Notification channel created successfully.");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error creating notification channel: $e");
+      }
+    }
   }
 }
+
