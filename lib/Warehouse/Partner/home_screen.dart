@@ -284,7 +284,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildHomePage(double screenWidth, double screenHeight) {
     final warehouseProvider = Provider.of<WarehouseProvider>(context);
-
     return Container(
       color: Colors.blue,
       width: double.infinity,
@@ -427,8 +426,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Container(
                                 padding: EdgeInsets.zero,
-                                height: screenHeight*0.04,
-                                width: screenWidth*0.17,
+                                height: screenHeight*0.042,
+                                width: screenWidth*0.18,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   color: Colors.white,
@@ -442,7 +441,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Text(
                                       S.of(context).add_new,
                                       style: const TextStyle(
-                                          fontSize: 8,
+                                          fontSize: 6,
                                           fontWeight: FontWeight.normal,
                                           color: Colors.blue),
                                     ),
@@ -477,7 +476,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       size: 20,
                                     ),
                                     onPressed: () {
-                                      // Handle add button press
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -530,605 +528,609 @@ class _HomeScreenState extends State<HomeScreen> {
                     topRight: Radius.circular(30),
                   ),
                 ),
-                child: FutureBuilder<WarehouseResponse>(
-                  future: futureWarehouseResponse,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                          child: SpinKitCircle(
-                        color: Colors.blue,
-                        size: 50.0,
-                      ));
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.error_outline,
-                                color: Colors.red,
-                                size: 60,
-                              ),
-                              const SizedBox(height: 20),
-                              Text(
-                                'Oops! Something went wrong.',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red.shade800,
+                child: RefreshIndicator(
+                  onRefresh: fetchWarehouseData,
+                  color: Colors.blue,
+                  backgroundColor: Colors.white,
+                  child: FutureBuilder<WarehouseResponse>(
+                    future: futureWarehouseResponse,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                            child: SpinKitCircle(
+                          color: Colors.blue,
+                          size: 50.0,
+                        ));
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.error_outline,
+                                  color: Colors.red,
+                                  size: 60,
                                 ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'We encountered an issue while loading the data. Please try again.',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Retry logic here
-                                  setState(() {});
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                const SizedBox(height: 20),
+                                Text(
+                                  'Oops! Something went wrong.',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red.shade800,
                                   ),
                                 ),
-                                child: const Text(
-                                  'Retry',
-                                  style: TextStyle(fontSize: 16, color: Colors.white),
+                                const SizedBox(height: 10),
+                                Text(
+                                  'We encountered an issue while loading the data. Please try again.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey.shade600,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    } else if (snapshot.hasData) {
-                      final warehouseList =
-                          snapshot.data!.data; // Access the list of warehouses
-
-                      return warehouseList.isEmpty
-                          ? Padding(
-                              padding: EdgeInsets.all(screenWidth * 0.04),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Center(
-                                        child: Image.asset(
-                                            "assets/images/house.png",
-                                            height: screenHeight*0.3,
-                                            width: screenWidth*0.6)),
-                                    Center(
-                                      child: Text(
-                                        S.of(context).start_adding_warehouse,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
-                                      ),
+                                const SizedBox(height: 20),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    // Retry logic here
+                                    setState(() {});
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
-                                     SizedBox(height: screenHeight*0.03),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
+                                  ),
+                                  child: const Text(
+                                    'Retry',
+                                    style: TextStyle(fontSize: 16, color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      } else if (snapshot.hasData) {
+                        final warehouseList =
+                            snapshot.data!.data;
+                        return warehouseList.isEmpty
+                            ? Padding(
+                                padding: EdgeInsets.all(screenWidth * 0.04),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Center(
+                                          child: Image.asset(
+                                              "assets/images/house.png",
+                                              height: screenHeight*0.2,
+                                              width: screenWidth*0.5)),
+                                      Center(
                                         child: Text(
-                                          S.of(context).add_warehouse_details,
+                                          S.of(context).start_adding_warehouse,
                                           style: const TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 12,
-                                              color: Colors.grey),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14),
                                         ),
                                       ),
-                                    ),
-                                    InkWell(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 20, horizontal: 30),
-                                        child: DottedBorder(
-                                          child: Container(
-                                            color: Colors.blue,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20, vertical: 8),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                const Icon(
-                                                  Icons.add,
-                                                  color: Colors.white,
-                                                  size: 24,
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Text(
-                                                  S.of(context).add_warehouse,
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                       SizedBox(height: screenHeight*0.02),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text(
+                                            S.of(context).add_warehouse_details,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 12,
+                                                color: Colors.grey),
                                           ),
                                         ),
                                       ),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const AddWareHouse()),
-                                        );
-                                      },
-                                    ),
-                                    Center(
-                                        child: Image.asset(
-                                            "assets/images/man.png")),
-                                     SizedBox(height: screenHeight*0.013),
-                                    Center(
-                                      child: Text(
-                                        S.of(context).we_are_happy_to_help,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
-                                      ),
-                                    ),
-                                    SizedBox(height: screenHeight*0.013),
-                                    Center(
-                                      child: Text(
-                                        "${S.of(context).need_assistance} >>",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                            color: Colors.blue),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          : ListView.builder(
-                              itemCount: warehouseList.length,
-                              itemBuilder: (context, index) {
-                                final warehouse = warehouseList[index];
-                                if (kDebugMode) {
-                                  print(
-                                    "availability${warehouse.isAvailableForRent}");
-                                }
-                                bool isavail = warehouseProvider
-                                        .warehouseStatus[warehouse.id] ??
-                                    warehouse.isAvailableForRent;
-
-                                return GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                WarehouseUpdate(
-                                                  warehouse: warehouse,
-                                                )));
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Center(
+                                      InkWell(
                                         child: Container(
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10)),
-                                          margin: EdgeInsets.only(
-                                              top: screenHeight * 0.01,
-                                              left: 10),
-                                          padding: const EdgeInsets.all(15),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 20),
                                           child: DottedBorder(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Row(
-                                                    children: [
-                                                      Text(
-                                                        warehouse.wHouseName
-                                                                .isNotEmpty
-                                                            ? (warehouse.wHouseName
-                                                                        .length >
-                                                                    7
-                                                                ? '${warehouse.wHouseName.substring(0, 7)}...'
-                                                                : warehouse
-                                                                    .wHouseName)
-                                                            : 'N/A',
-                                                        style: const TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                        ),
-                                                      ),
-                                                      const Spacer(),
-                                                      InkWell(
-                                                        child: Image.asset(
-                                                            "assets/images/Share.png"),
-                                                        onTap: () {
-                                                          _shareAppInfo();
-                                                        },
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 15,
-                                                      ),
-                                                      InkWell(
-                                                        child: Image.asset(
-                                                            "assets/images/QrCode.png"),
-                                                        onTap: () {
-                                                          String data =
-                                                              'Warehouse Name: ${warehouse.wHouseName}\nLocation: ${warehouse.wHouseAddress}\nContact: ${warehouse.mobile}';
-                                                          _showQrDialog(
-                                                              data);
-                                                        },
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 15,
-                                                      )
-                                                    ],
+                                            child: Container(
+                                              color: Colors.blue,
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 20, vertical: 8),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
+                                                    size: 24,
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(
-                                                        warehouseProvider
-                                                                        .warehouseStatus[
-                                                                    warehouse.id
-                                                                        .toString()] ??
-                                                                warehouse
-                                                                    .isAvailable
-                                                            ? ". Vacant"
-                                                            : ". Rented",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: warehouseProvider
-                                                                          .warehouseStatus[
-                                                                      warehouse
-                                                                          .id
-                                                                          .toString()] ??
-                                                                  warehouse
-                                                                      .isAvailable
-                                                              ? Colors
-                                                                  .red
-                                                              : Colors
-                                                                  .green,
-                                                          fontSize: 10,
-                                                        ),
-                                                      ),
-                                                      const Spacer(),
-                                                      FutureBuilder<String>(
-                                                        future: _getAddressFromLatLng(warehouse.wHouseAddress),
-                                                        builder: (context, snapshot) {
-                                                          return SizedBox(
-                                                            width: MediaQuery.of(context).size.width * 0.5,
-                                                            child: Text(
-                                                              snapshot.connectionState == ConnectionState.waiting
-                                                                  ? "Getting address..."
-                                                                  : snapshot.hasError
-                                                                  ? "Error fetching address"
-                                                                  : snapshot.hasData
-                                                                  ? "| ${snapshot.data}"
-                                                                  : "No address available",
-                                                              style: const TextStyle(
-                                                                fontWeight: FontWeight.w500,
-                                                                color: Colors.grey,
-                                                                fontSize: 10,
-                                                              ),
-                                                              overflow: TextOverflow.ellipsis,
-                                                              maxLines: 1,
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      )
-                                                    ],
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    S.of(context).add_warehouse,
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                    ),
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      SizedBox(
-                                                          width: screenWidth *
-                                                              0.05),
-                                                      Text(
-                                                        warehouse.warehouseCarpetArea !=
-                                                                null
-                                                            ? (warehouse.warehouseCarpetArea
-                                                                        .toString()
-                                                                        .length > 6
-                                                                ? '${warehouse.warehouseCarpetArea.toString().substring(0, 6)}... sq.ft'
-                                                                : '${warehouse.warehouseCarpetArea} sq.ft')
-                                                            : 'N/A',
-                                                        style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: Colors.black,
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-                                                      const Spacer(),
-                                                      Text(
-                                                        warehouse.wHouseRentPerSQFT !=
-                                                                null
-                                                            ? (warehouse.wHouseRentPerSQFT
-                                                                        .toString()
-                                                                        .length >
-                                                                    6
-                                                                ? '₹ ${warehouse.wHouseRentPerSQFT.toString().substring(0, 6)}...'
-                                                                : '₹ ${warehouse.wHouseRentPerSQFT}')
-                                                            : '₹ N/A',
-                                                        style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: Colors.black,
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                          width:
-                                                              screenWidth * 0.1)
-                                                    ],
-                                                  ),
-                                                ),
-                                                 Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      Text(
-                                                        "${S.of(context).carpet_area} Sq. ft.",
-                                                        style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color: Colors.grey,
-                                                            fontSize: 10),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(
-                                                        "  | ${S.of(context).rent_per_sqft} ",
-                                                        style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color: Colors.grey,
-                                                            fontSize: 10),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      10.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Flexible(
-                                                        flex: 4,
-                                                        child: Container(
-                                                          height: 25,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: const Color(
-                                                                0xffF0F4FD),
-                                                            border: Border.all(
-                                                                color: const Color(
-                                                                    0xffF0F4FD)),
-                                                          ),
-                                                          child: Center(
-                                                            child: Text(
-                                                              "${S.of(context).view_request} | ${_limitDigits(0)}",
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Flexible(
-                                                        flex: 3,
-                                                        child: Container(
-                                                          height: 25,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: const Color(
-                                                                0xffF0F4FD),
-                                                            border: Border.all(
-                                                                color: const Color(
-                                                                    0xffF0F4FD)),
-                                                          ),
-                                                          child: Center(
-                                                            child: Text(
-                                                              "${S.of(context).bids} | ${_limitDigits(0)}",
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Flexible(
-                                                        flex: 4,
-                                                        child: Container(
-                                                          height: 25,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: const Color(
-                                                                0xffF0F4FD),
-                                                            border: Border.all(
-                                                                color: const Color(
-                                                                    0xffF0F4FD)),
-                                                          ),
-                                                          child: Center(
-                                                            child: Text(
-                                                              "${S.of(context).contracts} | ${_limitDigits(0)}",
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                     Text(
-                                                        S.of(context).is_warehouse_available),
-                                                    Row(
-                                                      children: [
-                                                         Text(
-                                                          S.of(context).no,
-                                                          style: const TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontSize: 11,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500),
-                                                        ),
-                                                        // Switch button with Provider
-                                                        Switch(
-                                                          hoverColor:
-                                                              Colors.white,
-                                                          activeTrackColor:
-                                                              Colors.green,
-                                                          focusColor:
-                                                              Colors.white,
-                                                          activeColor: Colors
-                                                              .white,
-                                                          inactiveThumbColor: Colors
-                                                              .grey,
-                                                          value: warehouseProvider
-                                                                      .warehouseStatus[
-                                                                  warehouse.id
-                                                                      .toString()] ??
-                                                              warehouse
-                                                                  .isAvailable,
-                                                          onChanged:
-                                                              (bool value) {
-                                                            warehouseProvider
-                                                                .initializeStatus(
-                                                                    warehouse.id
-                                                                        .toString(),
-                                                                    value);
-                                                            warehouseProvider
-                                                                .updateWarehouseStatus(
-                                                                    warehouse.id
-                                                                        .toString(),
-                                                                    value)
-                                                                .catchError(
-                                                                    (error) {
-                                                              warehouseProvider
-                                                                  .initializeStatus(
-                                                                      warehouse
-                                                                          .id
-                                                                          .toString(),
-                                                                      !value);
-                                                              ScaffoldMessenger
-                                                                      .of(context)
-                                                                  .showSnackBar(
-                                                                const SnackBar(
-                                                                    content: Text(
-                                                                        'Failed to update warehouse status!')),
-                                                              );
-                                                            });
-                                                          },
-                                                        ),
-                                                         Text(
-                                                          S.of(context).yes,
-                                                          style: const TextStyle(
-                                                              fontSize: 11,
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                )
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const AddWareHouse()),
+                                          );
+                                        },
+                                      ),
+                                      Center(
+                                          child: Image.asset(
+                                              "assets/images/man.png")),
+                                       SizedBox(height: screenHeight*0.013),
+                                      Center(
+                                        child: Text(
+                                          S.of(context).we_are_happy_to_help,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                      SizedBox(height: screenHeight*0.013),
+                                      Center(
+                                        child: Text(
+                                          "${S.of(context).need_assistance} >>",
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: Colors.blue),
                                         ),
                                       ),
                                     ],
                                   ),
-                                );
-                              },
-                            );
-                    } else {
-                      return const Center(child: Text('No Data Found'));
-                    }
-                  },
+                                ),
+                              )
+                            : ListView.builder(
+                                itemCount: warehouseList.length,
+                                itemBuilder: (context, index) {
+                                  final warehouse = warehouseList[index];
+                                  if (kDebugMode) {
+                                    print(
+                                      "availability${warehouse.isAvailableForRent}");
+                                  }
+                                  bool isavail = warehouseProvider
+                                          .warehouseStatus[warehouse.id] ??
+                                      warehouse.isAvailableForRent;
+
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  WarehouseUpdate(
+                                                    warehouse: warehouse,
+                                                  )));
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Center(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            margin: EdgeInsets.only(
+                                                top: screenHeight * 0.01,
+                                                left: 10),
+                                            padding: const EdgeInsets.all(15),
+                                            child: DottedBorder(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8.0),
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          warehouse.wHouseName
+                                                                  .isNotEmpty
+                                                              ? (warehouse.wHouseName
+                                                                          .length >
+                                                                      7
+                                                                  ? '${warehouse.wHouseName.substring(0, 7)}...'
+                                                                  : warehouse
+                                                                      .wHouseName)
+                                                              : 'N/A',
+                                                          style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
+                                                        ),
+                                                        const Spacer(),
+                                                        InkWell(
+                                                          child: Image.asset(
+                                                              "assets/images/Share.png"),
+                                                          onTap: () {
+                                                            _shareAppInfo();
+                                                          },
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 15,
+                                                        ),
+                                                        InkWell(
+                                                          child: Image.asset(
+                                                              "assets/images/QrCode.png"),
+                                                          onTap: () {
+                                                            String data =
+                                                                'Warehouse Name: ${warehouse.wHouseName}\nLocation: ${warehouse.wHouseAddress}\nContact: ${warehouse.mobile}';
+                                                            _showQrDialog(
+                                                                data);
+                                                          },
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 15,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Text(
+                                                          warehouseProvider
+                                                                          .warehouseStatus[
+                                                                      warehouse.id
+                                                                          .toString()] ??
+                                                                  warehouse
+                                                                      .isAvailable
+                                                              ? ". Vacant"
+                                                              : ". Rented",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: warehouseProvider
+                                                                            .warehouseStatus[
+                                                                        warehouse
+                                                                            .id
+                                                                            .toString()] ??
+                                                                    warehouse
+                                                                        .isAvailable
+                                                                ? Colors
+                                                                    .red
+                                                                : Colors
+                                                                    .green,
+                                                            fontSize: 10,
+                                                          ),
+                                                        ),
+                                                        const Spacer(),
+                                                        FutureBuilder<String>(
+                                                          future: _getAddressFromLatLng(warehouse.wHouseAddress),
+                                                          builder: (context, snapshot) {
+                                                            return SizedBox(
+                                                              width: MediaQuery.of(context).size.width * 0.5,
+                                                              child: Text(
+                                                                snapshot.connectionState == ConnectionState.waiting
+                                                                    ? "Getting address..."
+                                                                    : snapshot.hasError
+                                                                    ? "Error fetching address"
+                                                                    : snapshot.hasData
+                                                                    ? "| ${snapshot.data}"
+                                                                    : "No address available",
+                                                                style: const TextStyle(
+                                                                  fontWeight: FontWeight.w500,
+                                                                  color: Colors.grey,
+                                                                  fontSize: 10,
+                                                                ),
+                                                                overflow: TextOverflow.ellipsis,
+                                                                maxLines: 1,
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        SizedBox(
+                                                            width: screenWidth *
+                                                                0.05),
+                                                        Text(
+                                                          warehouse.warehouseCarpetArea !=
+                                                                  null
+                                                              ? (warehouse.warehouseCarpetArea
+                                                                          .toString()
+                                                                          .length > 6
+                                                                  ? '${warehouse.warehouseCarpetArea.toString().substring(0, 6)}... sq.ft'
+                                                                  : '${warehouse.warehouseCarpetArea} sq.ft')
+                                                              : 'N/A',
+                                                          style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Colors.black,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                        const Spacer(),
+                                                        Text(
+                                                          warehouse.wHouseRentPerSQFT !=
+                                                                  null
+                                                              ? (warehouse.wHouseRentPerSQFT
+                                                                          .toString()
+                                                                          .length >
+                                                                      6
+                                                                  ? '₹ ${warehouse.wHouseRentPerSQFT.toString().substring(0, 6)}...'
+                                                                  : '₹ ${warehouse.wHouseRentPerSQFT}')
+                                                              : '₹ N/A',
+                                                          style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Colors.black,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                            width:
+                                                                screenWidth * 0.1)
+                                                      ],
+                                                    ),
+                                                  ),
+                                                   Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        Text(
+                                                          "${S.of(context).carpet_area} Sq. ft.",
+                                                          style: const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight.w500,
+                                                              color: Colors.grey,
+                                                              fontSize: 10),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Text(
+                                                          "  | ${S.of(context).rent_per_sqft} ",
+                                                          style: const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight.w500,
+                                                              color: Colors.grey,
+                                                              fontSize: 10),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(
+                                                        10.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Flexible(
+                                                          flex: 4,
+                                                          child: Container(
+                                                            height: 25,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: const Color(
+                                                                  0xffF0F4FD),
+                                                              border: Border.all(
+                                                                  color: const Color(
+                                                                      0xffF0F4FD)),
+                                                            ),
+                                                            child: Center(
+                                                              child: Text(
+                                                                "${S.of(context).view_request} | ${_limitDigits(0)}",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 10,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(width: 5),
+                                                        Flexible(
+                                                          flex: 3,
+                                                          child: Container(
+                                                            height: 25,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: const Color(
+                                                                  0xffF0F4FD),
+                                                              border: Border.all(
+                                                                  color: const Color(
+                                                                      0xffF0F4FD)),
+                                                            ),
+                                                            child: Center(
+                                                              child: Text(
+                                                                "${S.of(context).bids} | ${_limitDigits(0)}",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 10,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(width: 5),
+                                                        Flexible(
+                                                          flex: 4,
+                                                          child: Container(
+                                                            height: 25,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: const Color(
+                                                                  0xffF0F4FD),
+                                                              border: Border.all(
+                                                                  color: const Color(
+                                                                      0xffF0F4FD)),
+                                                            ),
+                                                            child: Center(
+                                                              child: Text(
+                                                                "${S.of(context).contracts} | ${_limitDigits(0)}",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 10,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                       Text(
+                                                          S.of(context).is_warehouse_available),
+                                                      Row(
+                                                        children: [
+                                                           Text(
+                                                            S.of(context).no,
+                                                            style: const TextStyle(
+                                                                color:
+                                                                    Colors.grey,
+                                                                fontSize: 11,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                          ),
+                                                          // Switch button with Provider
+                                                          Switch(
+                                                            hoverColor:
+                                                                Colors.white,
+                                                            activeTrackColor:
+                                                                Colors.green,
+                                                            focusColor:
+                                                                Colors.white,
+                                                            activeColor: Colors
+                                                                .white,
+                                                            inactiveThumbColor: Colors
+                                                                .grey,
+                                                            value: warehouseProvider
+                                                                        .warehouseStatus[
+                                                                    warehouse.id
+                                                                        .toString()] ??
+                                                                warehouse
+                                                                    .isAvailable,
+                                                            onChanged:
+                                                                (bool value) {
+                                                              warehouseProvider
+                                                                  .initializeStatus(
+                                                                      warehouse.id
+                                                                          .toString(),
+                                                                      value);
+                                                              warehouseProvider
+                                                                  .updateWarehouseStatus(
+                                                                      warehouse.id
+                                                                          .toString(),
+                                                                      value)
+                                                                  .catchError(
+                                                                      (error) {
+                                                                warehouseProvider
+                                                                    .initializeStatus(
+                                                                        warehouse
+                                                                            .id
+                                                                            .toString(),
+                                                                        !value);
+                                                                ScaffoldMessenger
+                                                                        .of(context)
+                                                                    .showSnackBar(
+                                                                  const SnackBar(
+                                                                      content: Text(
+                                                                          'Failed to update warehouse status!')),
+                                                                );
+                                                              });
+                                                            },
+                                                          ),
+                                                           Text(
+                                                            S.of(context).yes,
+                                                            style: const TextStyle(
+                                                                fontSize: 11,
+                                                                color:
+                                                                    Colors.grey,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                      } else {
+                        return const Center(child: Text('No Data Found'));
+                      }
+                    },
+                  ),
                 ),
               ),
             ),

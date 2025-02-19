@@ -54,8 +54,8 @@ class UserHomePageState extends State<UserHomePage>
 
   int _currentIndex = 0;
   final List<String> _images = [
-    'https://xpacesphere.com/Content/NewFolder/warehouse_1.jpg',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_2.jpg'
+    'https://xpacesphere.com/Content/NewFolder/warehouse_21.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_22.jpg'
   ];
 
   late PageController _pageControllerSlider;
@@ -84,7 +84,7 @@ class UserHomePageState extends State<UserHomePage>
     futureWarehouses = fetchWarehouses(widget.latitude, widget.longitude,20,
         [], [], rentRange);
     _pageControllerSlider = PageController(initialPage: _currentIndex);
-    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (_currentIndex < _images.length - 1) {
         _currentIndex++;
       } else {
@@ -93,7 +93,7 @@ class UserHomePageState extends State<UserHomePage>
       _pageControllerSlider.animateToPage(
         _currentIndex,
         duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
+        curve: Curves.slowMiddle,
       );
     });
     _controller = AnimationController(
@@ -335,11 +335,9 @@ if (kDebugMode) {
                             ),
                           ),
                           child: IconButton(
-                            icon: Icon(
-                              Icons.file_download_outlined,
-                              color: _selectedIndex == 1
-                                  ? Colors.white
-                                  : Colors.blue,
+                            icon: ImageIcon(
+                              const AssetImage(ImageAssets.storage),
+                              color: _selectedIndex == 1 ? Colors.white : Colors.blue,
                               size: 24,
                             ),
                             onPressed: () => _onItemTapped(1),
@@ -379,7 +377,7 @@ if (kDebugMode) {
           children: [
             Container(
               color: Colors.blue,
-              height: screenHeight * 0.21,
+              height: screenHeight * 0.22,
               child: Padding(
                 padding: EdgeInsets.only(
                   top: screenHeight * 0.0,
@@ -546,12 +544,11 @@ if (kDebugMode) {
                               color: Colors.white),
                         ),
                         Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Container(
                               padding: EdgeInsets.zero,
-                              height: screenHeight*0.042,
+                              height: screenHeight*0.044,
                               width: screenWidth*0.2,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
@@ -585,8 +582,7 @@ if (kDebugMode) {
                                             return FractionallySizedBox(
                                               heightFactor: 0.57,
                                               child: Padding(
-                                                padding:
-                                                     EdgeInsets.all(screenWidth*0.05),
+                                                padding: EdgeInsets.all(screenWidth*0.05),
                                                 child: Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
@@ -705,7 +701,7 @@ if (kDebugMode) {
                               child: Container(
                                 margin:  EdgeInsets.only(right: screenWidth*0.07),
                                 height: screenHeight*0.042,
-                                width: screenWidth*0.2, // Adjusted width
+                                width: screenWidth*0.2,
                                 decoration: BoxDecoration(
                                   color: Colors.blue,
                                   border: Border.all(
@@ -728,6 +724,7 @@ if (kDebugMode) {
                         )
                       ],
                     ),
+                    const Spacer()
                   ],
                 ),
               ),

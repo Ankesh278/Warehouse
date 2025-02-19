@@ -35,5 +35,6 @@ class ImageAssets{
   static const String back = 'assets/images/back_button_with_border.png';
   static const String appLogo = 'assets/images/appLogo.png';
   static const String worldWideLocation = 'assets/images/Worldwidelocation.png';
+  static const String storage = 'assets/images/storage.png';
 
 }

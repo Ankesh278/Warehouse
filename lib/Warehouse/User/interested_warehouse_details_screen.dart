@@ -8,6 +8,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 class InterestedWarehouseDetailsScreen extends StatefulWidget {
@@ -23,6 +24,8 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
   int _currentIndex = 0;
   bool isLoading=false;
   bool _isExpanded = false;
+  late String phone;
+
   final List<String> _uploadedImages = [];
   final List<String> _defaultImages = [
     'assets/images/slider3.jpg',
@@ -31,6 +34,7 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
   @override
   void initState() {
     super.initState();
+     getSharedData();
     String filePath = widget.warehouses.filePath;
     processMediaFilePath(filePath);
     _pageControllerSlider = PageController(initialPage: _currentIndex);
@@ -46,6 +50,10 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
         curve: Curves.easeInOut,
       );
     });
+  }
+  void getSharedData() async{
+    SharedPreferences pref= await SharedPreferences.getInstance();
+    phone=  pref.getString("phone")!;
   }
   void processMediaFilePath(String filePath) {
     List<String> filePaths = filePath.split(',');
@@ -103,6 +111,7 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
           'label': 'Flexi Model',
         },
     ];
+    DistanceCalculator distanceCalculator=DistanceCalculator();
     return Scaffold(
       body: Column(
         children: [
@@ -140,7 +149,7 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    cartProvider.toggleWarehouse(widget.warehouses.id, widget.warehouses.mobile,context);
+                                    cartProvider.toggleWarehouse(widget.warehouses.id, phone,context);
                                   },
                                   child: Container(
                                       height: screenHeight*0.04,
@@ -447,140 +456,109 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                   ),
                                   const SizedBox(height: 13,),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 15),
-                                    height: screenHeight * 0.15,
+                                    margin:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                    height: screenHeight * 0.07,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey, width: 1.5),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
+                                        border: Border.all(
+                                            color: Colors.grey, width: 1.5),
+                                        borderRadius: BorderRadius.circular(5)),
                                     child: Row(
                                       children: [
-                                         SizedBox(width: screenWidth*0.05),
+                                        const SizedBox(width: 10),
                                         Padding(
-                                          padding:  EdgeInsets.only(top: screenHeight*0.03),
-                                          child: Flexible(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02, vertical: 6),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius: BorderRadius.circular(screenWidth*0.03),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.grey.withValues(alpha: 0.2),
-                                                        spreadRadius: 1,
-                                                        blurRadius: 2,
-                                                        offset: const Offset(0, 1),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  constraints: BoxConstraints(maxWidth: screenWidth * 0.5),
-                                                  child: FutureBuilder<String>(
-                                                    future: distanceCalculator.getAddressFromLatLng(widget.warehouses.wHouseAddress),
-                                                    builder: (context, snapshot) {
-                                                      if (snapshot.connectionState == ConnectionState.waiting) {
-                                                        return const Text(
-                                                          "Loading address...",
-                                                          style: TextStyle(color: Colors.grey, fontSize: 12),
-                                                        );
-                                                      } else if (snapshot.hasError) {
-                                                        return Text(
-                                                          "Error: ${snapshot.error}",
-                                                          style: const TextStyle(color: Colors.red, fontSize: 12),
-                                                        );
-                                                      } else {
-                                                        return Text(
-                                                          snapshot.data!,
-                                                          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow.ellipsis,
-                                                        );
-                                                      }
-                                                    },
-                                                  ),
+                                          padding: const EdgeInsets.only(top: 4.0),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                constraints: const BoxConstraints(maxWidth: 130),
+                                                child: FutureBuilder<double>(
+                                                  future: distanceCalculator.getDistanceFromCurrentToWarehouse(widget.warehouses.wHouseAddress),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                                      return const Text(
+                                                        "Calculating distance...",
+                                                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                                                        textAlign: TextAlign.start,
+                                                      );
+                                                    } else if (snapshot.hasError) {
+                                                      return const Text(
+                                                        "Error fetching distance",
+                                                        style: TextStyle(color: Colors.red, fontSize: 12),
+                                                        textAlign: TextAlign.start,
+                                                      );
+                                                    } else {
+                                                      double distanceInKm = snapshot.data! / 1000; // Convert meters to KM
+                                                      return FittedBox(
+                                                        fit: BoxFit.scaleDown,
+                                                        child: Text(
+                                                          "${distanceInKm.toStringAsFixed(2)} km away from your current Location",
+                                                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                                                          textAlign: TextAlign.start,
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
                                                 ),
-                                                 SizedBox(height: screenHeight*0.03),
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03, vertical: 6),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius: BorderRadius.circular(screenWidth*0.03),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.grey.withValues(alpha: 0.2),
-                                                        spreadRadius: 1,
-                                                        blurRadius: 2,
-                                                        offset: const Offset(0, 1),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  constraints: BoxConstraints(maxWidth: screenWidth * 0.5),
-                                                  child: FutureBuilder<double>(
-                                                    future: Permission.location.isGranted.then((granted) {
-                                                      if (granted) {
-                                                        return distanceCalculator.getDistanceFromCurrentToWarehouse(widget.warehouses.wHouseAddress);
-                                                      } else {
-                                                        return Future.error("Location permission denied");
-                                                      }
-                                                    }),
-                                                    builder: (context, snapshot) {
-                                                      if (snapshot.connectionState == ConnectionState.waiting) {
-                                                        return const Text(
-                                                          "Calculating distance...",
-                                                          style: TextStyle(color: Colors.grey, fontSize: 12),
-                                                        );
-                                                      } else if (snapshot.hasError) {
-                                                        return TextButton.icon(
-                                                          onPressed: () => requestLocationPermission(context),
-                                                          icon: const Icon(Icons.location_on, size: 16, color: Colors.blue),
-                                                          label: const Text(
-                                                            "Enable location to see distance",
-                                                            style: TextStyle(fontSize: 12, color: Colors.blue, fontWeight: FontWeight.w600),
+                                              ),
+
+                                              Container(
+                                                constraints: BoxConstraints(maxWidth: screenWidth * 0.5),
+                                                child: FutureBuilder<String>(
+                                                  future: distanceCalculator.getAddressFromLatLng(widget.warehouses.wHouseAddress),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                                      return const Text(
+                                                        "Fetching address...",
+                                                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                                                        textAlign: TextAlign.start,
+                                                      );
+                                                    } else if (snapshot.hasError) {
+                                                      return const Text(
+                                                        "Error fetching address",
+                                                        style: TextStyle(color: Colors.red, fontSize: 12),
+                                                        textAlign: TextAlign.start,
+                                                      );
+                                                    } else {
+                                                      return FittedBox(
+                                                        fit: BoxFit.scaleDown,
+                                                        child: Text(
+                                                          "${snapshot.data}",
+                                                          style: const TextStyle(
+                                                            fontWeight: FontWeight.w700,
+                                                            color: Colors.grey,
+                                                            fontSize: 16,
                                                           ),
-                                                        );
-                                                      } else {
-                                                        double distanceInKm = snapshot.data! / 1000;
-                                                        return Text(
-                                                          "${distanceInKm.toStringAsFixed(3)} km away from your current location",
-                                                          style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.grey, fontSize: 15),
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow.ellipsis,
-                                                        );
-                                                      }
-                                                    },
-                                                  ),
+                                                          textAlign: TextAlign.start,
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+
+                                            ],
                                           ),
                                         ),
-                                       // Expanded(child: Container()),
                                         const Spacer(),
                                         Padding(
-                                          padding: const EdgeInsets.only(right: 5.0, top: 3, bottom: 3),
+                                          padding: const EdgeInsets.only(
+                                              right: 5.0, top: 3, bottom: 3),
                                           child: InkWell(
                                             onTap: () {
-                                              if(widget.warehouses.wHouseAddress!=null){
-                                                _openMapFromAddress(widget.warehouses.wHouseAddress);
-                                              } else {
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  const SnackBar(content: Text("Location information is missing.")),
-                                                );
-                                              }
+                                              _openMapFromAddress(widget.warehouses.wHouseAddress);
                                             },
                                             child: ClipOval(
                                               child: Image.asset(
                                                 ImageAssets.map,
-                                                height: screenHeight * 0.06,
-                                                width: screenWidth * 0.13,
+                                                height: screenHeight*0.06,
+                                                width: screenWidth*0.13,
                                                 fit: BoxFit.cover,
                                               ),
                                             ),
                                           ),
-                                        ),
+                                        )
                                       ],
                                     ),
                                   ),
@@ -814,7 +792,7 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
             ),
             actions: [
               TextButton(
-                onPressed: () => navigator.pop(), // ✅ Safe usage
+                onPressed: () => navigator.pop(),
                 child: const Text("Not Now", style: TextStyle(color: Colors.grey)),
               ),
               ElevatedButton.icon(
@@ -834,13 +812,11 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
     }
   }
 
-
   void _openMapFromAddress(String wHouseAddress) {
     DistanceCalculator distanceCalculator=DistanceCalculator();
     try {
       LatLng warehouseLatLng = distanceCalculator.parseLatLng(wHouseAddress);
-      String googleMapsUrl =
-          "https://www.google.com/maps/search/?api=1&query=${warehouseLatLng.latitude},${warehouseLatLng.longitude}";
+      String googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=${warehouseLatLng.latitude},${warehouseLatLng.longitude}";
       launchUrl(Uri.parse(googleMapsUrl));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

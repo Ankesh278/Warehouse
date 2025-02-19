@@ -8,6 +8,7 @@ import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class NewHomePage extends StatefulWidget {
@@ -46,6 +47,14 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
   final List<String> _manPowerImages = [
     'https://xpacesphere.com/Content/NewFolder/warehouse_13.jpg',
     'https://xpacesphere.com/Content/NewFolder/warehouse_14.jpg'
+  ];
+  final List<String> _advertisingImages = [
+    'https://xpacesphere.com/Content/NewFolder/warehouse_18.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_19.jpg'
+  ];
+  final List<String> _agriculturalImages = [
+    'https://xpacesphere.com/Content/NewFolder/warehouse_23.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_20.jpg'
   ];
 
   late PageController _pageControllerSlider;
@@ -98,7 +107,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
     }, 5, const Duration(milliseconds: 400), Curves.slowMiddle);
 
     _startAutoSlide(_agricultureController, () {
-      if (_agricultureIndex < _warehouseImages.length - 1) {
+      if (_agricultureIndex < _agriculturalImages.length - 1) {
         _agricultureIndex++;
       } else {
         _agricultureIndex = 0;
@@ -106,7 +115,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
     }, 4, const Duration(milliseconds: 3000), Curves.easeInOutCubicEmphasized);
 
     _startAutoSlide(_advertisingController, () {
-      if (sliderControllerIndex < _warehouseImages.length - 1) {
+      if (sliderControllerIndex < _advertisingImages.length - 1) {
         sliderControllerIndex++;
       } else {
         sliderControllerIndex = 0;
@@ -155,8 +164,8 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
     'https://xpacesphere.com/Content/NewFolder/warehouse_10.jpg',
     'https://xpacesphere.com/Content/NewFolder/warehouse_11.jpg',
     'https://xpacesphere.com/Content/NewFolder/warehouse_12.jpg',
-    'https://images.pexels.com/photos/3806252/pexels-photo-3806252.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    'https://images.pexels.com/photos/4484150/pexels-photo-4484150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_16.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_17.jpg',
   ];
   int horizontalSliderImagesIndex = 0;
   void _shiftImagesLeft() {
@@ -374,7 +383,12 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                   ),
                                   child: InkWell(
                                     onTap: (){
-
+                                      Fluttertoast.showToast(
+                                        msg: "Coming soon!",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.green,
+                                      );
                                     },
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -422,20 +436,30 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                         ),
                                       ],
                                     ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          ImageAssets.manpowergif,
-                                          height: screenHeight*0.08,
-                                          width: screenWidth*0.25,
-                                          fit: BoxFit.contain,
-                                        ),
-                                         Text(
-                                          S.of(context).manpower,
-                                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
-                                        ),
-                                      ],
+                                    child: InkWell(
+                                      onTap: (){
+                                        Fluttertoast.showToast(
+                                          msg: "Coming soon!",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.green,
+                                        );
+                                      },
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            ImageAssets.manpowergif,
+                                            height: screenHeight*0.08,
+                                            width: screenWidth*0.25,
+                                            fit: BoxFit.contain,
+                                          ),
+                                           Text(
+                                            S.of(context).manpower,
+                                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -462,20 +486,30 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                         ),
                                       ],
                                     ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          ImageAssets.agriculturalgif,
-                                          height: screenHeight*0.08,
-                                          width: screenWidth*0.25,
-                                          fit: BoxFit.contain,
-                                        ),
-                                         Text(
-                                          S.of(context).agricultural,
-                                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
-                                        ),
-                                      ],
+                                    child: InkWell(
+                                      onTap: (){
+                                        Fluttertoast.showToast(
+                                          msg: "Coming soon!",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.green,
+                                        );
+                                      },
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            ImageAssets.agriculturalgif,
+                                            height: screenHeight*0.08,
+                                            width: screenWidth*0.25,
+                                            fit: BoxFit.contain,
+                                          ),
+                                           Text(
+                                            S.of(context).agricultural,
+                                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -485,150 +519,157 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                         ),
                         SizedBox(height: screenHeight*0.025,),
                         ///Warehouse Slider
-                        Row(
-                          children: [
-                            SizedBox(
-                              height: screenHeight * 0.18,
-                              width: screenWidth*0.9,
-                              child: Stack(
-                                children: [
-                                  PageView.builder(
-                                    controller: _pageControllerSlider,
-                                    itemCount: _warehouseImages.length,
-                                    onPageChanged: (int index) {
-                                      setState(() {
-                                        _currentIndex = index;
-                                      });
-                                    },
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(6),
-                                          border: Border.all(color: Colors.grey, width: 3),
-                                        ),
-                                        child: CachedNetworkImage(
-                                          imageUrl: _warehouseImages[index],
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                          placeholder: (context, url) => Shimmer(
-                                            child: Container(
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey,
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) => Container(
-                                            alignment: Alignment.center,
+                        SizedBox(
+                          height: screenHeight * 0.18,
+                          width: screenWidth*0.9,
+                          child: Stack(
+                            children: [
+                              InkWell(
+                                onTap:(){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>UserHomePage(longitude:widget.longitude,latitude:widget.latitude)));
+                                  },
+                                child: PageView.builder(
+                                  controller: _pageControllerSlider,
+                                  itemCount: _warehouseImages.length,
+                                  onPageChanged: (int index) {
+                                    setState(() {
+                                      _currentIndex = index;
+                                    });
+                                  },
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(color: Colors.grey, width: 3),
+                                      ),
+                                      child: CachedNetworkImage(
+                                        imageUrl: _warehouseImages[index],
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        placeholder: (context, url) => Shimmer(
+                                          child: Container(
+                                            width: double.infinity,
                                             decoration: BoxDecoration(
-                                              color: Colors.red.shade100,
-                                              borderRadius: BorderRadius.circular(3),
-                                              border: Border.all(color: Colors.red.shade200, width: 2),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.error_outline,
-                                                  color: Colors.red.shade700,
-                                                  size: 40,
-                                                ),
-                                                Text(
-                                                  'Image failed to load!',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.red.shade700,
-                                                  ),
-                                                ),
-                                              ],
+                                              color: Colors.grey,
+                                              borderRadius: BorderRadius.circular(6),
                                             ),
                                           ),
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ],
+                                        errorWidget: (context, url, error) => Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: Colors.red.shade100,
+                                            borderRadius: BorderRadius.circular(3),
+                                            border: Border.all(color: Colors.red.shade200, width: 2),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.error_outline,
+                                                color: Colors.red.shade700,
+                                                size: 40,
+                                              ),
+                                              Text(
+                                                'Image failed to load!',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.red.shade700,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         SizedBox(height: screenHeight*0.017,),
                         ///Transportation Slider
-                         Row(
-                          children: [
-                            SizedBox(
-                              height: screenHeight*0.18,
-                              width: screenWidth*0.9,
-                              child: Stack(
-                                children: [
-                                  PageView.builder(
-                                    controller: _transportController,
-                                    itemCount: _transportImages.length,
-                                    onPageChanged: (int index) {
-                                      setState(() {
-                                        _transportIndex = index;
-                                      });
-                                    },
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(6),
-                                          border: Border.all(color: Colors.grey, width: 3),
-                                        ),
-                                        child: CachedNetworkImage(
-                                          imageUrl: _transportImages[index],
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                          placeholder: (context, url) => Shimmer(
-                                            child: Container(
-                                              width: double.infinity,
-                                              height: screenHeight*0.05,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey,
-                                                borderRadius: BorderRadius.circular(3),
-                                              ),
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) => Container(
-                                            alignment: Alignment.center,
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: Colors.red.shade100,
-                                              borderRadius: BorderRadius.circular(3),
-                                              border: Border.all(color: Colors.red.shade200, width: 2),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.error_outline,
-                                                  color: Colors.red.shade700,
-                                                  size: 40,
-                                                ),
-                                                Text(
-                                                  'Image failed to load!',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.red.shade700,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                         SizedBox(
+                           height: screenHeight*0.18,
+                           width: screenWidth*0.9,
+                           child: Stack(
+                             children: [
+                               InkWell(
+                                 onTap:(){
+                                   Fluttertoast.showToast(
+                                     msg: "Coming soon!",
+                                     toastLength: Toast.LENGTH_SHORT,
+                                     gravity: ToastGravity.BOTTOM,
+                                     backgroundColor: Colors.green,
+                                   );
+                         },
+                                 child: PageView.builder(
+                                   controller: _transportController,
+                                   itemCount: _transportImages.length,
+                                   onPageChanged: (int index) {
+                                     setState(() {
+                                       _transportIndex = index;
+                                     });
+                                   },
+                                   itemBuilder: (context, index) {
+                                     return Container(
+                                       decoration: BoxDecoration(
+                                         borderRadius: BorderRadius.circular(6),
+                                         border: Border.all(color: Colors.grey, width: 3),
+                                       ),
+                                       child: CachedNetworkImage(
+                                         imageUrl: _transportImages[index],
+                                         fit: BoxFit.cover,
+                                         width: double.infinity,
+                                         placeholder: (context, url) => Shimmer(
+                                           child: Container(
+                                             width: double.infinity,
+                                             height: screenHeight*0.05,
+                                             decoration: BoxDecoration(
+                                               color: Colors.grey,
+                                               borderRadius: BorderRadius.circular(3),
+                                             ),
+                                           ),
+                                         ),
+                                         errorWidget: (context, url, error) => Container(
+                                           alignment: Alignment.center,
+                                           padding: const EdgeInsets.all(10),
+                                           decoration: BoxDecoration(
+                                             color: Colors.red.shade100,
+                                             borderRadius: BorderRadius.circular(3),
+                                             border: Border.all(color: Colors.red.shade200, width: 2),
+                                           ),
+                                           child: Column(
+                                             mainAxisAlignment: MainAxisAlignment.center,
+                                             crossAxisAlignment: CrossAxisAlignment.center,
+                                             children: [
+                                               Icon(
+                                                 Icons.error_outline,
+                                                 color: Colors.red.shade700,
+                                                 size: 40,
+                                               ),
+                                               Text(
+                                                 'Image failed to load!',
+                                                 style: TextStyle(
+                                                   fontSize: 16,
+                                                   fontWeight: FontWeight.bold,
+                                                   color: Colors.red.shade700,
+                                                 ),
+                                               ),
+                                             ],
+                                           ),
+                                         ),
+                                       ),
+                                     );
+                                   },
+                                 ),
+                               ),
+                             ],
+                           ),
+                         ),
                         SizedBox(height: screenHeight*0.02,),
                         ///Horizontal Slider
                         Padding(
@@ -705,229 +746,247 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                           ),
                         ),
                         SizedBox(height: screenHeight*0.02,),
-                        ///Agricultural Slider
-                        Row(
-                          children: [
-                            SizedBox(
-                              height: screenHeight*0.18,
-                              width: screenWidth*0.9,
-                              child: Stack(
-                                children: [
-                                  PageView.builder(
-                                    controller: _manpowerController,
-                                    itemCount: _manPowerImages.length,
-                                    onPageChanged: (int index) {
-                                      setState(() {
-                                        _manpowerIndex = index;
-                                      });
-                                    },
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(6),
-                                          border: Border.all(color: Colors.grey, width: 3),
-                                        ),
-                                        child: CachedNetworkImage(
-                                          imageUrl: _manPowerImages[index],
-                                          fit: BoxFit.fitWidth,
-                                          width: double.infinity,
-                                          placeholder: (context, url) => Shimmer(
-                                            child: Container(
-                                              width: double.infinity,
-                                              height: screenHeight*0.05,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey,
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) => Container(
-                                            alignment: Alignment.center,
-                                            padding: const EdgeInsets.all(10),
+                        ///Manpower Slider
+                        SizedBox(
+                          height: screenHeight*0.18,
+                          width: screenWidth*0.9,
+                          child: Stack(
+                            children: [
+                              InkWell(
+                                onTap:(){
+                                    Fluttertoast.showToast(
+                                      msg: "Coming soon!",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.green,
+                                    );
+                                },
+                                child: PageView.builder(
+                                  controller: _manpowerController,
+                                  itemCount: _manPowerImages.length,
+                                  onPageChanged: (int index) {
+                                    setState(() {
+                                      _manpowerIndex = index;
+                                    });
+                                  },
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(color: Colors.grey, width: 3),
+                                      ),
+                                      child: CachedNetworkImage(
+                                        imageUrl: _manPowerImages[index],
+                                        fit: BoxFit.fitWidth,
+                                        width: double.infinity,
+                                        placeholder: (context, url) => Shimmer(
+                                          child: Container(
+                                            width: double.infinity,
+                                            height: screenHeight*0.05,
                                             decoration: BoxDecoration(
-                                              color: Colors.red.shade100,
-                                              borderRadius: BorderRadius.circular(3),
-                                              border: Border.all(color: Colors.red.shade200, width: 2),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.error_outline,
-                                                  color: Colors.red.shade700,
-                                                  size: 40,
-                                                ),
-                                                Text(
-                                                  'Image failed to load!',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.red.shade700,
-                                                  ),
-                                                ),
-                                              ],
+                                              color: Colors.grey,
+                                              borderRadius: BorderRadius.circular(6),
                                             ),
                                           ),
-
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ],
+                                        errorWidget: (context, url, error) => Container(
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red.shade100,
+                                            borderRadius: BorderRadius.circular(3),
+                                            border: Border.all(color: Colors.red.shade200, width: 2),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.error_outline,
+                                                color: Colors.red.shade700,
+                                                size: 40,
+                                              ),
+                                              Text(
+                                                'Image failed to load!',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.red.shade700,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         SizedBox(height: screenHeight*0.02,),
-                        ///Manpower Slider
-                        Row(
-                          children: [
-                            SizedBox(
-                              height: screenHeight*0.18,
-                              width: screenWidth*0.9,
-                              child: Stack(
-                                children: [
-                                  PageView.builder(
-                                    controller: _agricultureController,
-                                    itemCount: _warehouseImages.length,
-                                    onPageChanged: (int index) {
-                                      setState(() {
-                                        _agricultureIndex = index;
-                                      });
-                                    },
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(6),
-                                          border: Border.all(color: Colors.grey, width: 3),
-                                        ),
-                                        child: CachedNetworkImage(
-                                          imageUrl: _warehouseImages[index],
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                          placeholder: (context, url) => Shimmer(
-                                            child: Container(
-                                              width: double.infinity,
-                                              height: screenHeight*0.07,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey,
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) => Container(
-                                            alignment: Alignment.center,
-                                            padding: const EdgeInsets.all(10),
+                        ///Agriculture Slider
+                        SizedBox(
+                          height: screenHeight*0.18,
+                          width: screenWidth*0.9,
+                          child: Stack(
+                            children: [
+                              InkWell(
+                                onTap:(){
+                                    Fluttertoast.showToast(
+                                      msg: "Coming soon!",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.green,
+                                    );
+                                },
+                                child: PageView.builder(
+                                  controller: _agricultureController,
+                                  itemCount: _agriculturalImages.length,
+                                  onPageChanged: (int index) {
+                                    setState(() {
+                                      _agricultureIndex = index;
+                                    });
+                                  },
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(color: Colors.grey, width: 3),
+                                      ),
+                                      child: CachedNetworkImage(
+                                        imageUrl: _agriculturalImages[index],
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        placeholder: (context, url) => Shimmer(
+                                          child: Container(
+                                            width: double.infinity,
+                                            height: screenHeight*0.07,
                                             decoration: BoxDecoration(
-                                              color: Colors.red.shade100,
-                                              borderRadius: BorderRadius.circular(3),
-                                              border: Border.all(color: Colors.red.shade200, width: 2),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.error_outline,
-                                                  color: Colors.red.shade700,
-                                                  size: 40,
-                                                ),
-                                                Text(
-                                                  'Image failed to load!',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.red.shade700,
-                                                  ),
-                                                ),
-                                              ],
+                                              color: Colors.grey,
+                                              borderRadius: BorderRadius.circular(6),
                                             ),
                                           ),
-
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ],
+                                        errorWidget: (context, url, error) => Container(
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red.shade100,
+                                            borderRadius: BorderRadius.circular(3),
+                                            border: Border.all(color: Colors.red.shade200, width: 2),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.error_outline,
+                                                color: Colors.red.shade700,
+                                                size: 40,
+                                              ),
+                                              Text(
+                                                'Image failed to load!',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.red.shade700,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         SizedBox(height: screenHeight*0.02,),
                         ///Advertising Slider
-                        Row(
-                          children: [
-                            SizedBox(
-                              height: screenHeight*0.18,
-                              width: screenWidth*0.9,
-                              child: Stack(
-                                children: [
-                                  PageView.builder(
-                                    controller: _advertisingController,
-                                    itemCount: _warehouseImages.length,
-                                    onPageChanged: (int index) {
-                                      setState(() {
-                                        sliderControllerIndex = index;
-                                      });
-                                    },
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(6),
-                                          border: Border.all(color: Colors.grey, width: 3),
-                                        ),
-                                        child: CachedNetworkImage(
-                                          imageUrl: _warehouseImages[index],
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                          placeholder: (context, url) => Shimmer(
-                                            child: Container(
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey,
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) => Container(
-                                            alignment: Alignment.center,
-                                            padding: const EdgeInsets.all(10),
+                        SizedBox(
+                          height: screenHeight*0.18,
+                          width: screenWidth*0.9,
+                          child: Stack(
+                            children: [
+                              InkWell(
+                                onTap:(){
+                                    Fluttertoast.showToast(
+                                      msg: "Coming soon!",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.green,
+                                    );
+                                },
+                                child: PageView.builder(
+                                  controller: _advertisingController,
+                                  itemCount: _advertisingImages.length,
+                                  onPageChanged: (int index) {
+                                    setState(() {
+                                      sliderControllerIndex = index;
+                                    });
+                                  },
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(color: Colors.grey, width: 3),
+                                      ),
+                                      child: CachedNetworkImage(
+                                        imageUrl: _advertisingImages[index],
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        placeholder: (context, url) => Shimmer(
+                                          child: Container(
+                                            width: double.infinity,
                                             decoration: BoxDecoration(
-                                              color: Colors.red.shade100,
-                                              borderRadius: BorderRadius.circular(3),
-                                              border: Border.all(color: Colors.red.shade200, width: 2),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.error_outline,
-                                                  color: Colors.red.shade700,
-                                                  size: 40,
-                                                ),
-                                                const SizedBox(height: 8),
-                                                Text(
-                                                  'Image failed to load!',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.red.shade700,
-                                                  ),
-                                                ),
-                                              ],
+                                              color: Colors.grey,
+                                              borderRadius: BorderRadius.circular(6),
                                             ),
                                           ),
-
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ],
+                                        errorWidget: (context, url, error) => Container(
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red.shade100,
+                                            borderRadius: BorderRadius.circular(3),
+                                            border: Border.all(color: Colors.red.shade200, width: 2),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.error_outline,
+                                                color: Colors.red.shade700,
+                                                size: 40,
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                'Image failed to load!',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.red.shade700,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         )
                       ],
                     ),

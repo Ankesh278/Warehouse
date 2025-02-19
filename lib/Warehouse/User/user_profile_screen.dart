@@ -1644,6 +1644,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   void _showEditDialog(BuildContext context,String phone) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    // final screenWidth = MediaQuery.of(context).size.width;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1725,7 +1727,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 15),
+                        SizedBox(height: screenHeight*0.02),
                         TextField(
                           controller: emialController,
                           keyboardType: TextInputType.emailAddress,
@@ -1743,11 +1745,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             ),
                           ),
                         ),
+                         SizedBox(height: screenHeight*0.02),
+                        Align(
+                            alignment: Alignment.bottomRight,
+                            child: DeleteAccountButton(phone: phone,)),
                       ],
                     ),
                   ),
                 ),
-                 DeleteAccountButton(phone: phone,),
+
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(

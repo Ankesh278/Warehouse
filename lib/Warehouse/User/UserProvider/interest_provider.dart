@@ -28,9 +28,7 @@ class CartProvider with ChangeNotifier {
           print("Response Data: $data");
         }
         if (data['status'] == 200 && data['data'] is List && data['data'].isNotEmpty) {
-
           final type = data['data'][0]['type'];
-
           if (type == "Shortlisted") {
             _shortlistedWarehouses[warehouseId] = true;
           } else {
@@ -39,7 +37,6 @@ class CartProvider with ChangeNotifier {
         } else {
           _shortlistedWarehouses[warehouseId] = false;
         }
-
         notifyListeners();
       } else {
         throw Exception("Failed to fetch shortlist status");
@@ -66,7 +63,6 @@ class CartProvider with ChangeNotifier {
           "Warehouse_uid": warehouseId.toString(),
           "Type": "Shortlisted"
         });
-
         final headers = {"Content-Type": "application/json"};
         if (kDebugMode) {
           print("URL: $url");
@@ -77,16 +73,13 @@ class CartProvider with ChangeNotifier {
         if (kDebugMode) {
           print("Headers: $headers");
         }
-
         final response = await http.post(Uri.parse(url), body: body, headers: headers);
-
         if (kDebugMode) {
           print("Response Status Code: ${response.statusCode}");
         }
         if (kDebugMode) {
           print("Response Body: ${response.body}");
         }
-
         if (response.statusCode != 200 || json.decode(response.body)['status'] != 200) {
           if (kDebugMode) {
             print("Response code for shortlist: ${response.body}");
