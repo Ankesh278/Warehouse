@@ -48,7 +48,6 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
       List<File> mediaFiles = [];
       mediaFiles.addAll(_pickedImages.map((xFile) => File(xFile.path)));
       mediaFiles.addAll(_pickedVideos.map((xFile) => File(xFile.path)));
-
       if (kDebugMode) {
         print("Number of media files: ${mediaFiles.length}");
       }
@@ -87,6 +86,7 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
         if (kDebugMode) {
           print("Response body: $responseString");
         }
+        if (!mounted) return;
         Navigator.push(context, MaterialPageRoute(builder: (context)=>AmenitiesWarehouse(id: id)));
 
         try {
@@ -104,15 +104,16 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
             print("Error parsing response JSON: $e");
           }
         }
-
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Photos and Videos Uploaded...'),
             backgroundColor: Colors.green,
           ),
         );
-        _clearAllFields();
 
+        _clearAllFields();
+        if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) =>  AmenitiesWarehouse(id:id)),
           (Route<dynamic> route) => false,
@@ -343,9 +344,6 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
                                           totalMedia = _pickedImages.length + _pickedVideos.length;
                                           _progress = (5.0 * totalMedia);
                                         });
-                                        if (kDebugMode) {
-                                          print("${S.of(context).select_media}: ${result.length}");
-                                        }
                                       }
                                     },
                                     child: Image.asset("assets/images/addphotos.png"),

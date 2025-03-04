@@ -5,6 +5,7 @@ import 'package:Lisofy/Warehouse/Partner/document_upload.dart';
 import 'package:Lisofy/Warehouse/User/notification_setting.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/photo_provider.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/rating_provider.dart';
+import 'package:Lisofy/Warehouse/User/post_property_page.dart';
 import 'package:Lisofy/Warehouse/User/userlogin.dart';
 import 'package:Lisofy/Warehouse/User/website_viewer.dart';
 import 'package:Lisofy/generated/l10n.dart';
@@ -257,31 +258,55 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                   ],
                                                 ),
                                               ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 15.0, top: 12),
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Container(
-                                                    height: screenHeight*0.03,
-                                                    width: screenWidth * 0.6,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              7),
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    PageRouteBuilder(
+                                                      transitionDuration: const Duration(milliseconds: 500),
+                                                      pageBuilder: (_, __, ___) => const PostYourPropertyScreen(),
+                                                      transitionsBuilder: (_, animation, __, child) {
+                                                        return SlideTransition(
+                                                          position: Tween<Offset>(
+                                                            begin: const Offset(0, 1),
+                                                            end: const Offset(0, 0),
+                                                          ).animate(CurvedAnimation(
+                                                            parent: animation,
+                                                            curve: Curves.easeOut,
+                                                          )),
+                                                          child: child,
+                                                        );
+                                                      },
                                                     ),
-                                                    child: Center(
-                                                        child: Text(
-                                                      S.of(context)
-                                                          .post_your_property_free,
-                                                      style: const TextStyle(
-                                                          color: Colors.blue,
-                                                          fontWeight:
-                                                              FontWeight.w900,
-                                                          fontSize: 8),
-                                                    )),
+                                                  );
+                                                },
+
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      left: 15.0, top: 12),
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Container(
+                                                      height: screenHeight*0.03,
+                                                      width: screenWidth * 0.6,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                7),
+                                                      ),
+                                                      child: Center(
+                                                          child: Text(
+                                                        S.of(context)
+                                                            .post_your_property_free,
+                                                        style: const TextStyle(
+                                                            color: Colors.blue,
+                                                            fontWeight:
+                                                                FontWeight.w900,
+                                                            fontSize: 8),
+                                                      )),
+                                                    ),
                                                   ),
                                                 ),
                                               )

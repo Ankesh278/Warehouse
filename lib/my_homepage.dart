@@ -1,4 +1,4 @@
-import 'package:Lisofy/Warehouse/Partner/OtpScreen.dart';
+import 'package:Lisofy/Warehouse/Partner/otp_screen.dart';
 import 'package:Lisofy/Warehouse/User/userlogin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -37,14 +37,20 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
-    return shouldExit ?? false;
+    return shouldExit;
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return await _showExitConfirmationDialog(context);
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _showExitConfirmationDialog(context).then((exit) {
+          if (exit && context.mounted) {
+            Navigator.of(context).pop(result);
+          }
+        });
       },
       child: Scaffold(
         backgroundColor: Colors.blue.shade300,

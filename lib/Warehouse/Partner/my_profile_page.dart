@@ -28,6 +28,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
       await prefs.remove('userEmail');
       await prefs.remove('userName');
       await prefs.setBool('isLoggedIn', false);
+      if (!context.mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) =>  const UserLogin()),
             (route) => false,
@@ -525,7 +526,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                       ),
                                     ),
                                     onTap: () async {
+                                      if (!context.mounted) return;
                                       bool shouldLogout = await _showLogoutConfirmationDialog(context);
+                                      if (!context.mounted) return;
                                       if (shouldLogout) {
                                         await _logoutAndRedirect(context);
                                       }

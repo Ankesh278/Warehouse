@@ -141,7 +141,7 @@ class _WarehouseServiceState extends State<WarehouseService> {
       if (kDebugMode) {
         print("Response: ${response.statusCode}, Body: ${response.body}");
       }
-
+      if (!mounted) return;
       Navigator.of(context).pop();
 
       if (response.statusCode == 200) {
@@ -210,6 +210,7 @@ class _WarehouseServiceState extends State<WarehouseService> {
     );
 
     Future.delayed(const Duration(seconds: 3), () {
+      if (!mounted) return;
       Navigator.of(context).pop();
       _navigateToHomeScreen();
     });
@@ -224,7 +225,7 @@ class _WarehouseServiceState extends State<WarehouseService> {
 
   Map<String, dynamic> _prepareBodyData() {
     return {
-      "Electricity": widget.electricity ?? "0.0",
+      "Electricity": widget.electricity,
       "Power_backup": widget.powerBackup.toLowerCase() == "yes",
       "Office_space": widget.provideOffice.toLowerCase() == "yes",
       "Dock_levelers": widget.dockLevelers.toLowerCase() == "yes",

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:Lisofy/Animation/glitter_border.dart';
+import 'package:Lisofy/Warehouse/User/customPainter/custom_dailog.dart';
 import 'package:Lisofy/Warehouse/User/partner_chooser_screen.dart';
 import 'package:Lisofy/Warehouse/User/user_home_page.dart';
 import 'package:Lisofy/Warehouse/User/user_profile_screen.dart';
@@ -15,7 +16,6 @@ class NewHomePage extends StatefulWidget {
   final dynamic longitude;
   final dynamic latitude;
   const NewHomePage({super.key,required this.latitude,required this.longitude});
-
   @override
   State<NewHomePage> createState() => NewHomePageState();
 }
@@ -23,8 +23,6 @@ class NewHomePage extends StatefulWidget {
 class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
-
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -76,7 +74,6 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-
     _pageControllerSlider = PageController(initialPage: _currentIndex);
     _transportController = PageController(initialPage: _transportIndex);
     _manpowerController = PageController(initialPage: _manpowerIndex);
@@ -89,7 +86,6 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
         _currentIndex = 0;
       }
     }, 3, const Duration(milliseconds: 3000), Curves.easeInOutCubicEmphasized);
-
     _startAutoSlide(_transportController, () {
       if (_transportIndex < _transportImages.length - 1) {
         _transportIndex++;
@@ -97,7 +93,6 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
         _transportIndex = 0;
       }
     }, 4, const Duration(milliseconds: 200), Curves.slowMiddle);
-
     _startAutoSlide(_manpowerController, () {
       if (_manpowerIndex < _manPowerImages.length - 1) {
         _manpowerIndex++;
@@ -267,6 +262,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                     height: screenHeight*0.037,
                                     child: TextButton(
                                       onPressed: () async{
+                                        ///WarehousePartner
                                         Navigator.push(context, MaterialPageRoute(builder: (context)=>const PartnerChooserScreen()));
                                       },
                                       style: TextButton.styleFrom(
@@ -297,7 +293,6 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                         ),
                       ),
                     ),
-                    //
                   ],
                 ),
               ),
@@ -383,11 +378,14 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                   ),
                                   child: InkWell(
                                     onTap: (){
-                                      Fluttertoast.showToast(
-                                        msg: "Coming soon!",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.green,
+                                      ///Transport Page Navigation to Partner
+                                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookingScreen()));
+                                      showCustomDialog(
+                                          context,
+                                          'Transportation',
+                                          '. Get ready for Effortless Truck Booking at your FingerTips!',
+                                          '. Easy fast and Reliable Transport just for you.',
+                                          '. No more Hassles Seamlessly Book Track and manage Shipment'
                                       );
                                     },
                                     child: Column(
@@ -438,11 +436,12 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                     ),
                                     child: InkWell(
                                       onTap: (){
-                                        Fluttertoast.showToast(
-                                          msg: "Coming soon!",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          backgroundColor: Colors.green,
+                                        showCustomDialog(
+                                          context,
+                                          'Manpower',
+                                          '. Your trusted partner in Land Transactions simplified and secure!',
+                                          '. Buy and sell land with confidence, Transparency and ease',
+                                          '. Seamless transaction and Expert Guidance at every step.'
                                         );
                                       },
                                       child: Column(
@@ -488,11 +487,12 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                     ),
                                     child: InkWell(
                                       onTap: (){
-                                        Fluttertoast.showToast(
-                                          msg: "Coming soon!",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          backgroundColor: Colors.green,
+                                        showCustomDialog(
+                                            context,
+                                            'Agriculture',
+                                            '. Your trusted partner in Land Transactions Simplified and secure',
+                                            '. Buy and sell Land with confidence Transparency and Ease.',
+                                            '. Seamless Transactions and Expert Guidance at Every step'
                                         );
                                       },
                                       child: Column(

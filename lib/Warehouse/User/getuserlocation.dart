@@ -23,50 +23,52 @@ class _GetUserLocationState extends State<GetUserLocation> {
     _getCurrentLocation();
   }
   Future<void> _getCurrentLocation() async {
+    if (!mounted) return;
     setState(() {
       loading = true;
     });
-
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission != LocationPermission.whileInUse &&
           permission != LocationPermission.always) {
+        if (!mounted) return;
         setState(() {
           loading = false;
         });
         return;
       }
     }
-    try {
-      final navigator = Navigator.of(context);
 
-      position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+    try {
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
 
-      if (!context.mounted) return;
+      if (!mounted) return;
 
       setState(() {
         loading = false;
-        _coordinates = 'Latitude: ${position?.latitude}, Longitude: ${position?.longitude}';
+        _coordinates =
+        'Latitude: ${position.latitude}, Longitude: ${position.longitude}';
       });
 
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      await pref.setDouble('latitude', position!.latitude);
-      await pref.setDouble('longitude', position!.longitude);
-
-      if (!context.mounted) return;
-      navigator.push(
+      final pref = await SharedPreferences.getInstance();
+      await pref.setDouble('latitude', position.latitude);
+      await pref.setDouble('longitude', position.longitude);
+      if (!mounted) return;
+      Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => NewHomePage(
-            longitude: position?.longitude,
-            latitude: position?.latitude,
+          builder: (context) => NewHomePage(
+            longitude: position.longitude,
+            latitude: position.latitude,
           ),
         ),
       );
     } catch (e) {
-      if (!context.mounted) return;
+      if (!mounted) return;
 
       setState(() {
         loading = false;
@@ -78,7 +80,6 @@ class _GetUserLocationState extends State<GetUserLocation> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

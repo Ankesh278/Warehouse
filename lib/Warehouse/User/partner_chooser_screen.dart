@@ -245,9 +245,10 @@ class ComingSoonDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.of(context).pop();
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
     });
-
     return Dialog(
       backgroundColor: Colors.transparent,
       child: TweenAnimationBuilder(

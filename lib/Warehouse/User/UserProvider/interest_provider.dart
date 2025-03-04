@@ -90,6 +90,7 @@ class CartProvider with ChangeNotifier {
 
       _shortlistedWarehouses[warehouseId] = !isCurrentlyShortlisted;
       notifyListeners();
+      if (!context.mounted) return;
       if (!isCurrentlyShortlisted && !isUndo) {
         if (kDebugMode) {
           print("Warehouse added to shortlist");

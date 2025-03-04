@@ -36,5 +36,19 @@ class ImageAssets{
   static const String appLogo = 'assets/images/appLogo.png';
   static const String worldWideLocation = 'assets/images/Worldwidelocation.png';
   static const String storage = 'assets/images/storage.png';
+  static const String backgroundUpper = 'assets/images/backgroundUpper.png';
+  static const String warehouseAds = 'assets/images/secondAds.png';
+  static const String phoneHand = 'assets/images/phoneHand.png';
+  static const String locality = 'assets/images/locality.png';
+  static const String taskList = 'assets/images/taskList.png';
+  static const String free = 'assets/images/free.png';
+  static const String chemical = 'assets/icon/chemical.png';
+  static const String solar = 'assets/icon/solar.png';
+  static const String workplace = 'assets/icon/house.png';
+  static const String chimney = 'assets/icon/industry.png';
+  static const String electricPanel = 'assets/icon/electric.png';
+  static const String whatsapp = 'assets/images/whatsapp.png';
+  static const String comingSoonCircle = 'assets/images/comingSoonCircle.png';
+
 
 }

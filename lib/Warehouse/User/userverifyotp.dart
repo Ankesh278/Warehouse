@@ -4,6 +4,7 @@ import 'package:Lisofy/Warehouse/Partner/partner_registration_screen.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/photo_provider.dart';
 import 'package:Lisofy/Warehouse/User/getuserlocation.dart';
 import 'package:Lisofy/Warehouse/User/models/user_data_model.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,7 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
 
           if (responseData['message'] == "Register Successfully") {
             await _storeUserData(true);
+            trackButtonClick('OtpVerifyButton');
             _navigateTo(context, PartnerRegistrationScreen(phone: widget.phoneNumber));
           } else if (responseData['message'] == "Data retrieved successfully") {
             if (responseData['data'] != null && responseData['data'] is List) {
@@ -412,4 +414,14 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
       ),
     );
   }
+
+  void trackButtonClick(String buttonName) async {
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'button_click',
+      parameters: {
+        'VerifyOtp': buttonName,
+      },
+    );
+  }
+
 }

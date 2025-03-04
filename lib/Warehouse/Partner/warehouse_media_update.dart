@@ -161,7 +161,6 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
         }
       }
 
-      // Add already uploaded media paths (if applicable)
       if (_uploadedImages.isNotEmpty) {
         for (var imagePath in _uploadedImages) {
           request.fields['uploadedImages[]'] = imagePath;
@@ -192,7 +191,7 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
           _isUploading = false;
         });
 
-        if (mounted) {
+        if (context.mounted) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -200,6 +199,7 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
             ),
           );
         }
+
 
         _clearAllFields();
       } else {

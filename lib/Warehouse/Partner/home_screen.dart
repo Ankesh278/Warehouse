@@ -1,10 +1,10 @@
 import 'package:Lisofy/Warehouse/Partner/help_page.dart';
-import 'package:Lisofy/Warehouse/Partner/my_profile_page.dart';
 import 'package:Lisofy/Warehouse/Partner/notification_screen.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/warehouse_provider.dart';
 import 'package:Lisofy/Warehouse/Partner/add_warehouse.dart';
 import 'package:Lisofy/Warehouse/Partner/models/warehouses_model.dart';
 import 'package:Lisofy/Warehouse/Partner/warehouse_update.dart';
+import 'package:Lisofy/Warehouse/User/user_profile_screen.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:Lisofy/new_home_page.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
@@ -55,6 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     userName = pref.getString("name") ?? "Default Name";
+    if (kDebugMode) {
+      print("Name$userName");
+    }
     latitude = pref.getDouble("latitude") ?? 0.0;
     longitude = pref.getDouble("longitude") ?? 0.0;
   }
@@ -322,11 +325,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               margin:
                                   EdgeInsets.only(left: screenWidth * 0.030),
                               child: Text(
-                                userName.isNotEmpty
+                                (userName.isNotEmpty)
                                     ? (userName.length > 7
-                                        ? '${userName.substring(0, 7)}...'
-                                        : userName)
-                                    : 'Guest',
+                                    ? '${userName.substring(0, 7)}...'
+                                    : userName)
+                                    : 'Guest'
+                                ,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -347,6 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: SizedBox(
                               height: 35,
                               child: TextFormField(
+                                enabled: false,
                                 controller: _searchController,
                                 decoration: InputDecoration(
                                   hintText: S.of(context).search_by_location,
@@ -706,9 +711,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     print(
                                       "availability${warehouse.isAvailableForRent}");
                                   }
-                                  bool isavail = warehouseProvider
-                                          .warehouseStatus[warehouse.id] ??
-                                      warehouse.isAvailableForRent;
+                                  // bool isavail = warehouseProvider.warehouseStatus[warehouse.id] ??
+                                  //     warehouse.isAvailableForRent;
 
                                   return GestureDetector(
                                     onTap: () {
@@ -865,39 +869,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             width: screenWidth *
                                                                 0.05),
                                                         Text(
-                                                          warehouse.warehouseCarpetArea !=
-                                                                  null
-                                                              ? (warehouse.warehouseCarpetArea
-                                                                          .toString()
-                                                                          .length > 6
-                                                                  ? '${warehouse.warehouseCarpetArea.toString().substring(0, 6)}... sq.ft'
-                                                                  : '${warehouse.warehouseCarpetArea} sq.ft')
-                                                              : 'N/A',
+                                                          warehouse.warehouseCarpetArea.toString().length > 6
+                                                              ? '${warehouse.warehouseCarpetArea.toString().substring(0, 6)}... sq.ft'
+                                                              : '${warehouse.warehouseCarpetArea} sq.ft',
                                                           style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w500,
+                                                            fontWeight: FontWeight.w500,
                                                             color: Colors.black,
                                                             fontSize: 15,
                                                           ),
                                                         ),
                                                         const Spacer(),
                                                         Text(
-                                                          warehouse.wHouseRentPerSQFT !=
-                                                                  null
-                                                              ? (warehouse.wHouseRentPerSQFT
-                                                                          .toString()
-                                                                          .length >
-                                                                      6
-                                                                  ? '₹ ${warehouse.wHouseRentPerSQFT.toString().substring(0, 6)}...'
-                                                                  : '₹ ${warehouse.wHouseRentPerSQFT}')
-                                                              : '₹ N/A',
+                                                          warehouse.wHouseRentPerSQFT.toString().length > 6
+                                                              ? '₹ ${warehouse.wHouseRentPerSQFT.toString().substring(0, 6)}...'
+                                                              : '₹ ${warehouse.wHouseRentPerSQFT}',
                                                           style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w500,
+                                                            fontWeight: FontWeight.w500,
                                                             color: Colors.black,
                                                             fontSize: 15,
                                                           ),
                                                         ),
+
+
                                                         SizedBox(
                                                             width:
                                                                 screenWidth * 0.1)
@@ -1092,6 +1085,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             .id
                                                                             .toString(),
                                                                         !value);
+                                                                if (!context.mounted) return;
                                                                 ScaffoldMessenger
                                                                         .of(context)
                                                                     .showSnackBar(
@@ -1145,7 +1139,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildAccountPage(double screenWidth, double screenHeight) {
-    return const MyProfilePage();
+    return const UserProfileScreen();
   }
 
   Future<void> updateWarehouseStatus(String warehouseId, bool status) async {

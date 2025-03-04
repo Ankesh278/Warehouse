@@ -38,8 +38,9 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
   final TextEditingController _dateController = TextEditingController();
   DateTime? _selectedDate;
 
-  ///Post intrest data of the user
+  ///Post interest data of the user
   Future<void> postWarehouseData() async {
+    if (!context.mounted) return;
     Map<String, dynamic> data = {
       "warehouse_Id": widget.id,
       "Name": widget.name.toString(),
@@ -63,6 +64,7 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
         },
         body: jsonEncode(data),
       );
+      if (!context.mounted) return;
       if (response.statusCode == 200) {
         if (kDebugMode) {
           print('Data posted successfully!');
@@ -83,93 +85,108 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
     }
   }
 
-  void showCongratulationsDialog(BuildContext context) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    double? latitude = pref.getDouble("latitude");
-    double? longitude = pref.getDouble("longitude");
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          elevation: 10,
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Colors.blueAccent, Colors.purpleAccent],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+  void showCongratulationsDialog(BuildContext context) {
+    if (!context.mounted) return;
+
+    SharedPreferences.getInstance().then((pref) {
+      if (!context.mounted) return;
+
+      double? latitude = pref.getDouble("latitude");
+      double? longitude = pref.getDouble("longitude");
+
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext dialogContext) {
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            elevation: 10,
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Colors.blueAccent, Colors.purpleAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(20),
               ),
-              borderRadius: BorderRadius.circular(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(ImageAssets.intrest),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Congratulations!',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Your warehouse has been added successfully. Our team will connect with you shortly!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16, color: Colors.white70),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (dialogContext.mounted) {
+                        Navigator.of(dialogContext).pop();
+                        Navigator.pushAndRemoveUntil(
+                          dialogContext,
+                          MaterialPageRoute(
+                            builder: (context) => UserHomePage(
+                              latitude: latitude ?? 0.0,
+                              longitude: longitude ?? 0.0,
+                            ),
+                          ),
+                              (Route<dynamic> route) => false,
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.blueAccent,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      elevation: 5,
+                    ),
+                    child: const Text(
+                      'Continue Browsing',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(ImageAssets.intrest),
-                const SizedBox(height: 10),
-                const Text(
-                  'Congratulations!',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Your warehouse has been added successfully. Our team will connect with you shortly!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: Colors.white70),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UserHomePage(
-                            latitude: latitude!, longitude: longitude!),
-                      ),
-                      (Route<dynamic> route) => false,
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.blueAccent,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    elevation: 5,
-                  ),
-                  child: const Text(
-                    'Continue Browsing',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
+          );
+        },
+      );
+
+      // Auto-close dialog and navigate after 5 seconds
+      Future.delayed(const Duration(seconds: 5), () {
+        if (context.mounted && Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UserHomePage(
+                latitude: latitude ?? 0.0,
+                longitude: longitude ?? 0.0,
+              ),
             ),
-          ),
-        );
-      },
-    );
-    Future.delayed(const Duration(seconds: 5), () {
-      if (Navigator.of(context).canPop()) {
-        Navigator.of(context).pop();
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  UserHomePage(latitude: latitude!, longitude: longitude!)),
-          (Route<dynamic> route) => false,
-        );
-      }
+                (Route<dynamic> route) => false,
+          );
+        }
+      });
     });
   }
+
+
+
   void _selectDate(BuildContext context) async {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;

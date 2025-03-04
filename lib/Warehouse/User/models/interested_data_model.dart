@@ -26,7 +26,7 @@ class InterestedModel {
   final String wHouseTokenAdvance;
   final String wHouseLockinPeriod;
   final String currentAddress;
-  final String filePath; // Converted to a list of file paths
+  final String filePath;
   final double warehouseCarpetArea;
   final String mobile;
   final String image;

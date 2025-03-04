@@ -49,10 +49,15 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
       ).then((value) => value ?? false);
     }
 
-    return WillPopScope(
-      onWillPop: () async {
-        bool exit = await showExitDialog(context);
-        return exit;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        showExitDialog(context).then((exit) {
+          if (exit && context.mounted) {
+            Navigator.of(context).pop(result);
+          }
+        });
       },
       child: Scaffold(
         body: Stack(
@@ -211,6 +216,7 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
                                           try {
                                             final response = await http
                                                 .put(Uri.parse(apiUrl));
+                                            if (!context.mounted) return;
                                             if (response.statusCode == 200) {
                                               final responseData =
                                                   jsonDecode(response.body);
@@ -222,6 +228,7 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
                                                 prefs.setString("name", name);
                                                 prefs.setString(
                                                     "mobile", widget.phone);
+                                                if (!context.mounted) return;
                                                 Navigator.pushAndRemoveUntil(
                                                   context,
                                                   MaterialPageRoute(

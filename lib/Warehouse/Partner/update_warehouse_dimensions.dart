@@ -23,7 +23,7 @@ class UpdateWarehouseDimensions extends StatefulWidget {
   final String dockLevelers;
   final String cluDocument;
   final String fireComplaint;
-  final int Id ;
+  final int id ;
   final Warehouse warehouse;
   const UpdateWarehouseDimensions({super.key,
     required this.electricity,
@@ -39,7 +39,7 @@ class UpdateWarehouseDimensions extends StatefulWidget {
     required this.dockLevelers,
     required this.fireComplaint,
     required this.cluDocument,
-    required this.Id,
+    required this.id,
     required this.warehouse,
   });
 
@@ -153,6 +153,10 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
       if (kDebugMode) {
         print("Response: ${response.statusCode}, Body: ${response.body}");
       }
+
+      // Check if the widget is still mounted before using the context
+      if (!mounted) return;
+
       Navigator.of(context).pop();
       if (response.statusCode == 200) {
         _showSuccessPopup();
@@ -161,6 +165,9 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
       if (kDebugMode) {
         print("Error: $error");
       }
+
+      if (!mounted) return;
+
       Navigator.of(context).pop();
     }
   }
@@ -221,6 +228,7 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
 
 
     Future.delayed(const Duration(seconds: 2), () {
+      if (!mounted) return;
       Navigator.of(context).pop();
       _navigateToHomeScreen();
     });
@@ -236,7 +244,7 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
 
   Map<String, dynamic> _prepareBodyData() {
     return {
-      "Electricity": widget.electricity ?? "Unknown",
+      "Electricity": widget.electricity,
       "Power_backup": widget.powerBackup.toLowerCase() == "yes",
       "Office_space": widget.provideOffice.toLowerCase() == "yes",
       "Dock_levelers": widget.dockLevelers.toLowerCase() == "yes",

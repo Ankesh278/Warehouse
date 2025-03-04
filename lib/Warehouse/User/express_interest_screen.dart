@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExpressInterestScreen extends StatefulWidget {
-  final id;
+  final dynamic id;
   const ExpressInterestScreen({super.key, required this.id});
   @override
   State<ExpressInterestScreen> createState() => _ExpressInterestScreenState();
@@ -34,18 +34,25 @@ class _ExpressInterestScreenState extends State<ExpressInterestScreen> {
   Future<void> _loadPrefilledValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? prefilledValue = prefs.getString('phone');
-    phoneController.text = prefilledValue!;
-    if (kDebugMode) {
-      print("Data$prefilledValue");
-    }
-    if (prefilledValue!.startsWith("+91")) {
-      prefilledValue = prefilledValue.replaceFirst("+91", "");
-      if (kDebugMode) {
-        print("Prefilled>>>>>>>>$prefilledValue");
-      }
+    if (prefilledValue != null && prefilledValue.isNotEmpty) {
       phoneController.text = prefilledValue;
+      if (kDebugMode) {
+        print("Data: $prefilledValue");
+      }
+      if (prefilledValue.startsWith("+91")) {
+        prefilledValue = prefilledValue.replaceFirst("+91", "");
+        if (kDebugMode) {
+          print("Prefilled (without +91): $prefilledValue");
+        }
+        phoneController.text = prefilledValue;
+      }
+    } else {
+      if (kDebugMode) {
+        print("No prefilled phone number found.");
+      }
     }
   }
+
 
   List<String> possessions = [
     'Immediate',

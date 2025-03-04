@@ -312,7 +312,7 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
                                       dockLevelers: dockLevelers,
                                       fireComplaint: fireComplaint,
                                       cluDocument: cluDocument,
-                                      Id: widget.warehouse.wHouseId,
+                                      id: widget.warehouse.wHouseId,
                                       warehouse: widget.warehouse,
                                     ),
                                   ),

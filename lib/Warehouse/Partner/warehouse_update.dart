@@ -187,9 +187,9 @@ class _WarehouseUpdateState extends State<WarehouseUpdate> {
       double carpetArea = double.tryParse(_carpetAreaController.text) ?? 0.0;
       String totalArea = _totalArea.text.toString().trim();
       double rentPerSqFt = double.tryParse(_rentPerSqFt.text.trim()) ?? 0.0;
-      String maintenanceCostValue = _maintenanceCost.text.toString().trim() ?? "0.0";
-      String expectedSecurityDepositValue = _expectedSecurityDeposit.text.toString() ?? "0.0";
-      String tokenAdvanceValue = _tokenAdvance.text.toString().trim() ?? "0.0";
+      String maintenanceCostValue = _maintenanceCost.text.toString().trim();
+      String expectedSecurityDepositValue = _expectedSecurityDeposit.text.toString();
+      String tokenAdvanceValue = _tokenAdvance.text.toString().trim();
       int lockInPeriodValue = _lockinNumber;
       String warehouseNameValue = _warehouseName.text.toString().trim();
       String graundFloor = groundFloor.trim();
@@ -240,6 +240,7 @@ class _WarehouseUpdateState extends State<WarehouseUpdate> {
             if (kDebugMode) {
               print('Data Updated successfully');
             }
+            if (!mounted) return;
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) =>  WarehouseMediaUpdate(warehouse:widget.warehouse)),
@@ -258,6 +259,7 @@ class _WarehouseUpdateState extends State<WarehouseUpdate> {
             if (kDebugMode) {
               print('Failed to submit data: ${response.statusCode}');
             }
+            if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Failed to upload data. Please try again.'),
@@ -280,6 +282,7 @@ class _WarehouseUpdateState extends State<WarehouseUpdate> {
         if (kDebugMode) {
           print('Error occurred: $e');
         }
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('An error occurred. Please try again.'),
@@ -470,8 +473,10 @@ class _WarehouseUpdateState extends State<WarehouseUpdate> {
                                         });
                                         LatLng selectedLocation = result.latLng;
                                         String selectedAddress = result.address;
-                                        final locationProvider = Provider.of<LocationProvider>(context, listen: false);
-                                        locationProvider.updateLocation(selectedAddress, selectedLocation);
+                                        if (context.mounted) {
+                                          final locationProvider = Provider.of<LocationProvider>(context, listen: false);
+                                          locationProvider.updateLocation(selectedAddress, selectedLocation);
+                                        }
                                         if (kDebugMode) {
                                           print("Selected Location: ${selectedLocation.latitude}, ${selectedLocation.longitude}");
                                         }

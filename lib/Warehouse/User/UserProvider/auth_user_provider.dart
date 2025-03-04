@@ -39,27 +39,33 @@ class AuthUserProvider extends ChangeNotifier {
     setLoading(true);
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser != null) {
-        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      if (googleUser == null) {
+        setLoading(false);
+        return;
+      }
 
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-        final UserCredential userCredential = await _auth.signInWithCredential(credential);
-        final User? user = userCredential.user;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
 
-        if (user != null) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('email', user.email ?? '');
-          await prefs.setString('Name', user.displayName ?? '');
-          await prefs.setBool('isUserLoggedIn', true);
+      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      final User? user = userCredential.user;
 
+      if (user != null) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('email', user.email ?? '');
+        await prefs.setString('Name', user.displayName ?? '');
+        await prefs.setBool('isUserLoggedIn', true);
+
+        if (context.mounted) {
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const GetUserLocation()),
                 (route) => false,
           );
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Signed in successfully with ${user.email}'),
@@ -71,9 +77,12 @@ class AuthUserProvider extends ChangeNotifier {
     } catch (e) {
       setErrorMessage('Something went wrong. Please try again.');
     } finally {
-      setLoading(false);
+      if (context.mounted) {
+        setLoading(false);
+      }
     }
   }
+
   Future<void> verifyPhoneNumber(String phoneNumber, BuildContext context) async {
     setLoading(true);
     try {

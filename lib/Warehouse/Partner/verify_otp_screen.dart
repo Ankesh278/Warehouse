@@ -64,6 +64,7 @@ class VerifyOtpScreenState extends State<VerifyOtpScreen> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
         await prefs.setString('phone', widget.phoneNumber);
+        if (!mounted) return;
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const PartnerRegistrationScreen(phone: '',)),
@@ -73,7 +74,7 @@ class VerifyOtpScreenState extends State<VerifyOtpScreen> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
         await prefs.setString('phone', widget.phoneNumber);
-
+        if (!mounted) return;
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const PartnerRegistrationScreen(phone: '',)),

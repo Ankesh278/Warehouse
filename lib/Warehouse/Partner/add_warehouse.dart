@@ -309,7 +309,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => HelpPage()));
+                                            builder: (context) => const HelpPage()));
                                   },
                                 ),
                               ],
@@ -399,7 +399,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                LocationSelectionScreen()),
+                                                const LocationSelectionScreen()),
                                       );
                                       if (result != null &&
                                           result is LocationData) {
@@ -408,8 +408,11 @@ class _AddWareHouseState extends State<AddWareHouse> {
                                         });
                                         LatLng selectedLocation = result.latLng;
                                         String selectedAddress = result.address;
-                                        final locationProvider = Provider.of<LocationProvider>(context, listen: false);
-                                        locationProvider.updateLocation(
+                                        LocationProvider? locationProvider;
+                                        if (context.mounted) {
+                                          locationProvider = Provider.of<LocationProvider>(context, listen: false);
+                                        }
+                                        locationProvider?.updateLocation(
                                             selectedAddress, selectedLocation);
                                         setState(() {
                                           fullAddress = selectedAddress;

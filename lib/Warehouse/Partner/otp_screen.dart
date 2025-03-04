@@ -97,25 +97,25 @@ class _OTPScreenState extends State<OTPScreen> {
                                   children: [
                                     Container(
                                       padding: EdgeInsets.symmetric(
-                                        horizontal: screenWidth * 0.065, // Adjusted for responsiveness
-                                        vertical: screenHeight * 0.015, // Adjusted for responsiveness
+                                        horizontal: screenWidth * 0.065,
+                                        vertical: screenHeight * 0.015,
                                       ),
                                       child: TextField(
                                         controller: TextEditingController(text: '(+91) India'),
                                         readOnly: true,
                                         decoration: const InputDecoration(
-                                          border: InputBorder.none, // Remove the default border
+                                          border: InputBorder.none,
                                           enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.blue), // Bottom border color
+                                            borderSide: BorderSide(color: Colors.blue),
                                           ),
                                           focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.blue), // Bottom border color when focused
+                                            borderSide: BorderSide(color: Colors.blue),
                                           ),
                                         ),
                                         style: TextStyle(
                                           color: Colors.blue,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: screenWidth * 0.04, // Adjusted for responsiveness
+                                          fontSize: screenWidth * 0.04,
                                         ), // Color of the text
                                       ),
                                     ),
@@ -158,7 +158,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                     SizedBox(height: screenHeight * 0.04),
                                     Consumer<AuthProvider>(
                                       builder: (context, authProvider, child) {
-                                        return Container(
+                                        return SizedBox(
                                           height: screenHeight * 0.06,
                                           child: ElevatedButton(
                                             onPressed: () {
