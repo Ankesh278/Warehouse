@@ -217,6 +217,7 @@ class _GetUserLocationState extends State<GetUserLocation> {
                       child: Padding(
                         padding: EdgeInsets.all(screenWidth * 0.04),
                         child: SingleChildScrollView(
+                          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                           child: Column(
                             children: [
                               Padding(

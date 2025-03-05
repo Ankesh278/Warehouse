@@ -413,6 +413,7 @@ class _WarehouseUpdateState extends State<WarehouseUpdate> {
                         child: Padding(
                           padding: EdgeInsets.all(screenWidth * 0.04),
                           child: SingleChildScrollView(
+                            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                             child: Form(
                               key: _formKey,
                               child: Column(

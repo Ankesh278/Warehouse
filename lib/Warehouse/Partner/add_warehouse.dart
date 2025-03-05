@@ -346,6 +346,7 @@ class _AddWareHouseState extends State<AddWareHouse> {
                         child: Padding(
                           padding: EdgeInsets.all(screenWidth * 0.05),
                           child: SingleChildScrollView(
+                            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                             child: Form(
                               key: _formKey,
                               child: Column(

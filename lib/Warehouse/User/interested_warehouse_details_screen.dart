@@ -205,6 +205,7 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                         child: Padding(
                           padding: EdgeInsets.all(screenWidth * 0.04),
                           child: SingleChildScrollView(
+                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                               child: Column(
                                 children: [
                                   SizedBox(

@@ -329,6 +329,7 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
               padding: EdgeInsets.symmetric(vertical: screenHeight * 0.005,
                   horizontal: screenWidth * 0.045),
               child: SingleChildScrollView(
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

@@ -605,6 +605,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? Padding(
                                 padding: EdgeInsets.all(screenWidth * 0.04),
                                 child: SingleChildScrollView(
+                                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [

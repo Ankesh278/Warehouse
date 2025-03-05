@@ -261,6 +261,7 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                         child: Padding(
                           padding: EdgeInsets.all(screenWidth * 0.04),
                           child: SingleChildScrollView(
+                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                               child: Column(
                             children: [
                               SizedBox(
@@ -363,6 +364,7 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                     ),
                                     const SizedBox(height: 10),
                                     SingleChildScrollView(
+                                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                       scrollDirection: Axis.horizontal,
                                       child: Row(
                                         mainAxisAlignment:

@@ -530,6 +530,7 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
                               ],
                             ),
                             SingleChildScrollView(
+                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                               scrollDirection:Axis.horizontal,
                               child: Container(
                                 margin: EdgeInsets.only(
@@ -565,6 +566,7 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
                         child: Padding(
                           padding: EdgeInsets.all(screenWidth * 0.04),
                           child: SingleChildScrollView(
+                            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[

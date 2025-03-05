@@ -177,6 +177,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(0),
                             child: SingleChildScrollView(
+                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -1459,6 +1460,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   )
                 : ElevatedButton(
                     onPressed: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
                       if (!ratingProvider.isSubmitted&& !ratingProvider.isEditing) {
                         ratingProvider.submitFeedback(phone);
                       } else {

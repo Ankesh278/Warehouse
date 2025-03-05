@@ -161,6 +161,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                           child: Padding(
                             padding: EdgeInsets.all(screenWidth * 0.06),
                             child: SingleChildScrollView(
+                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,

@@ -296,6 +296,7 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
                       child: Padding(
                           padding: const EdgeInsets.only(top:10),
                         child: SingleChildScrollView(
+                          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                           child: Column(
                             children: [
                               Padding(

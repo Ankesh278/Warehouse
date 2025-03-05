@@ -194,6 +194,7 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
                 ),
                 padding: const EdgeInsets.all(20),
                 child: SingleChildScrollView(
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

@@ -189,6 +189,7 @@ class _SearchLocationUserState extends State<SearchLocationUser> {
                           child: Padding(
                             padding: EdgeInsets.all(screenWidth * 0.06),
                             child: SingleChildScrollView(
+                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                               child: Column(
                                 children: [
                                   SizedBox(height: screenHeight*0.02),

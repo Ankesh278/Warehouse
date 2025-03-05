@@ -14,6 +14,13 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty("android")) {
+            project.android.compileSdk = 34
+        }
+    }
+}
 
 allprojects {
     repositories {
@@ -31,6 +38,9 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
+
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+

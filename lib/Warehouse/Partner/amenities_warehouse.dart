@@ -149,6 +149,7 @@ class _AmenitiesWarehouseState extends State<AmenitiesWarehouse> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children:  [
                 SingleChildScrollView(
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [

@@ -98,6 +98,7 @@ class DocumentUploadState extends State<DocumentUpload> {
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal:screenWidth * 0.08,vertical: screenHeight*0.03),
                           child: SingleChildScrollView(
+                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                               child: Form(
                                 key: _formKey,
                                 child: Column(

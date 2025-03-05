@@ -146,6 +146,7 @@ class _UserLoginState extends State<UserLogin> {
                         padding: EdgeInsets.all(
                             screenWidth * 0.04),
                         child: SingleChildScrollView(
+                          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                           child: Form(
                             key: _formKey,
                             child: Column(

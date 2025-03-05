@@ -96,7 +96,7 @@ class AuthUserProvider extends ChangeNotifier {
           if (kDebugMode) {
             print("Error occurred here${e.message}");
           }
-          setErrorMessage("Some error occurred here");
+          setErrorMessage("Some error occurred here,Check network connection once..");
           setLoading(false);
         },
         codeSent: (String verificationId, int? resendToken) {
