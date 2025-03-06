@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "aadhaar_back": MessageLookupByLibrary.simpleMessage("ആധാർ ബാക്ക്"),
+    "aadhaar_front": MessageLookupByLibrary.simpleMessage("ആധാർ ഫ്രണ്ട്"),
     "account": MessageLookupByLibrary.simpleMessage("അക്കൗണ്ട്"),
     "add_additional_details": MessageLookupByLibrary.simpleMessage(
       "കൂടുതൽ ക്ലയന്റ്‌സ് ആകർഷിക്കാൻ അധിക വിവരങ്ങൾ ചേർക്കുക",
@@ -121,6 +123,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "ഡോക്കുകളുടെ ഉയരം (ഫീറ്റിൽ)",
     ),
     "done": MessageLookupByLibrary.simpleMessage("പൂർത്തിയായി"),
+    "edit_feedback": MessageLookupByLibrary.simpleMessage(
+      "പ്രതികരണം എഡിറ്റ് ചെയ്യുക",
+    ),
     "edit_profile": MessageLookupByLibrary.simpleMessage(
       "പ്രൊഫൈൽ എഡിറ്റ് ചെയ്യുക",
     ),
@@ -277,6 +282,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "parking_land": MessageLookupByLibrary.simpleMessage("പാർക്കിംഗ് ഭൂമി"),
     "payments": MessageLookupByLibrary.simpleMessage("പണം"),
     "peb": MessageLookupByLibrary.simpleMessage("PEB"),
+    "phone_notification": MessageLookupByLibrary.simpleMessage("ഫോൺ അറിയിപ്പ്"),
     "phone_notifications": MessageLookupByLibrary.simpleMessage(
       "ഫോൺ അറിയിപ്പുകൾ",
     ),
@@ -377,6 +383,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "terms_and_conditions": MessageLookupByLibrary.simpleMessage(
       "നിബന്ധനകളും വ്യവസ്ഥകളും",
     ),
+    "thanks_for_feedback": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങളുടെ പ്രതികരണത്തിന് നന്ദി!",
+    ),
     "toilets": MessageLookupByLibrary.simpleMessage("ശൗചാലയങ്ങൾ"),
     "token_advance": MessageLookupByLibrary.simpleMessage("ടോകൺ അഡ്വാൻസ്"),
     "total_area": MessageLookupByLibrary.simpleMessage("മൊത്തം പ്രദേശം"),
@@ -458,6 +467,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "warehouse_power_backup": MessageLookupByLibrary.simpleMessage(
       "നിങ്ങളുടെ ഗോഡാമിന് പവർ ബാക്കപ്പ് ഉണ്ടോ?",
     ),
+    "warehouse_published": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങളുടെ ഗുടാം വിജയകരമായി പ്രസിദ്ധീകരിച്ചു",
+    ),
     "warehouse_published_success": MessageLookupByLibrary.simpleMessage(
       "നിങ്ങളുടെ വെയർഹൗസ് വിജയകരമായി പ്രസിദ്ധീകരിച്ചു",
     ),
@@ -489,6 +501,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "ഒരു മൂല്യപ്പെട്ട വാക്കുകൾ എഴുതുക...(ഉദാ: സേവനം ഇഷ്ടപ്പെട്ടു!)",
     ),
     "yes": MessageLookupByLibrary.simpleMessage("ആം"),
+    "your_changes_saved": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങളുടെ മാറ്റങ്ങൾ വിജയകരമായി സംരക്ഷിച്ചു",
+    ),
     "your_comment": MessageLookupByLibrary.simpleMessage("നിങ്ങളുടെ കമന്റ്"),
     "your_comments_and_ratings_help_us_to_improve":
         MessageLookupByLibrary.simpleMessage(

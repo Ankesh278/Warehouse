@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "aadhaar_back": MessageLookupByLibrary.simpleMessage("ਆਧਾਰ ਪਿੱਛੇ"),
+    "aadhaar_front": MessageLookupByLibrary.simpleMessage("ਆਧਾਰ ਅੱਗੇ"),
     "account": MessageLookupByLibrary.simpleMessage("ਖਾਤਾ"),
     "add_additional_details": MessageLookupByLibrary.simpleMessage(
       "ਜ਼ਿਆਦਾ ਗਾਹਕਾਂ ਨੂੰ ਆਕਰਸ਼ਿਤ ਕਰਨ ਲਈ ਵਾਧੂ ਵਿਵਰਣ ਸ਼ਾਮਿਲ ਕਰੋ",
@@ -119,6 +121,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ਡੌਕਸ ਦੀ ਉਚਾਈ (ਫੀਟ ਵਿੱਚ)",
     ),
     "done": MessageLookupByLibrary.simpleMessage("ਮੁਕੰਮਲ"),
+    "edit_feedback": MessageLookupByLibrary.simpleMessage("ਪ੍ਰਤੀਕ੍ਰਿਆ ਸੋਧੋ"),
     "edit_profile": MessageLookupByLibrary.simpleMessage(
       "ਪ੍ਰੋਫਾਈਲ ਸੰਪਾਦਿਤ ਕਰੋ",
     ),
@@ -261,6 +264,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "parking_land": MessageLookupByLibrary.simpleMessage("ਪਾਰਕਿੰਗ ਦੀ ਜਗ੍ਹਾ"),
     "payments": MessageLookupByLibrary.simpleMessage("ਭੁਗਤਾਨ"),
     "peb": MessageLookupByLibrary.simpleMessage("PEB"),
+    "phone_notification": MessageLookupByLibrary.simpleMessage("ਫ਼ੋਨ ਸੂਚਨਾ"),
     "phone_notifications": MessageLookupByLibrary.simpleMessage("ਫੋਨ ਸੂਚਨਾਵਾਂ"),
     "phone_number": MessageLookupByLibrary.simpleMessage("ਫੋਨ ਨੰਬਰ"),
     "photos": MessageLookupByLibrary.simpleMessage("ਤਸਵੀਰਾਂ"),
@@ -345,6 +349,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "terms_and_conditions": MessageLookupByLibrary.simpleMessage(
       "ਨਿਯਮ ਅਤੇ ਸ਼ਰਤਾਂ",
     ),
+    "thanks_for_feedback": MessageLookupByLibrary.simpleMessage(
+      "ਤੁਹਾਡੀ ਪ੍ਰਤੀਕ੍ਰਿਆ ਲਈ ਧੰਨਵਾਦ!",
+    ),
     "toilets": MessageLookupByLibrary.simpleMessage("ਟਾਇਲਟ"),
     "token_advance": MessageLookupByLibrary.simpleMessage("ਟੋਕਨ ਐਡਵਾਂਸ"),
     "total_area": MessageLookupByLibrary.simpleMessage("ਕੁੱਲ ਖੇਤਰਫਲ"),
@@ -422,6 +429,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "warehouse_power_backup": MessageLookupByLibrary.simpleMessage(
       "ਕੀ ਤੁਹਾਡੇ ਗੋਦਾਮ ਵਿੱਚ ਬਿਜਲੀ ਬੈਕਅਪ ਹੈ?",
     ),
+    "warehouse_published": MessageLookupByLibrary.simpleMessage(
+      "ਤੁਹਾਡਾ ਗੋਦਾਮ ਸਫਲਤਾਪੂਰਵਕ ਪ੍ਰਕਾਸ਼ਤ ਕੀਤਾ ਗਿਆ ਹੈ",
+    ),
     "warehouse_published_success": MessageLookupByLibrary.simpleMessage(
       "ਤੁਹਾਡਾ ਗੋਦਾਮ ਸਫਲਤਾਪੂਰਵਕ ਪ੍ਰਕਾਸ਼ਿਤ ਹੋ ਗਿਆ ਹੈ",
     ),
@@ -455,6 +465,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "ਕੁਝ ਕੀਮਤੀ ਲਿਖੋ...(ਜਿਵੇਂ ਕਿ ਸੇਵਾ ਪਸੰਦ ਆਈ!)",
     ),
     "yes": MessageLookupByLibrary.simpleMessage("ਹਾਂ"),
+    "your_changes_saved": MessageLookupByLibrary.simpleMessage(
+      "ਤੁਹਾਡੀਆਂ ਤਬਦੀਲੀਆਂ ਸਫਲਤਾਪੂਰਵਕ ਸੰਭਾਲੀਆਂ ਗਈਆਂ ਹਨ",
+    ),
     "your_comment": MessageLookupByLibrary.simpleMessage("ਤੁਹਾਡਾ ਟਿੱਪਣੀ"),
     "your_comments_and_ratings_help_us_to_improve":
         MessageLookupByLibrary.simpleMessage(

@@ -129,6 +129,7 @@ flutter_native_splash:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
 
 
   # The following line ensures that the Material Icons font is

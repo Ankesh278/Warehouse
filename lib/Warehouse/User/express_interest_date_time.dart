@@ -185,8 +185,6 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
     });
   }
 
-
-
   void _selectDate(BuildContext context) async {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;

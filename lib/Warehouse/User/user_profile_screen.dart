@@ -48,7 +48,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController additionalPhoneController = TextEditingController();
-  final TextEditingController emialController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final String phoneNumber = '+917007221530';
   final TextEditingController _messageController = TextEditingController();
   Future<void> _logoutAndRedirect(BuildContext context) async {
@@ -1332,10 +1332,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Image.asset(ImageAssets.value),
-        const Text(
-          "Thanks you for your feedback!",
-          style: TextStyle(
+         Text(
+           S.of(context).thanks_for_feedback,
+          style: const TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
             color: Colors.black87,
@@ -1346,7 +1345,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Rating: ${ratingProvider.rating}/5",
+              "${"${S.of(context).upload_document}:"} ${ratingProvider.rating}/5",
               style: const TextStyle(fontSize: 18, color: Colors.black54,fontWeight: FontWeight.w600),
             ),
             const Icon(Icons.star,color: Colors.amber,)
@@ -1373,9 +1372,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
               backgroundColor: Colors.orangeAccent,
             ),
-            child: const Text(
-              "Edit Feedback",
-              style: TextStyle(
+            child:  Text(
+              S.of(context).edit_feedback,
+              style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: Colors.white),
@@ -1391,9 +1390,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text(
-          "Rate Your Experience",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+         Text(
+          S.of(context).rate_your_experience,
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
         Center(
@@ -1412,9 +1411,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
         ),
         const SizedBox(height: 20),
-        const Text(
-          "Your Comment",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+         Text(
+          S.of(context).your_comment,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
         FadeTransition(
@@ -1428,7 +1427,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               controller: ratingProvider.commentController,
               style: const TextStyle(fontSize: 16),
               decoration: InputDecoration(
-                hintText: "Write something valuable...",
+                hintText: S.of(context).write_something_valuable,
                 hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                 filled: true,
                 fillColor: Colors.grey[200],
@@ -1477,8 +1476,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                     child: Text(
                       ratingProvider.isSubmitted
-                          ? "Update Feedback"
-                          : "Submit Feedback",
+                          ? S.of(context).submit_feedback
+                          : S.of(context).submit_feedback,
                       style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
@@ -1491,16 +1490,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Future<void> getSharedPreference() async {
     if (kDebugMode) {
-      print("Shared call ho gya");
+      print("Shared");
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (kDebugMode) {
-      print("intialize v ho gya");
+      print("Initialized");
     }
-    // Use a fallback value or handle null cases
     name = prefs.getString("name") ?? "Default Name";
     phone = prefs.getString("phone") ?? "Default Phone";
-    // Remove the '+91' prefix if it exists
     if (phone.startsWith("+91")) {
       phone = phone.substring(3);
     }
@@ -1545,7 +1542,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           print("Relative Image URL: $relativeImageUrl");
         }
         if (kDebugMode) {
-          print("USERFILE: $userFile");
+          print("USERPROFILE: $userFile");
         }
         if (kDebugMode) {
           print("User Name: $name");
@@ -1672,7 +1669,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   void _showEditDialog(BuildContext context,String phone) {
     final screenHeight = MediaQuery.of(context).size.height;
-    // final screenWidth = MediaQuery.of(context).size.width;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1756,7 +1752,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                         SizedBox(height: screenHeight*0.02),
                         TextField(
-                          controller: emialController,
+                          controller: emailController,
                           keyboardType: TextInputType.emailAddress,
                           enableSuggestions: true,
                           decoration: InputDecoration(
@@ -1819,7 +1815,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 nameController,
                                 phoneController,
                                 additionalPhoneController,
-                                emialController,
+                                emailController,
                               );
                             },
                             child: Text(S.of(context).submit,
@@ -1863,8 +1859,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ..fields['Name'] = nameController.text
       ..fields['Mobile'] = phoneController.text
       ..fields['OPMobile'] = additionalPhoneController.text
-      ..fields['Mailid'] = emailController.text;
-    bool success = false;
+      ..fields[' Mailid'] = emailController.text;
+      bool success = false;
     try {
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
@@ -1928,7 +1924,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     const SizedBox(height: 20),
                     Text(
                       success
-                          ? "Profile updated successfully!"
+                          ? S.of(context).upload_document
                           : "Failed to update profile.",
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
@@ -1981,7 +1977,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         await launchUrl(emailUri);
         if (!context.mounted) return;
         messenger.showSnackBar(
-          const SnackBar(
+           const SnackBar(
             content: Text("Our team will connect with you soon."),
             backgroundColor: Colors.green,
           ),
@@ -2027,9 +2023,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   icon: const Icon(Icons.close, color: Colors.black),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-                title: const Text(
-                  'Upload Document',
-                  style: TextStyle(
+                title:  Text(
+                  S.of(context).upload_document,
+                  style: const TextStyle(
                       color: Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
@@ -2039,12 +2035,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               body: Column(
                 children: [
                   const Spacer(),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                   Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      'Please upload your document.',
+                      S.of(context).please_upload_document,
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                          const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -2160,17 +2156,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           side: const BorderSide(color: Colors.blue, width: 3),
                         ),
                       ),
-                      child: const Row(
+                      child:  Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.upload,
                             color: Colors.black,
                             size: 20,
                           ),
                           Text(
-                            'Upload Document',
-                            style: TextStyle(
+                            S.of(context).upload_document,
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -2245,12 +2241,10 @@ void _openInstagramProfile() async {
     bool launched = await launchUrl(Uri.parse(instagramUrl),
         mode: LaunchMode.externalApplication);
     if (!launched) {
-      // If Instagram app isn't installed, open in browser
       await launchUrl(Uri.parse(fallbackUrl),
           mode: LaunchMode.externalApplication);
     }
   } catch (e) {
-    // In case any error occurs, open fallback URL in browser
     await launchUrl(Uri.parse(fallbackUrl),
         mode: LaunchMode.externalApplication);
   }
@@ -2265,16 +2259,16 @@ void _openFacebookProfile() async {
     bool launched = await launchUrl(Uri.parse(facebookAppUrl),
         mode: LaunchMode.externalApplication);
     if (!launched) {
-      // If Facebook app isn't installed, open in browser
       await launchUrl(Uri.parse(fallbackUrl),
           mode: LaunchMode.externalApplication);
     }
   } catch (e) {
-    // In case any error occurs, open fallback URL in browser
     await launchUrl(Uri.parse(fallbackUrl),
         mode: LaunchMode.externalApplication);
   }
 }
+
+
 
 void _openTwitterProfile() async {
   const String twitterAppUrl = 'twitter://user?screen_name=AnkeshYada78626';
@@ -2284,16 +2278,15 @@ void _openTwitterProfile() async {
     bool launched = await launchUrl(Uri.parse(twitterAppUrl),
         mode: LaunchMode.externalApplication);
     if (!launched) {
-      // If Twitter app isn't installed, open in browser
       await launchUrl(Uri.parse(fallbackUrl),
           mode: LaunchMode.externalApplication);
     }
   } catch (e) {
-    // In case any error occurs, open fallback URL in browser
     await launchUrl(Uri.parse(fallbackUrl),
         mode: LaunchMode.externalApplication);
   }
 }
+
 
 class DeleteAccountButton extends StatelessWidget {
   final dynamic phone;
@@ -2335,10 +2328,9 @@ class DeleteAccountButton extends StatelessWidget {
   void _showDeleteConfirmationDialog(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
     showDialog(
       context: context,
-      barrierDismissible: false, // Prevent closing the dialog by tapping outside
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(

@@ -2004,6 +2004,76 @@ class S {
   String get ok {
     return Intl.message('Ok', name: 'ok', desc: '', args: []);
   }
+
+  /// `Thanks you for your feedback!`
+  String get thanks_for_feedback {
+    return Intl.message(
+      'Thanks you for your feedback!',
+      name: 'thanks_for_feedback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Feedback`
+  String get edit_feedback {
+    return Intl.message(
+      'Edit Feedback',
+      name: 'edit_feedback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your changes have been saved Successfully`
+  String get your_changes_saved {
+    return Intl.message(
+      'Your changes have been saved Successfully',
+      name: 'your_changes_saved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your Warehouse has been Published Successfully`
+  String get warehouse_published {
+    return Intl.message(
+      'Your Warehouse has been Published Successfully',
+      name: 'warehouse_published',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aadhaar Front`
+  String get aadhaar_front {
+    return Intl.message(
+      'Aadhaar Front',
+      name: 'aadhaar_front',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aadhaar Back`
+  String get aadhaar_back {
+    return Intl.message(
+      'Aadhaar Back',
+      name: 'aadhaar_back',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phone Notification`
+  String get phone_notification {
+    return Intl.message(
+      'Phone Notification',
+      name: 'phone_notification',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

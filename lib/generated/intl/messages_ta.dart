@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "aadhaar_back": MessageLookupByLibrary.simpleMessage("ஆதார் பின்பு"),
+    "aadhaar_front": MessageLookupByLibrary.simpleMessage("ஆதார் முன்பு"),
     "account": MessageLookupByLibrary.simpleMessage("கணக்கு"),
     "add_additional_details": MessageLookupByLibrary.simpleMessage(
       "மேலும் வாடிக்கையாளர்களை ஈர்க்க கூடுதல் விவரங்களைச் சேர்க்கவும்",
@@ -131,6 +133,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "docks_height": MessageLookupByLibrary.simpleMessage("டாக்ஸ் உயரம் (அடி)"),
     "done": MessageLookupByLibrary.simpleMessage("முடிந்தது"),
+    "edit_feedback": MessageLookupByLibrary.simpleMessage("கருத்தை திருத்து"),
     "edit_profile": MessageLookupByLibrary.simpleMessage(
       "சுயவிவரம் திருத்தவும்",
     ),
@@ -287,6 +290,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "payments": MessageLookupByLibrary.simpleMessage("பணம்"),
     "peb": MessageLookupByLibrary.simpleMessage("PEB"),
+    "phone_notification": MessageLookupByLibrary.simpleMessage(
+      "கைபேசி அறிவிப்பு",
+    ),
     "phone_notifications": MessageLookupByLibrary.simpleMessage(
       "தொலைபேசி அறிவிப்புகள்",
     ),
@@ -389,6 +395,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "terms_and_conditions": MessageLookupByLibrary.simpleMessage(
       "விதிமுறைகள் மற்றும் நிபந்தனைகள்",
     ),
+    "thanks_for_feedback": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் கருத்துக்கு நன்றி!",
+    ),
     "toilets": MessageLookupByLibrary.simpleMessage("கழிப்பறைகள்"),
     "token_advance": MessageLookupByLibrary.simpleMessage(
       "டோக்கன் முன்னேற்றம்",
@@ -476,6 +485,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "warehouse_power_backup": MessageLookupByLibrary.simpleMessage(
       "உங்கள் களஞ்சியத்தில் மின் பின்பற்றுதலை உறுதிப்படுத்தவும்?",
     ),
+    "warehouse_published": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் கிடங்கு வெற்றிகரமாக வெளியிடப்பட்டது",
+    ),
     "warehouse_published_success": MessageLookupByLibrary.simpleMessage(
       "உங்கள் கிடங்கு வெற்றிகரமாக வெளியிடப்பட்டது",
     ),
@@ -507,6 +519,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "தவறான ஒன்று எழுதவும்...(எ.கா. சேவையைப் போன்று!)",
     ),
     "yes": MessageLookupByLibrary.simpleMessage("ஆம்"),
+    "your_changes_saved": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் மாற்றங்கள் வெற்றிகரமாக சேமிக்கப்பட்டன",
+    ),
     "your_comment": MessageLookupByLibrary.simpleMessage("உங்கள் கருத்து"),
     "your_comments_and_ratings_help_us_to_improve":
         MessageLookupByLibrary.simpleMessage(

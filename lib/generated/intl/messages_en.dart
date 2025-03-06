@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "aadhaar_back": MessageLookupByLibrary.simpleMessage("Aadhaar Back"),
+    "aadhaar_front": MessageLookupByLibrary.simpleMessage("Aadhaar Front"),
     "account": MessageLookupByLibrary.simpleMessage("Account"),
     "add_additional_details": MessageLookupByLibrary.simpleMessage(
       "Add additional details to attract more clients",
@@ -117,6 +119,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "dock_levelers": MessageLookupByLibrary.simpleMessage("Dock Levelers"),
     "docks_height": MessageLookupByLibrary.simpleMessage("Docks Height (feet)"),
     "done": MessageLookupByLibrary.simpleMessage("Done"),
+    "edit_feedback": MessageLookupByLibrary.simpleMessage("Edit Feedback"),
     "edit_profile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
     "edit_warehouse_details": MessageLookupByLibrary.simpleMessage(
       "Edit warehouse Details",
@@ -255,6 +258,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "parking_land": MessageLookupByLibrary.simpleMessage("Parking Land"),
     "payments": MessageLookupByLibrary.simpleMessage("Payments"),
     "peb": MessageLookupByLibrary.simpleMessage("PEB"),
+    "phone_notification": MessageLookupByLibrary.simpleMessage(
+      "Phone Notification",
+    ),
     "phone_notifications": MessageLookupByLibrary.simpleMessage(
       "Phone Notifications",
     ),
@@ -339,6 +345,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "terms_and_conditions": MessageLookupByLibrary.simpleMessage(
       "Terms and Conditions",
     ),
+    "thanks_for_feedback": MessageLookupByLibrary.simpleMessage(
+      "Thanks you for your feedback!",
+    ),
     "toilets": MessageLookupByLibrary.simpleMessage("Toilets"),
     "token_advance": MessageLookupByLibrary.simpleMessage("Token Advance"),
     "total_area": MessageLookupByLibrary.simpleMessage("Total area"),
@@ -412,6 +421,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "warehouse_power_backup": MessageLookupByLibrary.simpleMessage(
       "Does your warehouse have power backup?",
     ),
+    "warehouse_published": MessageLookupByLibrary.simpleMessage(
+      "Your Warehouse has been Published Successfully",
+    ),
     "warehouse_published_success": MessageLookupByLibrary.simpleMessage(
       "Your warehouse has been published successfully",
     ),
@@ -443,6 +455,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Write something valuable...(eg. Loved the service!)",
     ),
     "yes": MessageLookupByLibrary.simpleMessage("Yes"),
+    "your_changes_saved": MessageLookupByLibrary.simpleMessage(
+      "Your changes have been saved Successfully",
+    ),
     "your_comment": MessageLookupByLibrary.simpleMessage("Your comment"),
     "your_comments_and_ratings_help_us_to_improve":
         MessageLookupByLibrary.simpleMessage(

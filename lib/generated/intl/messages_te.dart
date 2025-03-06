@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "aadhaar_back": MessageLookupByLibrary.simpleMessage("ఆధార్ బ్యాక్"),
+    "aadhaar_front": MessageLookupByLibrary.simpleMessage("ఆధార్ ఫ్రంట్"),
     "account": MessageLookupByLibrary.simpleMessage("ఖాతా"),
     "add_additional_details": MessageLookupByLibrary.simpleMessage(
       "ఇంకా క్లయింట్లను ఆకర్షించడానికి అదనపు వివరాలను జోడించండి",
@@ -121,6 +123,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "dock_levelers": MessageLookupByLibrary.simpleMessage("డాక్ లెవలర్స్"),
     "docks_height": MessageLookupByLibrary.simpleMessage("డాక్ ఎత్తు (ఫీట్)"),
     "done": MessageLookupByLibrary.simpleMessage("పూర్తి"),
+    "edit_feedback": MessageLookupByLibrary.simpleMessage(
+      "అభిప్రాయాన్ని సవరించు",
+    ),
     "edit_profile": MessageLookupByLibrary.simpleMessage(
       "ప్రొఫైల్‌ను ఎడిట్ చేయండి",
     ),
@@ -271,6 +276,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "parking_land": MessageLookupByLibrary.simpleMessage("పార్కింగ్ స్థలం"),
     "payments": MessageLookupByLibrary.simpleMessage("చెల్లింపులు"),
     "peb": MessageLookupByLibrary.simpleMessage("పీఈబీ"),
+    "phone_notification": MessageLookupByLibrary.simpleMessage(
+      "ఫోన్ నోటిఫికేషన్",
+    ),
     "phone_notifications": MessageLookupByLibrary.simpleMessage(
       "ఫోన్ నోటిఫికేషన్లు",
     ),
@@ -363,6 +371,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "terms_and_conditions": MessageLookupByLibrary.simpleMessage(
       "నిబంధనలు మరియు షరతులు",
     ),
+    "thanks_for_feedback": MessageLookupByLibrary.simpleMessage(
+      "మీ అభిప్రాయానికి ధన్యవాదాలు!",
+    ),
     "toilets": MessageLookupByLibrary.simpleMessage("టాయిలెట్‌లు"),
     "token_advance": MessageLookupByLibrary.simpleMessage(
       "టోకెన్ ముందు చెల్లింపు",
@@ -444,6 +455,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "warehouse_power_backup": MessageLookupByLibrary.simpleMessage(
       "మీ గోదాములో పవర్ బ్యాకప్ ఉందా?",
     ),
+    "warehouse_published": MessageLookupByLibrary.simpleMessage(
+      "మీ గిడ్డంగి విజయవంతంగా ప్రచురించబడింది",
+    ),
     "warehouse_published_success": MessageLookupByLibrary.simpleMessage(
       "మీ గిడ్డంగి విజయవంతంగా ప్రచురించబడింది",
     ),
@@ -473,6 +487,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "ఏదో విలువైనది వ్రాయండి...(ఉదాహరణ: సర్వీస్ చాలా బాగుంది!)",
     ),
     "yes": MessageLookupByLibrary.simpleMessage("అవును"),
+    "your_changes_saved": MessageLookupByLibrary.simpleMessage(
+      "మీ మార్పులు విజయవంతంగా సేవ్ చేయబడ్డాయి",
+    ),
     "your_comment": MessageLookupByLibrary.simpleMessage("మీ కామెంట్"),
     "your_comments_and_ratings_help_us_to_improve":
         MessageLookupByLibrary.simpleMessage(

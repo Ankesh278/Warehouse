@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "aadhaar_back": MessageLookupByLibrary.simpleMessage("আধার ব্যাক"),
+    "aadhaar_front": MessageLookupByLibrary.simpleMessage("আধার ফ্রন্ট"),
     "account": MessageLookupByLibrary.simpleMessage("একাউন্ট"),
     "add_additional_details": MessageLookupByLibrary.simpleMessage(
       "আরও ক্লায়েন্ট আকৃষ্ট করার জন্য অতিরিক্ত বিশদ যোগ করুন",
@@ -115,6 +117,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "dock_levelers": MessageLookupByLibrary.simpleMessage("ডক লেভেলার"),
     "docks_height": MessageLookupByLibrary.simpleMessage("ডকের উচ্চতা (ফুটে)"),
     "done": MessageLookupByLibrary.simpleMessage("সম্পন্ন"),
+    "edit_feedback": MessageLookupByLibrary.simpleMessage(
+      "প্রতিক্রিয়া সম্পাদনা করুন",
+    ),
     "edit_profile": MessageLookupByLibrary.simpleMessage(
       "প্রোফাইল সম্পাদনা করুন",
     ),
@@ -259,6 +264,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "parking_land": MessageLookupByLibrary.simpleMessage("পার্কিং জমি"),
     "payments": MessageLookupByLibrary.simpleMessage("পেমেন্ট"),
     "peb": MessageLookupByLibrary.simpleMessage("পিইবি"),
+    "phone_notification": MessageLookupByLibrary.simpleMessage("ফোন বিজ্ঞপ্তি"),
     "phone_notifications": MessageLookupByLibrary.simpleMessage(
       "ফোন বিজ্ঞপ্তি",
     ),
@@ -349,6 +355,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "subscriptions": MessageLookupByLibrary.simpleMessage("সাবস্ক্রিপশন"),
     "terms_and_conditions": MessageLookupByLibrary.simpleMessage("শর্তাবলী"),
+    "thanks_for_feedback": MessageLookupByLibrary.simpleMessage(
+      "আপনার প্রতিক্রিয়ার জন্য ধন্যবাদ!",
+    ),
     "toilets": MessageLookupByLibrary.simpleMessage("টয়লেট"),
     "token_advance": MessageLookupByLibrary.simpleMessage("টোকেন অগ্রিম"),
     "total_area": MessageLookupByLibrary.simpleMessage("মোট এলাকা"),
@@ -422,6 +431,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "warehouse_power_backup": MessageLookupByLibrary.simpleMessage(
       "আপনার গুদামে কি পাওয়ার ব্যাকআপ আছে?",
     ),
+    "warehouse_published": MessageLookupByLibrary.simpleMessage(
+      "আপনার গুদাম সফলভাবে প্রকাশিত হয়েছে",
+    ),
     "warehouse_published_success": MessageLookupByLibrary.simpleMessage(
       "আপনার গুদাম সফলভাবে প্রকাশিত হয়েছে",
     ),
@@ -453,6 +465,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "কিছু মূল্যবান লিখুন...(যেমন: সেবা পছন্দ হয়েছে!)",
     ),
     "yes": MessageLookupByLibrary.simpleMessage("হ্যাঁ"),
+    "your_changes_saved": MessageLookupByLibrary.simpleMessage(
+      "আপনার পরিবর্তনগুলি সফলভাবে সংরক্ষণ করা হয়েছে",
+    ),
     "your_comment": MessageLookupByLibrary.simpleMessage("আপনার মন্তব্য"),
     "your_comments_and_ratings_help_us_to_improve":
         MessageLookupByLibrary.simpleMessage(

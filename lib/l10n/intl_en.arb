@@ -235,7 +235,14 @@
   "email": "Email",
   "warehouse_added_success": "Your warehouse has been added successfully. Our team will connect with you shortly!",
   "continue_browsing": "Continue Browsing",
-  "ok": "Ok"
+  "ok": "Ok",
+  "thanks_for_feedback": "Thanks you for your feedback!",
+  "edit_feedback": "Edit Feedback",
+  "your_changes_saved": "Your changes have been saved Successfully",
+  "warehouse_published": "Your Warehouse has been Published Successfully",
+  "aadhaar_front": "Aadhaar Front",
+  "aadhaar_back": "Aadhaar Back",
+  "phone_notification": "Phone Notification"
 }
 
 
