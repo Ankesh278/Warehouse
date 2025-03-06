@@ -80,7 +80,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
-
   Future<bool> _showLogoutConfirmationDialog(BuildContext context) async {
     return await showDialog(
       context: context,

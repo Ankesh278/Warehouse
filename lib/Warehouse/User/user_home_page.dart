@@ -114,7 +114,7 @@ class UserHomePageState extends State<UserHomePage>
   Future<void> _refreshData() async {
     double latitude = getValidCoordinate(searchedLatitude, widget.latitude);
     double longitude = getValidCoordinate(searchedLongitude, widget.longitude);
-    int distance = getValidDistance(searchedDistance, 20); // Default to 20 if 0
+    int distance = getValidDistance(searchedDistance, 20);
 
     setState(() {
       isLoading = true;
@@ -130,7 +130,7 @@ class UserHomePageState extends State<UserHomePage>
     });
   }
 
-
+  List  imageList=[];
 
   Future<List<WarehouseModel>> fetchWarehouses(
       double latitude,
@@ -262,7 +262,6 @@ if (kDebugMode) {
         );
       },
       transitionBuilder: (context, anim1, anim2, child) {
-        // Rolling and sliding effect combined
         return Transform.translate(
           offset:
               Offset(MediaQuery.of(context).size.width * (1 - anim1.value), 0),
@@ -859,7 +858,7 @@ if (kDebugMode) {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.015),
-                      /// Api data
+                      /// Api Warehouse data
                       Expanded(
                         child: RefreshIndicator(
                             color: Colors.blue,
@@ -1245,7 +1244,10 @@ if (kDebugMode) {
                                                               7)),
                                                       child: InkWell(
                                                         onTap:(){
-                                                          downloadImages();
+                                                          if (kDebugMode) {
+                                                            print("ClickedImage$imageList");
+                                                          }
+                                                          downloadImages(warehouse.filePath);
                                                           },
                                                         child: const Icon(
                                                             Icons.file_download_outlined,
@@ -1350,7 +1352,7 @@ if (kDebugMode) {
     );
   }
 
-  Future<void> downloadImages() async {
+  Future<void> downloadImages(String filePath) async {
     bool hasPermission = await _requestPermission();
     if (!hasPermission) {
       if (!mounted) return;
@@ -1359,11 +1361,20 @@ if (kDebugMode) {
       );
       return;
     }
-
-    for (String url in _images) {
-      await _downloadAndSaveImageToGallery(url);
+    final newFile = filePath ;
+    const baseUrl = "https://xpacesphere.com";
+    imageList=
+        newFile
+            .split(',')
+            .map((path) => "$baseUrl${path.trim()}")
+            .toList();
+    if (kDebugMode) {
+      print("DEGREE$imageList");
     }
 
+    for (String url in imageList) {
+      await _downloadAndSaveImageToGallery(url);
+    }
     Fluttertoast.showToast(
         msg: "All images saved to Gallery!",
         toastLength: Toast.LENGTH_SHORT,
@@ -1374,7 +1385,6 @@ if (kDebugMode) {
         fontSize: 14.0
     );
   }
-
 
   /// Request permission for accessing media
   Future<bool> _requestPermission() async {
