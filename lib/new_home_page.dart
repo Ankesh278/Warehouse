@@ -4,12 +4,12 @@ import 'package:Lisofy/Warehouse/User/customPainter/custom_dailog.dart';
 import 'package:Lisofy/Warehouse/User/partner_chooser_screen.dart';
 import 'package:Lisofy/Warehouse/User/user_home_page.dart';
 import 'package:Lisofy/Warehouse/User/user_profile_screen.dart';
+import 'package:Lisofy/crausel/crausel_class.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class NewHomePage extends StatefulWidget {
@@ -48,12 +48,18 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
   ];
   final List<String> _advertisingImages = [
     'https://xpacesphere.com/Content/NewFolder/warehouse_18.jpg',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_19.jpg',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_14.jpg'
+    'https://xpacesphere.com/Content/NewFolder/warehouse_19.jpg'
   ];
   final List<String> _agriculturalImages = [
     'https://xpacesphere.com/Content/NewFolder/warehouse_23.jpg',
     'https://xpacesphere.com/Content/NewFolder/warehouse_20.jpg'
+  ];
+  final List<String> _demoImages = [
+   'https://xpacesphere.com/Content/NewFolder/warehouse_23.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_20.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_18.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_19.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_14.jpg'
   ];
 
   late PageController _pageControllerSlider;
@@ -992,7 +998,11 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                               ),
                             ],
                           ),
-                        )
+                        ),
+                        SizedBox(height: screenHeight*0.02,),
+                        SizedBox(
+                            height: screenHeight*0.25,
+                            child: DemoClass(images: _demoImages))
                       ],
                     ),
                   ),
