@@ -166,6 +166,9 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                       )),
                                 ),
                                 InkWell(
+                                  onTap: (){
+
+                                  },
                                   child: Container(
                                       height: screenHeight*0.04,
                                       width: screenWidth*0.1,
@@ -176,16 +179,16 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                       child: Image.asset("assets/images/Shareicon.png")
                                   ),
                                 ),
-                                Container(
-                                  height: screenHeight*0.04,
-                                  width: screenWidth*0.1,
-                                  margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.1),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.white
-                                  ),
-                                  child: const Center(child: Icon(Icons.file_download_outlined,color: Colors.blue,size: 16,)),
-                                ),
+                                // Container(
+                                //   height: screenHeight*0.04,
+                                //   width: screenWidth*0.1,
+                                //   margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.1),
+                                //   decoration: BoxDecoration(
+                                //       borderRadius: BorderRadius.circular(5),
+                                //       color: Colors.white
+                                //   ),
+                                //   child: const Center(child: Icon(Icons.file_download_outlined,color: Colors.blue,size: 16,)),
+                                // ),
                               ],
                             )
                           ],

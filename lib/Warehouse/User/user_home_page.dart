@@ -1389,9 +1389,9 @@ if (kDebugMode) {
   /// Request permission for accessing media
   Future<bool> _requestPermission() async {
     if (Platform.isAndroid) {
-      if (await Permission.storage.request().isGranted) return true; // For Android 10 and below
-      if (await Permission.manageExternalStorage.request().isGranted) return true; // For Android 11+
-      if (await Permission.photos.request().isGranted) return true; // For Android 13+
+      if (await Permission.storage.request().isGranted) return true;
+      if (await Permission.manageExternalStorage.request().isGranted) return true;
+      if (await Permission.photos.request().isGranted) return true;
     }
     return false;
   }
@@ -1463,10 +1463,8 @@ if (kDebugMode) {
       });
     }
   }
-
-
-
 }
+
 
 class AdvancedFiltersBottomSheet extends StatefulWidget {
   const AdvancedFiltersBottomSheet({super.key});

@@ -48,7 +48,8 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
   ];
   final List<String> _advertisingImages = [
     'https://xpacesphere.com/Content/NewFolder/warehouse_18.jpg',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_19.jpg'
+    'https://xpacesphere.com/Content/NewFolder/warehouse_19.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_14.jpg'
   ];
   final List<String> _agriculturalImages = [
     'https://xpacesphere.com/Content/NewFolder/warehouse_23.jpg',
@@ -520,7 +521,7 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                         SizedBox(height: screenHeight*0.025,),
                         ///Warehouse Slider
                         SizedBox(
-                          height: screenHeight * 0.18,
+                          height: screenHeight * 0.2,
                           width: screenWidth*0.9,
                           child: Stack(
                             children: [
@@ -593,17 +594,18 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                         SizedBox(height: screenHeight*0.017,),
                         ///Transportation Slider
                          SizedBox(
-                           height: screenHeight*0.18,
+                           height: screenHeight*0.2,
                            width: screenWidth*0.9,
                            child: Stack(
                              children: [
                                InkWell(
                                  onTap:(){
-                                   Fluttertoast.showToast(
-                                     msg: "Coming soon!",
-                                     toastLength: Toast.LENGTH_SHORT,
-                                     gravity: ToastGravity.BOTTOM,
-                                     backgroundColor: Colors.green,
+                                   showCustomDialog(
+                                       context,
+                                       'Transportation',
+                                       '. Get ready for Effortless Truck Booking at your FingerTips!',
+                                       '. Easy fast and Reliable Transport just for you.',
+                                       '. No more Hassles Seamlessly Book Track and manage Shipment'
                                    );
                          },
                                  child: PageView.builder(
@@ -748,18 +750,19 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                         SizedBox(height: screenHeight*0.02,),
                         ///Manpower Slider
                         SizedBox(
-                          height: screenHeight*0.18,
+                          height: screenHeight*0.2,
                           width: screenWidth*0.9,
                           child: Stack(
                             children: [
                               InkWell(
                                 onTap:(){
-                                    Fluttertoast.showToast(
-                                      msg: "Coming soon!",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: Colors.green,
-                                    );
+                                  showCustomDialog(
+                                      context,
+                                      'Manpower',
+                                      '. Your trusted partner in Land Transactions simplified and secure!',
+                                      '. Buy and sell land with confidence, Transparency and ease',
+                                      '. Seamless transaction and Expert Guidance at every step.'
+                                  );
                                 },
                                 child: PageView.builder(
                                   controller: _manpowerController,
@@ -829,18 +832,19 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                         SizedBox(height: screenHeight*0.02,),
                         ///Agriculture Slider
                         SizedBox(
-                          height: screenHeight*0.18,
+                          height: screenHeight*0.2,
                           width: screenWidth*0.9,
                           child: Stack(
                             children: [
                               InkWell(
                                 onTap:(){
-                                    Fluttertoast.showToast(
-                                      msg: "Coming soon!",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: Colors.green,
-                                    );
+                                  showCustomDialog(
+                                      context,
+                                      'Agriculture',
+                                      '. Your trusted partner in Land Transactions Simplified and secure',
+                                      '. Buy and sell Land with confidence Transparency and Ease.',
+                                      '. Seamless Transactions and Expert Guidance at Every step'
+                                  );
                                 },
                                 child: PageView.builder(
                                   controller: _agricultureController,
@@ -916,12 +920,13 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                             children: [
                               InkWell(
                                 onTap:(){
-                                    Fluttertoast.showToast(
-                                      msg: "Coming soon!",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: Colors.green,
-                                    );
+                                  showCustomDialog(
+                                      context,
+                                      'Agriculture',
+                                      '. Your trusted partner in Land Transactions Simplified and secure',
+                                      '. Buy and sell Land with confidence Transparency and Ease.',
+                                      '. Seamless Transactions and Expert Guidance at Every step'
+                                  );
                                 },
                                 child: PageView.builder(
                                   controller: _advertisingController,
