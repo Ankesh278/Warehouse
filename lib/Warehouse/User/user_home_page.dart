@@ -1458,6 +1458,14 @@ if (kDebugMode) {
         isLoading = true;
         futureWarehouses = fetchWarehouses(latitude, longitude, distance, [], [], "");
       });
+    }if(result==null){
+      setState(() {
+        searchedLoc="";
+        searchedDistance=0;
+        searchedLatitude=0;
+        searchedLongitude=0;
+      });
+      futureWarehouses = fetchWarehouses(widget.latitude, widget.longitude, 20, [], [], "");
     }
   }
 }
