@@ -110,15 +110,17 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon/app_icon.png"
+  image_path: "assets/icon/app_new_icon.png"
+  remove_alpha_ios: true
 
 flutter_native_splash:
-  color: "#ffffff"  # Background color (Change as needed)
-  image: "assets/icon/app_icon.png"  # Path to your logo (PNG, recommended size: 512x512)
+  color: "#ffffff" # Use hex format with a # prefix
+  image: "assets/icon/native_icon.png"
   android_12:
-    image: "assets/icon/app_icon.png"  # Android 12+ requires a separate image
-    icon_background_color: "#ffffff"  # Background color for Android 12+
-  fullscreen: true  # Enables full-screen splash
+    image: "assets/icon/native_icon.png"
+    icon_background_color: "#ffffff" # Same fix here
+  fullscreen: true
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

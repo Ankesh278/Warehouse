@@ -1,4 +1,3 @@
-import 'package:Lisofy/Transportation/User/payment_screen.dart';
 import 'package:Lisofy/Transportation/User/summary_screen.dart';
 import 'package:Lisofy/Transportation/common/custom_app_bar/custom_button.dart';
 import 'package:Lisofy/Transportation/common/custom_app_bar/cutom_app_bar.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:animate_do/animate_do.dart';
+
 class BookingPage extends StatefulWidget {
   final String pickUpAddress;
   final String finalAddress;
@@ -20,7 +20,7 @@ class BookingPageState extends State<BookingPage> {
   final PageController _controller = PageController(viewportFraction: .4);
   int currentIndex = 0;
   int selectedIndex = -1;
-  String? selectedCateoryItem;
+  String? selectedCategoryItem;
   final List<Map<String, String>> categoryItem = [
     {'text': 'Chemicals and\nLiquid Barrels', 'image': ImageAssets.chemical},
     {'text': 'Solar\n Products', 'image': ImageAssets.solar},
@@ -62,8 +62,7 @@ class BookingPageState extends State<BookingPage> {
                 initialDateTime: DateTime.now(),
                 onDateTimeChanged: (DateTime dateTime) {
                   setState(() {
-                    _dateController.text =
-                        DateFormat('dd-MM-yyyy').format(dateTime);
+                    _dateController.text = DateFormat('dd-MM-yyyy').format(dateTime);
                   });
                 },
               ),
@@ -93,6 +92,7 @@ class BookingPageState extends State<BookingPage> {
           onBackPressed: () => Navigator.pop(context),
         ),
         body: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -154,7 +154,7 @@ class BookingPageState extends State<BookingPage> {
                 onTap: () {
                   setState(() {
                     selectedIndex = index;
-                    selectedCateoryItem = categoryItem[index]['text']!;
+                    selectedCategoryItem = categoryItem[index]['text']!;
                   });
                 },
                 child: AnimatedContainer(
@@ -665,7 +665,7 @@ class BookingPageState extends State<BookingPage> {
                   color: Colors.blue,
                   onPressed: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> SummaryScreen(
-                        goodsType:selectedCateoryItem!,
+                        goodsType:selectedCategoryItem!,
                         vehicleType:vehicleSelectedItem!,
                         dateOfTransportation:_dateController.text.toString().trim(),
                         startingPoint:widget.pickUpAddress,

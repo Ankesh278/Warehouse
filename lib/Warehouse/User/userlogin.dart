@@ -1,4 +1,6 @@
 import 'package:Lisofy/Warehouse/User/UserProvider/auth_user_provider.dart';
+import 'package:Lisofy/crausel/crausel_class.dart';
+import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -17,6 +19,13 @@ class UserLogin extends StatefulWidget {
 class _UserLoginState extends State<UserLogin> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneController = TextEditingController();
+  final List<String> _demoImages = [
+    'https://xpacesphere.com/Content/NewFolder/warehouse_23.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_20.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_18.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_19.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_14.jpg'
+  ];
 @override
   void initState() {
     super.initState();
@@ -46,10 +55,10 @@ class _UserLoginState extends State<UserLogin> {
     final screenWidth = MediaQuery.of(context).size.width;
     final authProvider = Provider.of<AuthUserProvider>(context);
     return Scaffold(
+      backgroundColor: Colors.blue,
       body: Stack(
         children: [
-          Container(
-            color: Colors.blue,
+          SizedBox(
             width: double.infinity,
             height: double.infinity,
             child: SafeArea(
@@ -57,77 +66,77 @@ class _UserLoginState extends State<UserLogin> {
                 children: [
                   Container(
                     color: Colors.blue,
-                    height: screenHeight * 0.285,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: screenHeight * 0.015,
-                        left: screenWidth * 0.03,
-                      ),
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: IconButton(
-                              icon: const Icon(Icons.arrow_back_ios_sharp,
-                                  color: Colors.white),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+                    height: screenHeight * 0.15,
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: IconButton(
+                                icon: const Icon(Icons.arrow_back_ios_sharp,
+                                    color: Colors.white),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
                             ),
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Container(
-                              margin: EdgeInsets.only(
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    left: screenWidth *
+                                        0.045),
+                                child: Text(
+                                  "Sign in / Login",
+                                  style: TextStyle(
+                                    fontSize: screenWidth *
+                                        0.05,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Container(
+                                margin: EdgeInsets.only(
                                   left: screenWidth *
-                                      0.045),
-                              child: Text(
-                                "Sign in / Login",
-                                style: TextStyle(
-                                  fontSize: screenWidth *
-                                      0.05,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                                      0.045,
+                                  // top: screenHeight *
+                                  //     0.01,
+                                ),
+                                child: Text(
+                                  "Welcome back to the app",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: screenWidth *
+                                        0.04,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: screenWidth *
-                                    0.045,
-                                top: screenHeight *
-                                    0.01,
-                              ),
-                              child: Text(
-                                "Welcome back to the app",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: screenWidth *
-                                      0.04,
-                                ),
-                              ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                right: screenWidth *
+                                    0.06),
+                            child: Image.asset(
+                              "assets/images/faceid.png",
+                              height: screenHeight *
+                                  0.18,
+                              width: screenHeight *
+                                  0.15,
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                  right: screenWidth *
-                                      0.06),
-                              child: Image.asset(
-                                "assets/images/faceid.png",
-                                height: screenHeight *
-                                    0.12,
-                                width: screenHeight *
-                                    0.12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   // White bottom section
@@ -144,13 +153,17 @@ class _UserLoginState extends State<UserLogin> {
                       ),
                       child: Padding(
                         padding: EdgeInsets.all(
-                            screenWidth * 0.04),
+                            screenWidth * 0.0),
                         child: SingleChildScrollView(
                           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                           child: Form(
                             key: _formKey,
                             child: Column(
                               children: [
+                                Padding(
+                                  padding:  EdgeInsets.only(top: screenHeight*0.05),
+                                  child: Image.asset(ImageAssets.loginBanner,fit: BoxFit.cover,),
+                                ),
                                 Container(
                                   padding: EdgeInsets.symmetric(
                                     horizontal: screenWidth *
@@ -312,16 +325,24 @@ class _UserLoginState extends State<UserLogin> {
                                   },
                                 ),
                                 SizedBox(
-                                    height: screenHeight *
-                                        0.025),
+                                    height: screenHeight * 0.025),
                                 Text(
                                   "By continuing, you agree to our Terms and Conditions",
                                   style: TextStyle(
-                                    fontSize: screenWidth *
-                                        0.025,
+                                    fontSize: screenWidth * 0.025,
                                     color: Colors.blue,
                                   ),
                                 ),
+
+                                // Padding(
+                                //   padding:  EdgeInsets.only(top: screenHeight*0.05),
+                                //   child: Align(
+                                //     alignment: Alignment.bottomCenter,
+                                //     child: SizedBox(
+                                //         height: screenHeight*0.25,
+                                //         child: DemoClass(images: _demoImages)),
+                                //   ),
+                                // )
                               ],
                             ),
                           ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:Lisofy/Warehouse/User/UserProvider/interest_provider.dart';
+import 'package:Lisofy/Warehouse/User/customPainter/key_value_table.dart';
 import 'package:Lisofy/Warehouse/User/warehouse_details.dart';
 import 'package:Lisofy/distance_calculator.dart';
 import 'package:Lisofy/generated/l10n.dart';
@@ -112,6 +113,21 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
         },
     ];
     DistanceCalculator distanceCalculator=DistanceCalculator();
+    final Map<String, String> sampleData = {
+      "Previous Tenants": widget.warehouses.electricity,
+      "Construction Age(in Month)": widget.warehouses.constructionAge.toString(),
+      "Name": widget.warehouses.wHouseName,
+      "Ground Floor": widget.warehouses.groundFloor,
+      "Lock-in Period": widget.warehouses.wHouseLockInPeriod.toString(),
+      "Token Advance": widget.warehouses.wHouseTokenAdvance!,
+      "Maintenance Cost": widget.warehouses.wHouseMaintenance!,
+      "Inner Length": widget.warehouses.length.toString(),
+      "Inner Width": widget.warehouses.width.toString(),
+      "Side Height": widget.warehouses.sideHeight.toString(),
+      "Centre Height": widget.warehouses.centerHeight.toString(),
+      "No. of Docks": widget.warehouses.numberOfDocks.toString(),
+      "Docks Height(feet)": widget.warehouses.docksOfHeight.toString(),
+    };
     return Scaffold(
       body: Column(
         children: [
@@ -389,7 +405,7 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                             ),
                                              Padding(
                                               padding: const EdgeInsets.only(left: 4.0),
-                                              child: Text(S.of(context).security_deposit,style: const TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
+                                              child: Text("${S.of(context).security_deposit}(Month)",style: const TextStyle(color: Colors.grey,fontSize: 10,fontWeight: FontWeight.w500),),
                                             ),
                                           ],
                                         ),
@@ -567,19 +583,20 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                     ),
                                   ),
                                   const SizedBox(height: 13,),
-                                  Container(
-                                    margin:  EdgeInsets.symmetric(horizontal: screenWidth*0.08),
-                                    height: screenHeight*0.12,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey,width: 1.5),
-                                        borderRadius: BorderRadius.circular(5)
-                                    ),
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text("Messages"),
-                                    ),
-                                  ),
+                                  KeyValueTable(data: sampleData),
+                                  // Container(
+                                  //   margin:  EdgeInsets.symmetric(horizontal: screenWidth*0.08),
+                                  //   height: screenHeight*0.12,
+                                  //   width: double.infinity,
+                                  //   decoration: BoxDecoration(
+                                  //       border: Border.all(color: Colors.grey,width: 1.5),
+                                  //       borderRadius: BorderRadius.circular(5)
+                                  //   ),
+                                  //   child: const Padding(
+                                  //     padding: EdgeInsets.all(8.0),
+                                  //     child: Text("Messages"),
+                                  //   ),
+                                  // ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [

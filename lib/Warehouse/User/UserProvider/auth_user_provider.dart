@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthUserProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
+  bool _showAll = false;
   bool _isLoading = false;
   bool _isResending = false;
   String? _errorMessage;
@@ -123,6 +123,15 @@ class AuthUserProvider extends ChangeNotifier {
       setErrorMessage('Failed to verify phone number. Please try again.');
       setLoading(false);
     }
+  }
+///for Measurements class show more details
+
+
+  bool get showAll => _showAll;
+
+  void toggleShowAll() {
+    _showAll = !_showAll;
+    notifyListeners();
   }
 }
 

@@ -4,6 +4,7 @@ import 'package:Lisofy/Warehouse/Partner/partner_registration_screen.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/photo_provider.dart';
 import 'package:Lisofy/Warehouse/User/getuserlocation.dart';
 import 'package:Lisofy/Warehouse/User/models/user_data_model.dart';
+import 'package:Lisofy/crausel/crausel_class.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -31,7 +32,13 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
 
    final TextEditingController _otpController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final List<String> _demoImages = [
+    'https://xpacesphere.com/Content/NewFolder/warehouse_23.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_20.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_18.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_19.jpg',
+    'https://xpacesphere.com/Content/NewFolder/warehouse_14.jpg'
+  ];
   Future<void> _verifyOtp() async {
     setState(() {
       isLoading = true;
@@ -210,10 +217,10 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Colors.blue,
       body: Stack(
         children: [
-          Container(
-            color: Colors.blue,
+          SizedBox(
             width: double.infinity,
             height: double.infinity,
             child: SafeArea(
@@ -221,57 +228,62 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
                 children: [
                   Container(
                     color: Colors.blue,
-                    height: screenHeight * 0.285,
+                    height: screenHeight * 0.15,
                     child: Padding(
                       padding: EdgeInsets.only(
                         top: screenHeight * 0.015,
                         left: screenWidth * 0.03,
                       ),
-                      child: Column(
+                      child: Row(
                         children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: IconButton(
-                              icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.white),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Container(
-                              margin: EdgeInsets.only(left: screenWidth * 0.045),
-                              child: Text(
-                                "Confirm OTP",
-                                style: TextStyle(
-                                  fontSize: screenWidth * 0.05,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: IconButton(
+                                  icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.white),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: screenWidth * 0.045,
-                                top: screenHeight * 0.01,
-                              ),
-                              child: Text(
-                                "OTP has been sent to ${widget.phoneNumber}",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: screenWidth * 0.04,
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Container(
+                                  margin: EdgeInsets.only(left: screenWidth * 0.045),
+                                  child: Text(
+                                    "Confirm OTP",
+                                    style: TextStyle(
+                                      fontSize: screenWidth * 0.05,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                    left: screenWidth * 0.045,
+                                    top: screenHeight * 0.01,
+                                  ),
+                                  child: Text(
+                                    "OTP has been sent to ${widget.phoneNumber}",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: screenWidth * 0.04,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                            ],
                           ),
                           Align(
-                            alignment: Alignment.centerRight,
+                            alignment: Alignment.topRight,
                             child: Container(
-                              margin: EdgeInsets.only(right: screenWidth * 0.06),
                               child: Image.asset(
                                 "assets/images/faceid.png",
                                 height: screenHeight * 0.12,
@@ -401,6 +413,15 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
                                   color: Colors.blue,
                                 ),
                               ),
+                              Padding(
+                                padding:  EdgeInsets.only(top: screenHeight*0.05),
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: SizedBox(
+                                      height: screenHeight*0.25,
+                                      child: DemoClass(images: _demoImages)),
+                                ),
+                              )
                             ],
                           ),
                         ),

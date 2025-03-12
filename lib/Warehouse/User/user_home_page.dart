@@ -379,14 +379,13 @@ if (kDebugMode) {
               height: screenHeight * 0.22,
               child: Padding(
                 padding: EdgeInsets.only(
-                  top: screenHeight * 0.0,
                   left: screenWidth * 0.015,
                 ),
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        Image.asset(ImageAssets.appLogo,fit: BoxFit.fill,height: 60,width: 100,),
+                        Image.asset(ImageAssets.appLogo,fit: BoxFit.fill,height: screenHeight*0.065,width: screenWidth*0.3,),
                         const Spacer(),
                         Padding(
                           padding:  EdgeInsets.only(right: screenWidth*0.06, top: screenHeight*0.01),
@@ -454,19 +453,18 @@ if (kDebugMode) {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Spacer(),
                         GestureDetector(
                           onTap: _openSearchLocationPage,
                           child: SizedBox(
-                            width: screenWidth * 0.55,
+                            width: screenWidth * 0.79,
                             height: screenHeight * 0.09,
                             child: Align(
                               alignment: Alignment.center,
                               child: SizedBox(
-                                height: screenHeight*0.04,
+                                height: screenHeight*0.05,
+                                width: double.infinity,
                                 child: TextFormField(
-                                  enabled:
-                                      false,
+                                  enabled: false,
                                   decoration: InputDecoration(
                                     hintText: searchedLoc.isNotEmpty
                                         ? searchedLoc
@@ -492,8 +490,8 @@ if (kDebugMode) {
                                       borderSide: const BorderSide(
                                           color: Colors.grey, width: 1.0),
                                     ),
-                                    suffixIcon: const Icon(Icons.search,
-                                        color: Colors.blue, size: 18),
+                                    prefixIcon: const Icon(Icons.search,
+                                        color: Colors.blue, size: 25),
                                   ),
                                 ),
                               ),
@@ -503,8 +501,8 @@ if (kDebugMode) {
                         const SizedBox(width: 3),
                         InkWell(
                           child: Container(
-                            height: screenHeight*0.04,
-                            width: screenWidth*0.08,
+                            height: screenHeight*0.05,
+                            width: screenWidth*0.12,
                             margin: const EdgeInsets.only(right: 15),
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -518,7 +516,7 @@ if (kDebugMode) {
                               child: Icon(
                                 Icons.notifications,
                                 color: Colors.blue,
-                                size: 18,
+                                size: 25,
                               ),
                             ),
                           ),
@@ -546,7 +544,6 @@ if (kDebugMode) {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Container(
-                              padding: EdgeInsets.zero,
                               height: screenHeight*0.044,
                               width: screenWidth*0.2,
                               decoration: BoxDecoration(
@@ -699,7 +696,7 @@ if (kDebugMode) {
                             InkWell(
                               child: Container(
                                 margin:  EdgeInsets.only(right: screenWidth*0.07),
-                                height: screenHeight*0.042,
+                                height: screenHeight*0.044,
                                 width: screenWidth*0.2,
                                 decoration: BoxDecoration(
                                   color: Colors.blue,

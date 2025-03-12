@@ -9,6 +9,7 @@ import 'package:Lisofy/Warehouse/User/post_property_page.dart';
 import 'package:Lisofy/Warehouse/User/userlogin.dart';
 import 'package:Lisofy/Warehouse/User/website_viewer.dart';
 import 'package:Lisofy/generated/l10n.dart';
+import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -56,7 +57,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     try {
       /// Sign out from Google
       await _googleSignIn.signOut();
-
       /// Sign out from Firebase Authentication (for phone auth)
       FirebaseAuth auth = FirebaseAuth.instance;
       User? currentUser = auth.currentUser;
@@ -81,11 +81,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Future<bool> _showLogoutConfirmationDialog(BuildContext context) async {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.blue.shade400,
           title: Text(
             S.of(context).log_out,
             style: const TextStyle(
@@ -93,14 +96,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               color: Colors.red,
             ),
           ),
-          content: const Row(
+          content: Row(
             children: [
-              Icon(Icons.warning_amber_rounded, color: Colors.red),
-              SizedBox(width: 10),
-              Expanded(
+              Image.asset(ImageAssets.appLogo,fit: BoxFit.fill,height: screenHeight*0.06,width: screenWidth*0.2,),
+              const SizedBox(width: 10),
+              const Expanded(
                 child: Text(
                   "Are you sure you want to log out?",
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16,color: Colors.white),
                 ),
               ),
             ],
@@ -113,7 +116,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               child: const Text(
                 "No",
                 style: TextStyle(
-                  color: Colors.green,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -2332,6 +2335,7 @@ class DeleteAccountButton extends StatelessWidget {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
+          backgroundColor: Colors.blue.shade400,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(screenWidth * 0.07),
           ),
@@ -2344,25 +2348,26 @@ class DeleteAccountButton extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.warning_amber_outlined,
-                    size: screenWidth * 0.15,
-                    color: Colors.orangeAccent,
-                  ),
+                  // Icon(
+                  //   Icons.warning_amber_outlined,
+                  //   size: screenWidth * 0.15,
+                  //   color: Colors.orangeAccent,
+                  // ),
+                  Image.asset(ImageAssets.appLogo,fit: BoxFit.fill,height: screenHeight*0.065,width: screenWidth*0.3,),
                   SizedBox(height: screenHeight * 0.03),
                   const Text(
                     'Are you sure?',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: screenHeight * 0.01),
-                  Text(
+                  const Text(
                     'Do you really want to delete your account? This action cannot be undone.',
-                    style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: screenHeight * 0.03),

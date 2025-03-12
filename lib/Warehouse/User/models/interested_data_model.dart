@@ -24,7 +24,7 @@ class InterestedModel {
   final String wHouseMaintenance;
   final double securityDeposit;
   final String wHouseTokenAdvance;
-  final String wHouseLockinPeriod;
+  final String wHouseLockInPeriod;
   final String currentAddress;
   final String filePath;
   final double warehouseCarpetArea;
@@ -78,7 +78,7 @@ class InterestedModel {
     required this.wHouseMaintenance,
     required this.securityDeposit,
     required this.wHouseTokenAdvance,
-    required this.wHouseLockinPeriod,
+    required this.wHouseLockInPeriod,
     required this.currentAddress,
     required this.filePath,
     required this.warehouseCarpetArea,
@@ -134,7 +134,7 @@ class InterestedModel {
       wHouseMaintenance: json['whouse_maintenance'] ?? '',
       securityDeposit: (json['securityDeposit'] as num?)?.toDouble() ?? 0.0,
       wHouseTokenAdvance: json['whouse_tokenAdvance'] ?? '',
-      wHouseLockinPeriod: json['whouseLockinPeriod'] ?? '',
+      wHouseLockInPeriod: json['whouseLockinPeriod'] ?? '',
       currentAddress: json['current_address'] ?? '',
       filePath: (json['filepath'] ?? ''),
       warehouseCarpetArea: (json['warehouse_carpetarea'] as num?)?.toDouble() ?? 0.0,

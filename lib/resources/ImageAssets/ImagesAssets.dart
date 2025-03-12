@@ -33,7 +33,7 @@ class ImageAssets{
   static const String feedback = 'assets/images/feedback.gif';
   static const String value = 'assets/images/value.gif';
   static const String back = 'assets/images/back_button_with_border.png';
-  static const String appLogo = 'assets/images/appLogo.png';
+  static const String appLogo = 'assets/icon/app_icon.png';
   static const String worldWideLocation = 'assets/images/Worldwidelocation.png';
   static const String storage = 'assets/images/storage.png';
   static const String backgroundUpper = 'assets/images/backgroundUpper.png';
@@ -49,6 +49,7 @@ class ImageAssets{
   static const String electricPanel = 'assets/icon/electric.png';
   static const String whatsapp = 'assets/images/whatsapp.png';
   static const String comingSoonCircle = 'assets/images/comingSoonCircle.png';
+  static const String loginBanner = 'assets/images/loginBanner.png';
 
 
 }

@@ -23,14 +23,20 @@ class DistanceCalculator {
     );
   }
 
-  double calculateDistance(LatLng location1, LatLng location2) {
-    return Geolocator.distanceBetween(
+  double calculateDistanceWithRandomBuffer(LatLng location1, LatLng location2) {
+    double distance = Geolocator.distanceBetween(
       location1.latitude,
       location1.longitude,
       location2.latitude,
       location2.longitude,
     );
+
+    // Generate a random buffer between 1km (1000m) and 3km (3000m)
+    double randomBuffer = 1000 + Random().nextDouble() * (3000 - 1000);
+
+    return distance + randomBuffer;
   }
+
 
   Future<double> getDistanceFromCurrentToWarehouse(String whouseAddress) async {
     LatLng warehouseLatLng = parseLatLng(whouseAddress);
@@ -39,7 +45,6 @@ class DistanceCalculator {
 
     // Generate a small random offset between -0.005 and 0.005
     double offset = (Random().nextDouble() * 0.01 - 0.005); // Range: [-0.005, 0.005]
-
     // Randomly decide whether to modify latitude or longitude
     if (Random().nextBool()) {
       warehouseLatLng = LatLng(warehouseLatLng.latitude + offset, warehouseLatLng.longitude);
@@ -47,7 +52,7 @@ class DistanceCalculator {
       warehouseLatLng = LatLng(warehouseLatLng.latitude, warehouseLatLng.longitude + offset);
     }
 
-    return calculateDistance(currentLatLng, warehouseLatLng);
+    return calculateDistanceWithRandomBuffer(currentLatLng, warehouseLatLng);
   }
 
   Future<String> getAddressFromLatLng(String latLngString) async {

@@ -71,11 +71,10 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
                   children: [
                     Container(
                       color: Colors.blue,
-                      height: screenHeight * 0.285,
+                      height: screenHeight * 0.2,
                       child: Stack(
                         children: [
                           Positioned(
-                            top: 60,
                             right: 0,
                             left: 0,
                             child: Image.asset(
@@ -111,11 +110,11 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.only(right: screenWidth * 0.005),
-                        decoration: const BoxDecoration(
+                        decoration:  BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(30),
+                            topLeft: const Radius.circular(0),
+                            topRight: Radius.circular(screenWidth*0.1),
                           ),
                         ),
                         child: Padding(
@@ -123,13 +122,12 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
                               screenWidth * 0.1),
                           child: SingleChildScrollView(
                             child: Form(
-                              key:
-                                  _formKey,
+                              key: _formKey,
                               child: Column(
                                 children: [
-                                  const SizedBox(height: 40),
+                                   SizedBox(height: screenHeight*0.07),
                                   SizedBox(
-                                    height: 60,
+                                    height: screenHeight*0.08,
                                     child: TextFormField(
                                       controller: _firstNameController,
                                       keyboardType: TextInputType
@@ -164,9 +162,9 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
                                       },
                                     ),
                                   ),
-                                  const SizedBox(height: 16.0),
+                                   SizedBox( height: screenHeight*0.02,),
                                   SizedBox(
-                                    height: 60,
+                                    height: screenHeight*0.08,
                                     child: TextFormField(
                                       controller: _lastNameController,
                                       keyboardType: TextInputType
@@ -201,9 +199,9 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
                                       },
                                     ),
                                   ),
-                                  const SizedBox(height: 40),
+                                   SizedBox(height: screenHeight*0.07,),
                                   SizedBox(
-                                    height: 50,
+                                    height: screenHeight*0.06,
                                     child: ElevatedButton(
                                       onPressed: () async {
                                         if (_formKey.currentState!.validate()) {
@@ -267,7 +265,7 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
                                         foregroundColor: Colors.white,
                                         backgroundColor: Colors.blue,
                                         minimumSize:
-                                            const Size(double.infinity, 50),
+                                             Size(double.infinity,  screenHeight*0.06,),
                                       ),
                                       child: const Text('Confirm'),
                                     ),

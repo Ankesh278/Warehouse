@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:Lisofy/Warehouse/User/UserProvider/interest_provider.dart';
+import 'package:Lisofy/Warehouse/User/customPainter/key_value_table.dart';
 import 'package:Lisofy/Warehouse/User/express_interest_screen.dart';
 import 'package:Lisofy/Warehouse/User/models/warehouse_model.dart';
 import 'package:Lisofy/generated/l10n.dart';
@@ -150,6 +151,21 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
           'label': 'Flexi Model',
         },
     ];
+    final Map<String, String> sampleData = {
+      "Previous Tenants": widget.warehouses.electricity,
+      "Construction Age(in Month)": widget.warehouses.constructionAge.toString(),
+      "Name": widget.warehouses.wHouseName,
+      "Ground Floor": widget.warehouses.groundFloor,
+      "Lock-in Period": widget.warehouses.wHouseLockinPeriod.toString(),
+      "Token Advance": widget.warehouses.wHouseTokenAdvance!,
+      "Maintenance Cost": widget.warehouses.wHouseMaintenance!,
+      "Inner Length": widget.warehouses.length,
+      "Inner Width": widget.warehouses.width,
+      "Side Height": widget.warehouses.sideHeight,
+      "Centre Height": widget.warehouses.centerHeight,
+      "No. of Docks": widget.warehouses.numberOfDocks,
+      "Docks Height(feet)": widget.warehouses.docksOfHeight,
+    };
     return Scaffold(
       body: Column(
         children: [
@@ -521,11 +537,11 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                             ),
                                           ),
                                         ),
-                                        const Padding(
-                                          padding: EdgeInsets.only(left: 4.0),
+                                         Padding(
+                                          padding: const EdgeInsets.only(left: 4.0),
                                           child: Text(
-                                            "Security deposit",
-                                            style: TextStyle(
+                                            "${S.of(context).security_deposit}(Month)",
+                                            style: const TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.w500),
@@ -618,13 +634,13 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                               const SizedBox(
                                 height: 13,
                               ),
-                              const Align(
+                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
-                                  padding: EdgeInsets.only(left: 15.0),
+                                  padding: const EdgeInsets.only(left: 15.0),
                                   child: Text(
-                                    "Address",
-                                    style: TextStyle(
+                                    S.of(context).address,
+                                    style: const TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w500),
                                   ),
@@ -706,19 +722,20 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                               const SizedBox(
                                 height: 13,
                               ),
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                height: screenHeight * 0.12,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.grey, width: 1.5),
-                                    borderRadius: BorderRadius.circular(5)),
-                              ),
-                              const SizedBox(
-                                height: 7,
-                              ),
+                              KeyValueTable(data: sampleData),
+                              // Container(
+                              //   margin:
+                              //       const EdgeInsets.symmetric(horizontal: 15),
+                              //   height: screenHeight * 0.12,
+                              //   width: double.infinity,
+                              //   decoration: BoxDecoration(
+                              //       border: Border.all(
+                              //           color: Colors.grey, width: 1.5),
+                              //       borderRadius: BorderRadius.circular(5)),
+                              // ),
+                              // const SizedBox(
+                              //   height: 7,
+                              // ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -750,6 +767,7 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                 height: 15,
                               ),
 
+
                               Column(
                                 children: [
                                   WarehouseFeaturesRow(
@@ -759,7 +777,7 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                       {"icon": ImageAssets.truckSlot, "value": "Truck Slot | ${widget.warehouses.truckParkingSlot}"},
                                     ],
                                   ),
-                                  const SizedBox(height: 20),
+                                   SizedBox(height: screenHeight*0.02),
                                   WarehouseFeaturesRow(
                                     features: [
                                       {"icon": ImageAssets.fansNumber, "value": "Fans | ${widget.warehouses.numberOfFans}"},
@@ -777,7 +795,7 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                   children: [
                                      SizedBox(height: screenHeight*0.04),
                                     Wrap(
-                                      spacing: screenWidth*0.1,
+                                      spacing: screenWidth*0.05,
                                       runSpacing: screenWidth*0.10,
                                       children: gridItems.map((item) {
                                         return SizedBox(
@@ -910,13 +928,17 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                     ),
                   ],
                 ),
+
               ),
             ),
           ),
         ],
       ),
+
     );
+
   }
+
 
   Future<void> _openMap(double lat, double lng) async {
     final random = Random();
@@ -926,11 +948,9 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
         (random.nextDouble() * 0.018) - 0.009; // ±1 to 2 km in latitude
     double lngOffset =
         (random.nextDouble() * 0.018) - 0.009; // ±1 to 2 km in longitude
-
     // Adjust the coordinates
     double newLat = lat + latOffset;
     double newLng = lng + lngOffset;
-
     final Uri url = Uri.parse("https://www.google.com/maps/search/?api=1&query=$newLat,$newLng");
     if (await canLaunchUrl(url)) {
       await launchUrl(url);

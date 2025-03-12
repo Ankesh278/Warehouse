@@ -35,7 +35,7 @@ class DemoClassState extends State<DemoClass> {
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(screenWidth*0.05),
+            //borderRadius: BorderRadius.circular(screenWidth*0.05),
             child: CachedNetworkImage(
               imageUrl: widget.images[index],
               fit: BoxFit.fill,

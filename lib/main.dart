@@ -2,6 +2,8 @@
 import 'package:Lisofy/Connectivity/network_service.dart';
 import 'package:Lisofy/Localization/languages.dart';
 import 'package:Lisofy/Notification_Service/notification_service.dart';
+import 'package:Lisofy/Transportation/User/provider/booking_provider.dart';
+import 'package:Lisofy/Transportation/User/provider/transport_page_home_provider.dart';
 import 'package:Lisofy/Transportation/common/provider/loader_notifier.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/auth_provider.dart';
 import 'package:Lisofy/Warehouse/Partner/Provider/location_provider.dart';
@@ -63,7 +65,6 @@ void main() async {
       statusBarIconBrightness: Brightness.light,
     ),
   );
-  // Load shared preferences
   SharedPreferences prefs;
   try {
     prefs = await SharedPreferences.getInstance();
@@ -90,6 +91,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+
+        /// WarehouseProviders
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
         ChangeNotifierProvider<AuthUserProvider>(create: (_) => AuthUserProvider()),
         ChangeNotifierProvider<NetworkConnectionService>(create: (_) => NetworkConnectionService()),
@@ -104,6 +107,12 @@ void main() async {
         ChangeNotifierProvider(create: (_) => PhotoProvider()),
         ChangeNotifierProvider(create: (_) => RatingProvider()),
         ChangeNotifierProvider(create: (_) => LoaderNotifier()),
+
+        ///Transportation Providers
+        ChangeNotifierProvider(create: (_) => BookingScreenProvider()),
+        ChangeNotifierProvider(create: (_) => TransportPageHomeProvider()),
+
+
       ],
       child: MyApp(
         isLoggedIn: isLoggedIn,
