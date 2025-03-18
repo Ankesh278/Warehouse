@@ -50,6 +50,8 @@ class ImageAssets{
   static const String whatsapp = 'assets/images/whatsapp.png';
   static const String comingSoonCircle = 'assets/images/comingSoonCircle.png';
   static const String loginBanner = 'assets/images/loginBanner.png';
+  static const String verifyOtpBanner = 'assets/images/verifyOtpBanner.png';
+  static const String noWarehouseBanner = 'assets/images/noWarehouseBanner.png';
 
 
 }

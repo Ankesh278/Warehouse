@@ -888,6 +888,7 @@ if (kDebugMode) {
                                   child: Stack(
                                     children: [
                                       Image.asset(ImageAssets.noWarehouse),
+                                      Image.asset(ImageAssets.noWarehouseBanner),
                                       Container(
                                           margin: EdgeInsets.only(
                                               bottom: screenHeight * 0.1),

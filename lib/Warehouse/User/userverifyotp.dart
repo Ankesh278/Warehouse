@@ -4,7 +4,7 @@ import 'package:Lisofy/Warehouse/Partner/partner_registration_screen.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/photo_provider.dart';
 import 'package:Lisofy/Warehouse/User/getuserlocation.dart';
 import 'package:Lisofy/Warehouse/User/models/user_data_model.dart';
-import 'package:Lisofy/crausel/crausel_class.dart';
+import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -32,13 +32,13 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
 
    final TextEditingController _otpController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final List<String> _demoImages = [
-    'https://xpacesphere.com/Content/NewFolder/warehouse_23.jpg',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_20.jpg',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_18.jpg',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_19.jpg',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_14.jpg'
-  ];
+  // final List<String> _demoImages = [
+  //   'https://xpacesphere.com/Content/NewFolder/warehouse_23.jpg',
+  //   'https://xpacesphere.com/Content/NewFolder/warehouse_20.jpg',
+  //   'https://xpacesphere.com/Content/NewFolder/warehouse_18.jpg',
+  //   'https://xpacesphere.com/Content/NewFolder/warehouse_19.jpg',
+  //   'https://xpacesphere.com/Content/NewFolder/warehouse_14.jpg'
+  // ];
   Future<void> _verifyOtp() async {
     setState(() {
       isLoading = true;
@@ -306,13 +306,17 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
                         ),
                       ),
                       child: Padding(
-                          padding: const EdgeInsets.only(top:10),
+                          padding: const EdgeInsets.only(top:0),
                         child: SingleChildScrollView(
                           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                           child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(top: 70,left: 40,right: 40),
+                                padding:  EdgeInsets.only(top: screenHeight*0.0),
+                                child: Image.asset(ImageAssets.verifyOtpBanner,fit: BoxFit.cover,),
+                              ),
+                              Padding(
+                                padding:  EdgeInsets.only(top: screenHeight*0.05,left: screenWidth*0.04,right: screenWidth*0.04),
                                 child: Column(
                                   children: [
                                     Center(
@@ -413,15 +417,15 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
                                   color: Colors.blue,
                                 ),
                               ),
-                              Padding(
-                                padding:  EdgeInsets.only(top: screenHeight*0.05),
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: SizedBox(
-                                      height: screenHeight*0.25,
-                                      child: DemoClass(images: _demoImages)),
-                                ),
-                              )
+                              // Padding(
+                              //   padding:  EdgeInsets.only(top: screenHeight*0.05),
+                              //   child: Align(
+                              //     alignment: Alignment.bottomCenter,
+                              //     child: SizedBox(
+                              //         height: screenHeight*0.25,
+                              //         child: DemoClass(images: _demoImages)),
+                              //   ),
+                              // )
                             ],
                           ),
                         ),
