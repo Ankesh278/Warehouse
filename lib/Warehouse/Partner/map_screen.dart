@@ -5,21 +5,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
-
-
-
 class LocationSelectionScreen extends StatefulWidget {
   const LocationSelectionScreen({super.key});
-
   @override
   LocationSelectionScreenState createState() => LocationSelectionScreenState();
 }
-
 class LocationSelectionScreenState extends State<LocationSelectionScreen> {
   GoogleMapController? mapController;
   LatLng? currentLocation;
   TextEditingController addressController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -33,9 +27,7 @@ class LocationSelectionScreenState extends State<LocationSelectionScreen> {
       currentLocation = LatLng(position.latitude, position.longitude);
     });
     mapController?.animateCamera(CameraUpdate.newLatLng(currentLocation!));
-
     _getAddressFromLatLng(currentLocation!);
-
     locationProvider.updateLocation(
       addressController.text,
       currentLocation!,
@@ -63,7 +55,6 @@ class LocationSelectionScreenState extends State<LocationSelectionScreen> {
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
-
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return Future.error('Location services are disabled.');
@@ -89,7 +80,6 @@ class LocationSelectionScreenState extends State<LocationSelectionScreen> {
     String address = addressController.text;
     final locationProvider = Provider.of<LocationProvider>(context, listen: false);
     List<Location> locations = await locationFromAddress(address);
-
     if (locations.isNotEmpty) {
       setState(() {
         currentLocation = LatLng(locations[0].latitude, locations[0].longitude);
@@ -98,7 +88,6 @@ class LocationSelectionScreenState extends State<LocationSelectionScreen> {
       locationProvider.updateLocation(address, currentLocation!);
     }
   }
-
 
   void _returnLocation() {
     if (currentLocation != null) {
@@ -110,8 +99,6 @@ class LocationSelectionScreenState extends State<LocationSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-   // double screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Select Location'),
@@ -211,11 +198,8 @@ class LocationSelectionScreenState extends State<LocationSelectionScreen> {
 class LocationData {
   final LatLng latLng;
   final String address;
-
   LocationData(this.latLng, this.address);
 }
-
-
 class ElevatedCard extends StatelessWidget {
   final Widget child;
 

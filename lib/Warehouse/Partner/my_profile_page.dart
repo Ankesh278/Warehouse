@@ -5,17 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({super.key});
-
   @override
   State<MyProfilePage> createState() => _MyProfilePageState();
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
   Future<void> _logoutAndRedirect(BuildContext context) async {
     try {
       await _googleSignIn.signOut();
@@ -97,10 +94,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
       },
     );
   }
-
   String name="";
   String phone="";
-
   @override
   void initState() {
     super.initState();

@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-
 class ShortListModel {
   final int id;
   final String wHouseAddress;

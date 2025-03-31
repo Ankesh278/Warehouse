@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
-
 class UpdateWarehouseDimensions extends StatefulWidget {
   final String electricity;
   final String tenants;
@@ -54,15 +53,11 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
   final TextEditingController _centreHeight = TextEditingController();
   final TextEditingController _width = TextEditingController();
   final TextEditingController _length = TextEditingController();
-
   String? _selectedFlooringType;
   String? _selectedFurnishingType;
   String flexingModel = '';
-
-
   final List<String> _flooringType = ['Epoxy', 'VDF', 'Concrete'];
   final List<String> _furnishingType = ['Full Furnished', 'Semi Furnished', 'Unfurnished','Others'];
-
 
   @override
   void initState() {
@@ -73,7 +68,6 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
     _centreHeight.text=widget.warehouse.centerHeight;
     _noOfDocks.text=widget.warehouse.numberOfDocks;
     _dockHeight.text=widget.warehouse.docksOfHeight;
-    flexingModel=widget.warehouse.flexingModel ? "Yes" : "No";
     _selectedFlooringType=widget.warehouse.flooringType;
     _selectedFurnishingType=widget.warehouse.furnishingType;
   }
@@ -153,10 +147,7 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
       if (kDebugMode) {
         print("Response: ${response.statusCode}, Body: ${response.body}");
       }
-
-      // Check if the widget is still mounted before using the context
       if (!mounted) return;
-
       Navigator.of(context).pop();
       if (response.statusCode == 200) {
         _showSuccessPopup();
@@ -165,9 +156,7 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
       if (kDebugMode) {
         print("Error: $error");
       }
-
       if (!mounted) return;
-
       Navigator.of(context).pop();
     }
   }
@@ -225,23 +214,18 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
         ),
       ),
     );
-
-
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
       Navigator.of(context).pop();
       _navigateToHomeScreen();
     });
   }
-
-
   void _navigateToHomeScreen() {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => const HomeScreen()),
           (route) => false,
     );
   }
-
   Map<String, dynamic> _prepareBodyData() {
     return {
       "Electricity": widget.electricity,
@@ -265,7 +249,6 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
       "FlooringType": _selectedFlooringType ?? "Unknown",
       "FurnishingType": _selectedFurnishingType ?? "Unknown",
       "WhouseId": widget.warehouse.wHouseId,
-
     };
   }
 
@@ -290,7 +273,6 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
         .of(context)
         .size
         .width;
-
     return Scaffold(
       body: Column(
         children: [
@@ -488,8 +470,6 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
                             (value) => setState(() => _selectedFurnishingType = value),
                       ),
                     ),
-                    SizedBox(height: screenHeight*0.02),
-                    buildToggleButtons(S.of(context).flexi_model_interest, flexingModel, (value) => setState(() => flexingModel = value)),
                     SizedBox(height: screenHeight*0.04),
                     Align(
                       alignment: Alignment.center,
@@ -508,7 +488,7 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
                         child: const Text(
                           'Submit',
                           style: TextStyle(
-                            fontSize: 18, // Increase font size
+                            fontSize: 18,
                             fontWeight: FontWeight.bold, // Bold text
                           ),
                         ),
@@ -576,9 +556,7 @@ class _UpdateWarehouseDimensionsState extends State<UpdateWarehouseDimensions> {
 
 class AnimatedDialog extends StatelessWidget {
   final String message;
-
   const AnimatedDialog({super.key, required this.message});
-
   @override
   Widget build(BuildContext context) {
     return Dialog(

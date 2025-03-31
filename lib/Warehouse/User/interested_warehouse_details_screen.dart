@@ -195,16 +195,6 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                       child: Image.asset("assets/images/Shareicon.png")
                                   ),
                                 ),
-                                // Container(
-                                //   height: screenHeight*0.04,
-                                //   width: screenWidth*0.1,
-                                //   margin: EdgeInsets.only(top: screenHeight*0.05,right: screenWidth*0.1),
-                                //   decoration: BoxDecoration(
-                                //       borderRadius: BorderRadius.circular(5),
-                                //       color: Colors.white
-                                //   ),
-                                //   child: const Center(child: Icon(Icons.file_download_outlined,color: Colors.blue,size: 16,)),
-                                // ),
                               ],
                             )
                           ],
@@ -584,19 +574,6 @@ class _InterestedWarehouseDetailsScreenState extends State<InterestedWarehouseDe
                                   ),
                                   const SizedBox(height: 13,),
                                   KeyValueTable(data: sampleData),
-                                  // Container(
-                                  //   margin:  EdgeInsets.symmetric(horizontal: screenWidth*0.08),
-                                  //   height: screenHeight*0.12,
-                                  //   width: double.infinity,
-                                  //   decoration: BoxDecoration(
-                                  //       border: Border.all(color: Colors.grey,width: 1.5),
-                                  //       borderRadius: BorderRadius.circular(5)
-                                  //   ),
-                                  //   child: const Padding(
-                                  //     padding: EdgeInsets.all(8.0),
-                                  //     child: Text("Messages"),
-                                  //   ),
-                                  // ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [

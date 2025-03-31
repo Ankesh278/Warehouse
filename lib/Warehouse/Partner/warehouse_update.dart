@@ -14,8 +14,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
-
 class WarehouseUpdate extends StatefulWidget {
   final Warehouse warehouse;
   const WarehouseUpdate({super.key,required this.warehouse});

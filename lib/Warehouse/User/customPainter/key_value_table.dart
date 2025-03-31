@@ -1,106 +1,125 @@
-import 'package:Lisofy/Warehouse/User/UserProvider/auth_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:Lisofy/Warehouse/User/UserProvider/auth_user_provider.dart';
 
 class KeyValueTable extends StatelessWidget {
   final Map<String, String?>? data;
   const KeyValueTable({super.key, this.data});
+
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final showAll = context.watch<AuthUserProvider>().showAll;
-
     final dataEntries = data ?? {};
     final entries = showAll ? dataEntries.entries.toList() : dataEntries.entries.take(3).toList();
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: screenHeight * 0.02),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.black.withValues(alpha: 0.1),
-        //     blurRadius: 5,
-        //     spreadRadius: 1,
-        //   ),
-        // ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.8),
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: Colors.white.withOpacity(0.3)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Measurement",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
+              // Header
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      "📦 Warehouse Details",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.amber.shade400,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      context.read<AuthUserProvider>().toggleShowAll();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.shade400,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        showAll ? "🔽 View Less" : "🔼 View More",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              GestureDetector(
-                onTap: () {
-                  context.read<AuthUserProvider>().toggleShowAll();
-                },
-                child: Text(
-                  showAll ? "View Less" : "View More",
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
+              const SizedBox(height: 10),
+
+              // Key-Value List with Constraints
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: showAll ? constraints.maxHeight * 0.6 : constraints.maxHeight * 0.3,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: entries.map((entry) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Key
+                            Expanded(
+                              flex: 4,
+                              child: Text(
+                                "${entry.key}:",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  color: Colors.amber.shade300,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+
+                            // Value
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  entry.value ?? "0",
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ),
               ),
             ],
           ),
-           SizedBox(height: screenHeight*0.015),
-          // Key-Value List
-          AnimatedSize(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            child: Column(
-              children: entries.map((entry) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Key (left column)
-                      SizedBox(
-                        width: screenWidth * 0.5,
-                        child: Text(
-                          "${entry.key} :",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                      // Value (right column)
-                      Expanded(
-                        child: Text(
-                          entry.value ?? "0",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
-

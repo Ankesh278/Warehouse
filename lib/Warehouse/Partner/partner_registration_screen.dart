@@ -3,7 +3,6 @@ import 'package:Lisofy/Warehouse/User/getuserlocation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
 class PartnerRegistrationScreen extends StatefulWidget {
   final String phone;
   const PartnerRegistrationScreen({super.key, required this.phone});
@@ -15,9 +14,7 @@ class PartnerRegistrationScreen extends StatefulWidget {
 class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
-
   final _lastNameController = TextEditingController();
-
   @override
   void dispose() {
     _firstNameController.dispose();
@@ -48,7 +45,6 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
         ),
       ).then((value) => value ?? false);
     }
-
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -96,7 +92,6 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
                                     icon: const Icon(Icons.arrow_back_ios_sharp,
                                         color: Colors.white),
                                     onPressed: () {
-                                      // Navigator.pop(context);
                                     },
                                   ),
                                 ),
@@ -209,8 +204,7 @@ class _PartnerRegistrationScreenState extends State<PartnerRegistrationScreen> {
                                               .text
                                               .trim()
                                               .toString();
-                                          String apiUrl =
-                                              "https://xpacesphere.com/api/Register/UPDRegistrDetails?mobile=${widget.phone} &Name=$name";
+                                          String apiUrl = "https://xpacesphere.com/api/Register/UPDRegistrDetails?mobile=${widget.phone} &Name=$name";
                                           try {
                                             final response = await http
                                                 .put(Uri.parse(apiUrl));

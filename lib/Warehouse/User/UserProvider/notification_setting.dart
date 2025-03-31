@@ -9,14 +9,12 @@ class NotificationSettingsProvider with ChangeNotifier {
   String? _phone;
   String? _email;
 
-  // Getters
   bool get phoneNotifications => _phoneNotifications;
   bool get emailNotifications => _emailNotifications;
   bool get pushNotifications => _pushNotifications;
   String? get phone => _phone;
   String? get email => _email;
 
-  // Load preferences
   Future<void> loadPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _phoneNotifications = prefs.getBool('phoneNotifications') ?? true;

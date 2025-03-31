@@ -3,14 +3,10 @@ import 'package:Lisofy/Warehouse/User/user_shortlisted_intrested.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-
-
 class CartProvider with ChangeNotifier {
   final String baseUrl = "https://xpacesphere.com/api/Wherehousedt";
   final Map<int, bool> _shortlistedWarehouses = {};
   bool isShortlisted(int warehouseId) => _shortlistedWarehouses[warehouseId] ?? false;
-
   Future<void> fetchShortlistStatus(int warehouseId, String phoneNumber) async {
     try {
       final url = "$baseUrl/GetSortlist_warehouse?_mobile=$phoneNumber&Id=$warehouseId";

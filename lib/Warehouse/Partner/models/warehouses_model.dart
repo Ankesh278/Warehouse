@@ -1,5 +1,3 @@
-
-
 class Warehouse {
   final int id;
   final String wHouseAddress;

@@ -1,6 +1,7 @@
+import 'package:Lisofy/Localization/languages.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:warehouse/Localization/languages.dart';
+
 
 
 class LanguageSwitcher extends StatelessWidget {

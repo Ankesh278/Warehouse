@@ -16,7 +16,6 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 class WareHouseDetails extends StatefulWidget {
   final WarehouseModel warehouses;
   final String phone;
@@ -145,16 +144,14 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
           'icon': ImageAssets.powerBackup,
           'label': 'Power Backup',
         },
-      if (widget.warehouses.flexingModel)
-        {
-          'icon': ImageAssets.flexiModel,
-          'label': 'Flexi Model',
-        },
+      // if (widget.warehouses.flexingModel)
+      //   {
+      //     'icon': ImageAssets.flexiModel,
+      //     'label': 'Flexi Model',
+      //   },
     ];
     final Map<String, String> sampleData = {
-      "Previous Tenants": widget.warehouses.electricity,
       "Construction Age(in Month)": widget.warehouses.constructionAge.toString(),
-      "Name": widget.warehouses.wHouseName,
       "Ground Floor": widget.warehouses.groundFloor,
       "Lock-in Period": widget.warehouses.wHouseLockinPeriod.toString(),
       "Token Advance": widget.warehouses.wHouseTokenAdvance!,
@@ -178,10 +175,9 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                   children: [
                     Container(
                       color: Colors.blue,
-                      height: screenHeight * 0.18,
+                      height: screenHeight * 0.1,
                       child: Padding(
                         padding: EdgeInsets.only(
-                          top: screenHeight * 0.025,
                           left: screenWidth * 0.025,
                         ),
                         child: Column(
@@ -189,15 +185,14 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                 SizedBox(
-                                  width: screenWidth*0.02,
-                                  height: screenHeight*0.04,
-                                ),
                                 InkWell(
-                                  child: const Icon(
-                                    Icons.arrow_back_ios_new_rounded,
-                                    color: Colors.white,
-                                    size: 18,
+                                  child:  Padding(
+                                    padding: EdgeInsets.all(screenWidth*0.03),
+                                    child: const Icon(
+                                      Icons.arrow_back_ios_new_rounded,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
                                   ),
                                   onTap: () {
                                     Navigator.pop(context);
@@ -219,7 +214,7 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                       height: screenHeight*0.04,
                                       width: screenWidth*0.1,
                                       margin: EdgeInsets.only(
-                                          top: screenHeight * 0.05,
+                                          // top: screenHeight * 0.05,
                                           right: screenWidth * 0.04),
                                       child: isShortlisted
                                           ? const Icon(
@@ -251,8 +246,8 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                       height: screenHeight*0.04,
                                       width: screenWidth*0.1,
                                       margin: EdgeInsets.only(
-                                          top: screenHeight * 0.05,
-                                          right: screenWidth * 0.04),
+                                          // top: screenHeight * 0.05,
+                                          right: screenWidth * 0.06),
                                       decoration: const BoxDecoration(
                                           color: Colors.blue),
                                       child: Image.asset(
@@ -531,6 +526,7 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                                 style: const TextStyle(
                                                     fontSize: 12,
                                                     fontWeight: FontWeight.w500,
+                                                    overflow: TextOverflow.ellipsis,
                                                     color: Colors.black),
                                                 textAlign: TextAlign.start,
                                               ),
@@ -542,6 +538,7 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                           child: Text(
                                             "${S.of(context).security_deposit}(Month)",
                                             style: const TextStyle(
+                                                overflow: TextOverflow.ellipsis,
                                                 color: Colors.grey,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.w500),
@@ -575,6 +572,7 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                               child: Text(
                                                 widget.warehouses.wHouseType,
                                                 style: const TextStyle(
+                                                    overflow: TextOverflow.ellipsis,
                                                     fontSize: 12,
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.black),

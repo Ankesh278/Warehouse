@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 class DownArrowPainter extends CustomPainter {
   final Color color;
   final double strokeWidth;
-
   DownArrowPainter({required this.color, this.strokeWidth = 5.0});
-
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
@@ -37,13 +35,13 @@ class DownArrow extends StatelessWidget {
     super.key,
     this.width = 50,
     this.height = 100,
-    this.color = Colors.blue, // Default color is blue
+    this.color = Colors.blue,
   });
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: Size(width, height), // Arrow size
+      size: Size(width, height),
       painter: DownArrowPainter(color: color),
     );
   }

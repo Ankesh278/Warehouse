@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 class RatingProvider extends ChangeNotifier {
   double _rating = 0.0;
   String _comment = "";
@@ -21,7 +19,6 @@ class RatingProvider extends ChangeNotifier {
   int get panCardStatus => _panCardStatus;
   int get aadharCardStatus => _aadharCardStatus;
   int get selfiStatus => _selfiStatus;
-
   TextEditingController commentController = TextEditingController();
 
   /// Fetch existing rating & comment along with status fields
@@ -36,10 +33,8 @@ class RatingProvider extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-
         if (data.containsKey('data') && data['data'].isNotEmpty) {
           final latestFeedback = data['data'].last;
-
           _rating = (latestFeedback['rating'] as num?)?.toDouble() ?? 0.0;
           _comment = latestFeedback['review'] ?? "";
           _panCardStatus = latestFeedback['panCardStatus'] ?? 0;
@@ -47,7 +42,6 @@ class RatingProvider extends ChangeNotifier {
           _selfiStatus = latestFeedback['selfiStatus'] ?? 0;
           _isSubmitted = _rating > 0.0 && _comment.isNotEmpty;
           commentController.text = _comment;
-
           debugPrint("Fetched Rating: $_rating");
           debugPrint("Fetched Comment: $_comment");
           debugPrint("Pan Card Status: $_panCardStatus");

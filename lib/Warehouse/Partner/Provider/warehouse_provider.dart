@@ -1,12 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 class WarehouseProvider with ChangeNotifier {
   final Map<String, bool> _warehouseStatus = {};
-
   Map<String, bool> get warehouseStatus => _warehouseStatus;
-
   void initializeStatus(String warehouseId, bool status) {
     _warehouseStatus[warehouseId] = status;
   }
@@ -14,7 +11,6 @@ class WarehouseProvider with ChangeNotifier {
   Future<void> updateWarehouseStatus(String warehouseId, bool status) async {
     final url = Uri.parse(
         'https://xpacesphere.com/api/Wherehousedt/UpdIsAvailable');
-
     try {
       final response = await http.put(
         url,

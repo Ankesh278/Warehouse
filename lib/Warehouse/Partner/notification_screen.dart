@@ -1,16 +1,13 @@
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/material.dart';
-
 class NotificationScreen extends StatefulWidget {
   final String? payload;
   final List<Map<String, String>> notifications;
-
   const NotificationScreen({super.key, this.payload, this.notifications = const []});
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
 }
-
 class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {

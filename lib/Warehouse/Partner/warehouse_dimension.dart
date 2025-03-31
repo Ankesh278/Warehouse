@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
-
 class WarehouseService extends StatefulWidget {
   final String electricity;
   final String tenants;
@@ -122,22 +121,18 @@ class _WarehouseServiceState extends State<WarehouseService> {
         _selectedFurnishingType == null) {
       return;
     }
-
     _showProgressIndicator();
-
     try {
       final bodyData = _prepareBodyData();
       if (kDebugMode) {
         print("Request Body: $bodyData");
       }
-
       final response = await http.post(
         Uri.parse(
             'https://xpacesphere.com/api/Amenitiesdt/InsAmenities_Details'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(bodyData),
       );
-
       if (kDebugMode) {
         print("Response: ${response.statusCode}, Body: ${response.body}");
       }
@@ -164,7 +159,6 @@ class _WarehouseServiceState extends State<WarehouseService> {
       ),
     );
   }
-
   void _showSuccessPopup() {
     showDialog(
       context: context,
@@ -241,7 +235,7 @@ class _WarehouseServiceState extends State<WarehouseService> {
       "SideHeight": _sideHeight.text.trim(),
       "CenterHeight": _centreHeight.text.trim(),
       "DocksOfHeight": _dockHeight.text.trim(),
-      "FlexiModel": flexingModel.toLowerCase() == "yes",
+      //"FlexiModel": flexingModel.toLowerCase() == "yes",
       "CluDocument": widget.cluDocument.toLowerCase() == "yes",
       "FlooringType": _selectedFlooringType,
       "FurnishingType": _selectedFurnishingType,
@@ -524,11 +518,11 @@ class _WarehouseServiceState extends State<WarehouseService> {
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.02),
-                    buildToggleButtons(
-                        S.of(context).flexi_model_interest,
-                        flexingModel,
-                        (value) => setState(() => flexingModel = value)),
-                    SizedBox(height: screenHeight * 0.04),
+                    // buildToggleButtons(
+                    //     S.of(context).flexi_model_interest,
+                    //     flexingModel,
+                    //     (value) => setState(() => flexingModel = value)),
+                    // SizedBox(height: screenHeight * 0.04),
                     Align(
                       alignment: Alignment.center,
                       child: ElevatedButton(

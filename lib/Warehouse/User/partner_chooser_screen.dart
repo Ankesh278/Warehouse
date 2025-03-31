@@ -3,15 +3,11 @@ import 'package:Lisofy/Warehouse/Partner/home_screen.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter/material.dart';
-
-
 class PartnerChooserScreen extends StatefulWidget {
   const PartnerChooserScreen({super.key});
-
   @override
   State<PartnerChooserScreen> createState() => _PartnerChooserScreenState();
 }
-
 class _PartnerChooserScreenState extends State<PartnerChooserScreen> {
   @override
   Widget build(BuildContext context) {
@@ -94,11 +90,9 @@ class _PartnerChooserScreenState extends State<PartnerChooserScreen> {
 
 class CustomTextFieldShape extends StatefulWidget {
   const CustomTextFieldShape({super.key});
-
   @override
   State<CustomTextFieldShape> createState() => _CustomTextFieldShapeState();
 }
-
 class _CustomTextFieldShapeState extends State<CustomTextFieldShape> {
   int? selectedOption;
 
@@ -106,7 +100,6 @@ class _CustomTextFieldShapeState extends State<CustomTextFieldShape> {
     setState(() {
       selectedOption = index;
     });
-
     if (index == 0) {
       Navigator.push(
         context,
@@ -116,7 +109,6 @@ class _CustomTextFieldShapeState extends State<CustomTextFieldShape> {
       _showComingSoonDialog(context);
     }
   }
-
   void _showComingSoonDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -130,7 +122,6 @@ class _CustomTextFieldShapeState extends State<CustomTextFieldShape> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    // final screenWidth = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +148,6 @@ class _CustomTextFieldShapeState extends State<CustomTextFieldShape> {
       ),
     );
   }
-
   Widget buildSelectableContainer(
       int index, String label, String imageAsset, String image) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -195,8 +185,6 @@ class _CustomTextFieldShapeState extends State<CustomTextFieldShape> {
                   ],
                 ),
               ),
-
-              // Content on top of the image
               Positioned.fill(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -241,7 +229,6 @@ class _CustomTextFieldShapeState extends State<CustomTextFieldShape> {
 
 class ComingSoonDialog extends StatelessWidget {
   const ComingSoonDialog({super.key});
-
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 3), () {

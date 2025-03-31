@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 class AmenitiesWarehouse extends StatefulWidget {
   final int id;
   const AmenitiesWarehouse({super.key, required this.id});
-
   @override
   State<AmenitiesWarehouse> createState() => _AmenitiesWarehouseState();
 }

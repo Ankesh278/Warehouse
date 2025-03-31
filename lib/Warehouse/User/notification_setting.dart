@@ -2,11 +2,8 @@
 import 'package:Lisofy/Warehouse/User/UserProvider/notification_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-
 class NotificationSetting extends StatefulWidget {
   const NotificationSetting({super.key});
-
   @override
   State<NotificationSetting> createState() => _NotificationSettingState();
 }

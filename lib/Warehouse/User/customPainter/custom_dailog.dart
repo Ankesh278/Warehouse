@@ -1,6 +1,5 @@
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter/material.dart';
-
 class CustomDialog extends StatelessWidget {
   final String title;
   final String message1;
@@ -19,7 +18,6 @@ class CustomDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Container(
-        // padding:  EdgeInsets.all(screenWidth*0.1),
         decoration: BoxDecoration(
           color: Colors.blue,
           borderRadius: BorderRadius.circular(screenWidth*0.04),
@@ -110,7 +108,7 @@ void showCustomDialog(BuildContext context, String title, String message1,String
     barrierDismissible: false,
     builder: (context) {
       Future.delayed(const Duration(seconds: 5), () {
-        if (Navigator.canPop(context)) {
+        if (context.mounted &&Navigator.canPop(context)) {
           Navigator.of(context).pop();
         }
       });

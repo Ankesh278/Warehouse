@@ -7,27 +7,18 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
-
 class VerifyOtpScreen extends StatefulWidget {
   final String verificationId;
   final String phoneNumber;
-
   const VerifyOtpScreen({super.key, required this.verificationId, required this.phoneNumber});
-
   @override
   VerifyOtpScreenState createState() => VerifyOtpScreenState();
 }
-
 class VerifyOtpScreenState extends State<VerifyOtpScreen> {
   String? _errorMessage;
   bool isLoading=false;
-
   final TextEditingController _otpController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-
-
   Future<void> _verifyOtp() async {
     setState(() {
       isLoading = true;

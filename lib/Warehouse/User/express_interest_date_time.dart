@@ -8,8 +8,6 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
-
 class ExpressInterestDateTime extends StatefulWidget {
   final dynamic name;
   final dynamic email;
@@ -72,7 +70,9 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
         if (kDebugMode) {
           print('Response: ${response.body}');
         }
-        showCongratulationsDialog(context);
+        if(mounted){
+          showCongratulationsDialog(context);
+        }
       } else {
         if (kDebugMode) {
           print('Response: ${response.body}');
@@ -87,13 +87,10 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
 
   void showCongratulationsDialog(BuildContext context) {
     if (!context.mounted) return;
-
     SharedPreferences.getInstance().then((pref) {
       if (!context.mounted) return;
-
       double? latitude = pref.getDouble("latitude");
       double? longitude = pref.getDouble("longitude");
-
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -166,7 +163,6 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
         },
       );
 
-      // Auto-close dialog and navigate after 5 seconds
       Future.delayed(const Duration(seconds: 5), () {
         if (context.mounted && Navigator.of(context).canPop()) {
           Navigator.of(context).pop();

@@ -10,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 class WarehouseImageScreen extends StatefulWidget {
   const WarehouseImageScreen({super.key});
   @override
@@ -87,7 +86,14 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
           print("Response body: $responseString");
         }
         if (!mounted) return;
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>AmenitiesWarehouse(id: id)));
+        Future.microtask(() {
+          if (context.mounted) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AmenitiesWarehouse(id: id)),
+            );
+          }
+        });
 
         try {
           var responseJson = jsonDecode(responseString);
@@ -105,19 +111,26 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
           }
         }
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Photos and Videos Uploaded...'),
-            backgroundColor: Colors.green,
-          ),
-        );
-
+        Future.microtask(() {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Photos and Videos Uploaded...'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+        });
         _clearAllFields();
         if (!mounted) return;
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) =>  AmenitiesWarehouse(id:id)),
-          (Route<dynamic> route) => false,
-        );
+        Future.microtask(() {
+          if (context.mounted) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => AmenitiesWarehouse(id: id)),
+                  (Route<dynamic> route) => false,
+            );
+          }
+        });
       } else {
         setState(() {
           _isUploading = false;
@@ -164,7 +177,6 @@ class _WarehouseImageScreenState extends State<WarehouseImageScreen> {
     if (phone.startsWith("+91")) {
       phone = phone.replaceFirst("+91", "");
     }
-
     try {
       final response = await http.get(
         Uri.parse('$apiUrl?mobile=$phone'),

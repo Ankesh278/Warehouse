@@ -1,16 +1,12 @@
-
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-
 class PhotoProvider extends ChangeNotifier {
   File? _pancardPhoto;
   File? _selfieOfOwnerPhoto;
   File? _aadharCardFrontPhoto;
   File? _aadharCardBackPhoto;
-
-
   File? get frontPhoto => _pancardPhoto;
   File? get backPhoto => _selfieOfOwnerPhoto;
   File? get aadharPhotoFront => _aadharCardFrontPhoto;

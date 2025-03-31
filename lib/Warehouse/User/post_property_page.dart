@@ -5,21 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 class PostYourPropertyScreen extends StatefulWidget {
   const PostYourPropertyScreen({super.key});
-
   @override
   State<PostYourPropertyScreen> createState() => _PostYourPropertyScreenState();
 }
-
 class _PostYourPropertyScreenState extends State<PostYourPropertyScreen> {
   late ScrollController _scrollController;
   bool _isFabVisible = false;
-
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_handleScroll);
-
     Future.delayed(const Duration(seconds: 10), () {
       if (mounted) {
         setState(() {
@@ -28,7 +24,6 @@ class _PostYourPropertyScreenState extends State<PostYourPropertyScreen> {
       }
     });
   }
-
   void _handleScroll() {
     if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
       if (_isFabVisible) {

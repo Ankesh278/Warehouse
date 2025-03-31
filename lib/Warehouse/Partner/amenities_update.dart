@@ -2,11 +2,9 @@ import 'package:Lisofy/Warehouse/Partner/update_warehouse_dimensions.dart';
 import 'package:Lisofy/Warehouse/Partner/models/warehouses_model.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/material.dart';
-
 class AmenitiesUpdate extends StatefulWidget {
   final Warehouse warehouse;
   const AmenitiesUpdate({super.key, required this.warehouse});
-
   @override
   State<AmenitiesUpdate> createState() => _AmenitiesUpdateState();
 }
@@ -27,8 +25,6 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
   String dockLevelers = '';
   String fireComplaint = '';
   String cluDocument = '';
-
-
 
   @override
   void initState() {
@@ -204,7 +200,6 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
                       buildTextField(label: "${S.of(context).num_of_fans}*", controller: fansController, hint: 'ex. 23'),
                       buildTextField(label: "${S.of(context).num_of_lights}*", controller: lightsController, hint: 'ex. 23'),
                       buildToggleButtons(S.of(context).warehouse_power_backup, powerBackup, (value) => setState(() => powerBackup = value)),
-                      // buildTextField(label: "Previous Tenants", controller: tenantsController, hint: 'ex. Amazon, 2 yrs contact details'),
                       buildToggleButtons(S.of(context).provide_office_space, provideOffice, (value) => setState(() => provideOffice = value)),
                       buildToggleButtons(S.of(context).warehouse_dock_levelers, dockLevelers, (value) => setState(() => dockLevelers = value)),
                       Row(children: [
@@ -215,7 +210,7 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
                         Container(
                           margin: const EdgeInsets.only(left: 17),
                           height: 20,
-                          width: 82, // Adjusted width
+                          width: 82,
                           decoration: BoxDecoration(
                             borderRadius:
                             BorderRadius.circular(1),
@@ -229,7 +224,7 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
                                 onTap: _decrease,
                                 child: Container(
                                   width:
-                                  25, // Width for minus button
+                                  25,
                                   color: Colors.white,
                                   alignment: Alignment.center,
                                   child: const Text(
@@ -266,7 +261,7 @@ class _AmenitiesUpdateState extends State<AmenitiesUpdate> {
                                     style: TextStyle(
                                         fontSize: 14,
                                         color: Colors
-                                            .green), // Adjusted font size
+                                            .green),
                                   ),
                                 ),
                               ),

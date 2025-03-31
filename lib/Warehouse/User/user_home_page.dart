@@ -11,6 +11,7 @@ import 'package:Lisofy/Warehouse/User/user_profile_screen.dart';
 import 'package:Lisofy/Warehouse/User/user_shortlisted_intrested.dart';
 import 'package:Lisofy/Warehouse/User/warehouse_details.dart';
 import 'package:Lisofy/generated/l10n.dart';
+import 'package:Lisofy/new_home_page.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
@@ -23,7 +24,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
-
 class UserHomePage extends StatefulWidget {
   final double latitude;
   final double longitude;
@@ -273,95 +273,97 @@ if (kDebugMode) {
       },
     );
   }
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-              children: [
-                _buildHomePage(screenWidth, screenHeight),
-                _userShortListedInterestedPage(screenWidth, screenHeight),
-                _buildAccountPage(screenWidth, screenHeight),
-              ],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Column(
+          children: [
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+                children: [
+                  _buildHomePage(screenWidth, screenHeight),
+                  _userShortListedInterestedPage(screenWidth, screenHeight),
+                  _buildAccountPage(screenWidth, screenHeight),
+                ],
+              ),
             ),
-          ),
-          Container(
-            color: Colors.blue,
-            height: screenHeight*0.05,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: IconButton(
-                    icon: const Icon(Icons.home_filled),
-                    color:
-                        _selectedIndex == 0 ? Colors.white : Colors.grey[300],
-                    onPressed: () => _onItemTapped(0),
+            Container(
+              color: Colors.blue,
+              height: screenHeight*0.05,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: IconButton(
+                      icon: const Icon(Icons.home_filled),
+                      color:
+                          _selectedIndex == 0 ? Colors.white : Colors.grey[300],
+                      onPressed: () => _onItemTapped(0),
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Stack(
-                    clipBehavior: Clip
-                        .none,
-                    alignment: Alignment.center,
-                    children: [
-                      Positioned(
-                        bottom:screenHeight*0.025,
-                        child: Container(
-                          width: screenWidth*0.15,
-                          height: screenHeight*0.058,
-                          decoration: BoxDecoration(
-                            color: _selectedIndex == 1
-                                ? Colors.blue
-                                : const Color(
-                                    0xffD9D9D9),
-                            shape:
-                                BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 1,
+                  Expanded(
+                    child: Stack(
+                      clipBehavior: Clip
+                          .none,
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                          bottom:screenHeight*0.025,
+                          child: Container(
+                            width: screenWidth*0.15,
+                            height: screenHeight*0.058,
+                            decoration: BoxDecoration(
+                              color: _selectedIndex == 1
+                                  ? Colors.blue
+                                  : const Color(
+                                      0xffD9D9D9),
+                              shape:
+                                  BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 1,
+                              ),
                             ),
-                          ),
-                          child: IconButton(
-                            icon: ImageIcon(
-                              const AssetImage(ImageAssets.storage),
-                              color: _selectedIndex == 1 ? Colors.white : Colors.blue,
-                              size: 24,
+                            child: IconButton(
+                              icon: ImageIcon(
+                                const AssetImage(ImageAssets.storage),
+                                color: _selectedIndex == 1 ? Colors.white : Colors.blue,
+                                size: 24,
+                              ),
+                              onPressed: () => _onItemTapped(1),
                             ),
-                            onPressed: () => _onItemTapped(1),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: IconButton(
-                    icon: ImageIcon(
-                      _selectedIndex == 2
-                          ? const AssetImage("assets/images/Gear2.png")
-                          : const AssetImage('assets/images/Gear.png'),
-                      color:
-                          _selectedIndex == 2 ? Colors.white : Colors.grey[300],
+                      ],
                     ),
-                    onPressed: () => _onItemTapped(2),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: IconButton(
+                      icon: ImageIcon(
+                        _selectedIndex == 2
+                            ? const AssetImage("assets/images/Gear2.png")
+                            : const AssetImage('assets/images/Gear.png'),
+                        color:
+                            _selectedIndex == 2 ? Colors.white : Colors.grey[300],
+                      ),
+                      onPressed: () => _onItemTapped(2),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -539,6 +541,28 @@ if (kDebugMode) {
                               fontSize: 10,
                               fontWeight: FontWeight.normal,
                               color: Colors.white),
+                        ),
+                        InkWell(
+                            onTap: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => NewHomePage(
+                                        longitude: widget.longitude,
+                                        latitude: widget.latitude,
+                                      )));
+                            },
+                            child: const Column(
+                              children: [
+                                ImageIcon(
+                                  AssetImage(
+                                      ImageAssets.backArrow
+                                  ),
+                                  color: Colors.white,
+                                ),
+                                Text("Back",style: TextStyle(color: Colors.white,fontSize: 8,fontWeight: FontWeight.w100),)
+                              ],
+                            )
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -884,30 +908,41 @@ if (kDebugMode) {
                                   ));
                             } else if (!snapshot.hasData ||
                                 snapshot.data!.isEmpty) {
-                              return Center(
-                                  child: Stack(
-                                    children: [
-                                      Image.asset(ImageAssets.noWarehouse),
-                                      Image.asset(ImageAssets.noWarehouseBanner),
-                                      Container(
-                                          margin: EdgeInsets.only(
-                                              bottom: screenHeight * 0.1),
-                                          child: const Center(
-                                              child: Text(
-                                                "Sorry...",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w800,
-                                                    fontSize: 18),
-                                              ))),
-                                      const Center(
-                                          child: Text(
-                                            "No Warehouse near you...",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w800,
-                                                fontSize: 18),
-                                          ))
-                                    ],
-                                  ));
+                              return SingleChildScrollView(
+                                child: Center(
+                                    child: Column(
+                                      children: [
+                                        Image.asset(ImageAssets.noWarehouseBanner),
+                                        SizedBox(height: screenHeight*0.05,),
+                                        Stack(
+                                          children: [
+                                            Image.asset(ImageAssets.noWarehouse),
+                                            // Container(
+                                            //     margin: EdgeInsets.only(
+                                            //         bottom: screenHeight * 0.1),
+                                            //     child: const Center(
+                                            //         child: Text(
+                                            //           "Sorry...",
+                                            //           style: TextStyle(
+                                            //               fontWeight: FontWeight.w800,
+                                            //               fontSize: 18),
+                                            //         ))),
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  bottom: screenHeight * 0.1),
+                                              child: const Center(
+                                                  child: Text(
+                                                    "No Warehouse near you...",
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.w800,
+                                                        fontSize: 18),
+                                                  )),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    )),
+                              );
                             } else {
                               return Consumer<SortingProvider>(
                                   builder: (context, sortingProvider, child) {
@@ -1472,6 +1507,8 @@ if (kDebugMode) {
 }
 
 
+
+
 class AdvancedFiltersBottomSheet extends StatefulWidget {
   const AdvancedFiltersBottomSheet({super.key});
 
@@ -1485,14 +1522,7 @@ class AdvancedFiltersBottomSheetState
   String? selectedFilter;
   bool isClearFilters = true;
   Map<String, List<String>> filterOptions = {
-    'Construction Types': [
-      'PEB',
-      'Cold Storage',
-      'RCC',
-      'Shed',
-      'Factory',
-      'Others'
-    ],
+    'Construction Types': ['PEB', 'Cold Storage', 'RCC', 'Shed', 'Factory', 'Others'],
     'Warehouse Types': [
       'PEB',
       'Cold Storage',
@@ -1522,75 +1552,73 @@ class AdvancedFiltersBottomSheetState
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: MediaQuery.of(context).size.height / 1.8,
+      height: screenHeight / 1.9,
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        boxShadow: [
+          BoxShadow(color: Colors.black26, blurRadius: 5, spreadRadius: 2),
+        ],
       ),
       child: Column(
         children: [
+          // Header
           Container(
-            height: 35,
-            margin: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.15, vertical: 8),
+            height: screenHeight * 0.06,
+            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.1, vertical: 8),
             decoration: BoxDecoration(
               color: Colors.blue,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
+                const Padding(
+                  padding: EdgeInsets.only(left: 12.0),
                   child: Text(
-                    S.of(context).advanced_filters,
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w600),
+                    "Advanced Filters",
+                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: const Icon(Icons.clear, color: Colors.white, size: 20),
+                  icon: Icon(Icons.clear, color: Colors.white, size: screenHeight * 0.03),
                 ),
               ],
             ),
           ),
           Expanded(
-            flex: 1,
             child: Row(
               children: [
+                // Filter categories
                 Container(
-                  width: screenWidth / 1.7,
-                  color: Colors.white,
+                  width: screenWidth / 2.5,
+                  color: Colors.grey.shade100,
                   child: ListView(
                     children: filterOptions.keys.map((filter) {
-                      return Container(
-                        height: screenHeight*0.04,
-                        margin: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: selectedFilter == filter
-                              ? Colors.blue
-                              : Colors.white,
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedFilter = filter;
-                            });
-                          },
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedFilter = filter;
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: selectedFilter == filter ? Colors.blue : Colors.white,
+                            border: Border.all(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           child: Center(
                             child: Text(
                               filter,
                               style: TextStyle(
-                                fontSize: 12,
-                                color: selectedFilter == filter
-                                    ? Colors.white
-                                    : Colors.black,
+                                fontSize: 14,
+                                color: selectedFilter == filter ? Colors.white : Colors.black,
+                                fontWeight: FontWeight.w500,
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -1602,80 +1630,51 @@ class AdvancedFiltersBottomSheetState
                 ),
                 // Filter Options
                 Expanded(
-                  flex: 1,
                   child: Container(
+                    padding: const EdgeInsets.all(10),
                     color: Colors.white,
                     child: selectedFilter == 'Rent Range'
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("${S.of(context).select_rent_range} (₹)",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold)),
-                                const SizedBox(height: 10),
-                                RotatedBox(
-                                  quarterTurns: -1,
-                                  child: RangeSlider(
-                                    min: minRent,
-                                    max: maxRent,
-                                    values: rentRange,
-                                    onChanged: (RangeValues newRange) {
-                                      setState(() {
-                                        rentRange = newRange;
-                                      });
-                                    },
-                                    divisions: 10,
-                                    labels: RangeLabels(
-                                      '${rentRange.start.round()}',
-                                      '${rentRange.end.round()}',
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                    "₹${rentRange.start.round()} - ₹${rentRange.end.round()}"),
-                              ],
-                            ),
-                          )
+                        ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Select Rent Range (₹)", style: TextStyle(fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 10),
+                        RangeSlider(
+                          min: minRent,
+                          max: maxRent,
+                          values: rentRange,
+                          onChanged: (RangeValues newRange) {
+                            setState(() {
+                              rentRange = newRange;
+                            });
+                          },
+                          divisions: 10,
+                          labels: RangeLabels(
+                            '${rentRange.start.round()}',
+                            '${rentRange.end.round()}',
+                          ),
+                        ),
+                        Text("₹${rentRange.start.round()} - ₹${rentRange.end.round()}")
+                      ],
+                    )
                         : selectedFilter != null
-                            ? ListView(
-                                padding: EdgeInsets.zero,
-                                children: filterOptions[selectedFilter!]!
-                                    .map((option) {
-                                  return Container(
-                                    height: screenHeight*0.04,
-                                    margin: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Checkbox(
-                                          activeColor: Colors.green,
-                                          value: selectedOptions[selectedFilter]
-                                                  ?[option] ??
-                                              false,
-                                          onChanged: (bool? value) {
-                                            setState(() {
-                                              selectedOptions[selectedFilter]![
-                                                  option] = value!;
-                                            });
-                                          },
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            option,
-                                            style:
-                                                const TextStyle(fontSize: 12),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
-                              )
-                            : const Center(child: Text('Select a filter')),
+                        ? ListView(
+                      children: filterOptions[selectedFilter!]!.map((option) {
+                        return ListTile(
+                          leading: Checkbox(
+                            activeColor: Colors.green,
+                            value: selectedOptions[selectedFilter]?[option] ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                selectedOptions[selectedFilter]![option] = value!;
+                              });
+                            },
+                          ),
+                          title: Text(option, style: const TextStyle(fontSize: 14)),
+                        );
+                      }).toList(),
+                    )
+                        : const Center(child: Text('Select a filter', style: TextStyle(fontSize: 14))),
                   ),
                 ),
               ],
@@ -1683,87 +1682,36 @@ class AdvancedFiltersBottomSheetState
           ),
           // Bottom Action Buttons
           Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Container(
-              height: screenHeight * 0.05,
-              width: screenWidth * 0.7,
-              color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: screenWidth * 0.045,
-                  right: screenWidth * 0.03,
-                  bottom: screenWidth * 0.013,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isClearFilters = true;
+                      selectedOptions = {
+                        'Construction Types': {},
+                        'Warehouse Types': {},
+                        'Rent Range': {},
+                      };
+                      rentRange = const RangeValues(0, 10000);
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey.shade300),
+                  child: const Text("Clear All", style: TextStyle(color: Colors.black)),
                 ),
-                child: Container(
-                  width: screenWidth * 0.28,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                  ),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isClearFilters = true;
-                            selectedOptions = {
-                              'Construction Types': {},
-                              'Warehouse Types': {},
-                              'Rent Range': {},
-                            };
-                            rentRange = const RangeValues(0, 10000);
-                          });
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: screenWidth * 0.26,
-                          padding: EdgeInsets.symmetric(
-                              vertical: screenHeight * 0.005),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                          ),
-                          child: Text(
-                            S.of(context).clear_all,
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: screenHeight * 0.011,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      // Apply Filters button
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isClearFilters = false;
-                            Navigator.pop(context);
-                          });
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: screenWidth * 0.34,
-                          padding: EdgeInsets.symmetric(
-                              vertical: screenHeight * 0.005),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.blue,
-                          ),
-                          child: Text(
-                            S.of(context).apply_filters,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: screenHeight * 0.011,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isClearFilters = false;
+                      Navigator.pop(context);
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                  child: const Text("Apply Filters", style: TextStyle(color: Colors.white)),
                 ),
-              ),
+              ],
             ),
           ),
         ],
@@ -1771,6 +1719,7 @@ class AdvancedFiltersBottomSheetState
     );
   }
 }
+
 
 class DottedBorder extends StatelessWidget {
   final Widget child;

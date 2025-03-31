@@ -14,8 +14,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:sms_autofill/sms_autofill.dart';
-
-
 class UserVerifyOtp extends StatefulWidget {
   final String verificationId;
   final String phoneNumber;
@@ -40,6 +38,7 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
   //   'https://xpacesphere.com/Content/NewFolder/warehouse_14.jpg'
   // ];
   Future<void> _verifyOtp() async {
+    if (!mounted) return;
     setState(() {
       isLoading = true;
     });
@@ -78,7 +77,9 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
           if (responseData['message'] == "Register Successfully") {
             await _storeUserData(true);
             trackButtonClick('OtpVerifyButton');
-            _navigateTo(context, PartnerRegistrationScreen(phone: widget.phoneNumber));
+            if(mounted){
+              _navigateTo(context, PartnerRegistrationScreen(phone: widget.phoneNumber));
+            }
           } else if (responseData['message'] == "Data retrieved successfully") {
             if (responseData['data'] != null && responseData['data'] is List) {
               if (kDebugMode) {
@@ -90,8 +91,12 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
                   .toList();
 
               if (userData.isNotEmpty) {
-                await _storeUserDetails(context,userData.first);
-                _navigateTo(context, const GetUserLocation());
+               if(mounted){
+                 await _storeUserDetails(context,userData.first);
+               }
+                if(mounted){
+                  _navigateTo(context, const GetUserLocation());
+                }
               } else {
                 throw Exception("User data list is empty.");
               }
@@ -116,24 +121,32 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
       }
       setError('Invalid OTP or server error. Please try again.');
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+     if(mounted){
+       setState(() {
+         isLoading = false;
+       });
+     }
     }
   }
 
 
   void setError(String message) {
-    setState(() {
-      _errorMessage = message;
-    });
+    if(mounted){
+      setState(() {
+        _errorMessage = message;
+      });
+    }
   }
   void setLoading(bool value) {
-    setState(() {
-      isLoading = value;
-    });
+    if(mounted){
+      setState(() {
+        isLoading = value;
+      });
+    }
   }
   Future<void> _storeUserDetails(BuildContext context, UserData user) async {
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final profileUrl = "https://xpacesphere.com${user.userProfile}";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isUserLoggedIn', true);
     await prefs.setString('phone', widget.phoneNumber);
@@ -144,8 +157,7 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
     if (kDebugMode) {
       print("ImageUrl: ${user.userProfile}");
     }
-    Provider.of<ProfileProvider>(context, listen: false)
-        .setProfileImageUrl("https://xpacesphere.com${user.userProfile}");
+    profileProvider.setProfileImageUrl(profileUrl);
 
     if (kDebugMode) {
       print("Updated Profile URL: https://xpacesphere.com${user.userProfile}");
@@ -175,7 +187,6 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
     listenForCode();
   }
 
-
   void startTimer() {
     _isButtonDisabled = true;
     _start = 30;
@@ -194,7 +205,6 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
   void dispose() {
     _timer?.cancel();
     super.dispose();
-    //cancel();
   }
   /// Listen for OTP automatically
   void listenForCode() async {
@@ -283,12 +293,10 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
                           ),
                           Align(
                             alignment: Alignment.topRight,
-                            child: Container(
-                              child: Image.asset(
-                                "assets/images/faceid.png",
-                                height: screenHeight * 0.12,
-                                width: screenHeight * 0.12,
-                              ),
+                            child: Image.asset(
+                              "assets/images/faceid.png",
+                              height: screenHeight * 0.12,
+                              width: screenHeight * 0.12,
                             ),
                           ),
                         ],
@@ -417,15 +425,6 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
                                   color: Colors.blue,
                                 ),
                               ),
-                              // Padding(
-                              //   padding:  EdgeInsets.only(top: screenHeight*0.05),
-                              //   child: Align(
-                              //     alignment: Alignment.bottomCenter,
-                              //     child: SizedBox(
-                              //         height: screenHeight*0.25,
-                              //         child: DemoClass(images: _demoImages)),
-                              //   ),
-                              // )
                             ],
                           ),
                         ),

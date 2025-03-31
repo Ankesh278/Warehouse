@@ -12,8 +12,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
-
 class AddWareHouse extends StatefulWidget {
   const AddWareHouse({super.key});
 
@@ -29,7 +27,6 @@ class _AddWareHouseState extends State<AddWareHouse> {
   final TextEditingController _warehouseName = TextEditingController();
   final TextEditingController _totalArea = TextEditingController();
   final TextEditingController _carpetAreaController = TextEditingController();
-
   final int _maxLength = 29;
   bool _isCheckedBase = false;
   int _numberOfFloor = 0;
@@ -228,7 +225,6 @@ class _AddWareHouseState extends State<AddWareHouse> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -1435,7 +1431,7 @@ class RentPerSqFt extends StatelessWidget {
         ),
         suffix: Container(
           padding: const EdgeInsets.only(
-              left: 8.0), // Space between the text and the input
+              left: 8.0),
           child: const Text(
             '|per month',
             style: TextStyle(color: Colors.grey, fontSize: 13),

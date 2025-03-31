@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 class WarehouseItemDesign extends StatefulWidget {
   const WarehouseItemDesign({super.key});
   @override

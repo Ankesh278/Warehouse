@@ -88,7 +88,8 @@ dependencies:
   flutter_native_splash: ^2.4.4
   animate_do: ^4.1.1
   firebase_analytics: ^11.4.4
-  flutter_carousel_slider: ^1.1.0
+  #flutter_carousel_slider: ^1.1.0
+
 
 
 

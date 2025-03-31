@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:Lisofy/Animation/glitter_border.dart';
-import 'package:Lisofy/Transportation/User/booking_page.dart';
 import 'package:Lisofy/Warehouse/User/customPainter/custom_dailog.dart';
 import 'package:Lisofy/Warehouse/User/partner_chooser_screen.dart';
 import 'package:Lisofy/Warehouse/User/user_home_page.dart';
@@ -11,7 +10,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-
 class NewHomePage extends StatefulWidget {
   final dynamic longitude;
   final dynamic latitude;
@@ -19,7 +17,6 @@ class NewHomePage extends StatefulWidget {
   @override
   State<NewHomePage> createState() => NewHomePageState();
 }
-
 class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
@@ -386,14 +383,14 @@ class NewHomePageState extends State<NewHomePage>with SingleTickerProviderStateM
                                   child: InkWell(
                                     onTap: (){
                                       ///Transport Page Navigation to Partner
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookingScreen()));
-                                      // showCustomDialog(
-                                      //     context,
-                                      //     'Transportation',
-                                      //     '. Get ready for Effortless Truck Booking at your FingerTips!',
-                                      //     '. Easy fast and Reliable Transport just for you.',
-                                      //     '. No more Hassles Seamlessly Book Track and manage Shipment'
-                                      // );
+                                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>const BookingScreen()));
+                                      showCustomDialog(
+                                          context,
+                                          'Transportation',
+                                          '. Get ready for Effortless Truck Booking at your FingerTips!',
+                                          '. Easy fast and Reliable Transport just for you.',
+                                          '. No more Hassles Seamlessly Book Track and manage Shipment'
+                                      );
                                     },
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,

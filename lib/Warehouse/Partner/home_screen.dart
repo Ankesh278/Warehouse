@@ -21,19 +21,15 @@ import 'package:share_plus/share_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
-
 class HomeScreen extends StatefulWidget {
   final String name;
-
   const HomeScreen({super.key, this.name = 'Guest'});
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
-
 class _HomeScreenState extends State<HomeScreen> {
   late Future<WarehouseResponse> futureWarehouseResponse;
   final TextEditingController _searchController = TextEditingController();
-
   late String userName = "";
   final String warehouseName = 'WarehouseX';
   final String benefitsText =
@@ -44,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late double latitude=0;
   late double longitude=0;
   final PageController _pageController = PageController();
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -76,13 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       RegExp regExp = RegExp(r'LatLng\(([^,]+), ([^,]+)\)');
       Match? match = regExp.firstMatch(latLong);
-
       if (match != null && match.groupCount == 2) {
         double latitude = double.parse(match.group(1)!.trim());
         double longitude = double.parse(match.group(2)!.trim());
-
         List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
-
         if (placeMarks.isNotEmpty) {
           Placemark place = placeMarks[0];
           return '${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.country}';
@@ -93,7 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
       return 'Error: $e';
     }
   }
-
   String _limitDigits(int count) {
     if (count >= 1000) {
       return '999+';
@@ -149,7 +140,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
     _searchController.dispose();
   }
-
   Future<void> _shareAppInfo() async {
     try {
       final ByteData logoData =
@@ -712,9 +702,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     print(
                                       "availability${warehouse.isAvailableForRent}");
                                   }
-                                  // bool isavail = warehouseProvider.warehouseStatus[warehouse.id] ??
-                                  //     warehouse.isAvailableForRent;
-
                                   return GestureDetector(
                                     onTap: () {
                                       Navigator.push(
@@ -890,8 +877,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             fontSize: 15,
                                                           ),
                                                         ),
-
-
                                                         SizedBox(
                                                             width:
                                                                 screenWidth * 0.1)
@@ -1189,71 +1174,9 @@ class DottedBorder extends StatelessWidget {
   }
 }
 
-// class DottedBorderPainter extends CustomPainter {
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     final paint = Paint()
-//       ..color = Colors.blue
-//       ..style = PaintingStyle.stroke
-//       ..strokeWidth = 2.0;
-//
-//     const double dashWidth = 4.0;
-//     const double dashSpace = 4.0;
-//     double startX = 0;
-//
-//     final path = Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height));
-//
-//     // Draw dotted border
-//     while (startX < size.width) {
-//       canvas.drawLine(
-//         Offset(startX, 0),
-//         Offset(startX + dashWidth, 0),
-//         paint,
-//       );
-//       startX += dashWidth + dashSpace;
-//     }
-//
-//     startX = 0; // Reset startX for the next side
-//     while (startX < size.height) {
-//       canvas.drawLine(
-//         Offset(size.width, startX),
-//         Offset(size.width, startX + dashWidth),
-//         paint,
-//       );
-//       startX += dashWidth + dashSpace;
-//     }
-//
-//     startX = 0; // Reset startX for the next side
-//     while (startX < size.width) {
-//       canvas.drawLine(
-//         Offset(size.width - startX, size.height),
-//         Offset(size.width - startX - dashWidth, size.height),
-//         paint,
-//       );
-//       startX += dashWidth + dashSpace;
-//     }
-//
-//     startX = 0; // Reset startX for the next side
-//     while (startX < size.height) {
-//       canvas.drawLine(
-//         Offset(0, size.height - startX),
-//         Offset(0, size.height - startX - dashWidth),
-//         paint,
-//       );
-//       startX += dashWidth + dashSpace;
-//     }
-//   }
-//
-//   @override
-//   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-//     return false;
-//   }
-// }
-
 class AnimatedQrDialog extends StatefulWidget {
   final String data;
   const AnimatedQrDialog({super.key, required this.data});
-
   @override
   AnimatedQrDialogState createState() => AnimatedQrDialogState();
 }
@@ -1266,7 +1189,6 @@ class AnimatedQrDialogState extends State<AnimatedQrDialog>
   @override
   void initState() {
     super.initState();
-    // Animation setup
     _controller = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -1308,7 +1230,6 @@ class AnimatedQrDialogState extends State<AnimatedQrDialog>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Title at the top center
             const Text(
               'Scan this QR Code',
               style: TextStyle(
@@ -1318,7 +1239,6 @@ class AnimatedQrDialogState extends State<AnimatedQrDialog>
               ),
             ),
             const SizedBox(height: 20),
-            // QR Code
             QrImageView(
               data: widget.data,
               version: QrVersions.auto,

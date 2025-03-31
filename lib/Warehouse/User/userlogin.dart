@@ -1,17 +1,12 @@
 import 'package:Lisofy/Warehouse/User/UserProvider/auth_user_provider.dart';
-import 'package:Lisofy/crausel/crausel_class.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:sms_autofill/sms_autofill.dart';
-
-
-
 class UserLogin extends StatefulWidget {
   const UserLogin({super.key});
-
   @override
   State<UserLogin> createState() => _UserLoginState();
 }
@@ -19,13 +14,13 @@ class UserLogin extends StatefulWidget {
 class _UserLoginState extends State<UserLogin> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneController = TextEditingController();
-  final List<String> _demoImages = [
-    'https://xpacesphere.com/Content/NewFolder/warehouse_23.jpg',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_20.jpg',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_18.jpg',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_19.jpg',
-    'https://xpacesphere.com/Content/NewFolder/warehouse_14.jpg'
-  ];
+  // final List<String> _demoImages = [
+  //   'https://xpacesphere.com/Content/NewFolder/warehouse_23.jpg',
+  //   'https://xpacesphere.com/Content/NewFolder/warehouse_20.jpg',
+  //   'https://xpacesphere.com/Content/NewFolder/warehouse_18.jpg',
+  //   'https://xpacesphere.com/Content/NewFolder/warehouse_19.jpg',
+  //   'https://xpacesphere.com/Content/NewFolder/warehouse_14.jpg'
+  // ];
 @override
   void initState() {
     super.initState();
@@ -307,25 +302,25 @@ class _UserLoginState extends State<UserLogin> {
                                 SizedBox(height: screenHeight * 0.05),
                                 SizedBox(
                                     height: screenHeight * 0.05),
-                                InkWell(
-                                  child: Container(
-                                    height: 25,
-                                    width: screenWidth * 0.28,
-                                    decoration: BoxDecoration(
-                                        color: const Color(0xffD4E3FF),
-                                        borderRadius: BorderRadius.circular(5)),
-                                    child: const Center(
-                                      child: Text(
-                                        "Skip for Now >>",
-                                        style: TextStyle(fontSize: 11),
-                                      ),
-                                    ),
-                                  ),
-                                  onTap: () {
-                                  },
-                                ),
-                                SizedBox(
-                                    height: screenHeight * 0.025),
+                                // InkWell(
+                                //   child: Container(
+                                //     height: 25,
+                                //     width: screenWidth * 0.28,
+                                //     decoration: BoxDecoration(
+                                //         color: const Color(0xffD4E3FF),
+                                //         borderRadius: BorderRadius.circular(5)),
+                                //     child: const Center(
+                                //       child: Text(
+                                //         "Skip for Now >>",
+                                //         style: TextStyle(fontSize: 11),
+                                //       ),
+                                //     ),
+                                //   ),
+                                //   onTap: () {
+                                //   },
+                                // ),
+                                // SizedBox(
+                                //     height: screenHeight * 0.025),
                                 Text(
                                   "By continuing, you agree to our Terms and Conditions",
                                   style: TextStyle(
@@ -333,16 +328,6 @@ class _UserLoginState extends State<UserLogin> {
                                     color: Colors.blue,
                                   ),
                                 ),
-
-                                // Padding(
-                                //   padding:  EdgeInsets.only(top: screenHeight*0.05),
-                                //   child: Align(
-                                //     alignment: Alignment.bottomCenter,
-                                //     child: SizedBox(
-                                //         height: screenHeight*0.25,
-                                //         child: DemoClass(images: _demoImages)),
-                                //   ),
-                                // )
                               ],
                             ),
                           ),

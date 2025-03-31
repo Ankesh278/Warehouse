@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-
 class MediaPickerPage extends StatefulWidget {
   final bool isImagePicker;
   final List<XFile> initialMedia;
@@ -30,7 +29,6 @@ class MediaPickerPageState extends State<MediaPickerPage> {
 
   Future<void> _pickMedia() async {
     List<XFile>? pickedFiles;
-
     if (widget.isImagePicker) {
       pickedFiles = await _picker.pickMultiImage();
     } else {
@@ -52,8 +50,6 @@ class MediaPickerPageState extends State<MediaPickerPage> {
       }
     }
   }
-
-
 
   void _deleteMedia(int index) {
     setState(() {

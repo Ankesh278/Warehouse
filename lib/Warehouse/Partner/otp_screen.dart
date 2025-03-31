@@ -3,19 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-
-
 class OTPScreen extends StatefulWidget {
   const OTPScreen({super.key});
-
   @override
   State<OTPScreen> createState() => _OTPScreenState();
 }
-
 class _OTPScreenState extends State<OTPScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
@@ -172,14 +167,12 @@ class _OTPScreenState extends State<OTPScreen> {
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(8.0),
                                                 ),
-                                               // padding: EdgeInsets.symmetric(vertical: 12.0),
                                               ),
                                             child:   authProvider.isLoading
                                                 ? const SpinKitCircle(
                                               color: Colors.white,
                                               size: 50.0,
                                             )
-
                                             :  const Text('Get OTP',
                                               style: TextStyle(color: Colors.white),
                                             ),
@@ -192,30 +185,6 @@ class _OTPScreenState extends State<OTPScreen> {
                                 ),
                               ),
                               SizedBox(height: screenHeight * 0.05),
-                              // InkWell(
-                              //   child: Container(
-                              //     width: screenWidth * 0.75,
-                              //     height: screenHeight * 0.05,
-                              //     decoration: BoxDecoration(
-                              //       border: Border.all(color: Colors.blue),
-                              //       borderRadius: BorderRadius.circular(5),
-                              //     ),
-                              //     child: Center(
-                              //       child: Row(
-                              //         mainAxisAlignment: MainAxisAlignment.center,
-                              //         children: [
-                              //           Image.asset("assets/images/Google.png"),
-                              //           const Text("Continue with Google", style: TextStyle(fontSize: 12)),
-                              //         ],
-                              //       ),
-                              //     ),
-                              //   ),
-                              //   onTap: () {
-                              //     authProvider.signInWithGoogle(context);
-                              //   },
-                              // ),
-                             // SizedBox(height: screenHeight * 0.05),
-
                             ],
                           ),
                         ),

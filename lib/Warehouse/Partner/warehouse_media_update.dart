@@ -10,17 +10,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-
-
 class WarehouseMediaUpdate extends StatefulWidget {
   final Warehouse warehouse;
-
   const WarehouseMediaUpdate({required this.warehouse, super.key});
-
   @override
   State<WarehouseMediaUpdate> createState() => _WarehouseMediaUpdateState();
 }
-
 class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
   int totalMedia = 0;
   int _photoCount = 0;
@@ -31,22 +26,17 @@ class _WarehouseMediaUpdateState extends State<WarehouseMediaUpdate> {
   final List<String> _uploadedImages = [];
   final List<String> _uploadedVideos = [];
   bool _isUploading = false;
-
   final ImagePicker _picker = ImagePicker();
-
   @override
   void initState() {
     super.initState();
     String filePath = widget.warehouse.filePath;
     processMediaFilePath(filePath);
   }
-
   void processMediaFilePath(String filePath) {
     List<String> filePaths = filePath.split(',');
-
     List<String> photos = [];
     List<String> videos = [];
-
     for (var path in filePaths) {
       if (path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.png')) {
         photos.add(path);

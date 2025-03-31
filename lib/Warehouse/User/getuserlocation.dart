@@ -5,14 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 class GetUserLocation extends StatefulWidget {
   const GetUserLocation({super.key});
-
   @override
   State<GetUserLocation> createState() => _GetUserLocationState();
 }
-
 class _GetUserLocationState extends State<GetUserLocation> {
   String _coordinates = '';
   Position? position;

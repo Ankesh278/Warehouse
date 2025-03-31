@@ -1,9 +1,7 @@
-
 import 'package:Lisofy/Warehouse/Partner/add_warehouse.dart';
 import 'package:Lisofy/Warehouse/User/user_profile_screen.dart';
 import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/material.dart';
-
 class HelpPage extends StatefulWidget {
   const HelpPage({super.key});
   @override
@@ -244,8 +242,6 @@ class _HelpPageState extends State<HelpPage> {
                                       ],
                                     ),
                                   ),
-
-
                                 ],
                               )
                           ),
@@ -257,7 +253,6 @@ class _HelpPageState extends State<HelpPage> {
               ),
             ),
           ),
-
         ],
       ),
     );
