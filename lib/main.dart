@@ -91,7 +91,6 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-
         /// WarehouseProviders
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
         ChangeNotifierProvider<AuthUserProvider>(create: (_) => AuthUserProvider()),
@@ -206,20 +205,20 @@ class _MyAppState extends State<MyApp> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Notification Permission Required"),
-          content: const Text(
+          content:  const Text(
               "This app requires notification permissions to send you updates. Please enable notifications in the app settings."),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text("Cancel"),
+              child:  Text(S.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
                 openAppSettings();
               },
-              child: const Text("Open Settings"),
+              child:  Text(S.of(context).open_settings),
             ),
           ],
         );
@@ -239,13 +238,13 @@ class _MyAppState extends State<MyApp> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text("OK"),
+              child:  Text(S.of(context).ok),
             ),
             TextButton(
               onPressed: () {
                 openAppSettings();
               },
-              child: const Text("Open Settings"),
+              child:  Text(S.of(context).open_settings),
             ),
           ],
         );
@@ -298,10 +297,10 @@ class _MyAppState extends State<MyApp> {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Network Error. Please try again."),
+                         Text(S.of(context).network_error_try_again),
                         ElevatedButton(
                           onPressed: () => setState(() {}),
-                          child: const Text("Retry"),
+                          child:  Text(S.of(context).retry),
                         )
                       ],
                     );

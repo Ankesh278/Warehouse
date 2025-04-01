@@ -498,11 +498,11 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                             ),
                                           ),
                                         ),
-                                        const Padding(
-                                          padding: EdgeInsets.only(left: 4.0),
+                                         Padding(
+                                          padding: const EdgeInsets.only(left: 4.0),
                                           child: Text(
-                                            "Available area",
-                                            style: TextStyle(
+                                            S.of(context).available_area,
+                                            style: const TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.w500),
@@ -851,23 +851,23 @@ class _WareHouseDetailsState extends State<WareHouseDetails> {
                                         border: Border.all(color: Colors.blue),
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    child: const Row(
+                                    child:  Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Icon(
+                                        const Icon(
                                           Icons.calendar_today_outlined,
                                           color: Colors.blue,
                                           size: 16,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 4,
                                         ),
                                         Text(
-                                          "Schedule a visit",
-                                          style: TextStyle(
+                                          S.of(context).schedule_a_visit,
+                                          style: const TextStyle(
                                               color: Colors.blue, fontSize: 10),
                                         )
                                       ],

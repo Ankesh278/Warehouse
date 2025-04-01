@@ -1,12 +1,10 @@
 import 'package:Lisofy/Warehouse/Partner/otp_screen.dart';
 import 'package:Lisofy/Warehouse/User/userlogin.dart';
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -18,20 +16,20 @@ class _MyHomePageState extends State<MyHomePage> {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Exit App"),
-        content: const Text("Are you sure you want to exit?"),
+        title:  Text(S.of(context).exit_app),
+        content:  Text(S.of(context).logout_confirmation),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(false);
             },
-            child: const Text("No"),
+            child:  Text(S.of(context).no),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(true);
             },
-            child: const Text("Yes"),
+            child:  Text(S.of(context).yes),
           ),
         ],
       ),
@@ -183,14 +181,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10),bottomLeft: Radius.circular(25),bottomRight: Radius.circular(25)), // Adjust the radius as needed
-                      child: Image.asset(
-                        "assets/images/demoScreenImage.png",
+                      child: Image.asset("assets/images/demoScreenImage.png",
                         height: 170,
                         fit: BoxFit.cover,
                       ),
                     ),
                   )
-          
               ),
             ],
           ),

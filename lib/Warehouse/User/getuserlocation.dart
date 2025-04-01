@@ -1,4 +1,5 @@
 import 'package:Lisofy/Warehouse/User/user_help_page.dart';
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:Lisofy/new_home_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -43,13 +44,10 @@ class _GetUserLocationState extends State<GetUserLocation> {
           accuracy: LocationAccuracy.high,
         ),
       );
-
       if (!mounted) return;
-
       setState(() {
         loading = false;
-        _coordinates =
-        'Latitude: ${position.latitude}, Longitude: ${position.longitude}';
+        _coordinates = 'Latitude: ${position.latitude}, Longitude: ${position.longitude}';
       });
 
       final pref = await SharedPreferences.getInstance();
@@ -66,12 +64,10 @@ class _GetUserLocationState extends State<GetUserLocation> {
       );
     } catch (e) {
       if (!mounted) return;
-
       setState(() {
         loading = false;
         _coordinates = 'Could not fetch location';
       });
-
       if (kDebugMode) {
         print("Error fetching location: $e");
       }
@@ -82,7 +78,6 @@ class _GetUserLocationState extends State<GetUserLocation> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: loading
           ? _buildLoadingScreen()
@@ -92,15 +87,15 @@ class _GetUserLocationState extends State<GetUserLocation> {
 
   /// **Loading UI with SpinKit and "Please wait..." text**
   Widget _buildLoadingScreen() {
-    return const Center(
+    return  Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SpinKitCircle(color: Colors.blue, size: 50),
-          SizedBox(height: 10),
+          const SpinKitCircle(color: Colors.blue, size: 50),
+          const SizedBox(height: 10),
           Text(
-            "Please wait...",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            S.of(context).please_wait_for_sometime,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -130,19 +125,19 @@ class _GetUserLocationState extends State<GetUserLocation> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Column(
+                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  SizedBox(width: 7),
-                                  Text("Hello",
-                                      style: TextStyle(
+                                  const SizedBox(width: 7),
+                                  Text(S.of(context).hello,
+                                      style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500)),
-                                  Text(
-                                    "There",
-                                    style: TextStyle(
+                                   Text(
+                                     S.of(context).there,
+                                    style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500),
@@ -185,12 +180,12 @@ class _GetUserLocationState extends State<GetUserLocation> {
                           Container(
                             margin: EdgeInsets.only(
                                 top: screenHeight * 0.07, left: 5),
-                            child: const Row(
+                            child:  Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Get Personalized Recommendations Near You",
-                                  style: TextStyle(
+                                  S.of(context).get_personalized_recommendations,
+                                  style: const TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white),

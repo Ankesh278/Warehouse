@@ -24,6 +24,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "aadhaar_back": MessageLookupByLibrary.simpleMessage("ആധാർ ബാക്ക്"),
     "aadhaar_front": MessageLookupByLibrary.simpleMessage("ആധാർ ഫ്രണ്ട്"),
+    "about_warehouse_now": MessageLookupByLibrary.simpleMessage(
+      "ഗോഡൗൺ കുറിച്ച് ഇപ്പോൾ",
+    ),
     "account": MessageLookupByLibrary.simpleMessage("അക്കൗണ്ട്"),
     "add_additional_details": MessageLookupByLibrary.simpleMessage(
       "കൂടുതൽ ക്ലയന്റ്‌സ് ആകർഷിക്കാൻ അധിക വിവരങ്ങൾ ചേർക്കുക",
@@ -55,6 +58,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "agricultural": MessageLookupByLibrary.simpleMessage("കൃഷി"),
     "all_topics": MessageLookupByLibrary.simpleMessage("എല്ലാ വിഷങ്ങള്‍"),
+    "already_completed": MessageLookupByLibrary.simpleMessage(
+      "ഇതുവരെ പൂർത്തിയായി",
+    ),
     "amenities": MessageLookupByLibrary.simpleMessage("സൗകര്യങ്ങൾ"),
     "apply_filters": MessageLookupByLibrary.simpleMessage(
       "ഫിൽട്ടറുകൾ പ്രയോഗിക്കുക",
@@ -66,6 +72,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "പ്രദേശം (കുറഞ്ഞത് മുതൽ കൂടുതലുവരെ)",
     ),
     "available_area": MessageLookupByLibrary.simpleMessage("ലഭ്യമായ വിസ്തീർണം"),
+    "back": MessageLookupByLibrary.simpleMessage("തിരികെ"),
+    "basic_info": MessageLookupByLibrary.simpleMessage("അടിസ്ഥാന വിവരം"),
     "became_partner": MessageLookupByLibrary.simpleMessage("പങ്കാളിയാകുക"),
     "bids": MessageLookupByLibrary.simpleMessage("ബിഡ്"),
     "bike_parking_slots": MessageLookupByLibrary.simpleMessage(
@@ -102,6 +110,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "complete_kyc": MessageLookupByLibrary.simpleMessage(
       "കെവൈസി പൂർത്തിയാക്കുക",
     ),
+    "confirm_delete_account": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങളുടെ അക്കൗണ്ട് ഇല്ലാതാക്കണമെന്ന് തീർച്ചയാണോ? ഈ പ്രവൃത്തി പിന്‍വലിക്കാനാകില്ല",
+    ),
+    "confirm_otp": MessageLookupByLibrary.simpleMessage("OTP സ്ഥിരീകരിക്കുക"),
     "congratulations": MessageLookupByLibrary.simpleMessage("അഭിനന്ദനങ്ങൾ"),
     "connect_with_whatsapp": MessageLookupByLibrary.simpleMessage(
       "വാട്ട്സാപ്പുമായി ബന്ധിപ്പിക്കുക",
@@ -117,6 +129,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "contracts": MessageLookupByLibrary.simpleMessage("കരാറുകൾ"),
     "contracts_documents": MessageLookupByLibrary.simpleMessage("കരാർ രേഖകൾ"),
     "dark_store": MessageLookupByLibrary.simpleMessage("ഡാർക്ക് സ്റ്റോർ"),
+    "delete_account": MessageLookupByLibrary.simpleMessage(
+      "അക്കൗണ്ട് ഇല്ലാതാക്കുക",
+    ),
     "designation": MessageLookupByLibrary.simpleMessage("പദവി"),
     "dock_levelers": MessageLookupByLibrary.simpleMessage("ഡോക്ക് ലെവലറുകൾ"),
     "docks_height": MessageLookupByLibrary.simpleMessage(
@@ -144,17 +159,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "ദയവായി വ്യക്തത & ശരിയായ വെളിച്ചം ഉറപ്പാക്കുക",
     ),
     "enter_address": MessageLookupByLibrary.simpleMessage("വിലാസം നൽകുക"),
+    "enter_property_details": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങളുടെ ആസ്തിയുടെ വിശദാംശങ്ങൾ നൽകുക",
+    ),
+    "exit_app": MessageLookupByLibrary.simpleMessage("ആപ്പ് പുറത്ത് കടക്കുക"),
     "express_interest": MessageLookupByLibrary.simpleMessage(
       "ആസക്തി പ്രകടിപ്പിക്കുക",
     ),
     "express_interest_to_get_callback": MessageLookupByLibrary.simpleMessage(
       "കാൾ ബാക്ക് ലഭിക്കാൻ ആസ്വദിച്ചിരിക്കുക.",
     ),
+    "facility_feature": MessageLookupByLibrary.simpleMessage(
+      "സൗകര്യങ്ങളും സവിശേഷതകളും",
+    ),
     "factory": MessageLookupByLibrary.simpleMessage("ഫാക്ടറി"),
     "failed_to_load_image": MessageLookupByLibrary.simpleMessage(
       "ചിത്രം ലോഡുചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു!",
     ),
+    "failed_update_profile": MessageLookupByLibrary.simpleMessage(
+      "പ്രൊഫൈൽ അപ്‌ഡേറ്റ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു",
+    ),
     "fans": MessageLookupByLibrary.simpleMessage("ഫാനുകൾ"),
+    "few_simple_steps": MessageLookupByLibrary.simpleMessage(
+      "കുറച്ച് ലളിതമായ ഘട്ടങ്ങളിൽ",
+    ),
     "filter": MessageLookupByLibrary.simpleMessage("ഫിൽറ്റർ"),
     "fire_noc": MessageLookupByLibrary.simpleMessage(
       "ഫയർ NOC: നിങ്ങളുടെ ഗോഡാം ഫയർ സുരക്ഷിതമാണോ?",
@@ -168,6 +196,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "furnishing_type": MessageLookupByLibrary.simpleMessage("ഫർണിഷിങ് തരം"),
     "general": MessageLookupByLibrary.simpleMessage("സാധാരണ"),
     "get_address": MessageLookupByLibrary.simpleMessage("വിലാസം നേടുക"),
+    "get_otp": MessageLookupByLibrary.simpleMessage("OTP നേടുക"),
+    "get_personalized_recommendations": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങൾക്ക് സമീപമുള്ള വ്യക്തിഗത ശുപാർശകൾ നേടുക",
+    ),
     "ground_floor": MessageLookupByLibrary.simpleMessage("ഭൂമിക്കടത്തി"),
     "have_clu_document": MessageLookupByLibrary.simpleMessage(
       "നിങ്ങളുടെ CLU പ്രമാണം ഉണ്ടോ?",
@@ -199,7 +231,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "larger_collection_of_warehouses": MessageLookupByLibrary.simpleMessage(
       "വളരെ വലിപ്പമുള്ള ഗോദാമുകളുടെ ശേഖരം",
     ),
+    "lease_rent_warehouse": MessageLookupByLibrary.simpleMessage(
+      "ഗോഡൗൺ ലീസ് & വാടക",
+    ),
     "lights": MessageLookupByLibrary.simpleMessage("ലൈറ്റുകൾ"),
+    "list_free_lisofy": MessageLookupByLibrary.simpleMessage(
+      "ഇത് സൗജന്യമായി ലിസ്റ്റ് ചെയ്യുക, Lisofy ഏത് ഫീസും ഈടാക്കില്ല",
+    ),
+    "list_property_for_rent": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങളുടെ ആസ്തി വാടകയ്ക്ക് ലിസ്റ്റ് ചെയ്യുക",
+    ),
+    "list_property_lisofy": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങളുടെ ആസ്തി Lisofy-യിൽ ലിസ്റ്റ് ചെയ്യുക",
+    ),
     "location": MessageLookupByLibrary.simpleMessage("സ്ഥലം"),
     "lock_in_period": MessageLookupByLibrary.simpleMessage("ലോക്ക് ഇൻ കാലയളവ്"),
     "log_out": MessageLookupByLibrary.simpleMessage("ലോഗ് ഔട്ട്"),
@@ -213,6 +257,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "പാലനച്ചിലവ് (പ്രതി സ്ക്വയർഫീറ്റ്)",
     ),
     "manage": MessageLookupByLibrary.simpleMessage("നിരവധി ചെയ്യുക"),
+    "manage_at_ease": MessageLookupByLibrary.simpleMessage(
+      "സൗകര്യപ്രദമായി നിയന്ത്രിക്കുക",
+    ),
     "manage_photos": MessageLookupByLibrary.simpleMessage(
       "ഫോട്ടോകൾ മാനേജുചെയ്യുക",
     ),
@@ -235,7 +282,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "need_assistance": MessageLookupByLibrary.simpleMessage(
       "സഹായം ആവശ്യമുണ്ട്",
     ),
+    "network_error_try_again": MessageLookupByLibrary.simpleMessage(
+      "നെറ്റ്വർക്കിൽ പിശക്, ദയവായി വീണ്ടും ശ്രമിക്കുക",
+    ),
     "no": MessageLookupByLibrary.simpleMessage("ഇല്ല"),
+    "no_document_uploaded": MessageLookupByLibrary.simpleMessage(
+      "യാതൊരുവിധ രേഖയും അപ്‌ലോഡ് ചെയ്തിട്ടില്ല",
+    ),
     "no_interested_warehouse_found": MessageLookupByLibrary.simpleMessage(
       "ആസ്വദിക്കുന്ന ഗോദാമുകൾ കണ്ടെത്തിയില്ല",
     ),
@@ -273,13 +326,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "office_space": MessageLookupByLibrary.simpleMessage("ഓഫീസ് സ്ഥലം"),
     "ok": MessageLookupByLibrary.simpleMessage("ശരി"),
     "open": MessageLookupByLibrary.simpleMessage("തുറക്കുക"),
+    "open_settings": MessageLookupByLibrary.simpleMessage(
+      "ക്രമീകരണങ്ങൾ തുറക്കുക",
+    ),
     "open_space": MessageLookupByLibrary.simpleMessage("തുറന്ന സ്ഥലത്ത്"),
+    "optimized_supply_chain": MessageLookupByLibrary.simpleMessage(
+      "ഉത്തമമായ വിതരണ ശൃംഖല",
+    ),
     "other": MessageLookupByLibrary.simpleMessage("മറ്റുള്ളവ"),
     "others": MessageLookupByLibrary.simpleMessage("മറ്റുള്ളവ"),
+    "otp_sent_to": MessageLookupByLibrary.simpleMessage("OTP അയച്ചിരിക്കുന്നു"),
     "outer": MessageLookupByLibrary.simpleMessage("ബാഹ്യ"),
     "owner_pan_card": MessageLookupByLibrary.simpleMessage("ഉടമയുടെ PAN കാർഡ്"),
     "parking": MessageLookupByLibrary.simpleMessage("പാർക്കിംഗ്"),
     "parking_land": MessageLookupByLibrary.simpleMessage("പാർക്കിംഗ് ഭൂമി"),
+    "partner_app": MessageLookupByLibrary.simpleMessage("പാർട്ട്ണർ ആപ്പ്"),
     "payments": MessageLookupByLibrary.simpleMessage("പണം"),
     "peb": MessageLookupByLibrary.simpleMessage("PEB"),
     "phone_notification": MessageLookupByLibrary.simpleMessage("ഫോൺ അറിയിപ്പ്"),
@@ -300,6 +361,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_wait_for_sometime": MessageLookupByLibrary.simpleMessage(
       "ചില സമയം കാത്തിരിക്കുക...",
     ),
+    "post_property": MessageLookupByLibrary.simpleMessage(
+      "നിങ്ങളുടെ ആസ്തി പോസ്റ്റ് ചെയ്യുക",
+    ),
     "post_your_property_free": MessageLookupByLibrary.simpleMessage(
       "നിങ്ങളുടെ പ്രോപ്പർട്ടി സൗജന്യമായി പോസ്റ്റ് ചെയ്യുക",
     ),
@@ -310,7 +374,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "price_min_to_max": MessageLookupByLibrary.simpleMessage(
       "വില (കുറഞ്ഞത് മുതൽ കൂടുതലുവരെ)",
     ),
+    "pricing_leasing_team": MessageLookupByLibrary.simpleMessage(
+      "വിലനിർണ്ണയവും ലീസിംഗ് ടീമും",
+    ),
     "privacy_policy": MessageLookupByLibrary.simpleMessage("സ്വകാര്യതാ നയം"),
+    "property_type": MessageLookupByLibrary.simpleMessage("ആസ്തിയുടെ തരം"),
     "provide_office_space": MessageLookupByLibrary.simpleMessage(
       "നിങ്ങൾ ഓഫീസുകളുടെ സ്ഥലം നൽകുന്നോ?",
     ),
@@ -330,12 +398,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "പ്രതി സ്ക്വയർഫീറ്റ് വാടക",
     ),
     "rent_range": MessageLookupByLibrary.simpleMessage("വാടക പരിധി"),
+    "resend_otp": MessageLookupByLibrary.simpleMessage("OTP വീണ്ടും അയയ്ക്കുക"),
+    "retry": MessageLookupByLibrary.simpleMessage("വീണ്ടും ശ്രമിക്കുക"),
+    "safety_measures": MessageLookupByLibrary.simpleMessage("സുരക്ഷാ നടപടികൾ"),
     "save": MessageLookupByLibrary.simpleMessage("സേവ് ചെയ്യുക"),
     "save_next": MessageLookupByLibrary.simpleMessage("സേവ് & അടുത്തത്"),
     "schedule_a_visit": MessageLookupByLibrary.simpleMessage(
       "ഒരു സന്ദർശനം പ്ലാൻ ചെയ്യുക",
     ),
     "seall": MessageLookupByLibrary.simpleMessage("എല്ലാം കാണുക..."),
+    "seamless_inventory_tracking": MessageLookupByLibrary.simpleMessage(
+      "നിരന്തരം ഇൻവന്ററി ട്രാക്കിംഗ്",
+    ),
+    "search": MessageLookupByLibrary.simpleMessage("തിരയുക"),
     "search_by_location": MessageLookupByLibrary.simpleMessage(
       "സ്ഥാനം അനുസരിച്ച് തിരയുക",
     ),
@@ -366,6 +441,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "ഷോർട്ട്ലിസ്റ്റ് ചെയ്തത്",
     ),
     "side_height": MessageLookupByLibrary.simpleMessage("പങ്ക് ഉയരം (ഫീറ്റിൽ)"),
+    "sign_in_login": MessageLookupByLibrary.simpleMessage("സൈൻ ഇൻ / ലോഗിൻ"),
+    "size_capacity": MessageLookupByLibrary.simpleMessage("വലിപ്പവും ശേഷിയും"),
     "skip_for_now": MessageLookupByLibrary.simpleMessage("ഇപ്പോൾ ഒഴിവാക്കുക"),
     "sorry": MessageLookupByLibrary.simpleMessage("ക്ഷമിക്കണം..."),
     "sort": MessageLookupByLibrary.simpleMessage("വരிசി"),
@@ -386,6 +463,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "thanks_for_feedback": MessageLookupByLibrary.simpleMessage(
       "നിങ്ങളുടെ പ്രതികരണത്തിന് നന്ദി!",
     ),
+    "there": MessageLookupByLibrary.simpleMessage("അവിടെ"),
     "toilets": MessageLookupByLibrary.simpleMessage("ശൗചാലയങ്ങൾ"),
     "token_advance": MessageLookupByLibrary.simpleMessage("ടോകൺ അഡ്വാൻസ്"),
     "total_area": MessageLookupByLibrary.simpleMessage("മൊത്തം പ്രദേശം"),
@@ -441,6 +519,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "verified_property_and_owner": MessageLookupByLibrary.simpleMessage(
       "പരിശോധിത പ്രോപ്പർട്ടി ಮತ್ತು ഉടമ",
     ),
+    "verify_proceed": MessageLookupByLibrary.simpleMessage(
+      "പരിശോധിച്ച് തുടരുക",
+    ),
     "videos": MessageLookupByLibrary.simpleMessage("വീഡിയോകൾ"),
     "view_less": MessageLookupByLibrary.simpleMessage("കുറവ് കാണിക്കുക"),
     "view_more": MessageLookupByLibrary.simpleMessage("കൂടുതൽ കാണുക"),
@@ -494,6 +575,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "whose_partner_question": MessageLookupByLibrary.simpleMessage(
       "നിങ്ങൾ ആരുടെ പങ്കാളിയാവാൻ ആഗ്രഹിക്കുന്നു?",
     ),
+    "widely_trusted_by": MessageLookupByLibrary.simpleMessage("വിശ്വസനീയമായ"),
     "within_15_days": MessageLookupByLibrary.simpleMessage("15 ദിവസത്തിനകം"),
     "within_30_days": MessageLookupByLibrary.simpleMessage("30 ദിവസത്തിനകം"),
     "within_60_days": MessageLookupByLibrary.simpleMessage("60 ദിവസത്തിനകം"),

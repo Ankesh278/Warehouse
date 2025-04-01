@@ -113,19 +113,19 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
                 children: [
                   Image.asset(ImageAssets.intrest),
                   const SizedBox(height: 10),
-                  const Text(
-                    'Congratulations!',
-                    style: TextStyle(
+                   Text(
+                    S.of(context).congratulations,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    'Your warehouse has been added successfully. Our team will connect with you shortly!',
+                   Text(
+                    S.of(context).warehouse_added_success,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.white70),
+                    style: const TextStyle(fontSize: 16, color: Colors.white70),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
@@ -151,9 +151,9 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       elevation: 5,
                     ),
-                    child: const Text(
-                      'Continue Browsing',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    child:  Text(
+                      S.of(context).continue_browsing,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -224,9 +224,9 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
                       onPressed: () {
                         Navigator.pop(context, tempPickedDate);
                       },
-                      child: const Text(
-                        'OK',
-                        style: TextStyle(color: Colors.blue),
+                      child:  Text(
+                        S.of(context).ok,
+                        style: const TextStyle(color: Colors.blue),
                       ),
                     ),
                   ),
@@ -350,9 +350,9 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
                         );
                         Navigator.pop(context, tempPickedTime);
                       },
-                      child: const Text(
-                        'OK',
-                        style: TextStyle(color: Colors.blue),
+                      child:  Text(
+                        S.of(context).ok,
+                        style: const TextStyle(color: Colors.blue),
                       ),
                     ),
                   ),
@@ -563,14 +563,14 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
                                     borderRadius: BorderRadius.circular( screenWidth * 0.07)),
                                 child: Column(
                                   children: [
-                                    const Align(
+                                     Align(
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
-                                          padding: EdgeInsets.only(
+                                          padding: const EdgeInsets.only(
                                               left: 18.0, top: 15),
                                           child: Text(
-                                            "SELECT DATE",
-                                            style: TextStyle(
+                                            S.of(context).select_date,
+                                            style: const TextStyle(
                                                 fontWeight: FontWeight.w700),
                                           ),
                                         )),
@@ -626,14 +626,14 @@ class _ExpressInterestDateTimeState extends State<ExpressInterestDateTime> {
                                     borderRadius: BorderRadius.circular(screenWidth * 0.07)),
                                 child: Column(
                                   children: [
-                                    const Align(
+                                     Align(
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
-                                          padding: EdgeInsets.only(
+                                          padding: const EdgeInsets.only(
                                               left: 18.0, top: 15),
                                           child: Text(
-                                            "SELECT TIME",
-                                            style: TextStyle(
+                                            S.of(context).select_time,
+                                            style: const TextStyle(
                                                 fontWeight: FontWeight.w700),
                                           ),
                                         )),

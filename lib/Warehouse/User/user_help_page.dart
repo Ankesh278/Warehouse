@@ -1,3 +1,4 @@
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class UserHelpPage extends StatefulWidget {
@@ -45,7 +46,7 @@ class _UserHelpPageState extends State<UserHelpPage> {
                                           },
                                         ),
                                         const SizedBox(width: 20,),
-                                        const Text("Help",style: TextStyle(color: Colors.white,fontSize: 17,fontWeight: FontWeight.w600),)
+                                         Text(S.of(context).help,style: const TextStyle(color: Colors.white,fontSize: 17,fontWeight: FontWeight.w600),)
                                       ],
                                     )
                                   ],
@@ -81,7 +82,7 @@ class _UserHelpPageState extends State<UserHelpPage> {
                                         color: Colors.blue,
                                         borderRadius: BorderRadius.circular(8)
                                     ),
-                                    child: const Center(child: Text("All topics",style: TextStyle(fontSize: 10,color: Colors.white),)),
+                                    child:  Center(child: Text(S.of(context).all_topics,style: const TextStyle(fontSize: 10,color: Colors.white),)),
                                   ),
                                   Container(
                                     padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
@@ -93,9 +94,9 @@ class _UserHelpPageState extends State<UserHelpPage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text(
-                                          "Troubleshooting",
-                                          style: TextStyle(
+                                         Text(
+                                          S.of(context).troubleshooting,
+                                          style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
                                           ),
@@ -115,9 +116,9 @@ class _UserHelpPageState extends State<UserHelpPage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text(
-                                          "Referral",
-                                          style: TextStyle(
+                                         Text(
+                                          S.of(context).referral,
+                                          style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
                                           ),
@@ -137,9 +138,9 @@ class _UserHelpPageState extends State<UserHelpPage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text(
-                                          "About Warehouse Now",
-                                          style: TextStyle(
+                                         Text(
+                                          S.of(context).about_warehouse_now,
+                                          style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
                                           ),
@@ -159,9 +160,9 @@ class _UserHelpPageState extends State<UserHelpPage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text(
-                                          "My Account",
-                                          style: TextStyle(
+                                         Text(
+                                           S.of(context).my_account,
+                                          style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
                                           ),

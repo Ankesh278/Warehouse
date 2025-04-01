@@ -100,10 +100,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             children: [
               Image.asset(ImageAssets.appLogo,fit: BoxFit.fill,height: screenHeight*0.06,width: screenWidth*0.2,),
               const SizedBox(width: 10),
-              const Expanded(
+               Expanded(
                 child: Text(
-                  "Are you sure you want to log out?",
-                  style: TextStyle(fontSize: 16,color: Colors.white),
+                  S.of(context).logout_confirmation,
+                  style: const TextStyle(fontSize: 16,color: Colors.white),
                 ),
               ),
             ],
@@ -113,9 +113,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: const Text(
-                "No",
-                style: TextStyle(
+              child:  Text(
+                S.of(context).no,
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -128,9 +128,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
               ),
-              child: const Text(
-                "Yes",
-                style: TextStyle(
+              child:  Text(
+                S.of(context).yes,
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -483,7 +483,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                               ),
                                               SizedBox(width: screenHeight * 0.02),
                                               Text(
-                                                isKYCComplete?"Already Completed":S.of(context).complete_kyc,
+                                                isKYCComplete?S.of(context).already_completed:S.of(context).complete_kyc,
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: isKYCComplete?Colors.green:Colors.black,
@@ -1353,14 +1353,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             const Icon(Icons.star,color: Colors.amber,)
           ],
         ),
-        // const SizedBox(height: 5),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        //   child: Text(
-        //     "Your words:   ${ratingProvider.comment}",
-        //     style: const TextStyle(fontSize: 10, color: Colors.black54,fontWeight: FontWeight.w400),
-        //   ),
-        // ),
         SizedBox(height: screenHeight*0.02),
         AnimatedScale(
           scale: 1.1,
@@ -1927,7 +1919,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     Text(
                       success
                           ? S.of(context).upload_document
-                          : "Failed to update profile.",
+                          : S.of(context).failed_update_profile,
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
@@ -1939,7 +1931,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         navigator.pop();
                         navigator.pop();
                       },
-                      child: const Text("OK"),
+                      child:  Text(S.of(context).ok),
                     ),
                   ],
                 ),
@@ -2214,7 +2206,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                         onPressed: () {
                           Fluttertoast.showToast(
-                            msg: "No document uploaded",
+                            msg: S.of(context).no_document_uploaded,
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.BOTTOM,
                           );
@@ -2312,14 +2304,14 @@ class DeleteAccountButton extends StatelessWidget {
         onPressed: () {
           _showDeleteConfirmationDialog(context);
         },
-        child: const Row(
+        child:  Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.delete,color: Colors.white,),
-            SizedBox(width: 5,),
+            const Icon(Icons.delete,color: Colors.white,),
+            const SizedBox(width: 5,),
             Text(
-              'Delete Account',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              S.of(context).delete_account,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -2365,9 +2357,9 @@ class DeleteAccountButton extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: screenHeight * 0.01),
-                  const Text(
-                    'Do you really want to delete your account? This action cannot be undone.',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                   Text(
+                     S.of(context).confirm_delete_account,
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: screenHeight * 0.03),

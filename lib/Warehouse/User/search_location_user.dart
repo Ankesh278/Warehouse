@@ -383,9 +383,8 @@ class _SearchLocationUserState extends State<SearchLocationUser> {
                 elevation: 5,
                 padding:  EdgeInsets.symmetric(horizontal: screenWidth*0.1, vertical: screenHeight*0.01),
               ),
-              child: const Text(
-                "Search",
-                style: TextStyle(
+              child:  Text(S.of(context).search,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,

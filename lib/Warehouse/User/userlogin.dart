@@ -1,4 +1,5 @@
 import 'package:Lisofy/Warehouse/User/UserProvider/auth_user_provider.dart';
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +85,7 @@ class _UserLoginState extends State<UserLogin> {
                                     left: screenWidth *
                                         0.045),
                                 child: Text(
-                                  "Sign in / Login",
+                                  S.of(context).sign_in_login,
                                   style: TextStyle(
                                     fontSize: screenWidth *
                                         0.05,
@@ -104,7 +105,7 @@ class _UserLoginState extends State<UserLogin> {
                                   //     0.01,
                                 ),
                                 child: Text(
-                                  "Welcome back to the app",
+                                  S.of(context).welcome,
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: screenWidth *
@@ -265,43 +266,43 @@ class _UserLoginState extends State<UserLogin> {
                                          color: Colors.white,
                                          size: 50.0,
                                        )
-                                         :const Text('Get OTP'),
+                                         : Text(S.of(context).get_otp),
                                      ),
                                    );
                                  }),
                                 SizedBox(
                                     height: screenHeight * 0.015),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical:
-                                              10.0),
-                                      width: 100.0,
-                                      height: 2,
-                                      color: Colors.blue,
-                                    ),
-                                    SizedBox(width: screenHeight * 0.02),
-                                    const Text(
-                                      "or",
-                                      style: TextStyle(
-                                          color: Colors.blue,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(width: screenHeight * 0.02),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
-                                      width: 100.0,
-                                      height: 2,
-                                      color: Colors.blue,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: screenHeight * 0.05),
-                                SizedBox(
-                                    height: screenHeight * 0.05),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.center,
+                                //   children: [
+                                //     Container(
+                                //       margin: const EdgeInsets.symmetric(
+                                //           vertical:
+                                //               10.0),
+                                //       width: 100.0,
+                                //       height: 2,
+                                //       color: Colors.blue,
+                                //     ),
+                                //     SizedBox(width: screenHeight * 0.02),
+                                //     const Text(
+                                //       "or",
+                                //       style: TextStyle(
+                                //           color: Colors.blue,
+                                //           fontWeight: FontWeight.bold),
+                                //     ),
+                                //     SizedBox(width: screenHeight * 0.02),
+                                //     Container(
+                                //       margin: const EdgeInsets.symmetric(
+                                //           vertical: 10.0),
+                                //       width: 100.0,
+                                //       height: 2,
+                                //       color: Colors.blue,
+                                //     ),
+                                //   ],
+                                // ),
+                                // SizedBox(height: screenHeight * 0.05),
+                                // SizedBox(
+                                //     height: screenHeight * 0.05),
                                 // InkWell(
                                 //   child: Container(
                                 //     height: 25,

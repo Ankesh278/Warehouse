@@ -12,7 +12,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
-
 class UserShortListedInterested extends StatefulWidget {
   const UserShortListedInterested({super.key});
   @override

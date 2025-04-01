@@ -95,7 +95,6 @@ class CustomTextFieldShape extends StatefulWidget {
 }
 class _CustomTextFieldShapeState extends State<CustomTextFieldShape> {
   int? selectedOption;
-
   void selectOption(int index) {
     setState(() {
       selectedOption = index;

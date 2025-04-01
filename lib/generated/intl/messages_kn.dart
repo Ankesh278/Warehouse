@@ -24,6 +24,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "aadhaar_back": MessageLookupByLibrary.simpleMessage("ಆಧಾರ್ ಹಿಂಭಾಗ"),
     "aadhaar_front": MessageLookupByLibrary.simpleMessage("ಆಧಾರ್ ಮುಂಭಾಗ"),
+    "about_warehouse_now": MessageLookupByLibrary.simpleMessage(
+      "ವೇರ್ಹೌಸ್ ಬಗ್ಗೆ ಈಗ",
+    ),
     "account": MessageLookupByLibrary.simpleMessage("ಖಾತೆ"),
     "add_additional_details": MessageLookupByLibrary.simpleMessage(
       "ಇನ್ನಷ್ಟು ಗ್ರಾಹಕರನ್ನು ಆಕರ್ಷಿಸಲು ಹೆಚ್ಚುವರಿ ವಿವರಗಳನ್ನು ಸೇರಿಸಿ",
@@ -55,6 +58,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "agricultural": MessageLookupByLibrary.simpleMessage("ಕೃಷಿ"),
     "all_topics": MessageLookupByLibrary.simpleMessage("ಎಲ್ಲಾ ವಿಷಯಗಳು"),
+    "already_completed": MessageLookupByLibrary.simpleMessage(
+      "ಈಗಾಗಲೇ ಪೂರ್ಣಗೊಂಡಿದೆ",
+    ),
     "amenities": MessageLookupByLibrary.simpleMessage("ಸೌಕರ್ಯಗಳು"),
     "apply_filters": MessageLookupByLibrary.simpleMessage(
       "ಶ್ರೇಣಿಗಳನ್ನು ಅನ್ವಯಿಸಿ",
@@ -66,6 +72,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "ಪ್ರದೇಶ (ಕನಿಷ್ಠದಿಂದ ಗರಿಷ್ಠಕ್ಕೆ)",
     ),
     "available_area": MessageLookupByLibrary.simpleMessage("ಲಭ್ಯವಿರುವ ಪ್ರದೇಶ"),
+    "back": MessageLookupByLibrary.simpleMessage("ಹಿಂದೆ"),
+    "basic_info": MessageLookupByLibrary.simpleMessage("ಮೂಲ ಮಾಹಿತಿ"),
     "became_partner": MessageLookupByLibrary.simpleMessage("ಪಾರ್ಟ್ನರ್ ಆಗಿ"),
     "bids": MessageLookupByLibrary.simpleMessage("ಬಿಡ್ಸ್"),
     "bike_parking_slots": MessageLookupByLibrary.simpleMessage(
@@ -100,6 +108,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "coming_soon": MessageLookupByLibrary.simpleMessage("ಶೀಘ್ರದಲ್ಲೇ ಬರಲಿದೆ"),
     "company_name": MessageLookupByLibrary.simpleMessage("ಕಂಪನಿಯ ಹೆಸರು"),
     "complete_kyc": MessageLookupByLibrary.simpleMessage("ಕೆವೈಸಿ ಪೂರ್ಣಗೊಳಿಸಿ"),
+    "confirm_delete_account": MessageLookupByLibrary.simpleMessage(
+      "ನೀವು ಖಚಿತವಾಗಿ ನಿಮ್ಮ ಖಾತೆಯನ್ನು ಅಳಿಸಲು ಬಯಸುವಿರಾ? ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂದಕ್ಕೆ ತಿರುಗಿಸಲಾಗದು",
+    ),
+    "confirm_otp": MessageLookupByLibrary.simpleMessage("OTP ದೃಢೀಕರಿಸಿ"),
     "congratulations": MessageLookupByLibrary.simpleMessage("ಅಭಿನಂದನೆಗಳು"),
     "connect_with_whatsapp": MessageLookupByLibrary.simpleMessage(
       "ವಾಟ್ಸಾಪ್ ಜೊತೆ ಸಂಪರ್ಕಿಸಿ",
@@ -119,6 +131,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ಒಪ್ಪಂದದ ದಾಖಲೆಗಳು",
     ),
     "dark_store": MessageLookupByLibrary.simpleMessage("ಡಾರ್ಕ್ ಸ್ಟೋರ್"),
+    "delete_account": MessageLookupByLibrary.simpleMessage("ಖಾತೆ ಅಳಿಸಿ"),
     "designation": MessageLookupByLibrary.simpleMessage("ಹುದ್ದೆ"),
     "dock_levelers": MessageLookupByLibrary.simpleMessage("ಡಾಕ್ ಲೆವೆಲರ್ಸ್"),
     "docks_height": MessageLookupByLibrary.simpleMessage(
@@ -144,17 +157,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "ದಯವಿಟ್ಟು ಸ್ಪಷ್ಟತೆ & ಸರಿಯಾದ ಬೆಳಕು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ",
     ),
     "enter_address": MessageLookupByLibrary.simpleMessage("ವಿಳಾಸ ನಮೂದಿಸಿ"),
+    "enter_property_details": MessageLookupByLibrary.simpleMessage(
+      "ನಿಮ್ಮ ಆಸ್ತಿ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ",
+    ),
+    "exit_app": MessageLookupByLibrary.simpleMessage("ಆಪ್ ತೊರೆಯಿರಿ"),
     "express_interest": MessageLookupByLibrary.simpleMessage(
       "ಆಸಕ್ತಿ ವ್ಯಕ್ತಪಡಿಸಿ",
     ),
     "express_interest_to_get_callback": MessageLookupByLibrary.simpleMessage(
       "ಕಾಲ್‌ಬ್ಯಾಕ್ ಪಡೆಯಲು ಆಸಕ್ತಿ ಸೂಚಿಸಿ.",
     ),
+    "facility_feature": MessageLookupByLibrary.simpleMessage(
+      "ಸೌಲಭ್ಯ ಮತ್ತು ವೈಶಿಷ್ಟ್ಯಗಳು",
+    ),
     "factory": MessageLookupByLibrary.simpleMessage("ಕಾರ್ಖಾನೆ"),
     "failed_to_load_image": MessageLookupByLibrary.simpleMessage(
       "ಚಿತ್ರವನ್ನು ಲೋಡ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ!",
     ),
+    "failed_update_profile": MessageLookupByLibrary.simpleMessage(
+      "ಪ್ರೊಫೈಲ್ ನವೀಕರಿಸಲು ವಿಫಲವಾಗಿದೆ",
+    ),
     "fans": MessageLookupByLibrary.simpleMessage("ಗಾಳಿಪಟಗಳು"),
+    "few_simple_steps": MessageLookupByLibrary.simpleMessage(
+      "ಕೆಲವು ಸುಲಭ ಹಂತಗಳಲ್ಲಿ",
+    ),
     "filter": MessageLookupByLibrary.simpleMessage("ಫಿಲ್ಟರ್ ಮಾಡಿ"),
     "fire_noc": MessageLookupByLibrary.simpleMessage(
       "ಅಗ್ನಿಶಾಮಕ NOC: ನಿಮ್ಮ ಗೋದಾಮು ಅಗ್ನಿ ಸುರಕ್ಷಿತವಿದೆಯೆ?",
@@ -170,6 +196,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "general": MessageLookupByLibrary.simpleMessage("ಸಾಮಾನ್ಯ"),
     "get_address": MessageLookupByLibrary.simpleMessage("ವಿಳಾಸ ಪಡೆಯಿರಿ"),
+    "get_otp": MessageLookupByLibrary.simpleMessage("OTP ಪಡೆಯಿರಿ"),
+    "get_personalized_recommendations": MessageLookupByLibrary.simpleMessage(
+      "ನಿಮಗೆ ಸಮೀಪದಲ್ಲಿರುವ ವೈಯಕ್ತಿಕ ಶಿಫಾರಸುಗಳನ್ನು ಪಡೆಯಿರಿ",
+    ),
     "ground_floor": MessageLookupByLibrary.simpleMessage("ಭೂತಲ"),
     "have_clu_document": MessageLookupByLibrary.simpleMessage(
       "ನಿಮ್ಮ ಬಳಿ CLU ದಾಖಲಾತಿ ಇದೆಯೆ?",
@@ -199,7 +229,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "larger_collection_of_warehouses": MessageLookupByLibrary.simpleMessage(
       "ಹೆಚ್ಚು ಗೋದಾಮುಗಳನ್ನು ಸಂಗ್ರಹಿಸಿ",
     ),
+    "lease_rent_warehouse": MessageLookupByLibrary.simpleMessage(
+      "ವೇರ್ಹೌಸ್ ಲೀಸ್ & ಬಾಡಿಗೆ",
+    ),
     "lights": MessageLookupByLibrary.simpleMessage("ಲೈಟ್‌ಗಳು"),
+    "list_free_lisofy": MessageLookupByLibrary.simpleMessage(
+      "ಇದು ಉಚಿತವಾಗಿ ಪಟ್ಟಿ ಮಾಡಿ, Lisofy ಯಾವುದೇ ಶುಲ್ಕ ವಿಧಿಸುವುದಿಲ್ಲ",
+    ),
+    "list_property_for_rent": MessageLookupByLibrary.simpleMessage(
+      "ನಿಮ್ಮ ಆಸ್ತಿಯನ್ನು ಬಾಡಿಗೆಗಾಗಿ ಪಟ್ಟಿ ಮಾಡಿ",
+    ),
+    "list_property_lisofy": MessageLookupByLibrary.simpleMessage(
+      "ನಿಮ್ಮ ಆಸ್ತಿಯನ್ನು Lisofy ನಲ್ಲಿ ಪಟ್ಟಿ ಮಾಡಿ",
+    ),
     "location": MessageLookupByLibrary.simpleMessage("ಸ್ಥಳ"),
     "lock_in_period": MessageLookupByLibrary.simpleMessage("ಲಾಕ್ ಇನ್ ಅವಧಿ"),
     "log_out": MessageLookupByLibrary.simpleMessage("ಲಾಗ್ ಔಟ್"),
@@ -213,6 +255,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "ನಮೂನಾ ಖರ್ಚು (ಪ್ರತಿ ಚದರ ಅಡಿ)",
     ),
     "manage": MessageLookupByLibrary.simpleMessage("ನಿರ್ವಹಿಸಿ"),
+    "manage_at_ease": MessageLookupByLibrary.simpleMessage(
+      "ಸುಲಭವಾಗಿ ನಿರ್ವಹಿಸಿ",
+    ),
     "manage_photos": MessageLookupByLibrary.simpleMessage(
       "ಫೋಟೋಗಳನ್ನು ನಿರ್ವಹಿಸಿ",
     ),
@@ -233,7 +278,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "name": MessageLookupByLibrary.simpleMessage("ಹೆಸರು"),
     "near_by": MessageLookupByLibrary.simpleMessage("ಹತ್ತಿರದಲ್ಲಿ"),
     "need_assistance": MessageLookupByLibrary.simpleMessage("ಸಹಾಯ ಬೇಕು"),
+    "network_error_try_again": MessageLookupByLibrary.simpleMessage(
+      "ನೆಟ್‌ವರ್ಕ್ ದೋಷ, ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ",
+    ),
     "no": MessageLookupByLibrary.simpleMessage("ಇಲ್ಲ"),
+    "no_document_uploaded": MessageLookupByLibrary.simpleMessage(
+      "ಯಾವುದೇ ದಾಖಲೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಿಲ್ಲ",
+    ),
     "no_interested_warehouse_found": MessageLookupByLibrary.simpleMessage(
       "ಯಾವುದೇ ಆಸಕ್ತ ಗೋದಾಮುಗಳನ್ನು ಕಂಡುಬರಲಿಲ್ಲ",
     ),
@@ -267,13 +318,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "office_space": MessageLookupByLibrary.simpleMessage("ಕಚೇರಿ ಸ್ಥಳ"),
     "ok": MessageLookupByLibrary.simpleMessage("ಸರಿ"),
     "open": MessageLookupByLibrary.simpleMessage("ತುಂಬಿ"),
+    "open_settings": MessageLookupByLibrary.simpleMessage("ಸೆಟ್ಟಿಂಗ್ ತೆರೆಯಿರಿ"),
     "open_space": MessageLookupByLibrary.simpleMessage("ತೆರೆದ ಸ್ಥಳ"),
+    "optimized_supply_chain": MessageLookupByLibrary.simpleMessage(
+      "ಅನುಕೂಲಿತ ಸರಬರಾಜು ಸರಣಿ",
+    ),
     "other": MessageLookupByLibrary.simpleMessage("ಇತರ"),
     "others": MessageLookupByLibrary.simpleMessage("ಇತರೆ"),
+    "otp_sent_to": MessageLookupByLibrary.simpleMessage("OTP ಕಳುಹಿಸಲಾಗಿದೆ"),
     "outer": MessageLookupByLibrary.simpleMessage("ಹೊರಗಿನ"),
     "owner_pan_card": MessageLookupByLibrary.simpleMessage("ಮಾಲಕನ PAN ಕಾರ್ಡ್"),
     "parking": MessageLookupByLibrary.simpleMessage("ಪಾರ್ಕಿಂಗ್"),
     "parking_land": MessageLookupByLibrary.simpleMessage("ಪಾರ್ಕಿಂಗ್ ಭೂಮಿ"),
+    "partner_app": MessageLookupByLibrary.simpleMessage("ಪಾರ್ಟ್ನರ್ ಆಪ್"),
     "payments": MessageLookupByLibrary.simpleMessage("ಪಾವತಿಗಳು"),
     "peb": MessageLookupByLibrary.simpleMessage("ಪಿಇಬಿ"),
     "phone_notification": MessageLookupByLibrary.simpleMessage("ಫೋನ್ ಅಧಿಸೂಚನೆ"),
@@ -294,6 +351,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_wait_for_sometime": MessageLookupByLibrary.simpleMessage(
       "ದಯವಿಟ್ಟು ಸ್ವಲ್ಪ ಸಮಯ ಕಾಯಿರಿ...",
     ),
+    "post_property": MessageLookupByLibrary.simpleMessage(
+      "ನಿಮ್ಮ ಆಸ್ತಿಯನ್ನು ಪಟ್ಟಿ ಮಾಡಿ",
+    ),
     "post_your_property_free": MessageLookupByLibrary.simpleMessage(
       "ನಿಮ್ಮ ಆಸ್ತಿ ಉಚಿತವಾಗಿ ಪೋಸ್ಟ್ ಮಾಡಿ",
     ),
@@ -304,7 +364,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "price_min_to_max": MessageLookupByLibrary.simpleMessage(
       "ಬೆಲೆ (ಕನಿಷ್ಠದಿಂದ ಗರಿಷ್ಠಕ್ಕೆ)",
     ),
+    "pricing_leasing_team": MessageLookupByLibrary.simpleMessage(
+      "ಬೆಲೆ ಮತ್ತು ಲೀಸ್ ತಂಡ",
+    ),
     "privacy_policy": MessageLookupByLibrary.simpleMessage("ಗೌಪ್ಯತಾ ನೀತಿ"),
+    "property_type": MessageLookupByLibrary.simpleMessage("ಆಸ್ತಿ ಪ್ರಕಾರ"),
     "provide_office_space": MessageLookupByLibrary.simpleMessage(
       "ನೀವು ಕಚೇರಿ ಜಾಗವನ್ನು ಒದಗಿಸಬಹುದೇ?",
     ),
@@ -322,10 +386,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "ಪ್ರತಿ ಚದರ ಅಡಿ ಬಾಡಿಗೆ",
     ),
     "rent_range": MessageLookupByLibrary.simpleMessage("ಭಾಡಾ ಶ್ರೇಣಿ"),
+    "resend_otp": MessageLookupByLibrary.simpleMessage("OTP ಮತ್ತೆ ಕಳುಹಿಸಿ"),
+    "retry": MessageLookupByLibrary.simpleMessage("ಪುನಃ ಪ್ರಯತ್ನಿಸಿ"),
+    "safety_measures": MessageLookupByLibrary.simpleMessage("ಭದ್ರತಾ ಕ್ರಮಗಳು"),
     "save": MessageLookupByLibrary.simpleMessage("ಉಳಿಸಿ"),
     "save_next": MessageLookupByLibrary.simpleMessage("ಉಳಿಸಿ & ಮುಂದುವರಿಸಿ"),
     "schedule_a_visit": MessageLookupByLibrary.simpleMessage("ಭೇಟಿ ನಿಗದಿಪಡಿಸಿ"),
     "seall": MessageLookupByLibrary.simpleMessage("ಎಲ್ಲವನ್ನೂ ನೋಡಿ..."),
+    "seamless_inventory_tracking": MessageLookupByLibrary.simpleMessage(
+      "ನಿರಾತಂಕ ಇನ್ವೆಂಟರಿ ಟ್ರ್ಯಾಕಿಂಗ್",
+    ),
+    "search": MessageLookupByLibrary.simpleMessage("ಹುಡುಕಿ"),
     "search_by_location": MessageLookupByLibrary.simpleMessage(
       "ಸ್ಥಳದ ಪ್ರಕಾರ ಹುಡುಕಿ",
     ),
@@ -356,6 +427,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "ಶಾರ್ಟ್‌ಲಿಸ್ಟ್ ಮಾಡಿದವು",
     ),
     "side_height": MessageLookupByLibrary.simpleMessage("ಬದಿಯ ಎತ್ತರ (ಅಂಗುಚಿಯ)"),
+    "sign_in_login": MessageLookupByLibrary.simpleMessage("ಸೈನ್ ಇನ್ / ಲಾಗಿನ್"),
+    "size_capacity": MessageLookupByLibrary.simpleMessage(
+      "ಗಾತ್ರ ಮತ್ತು ಸಾಮರ್ಥ್ಯ",
+    ),
     "skip_for_now": MessageLookupByLibrary.simpleMessage(
       "ಈಗ ಬದ್ಧಗೊಳ್ಳುವುದು ತಪ್ಪಿಸಿ",
     ),
@@ -378,6 +453,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "thanks_for_feedback": MessageLookupByLibrary.simpleMessage(
       "ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆಗೆ ಧನ್ಯವಾದಗಳು!",
     ),
+    "there": MessageLookupByLibrary.simpleMessage("ಅಲ್ಲಿ"),
     "toilets": MessageLookupByLibrary.simpleMessage("ಶೌಚಾಲಯಗಳು"),
     "token_advance": MessageLookupByLibrary.simpleMessage("ಟೋಕನ್ ಮುಂದುವರಿದ"),
     "total_area": MessageLookupByLibrary.simpleMessage("ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ"),
@@ -428,6 +504,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "verified_property_and_owner": MessageLookupByLibrary.simpleMessage(
       "ಪರಿಶೀಲಿತ ಆಸ್ತಿ ಮತ್ತು ಮಾಲೀಕ",
+    ),
+    "verify_proceed": MessageLookupByLibrary.simpleMessage(
+      "ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಮುಂದುವರಿಯಿರಿ",
     ),
     "videos": MessageLookupByLibrary.simpleMessage("ವೀಡಿಯೋಗಳು"),
     "view_less": MessageLookupByLibrary.simpleMessage("ಕಡಿಮೆ ವೀಕ್ಷಿಸಿ"),
@@ -484,6 +563,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "whose_partner_question": MessageLookupByLibrary.simpleMessage(
       "ನೀವು ಯಾರ ಪಾಲುದಾರರಾಗಲು ಬಯಸುತ್ತೀರಿ?",
     ),
+    "widely_trusted_by": MessageLookupByLibrary.simpleMessage("ವಿಶ್ವಾಸಾರ್ಹ"),
     "within_15_days": MessageLookupByLibrary.simpleMessage("15 ದಿನಗಳೊಳಗೆ"),
     "within_30_days": MessageLookupByLibrary.simpleMessage("30 ದಿನಗಳೊಳಗೆ"),
     "within_60_days": MessageLookupByLibrary.simpleMessage("60 ದಿನಗಳೊಳಗೆ"),

@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-
 class DistanceCalculator {
   LatLng parseLatLng(String wHouseAddress) {
     final regex = RegExp(r'LatLng\(([^,]+), ([^)]+)\)');
@@ -33,16 +32,13 @@ class DistanceCalculator {
 
     // Generate a random buffer between 1km (1000m) and 3km (3000m)
     double randomBuffer = 1000 + Random().nextDouble() * (3000 - 1000);
-
     return distance + randomBuffer;
   }
-
 
   Future<double> getDistanceFromCurrentToWarehouse(String whouseAddress) async {
     LatLng warehouseLatLng = parseLatLng(whouseAddress);
     Position currentPosition = await getCurrentLocation();
     LatLng currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
-
     // Generate a small random offset between -0.005 and 0.005
     double offset = (Random().nextDouble() * 0.01 - 0.005); // Range: [-0.005, 0.005]
     // Randomly decide whether to modify latitude or longitude
@@ -69,10 +65,6 @@ class DistanceCalculator {
       return "Error: ${e.toString()}";
     }
   }
-
-
-
-
 }
 
 class LatLng {

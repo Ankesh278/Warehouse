@@ -1,5 +1,6 @@
 
 import 'package:Lisofy/Warehouse/User/UserProvider/notification_setting.dart';
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 class NotificationSetting extends StatefulWidget {
@@ -54,9 +55,9 @@ class _NotificationSettingState extends State<NotificationSetting> {
                                   },
                                 ),
                                 const SizedBox(width: 20),
-                                const Text(
-                                  "Notification setting",
-                                  style: TextStyle(
+                                 Text(
+                                  S.of(context).notification_setting,
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 17,
                                     fontWeight: FontWeight.w600,

@@ -24,6 +24,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "aadhaar_back": MessageLookupByLibrary.simpleMessage("ஆதார் பின்பு"),
     "aadhaar_front": MessageLookupByLibrary.simpleMessage("ஆதார் முன்பு"),
+    "about_warehouse_now": MessageLookupByLibrary.simpleMessage(
+      "கிடங்கு பற்றி இப்போது",
+    ),
     "account": MessageLookupByLibrary.simpleMessage("கணக்கு"),
     "add_additional_details": MessageLookupByLibrary.simpleMessage(
       "மேலும் வாடிக்கையாளர்களை ஈர்க்க கூடுதல் விவரங்களைச் சேர்க்கவும்",
@@ -59,6 +62,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "agricultural": MessageLookupByLibrary.simpleMessage("விவசாயம்"),
     "all_topics": MessageLookupByLibrary.simpleMessage("அனைத்து தலைப்புகள்"),
+    "already_completed": MessageLookupByLibrary.simpleMessage(
+      "ஏற்கனவே முடிந்துவிட்டது",
+    ),
     "amenities": MessageLookupByLibrary.simpleMessage("வசதிகள்"),
     "apply_filters": MessageLookupByLibrary.simpleMessage(
       "வடிகட்டிகளை பயன்படுத்து",
@@ -72,6 +78,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "available_area": MessageLookupByLibrary.simpleMessage(
       "கிடைக்கும் பரப்பளவு",
     ),
+    "back": MessageLookupByLibrary.simpleMessage("பின்னே"),
+    "basic_info": MessageLookupByLibrary.simpleMessage("அடிப்படை தகவல்"),
     "became_partner": MessageLookupByLibrary.simpleMessage("பங்குதாரராகவும்"),
     "bids": MessageLookupByLibrary.simpleMessage("பிட்ஸ்"),
     "bike_parking_slots": MessageLookupByLibrary.simpleMessage(
@@ -110,6 +118,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "complete_kyc": MessageLookupByLibrary.simpleMessage(
       "கே.வைகே. முடிக்கவும்",
     ),
+    "confirm_delete_account": MessageLookupByLibrary.simpleMessage(
+      "நீங்கள் உங்கள் கணக்கை நிச்சயமாக நீக்க விரும்புகிறீர்களா? இந்த செயல் ரத்து செய்ய முடியாது",
+    ),
+    "confirm_otp": MessageLookupByLibrary.simpleMessage(
+      "OTP ஐ உறுதிப்படுத்தவும்",
+    ),
     "congratulations": MessageLookupByLibrary.simpleMessage("வாழ்த்துகள்"),
     "connect_with_whatsapp": MessageLookupByLibrary.simpleMessage(
       "வாட்ஸ்அப்புடன் இணைக்கவும்",
@@ -127,6 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ஒப்பந்த ஆவணங்கள்",
     ),
     "dark_store": MessageLookupByLibrary.simpleMessage("டார்க் ஸ்டோர்"),
+    "delete_account": MessageLookupByLibrary.simpleMessage("கணக்கை நீக்கவும்"),
     "designation": MessageLookupByLibrary.simpleMessage("பதவி"),
     "dock_levelers": MessageLookupByLibrary.simpleMessage(
       "டாக் நிலைப்படுத்திகள்",
@@ -152,17 +167,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "தயவுசெய்து தெளிவுத்தன்மை & சரியான விளக்கத்தை உறுதிசெய்யவும்",
     ),
     "enter_address": MessageLookupByLibrary.simpleMessage("முகவரியை உள்ளிடுக"),
+    "enter_property_details": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் சொத்து விவரங்களை உள்ளிடவும்",
+    ),
+    "exit_app": MessageLookupByLibrary.simpleMessage("ஆப்பை வெளியேறு"),
     "express_interest": MessageLookupByLibrary.simpleMessage(
       "ஆர்வத்தை வெளிப்படுத்துக",
     ),
     "express_interest_to_get_callback": MessageLookupByLibrary.simpleMessage(
       "காலை பெற ஆர்வம் தெரிவிக்கவும்.",
     ),
+    "facility_feature": MessageLookupByLibrary.simpleMessage(
+      "வசதிகள் மற்றும் அம்சங்கள்",
+    ),
     "factory": MessageLookupByLibrary.simpleMessage("தொழிற்சாலை"),
     "failed_to_load_image": MessageLookupByLibrary.simpleMessage(
       "புகைப்படத்தை ஏற்றுவது தோல்வியடைந்தது!",
     ),
+    "failed_update_profile": MessageLookupByLibrary.simpleMessage(
+      "சுயவிவரத்தை புதுப்பிக்க முடியவில்லை",
+    ),
     "fans": MessageLookupByLibrary.simpleMessage("விசிறிகள்"),
+    "few_simple_steps": MessageLookupByLibrary.simpleMessage(
+      "சில எளிய நடவடிக்கைகளில்",
+    ),
     "filter": MessageLookupByLibrary.simpleMessage("பிடுக்கி"),
     "fire_noc": MessageLookupByLibrary.simpleMessage(
       "பொருள் NOC: உங்கள் களஞ்சியத்தில் தீ பாதுகாப்பு உள்ளது என உறுதிப்படுத்தவும்",
@@ -180,6 +208,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "general": MessageLookupByLibrary.simpleMessage("பொது"),
     "get_address": MessageLookupByLibrary.simpleMessage("முகவரி பெறுக"),
+    "get_otp": MessageLookupByLibrary.simpleMessage("OTP ஐப் பெறுங்கள்"),
+    "get_personalized_recommendations": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் அருகிலுள்ள தனிப்பயன் பரிந்துரைகளை பெறுங்கள்",
+    ),
     "ground_floor": MessageLookupByLibrary.simpleMessage("பூமி மாடி"),
     "have_clu_document": MessageLookupByLibrary.simpleMessage(
       "உங்களுக்கு CLU ஆவணம் உள்ளது என உறுதிப்படுத்தவும்",
@@ -207,7 +239,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "larger_collection_of_warehouses": MessageLookupByLibrary.simpleMessage(
       "பெரிய கிடங்கு சேகரிப்பு",
     ),
+    "lease_rent_warehouse": MessageLookupByLibrary.simpleMessage(
+      "கிடங்கு வாடகைக்கு கொடுக்க / எடுக்க",
+    ),
     "lights": MessageLookupByLibrary.simpleMessage("விளக்குகள்"),
+    "list_free_lisofy": MessageLookupByLibrary.simpleMessage(
+      "இது இலவசமாக பட்டியலிடப்பட்டது, Lisofy எந்த கட்டணமும் வசூலிக்காது",
+    ),
+    "list_property_for_rent": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் சொத்தை வாடகைக்கு பட்டியலிடுங்கள்",
+    ),
+    "list_property_lisofy": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் சொத்தை Lisofy இல் பட்டியலிடுங்கள்",
+    ),
     "location": MessageLookupByLibrary.simpleMessage("இடம்"),
     "lock_in_period": MessageLookupByLibrary.simpleMessage("லாக்-இன் காலம்"),
     "log_out": MessageLookupByLibrary.simpleMessage("வெளியேறு"),
@@ -221,6 +265,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "பராமரிப்பு செலவு (ஒவ்வொரு சதுர அடி)",
     ),
     "manage": MessageLookupByLibrary.simpleMessage("மேலாண்மை செய்யவும்"),
+    "manage_at_ease": MessageLookupByLibrary.simpleMessage(
+      "எளிதாக நிர்வகிக்கவும்",
+    ),
     "manage_photos": MessageLookupByLibrary.simpleMessage(
       "புகைப்படங்களை மேலாண்மை செய்யவும்",
     ),
@@ -241,7 +288,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "name": MessageLookupByLibrary.simpleMessage("பெயர்"),
     "near_by": MessageLookupByLibrary.simpleMessage("அருகில்"),
     "need_assistance": MessageLookupByLibrary.simpleMessage("உதவி தேவை"),
+    "network_error_try_again": MessageLookupByLibrary.simpleMessage(
+      "நெட்வொர்க் பிழை, தயவுசெய்து மீண்டும் முயற்சிக்கவும்",
+    ),
     "no": MessageLookupByLibrary.simpleMessage("இல்லை"),
+    "no_document_uploaded": MessageLookupByLibrary.simpleMessage(
+      "எந்த ஆவணமும் பதிவேற்றப்படவில்லை",
+    ),
     "no_interested_warehouse_found": MessageLookupByLibrary.simpleMessage(
       "ஆர்வம் கொண்ட களம் கிடைக்கவில்லை",
     ),
@@ -277,9 +330,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "office_space": MessageLookupByLibrary.simpleMessage("அலுவலக இடம்"),
     "ok": MessageLookupByLibrary.simpleMessage("சரி"),
     "open": MessageLookupByLibrary.simpleMessage("திறக்கவும்"),
+    "open_settings": MessageLookupByLibrary.simpleMessage(
+      "அமைப்புகளை திறக்கவும்",
+    ),
     "open_space": MessageLookupByLibrary.simpleMessage("திறந்த இடம்"),
+    "optimized_supply_chain": MessageLookupByLibrary.simpleMessage(
+      "சீரமைக்கப்பட்ட வழங்கல் சங்கிலி",
+    ),
     "other": MessageLookupByLibrary.simpleMessage("மற்றவை"),
     "others": MessageLookupByLibrary.simpleMessage("மற்றவை"),
+    "otp_sent_to": MessageLookupByLibrary.simpleMessage("OTP அனுப்பப்பட்டது"),
     "outer": MessageLookupByLibrary.simpleMessage("வெளிப்புறம்"),
     "owner_pan_card": MessageLookupByLibrary.simpleMessage(
       "உரிமையாளர் PAN கார்டு",
@@ -288,6 +348,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "parking_land": MessageLookupByLibrary.simpleMessage(
       "கார் நிறுத்தும் நிலம்",
     ),
+    "partner_app": MessageLookupByLibrary.simpleMessage("பார்ட்னர் ஆப்"),
     "payments": MessageLookupByLibrary.simpleMessage("பணம்"),
     "peb": MessageLookupByLibrary.simpleMessage("PEB"),
     "phone_notification": MessageLookupByLibrary.simpleMessage(
@@ -310,6 +371,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_wait_for_sometime": MessageLookupByLibrary.simpleMessage(
       "சில நேரம் காத்திருங்கள்...",
     ),
+    "post_property": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் சொத்தை பட்டியலிடுங்கள்",
+    ),
     "post_your_property_free": MessageLookupByLibrary.simpleMessage(
       "உங்கள் சொத்தை இலவசமாகப் போஸ்ட் செய்யவும்",
     ),
@@ -320,7 +384,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "price_min_to_max": MessageLookupByLibrary.simpleMessage(
       "விலை (குறைந்தது முதல் அதிகம் வரை)",
     ),
+    "pricing_leasing_team": MessageLookupByLibrary.simpleMessage(
+      "விலை நிர்ணய மற்றும் வாடகை அணிகள்",
+    ),
     "privacy_policy": MessageLookupByLibrary.simpleMessage("தனியுரிமை கொள்கை"),
+    "property_type": MessageLookupByLibrary.simpleMessage("சொத்து வகை"),
     "provide_office_space": MessageLookupByLibrary.simpleMessage(
       "நீங்கள் அலுவலக இடத்தை வழங்குகிறீர்களா?",
     ),
@@ -338,12 +406,23 @@ class MessageLookup extends MessageLookupByLibrary {
       "ஒவ்வொரு சதுர அடி வாடகை",
     ),
     "rent_range": MessageLookupByLibrary.simpleMessage("வாடகை வரம்பு"),
+    "resend_otp": MessageLookupByLibrary.simpleMessage(
+      "OTP மீண்டும் அனுப்பவும்",
+    ),
+    "retry": MessageLookupByLibrary.simpleMessage("மீண்டும் முயற்சிக்கவும்"),
+    "safety_measures": MessageLookupByLibrary.simpleMessage(
+      "பாதுகாப்பு நடவடிக்கைகள்",
+    ),
     "save": MessageLookupByLibrary.simpleMessage("சேமி"),
     "save_next": MessageLookupByLibrary.simpleMessage("சேமிக்கவும் & அடுத்தது"),
     "schedule_a_visit": MessageLookupByLibrary.simpleMessage(
       "ஒரு பார்வையை திட்டமிடுங்கள்",
     ),
     "seall": MessageLookupByLibrary.simpleMessage("அனைத்தையும் காண்க..."),
+    "seamless_inventory_tracking": MessageLookupByLibrary.simpleMessage(
+      "மிகவும் எளிமையான சரக்கு கண்காணிப்பு",
+    ),
+    "search": MessageLookupByLibrary.simpleMessage("தேடல்"),
     "search_by_location": MessageLookupByLibrary.simpleMessage(
       "இடம் மூலம் தேடு",
     ),
@@ -376,6 +455,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "shed": MessageLookupByLibrary.simpleMessage("ஷெட்"),
     "shortlisted": MessageLookupByLibrary.simpleMessage("சட்டியிடப்பட்டவை"),
     "side_height": MessageLookupByLibrary.simpleMessage("பக்கம் உயரம் (அடி)"),
+    "sign_in_login": MessageLookupByLibrary.simpleMessage(
+      "உள்நுழையவும் / புகுபதிகை",
+    ),
+    "size_capacity": MessageLookupByLibrary.simpleMessage("அளவு மற்றும் திறன்"),
     "skip_for_now": MessageLookupByLibrary.simpleMessage(
       "இப்போது தவிர்க்கவும்",
     ),
@@ -398,6 +481,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "thanks_for_feedback": MessageLookupByLibrary.simpleMessage(
       "உங்கள் கருத்துக்கு நன்றி!",
     ),
+    "there": MessageLookupByLibrary.simpleMessage("அங்கே"),
     "toilets": MessageLookupByLibrary.simpleMessage("கழிப்பறைகள்"),
     "token_advance": MessageLookupByLibrary.simpleMessage(
       "டோக்கன் முன்னேற்றம்",
@@ -455,6 +539,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "verified_property_and_owner": MessageLookupByLibrary.simpleMessage(
       "நிறுவிக்கப்பட்ட சொத்து மற்றும் உரிமையாளர்",
     ),
+    "verify_proceed": MessageLookupByLibrary.simpleMessage(
+      "சரிபார்த்து தொடரவும்",
+    ),
     "videos": MessageLookupByLibrary.simpleMessage("வீடியோக்கள்"),
     "view_less": MessageLookupByLibrary.simpleMessage("குறைவாக பார்க்க"),
     "view_more": MessageLookupByLibrary.simpleMessage("மேலும் பார்க்க"),
@@ -511,6 +598,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "whose_partner_question": MessageLookupByLibrary.simpleMessage(
       "நீங்கள் யாரின் கூட்டாளராக இருக்க விரும்புகிறீர்கள்?",
+    ),
+    "widely_trusted_by": MessageLookupByLibrary.simpleMessage(
+      "பிரபலமாக நம்பப்பட்டவர்கள்",
     ),
     "within_15_days": MessageLookupByLibrary.simpleMessage("15 நாட்களில்"),
     "within_30_days": MessageLookupByLibrary.simpleMessage("30 நாட்களில்"),

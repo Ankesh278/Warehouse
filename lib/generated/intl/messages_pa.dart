@@ -24,6 +24,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "aadhaar_back": MessageLookupByLibrary.simpleMessage("ਆਧਾਰ ਪਿੱਛੇ"),
     "aadhaar_front": MessageLookupByLibrary.simpleMessage("ਆਧਾਰ ਅੱਗੇ"),
+    "about_warehouse_now": MessageLookupByLibrary.simpleMessage(
+      "ਗੋਦਾਮ ਬਾਰੇ ਹੁਣੇ",
+    ),
     "account": MessageLookupByLibrary.simpleMessage("ਖਾਤਾ"),
     "add_additional_details": MessageLookupByLibrary.simpleMessage(
       "ਜ਼ਿਆਦਾ ਗਾਹਕਾਂ ਨੂੰ ਆਕਰਸ਼ਿਤ ਕਰਨ ਲਈ ਵਾਧੂ ਵਿਵਰਣ ਸ਼ਾਮਿਲ ਕਰੋ",
@@ -53,6 +56,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "advanced_filters": MessageLookupByLibrary.simpleMessage("ਤਕਨੀਕੀ ਫਿਲਟਰ"),
     "agricultural": MessageLookupByLibrary.simpleMessage("ਕ੍ਰਿਸ਼ੀ"),
     "all_topics": MessageLookupByLibrary.simpleMessage("ਸਭ ਵਿਸ਼ੇ"),
+    "already_completed": MessageLookupByLibrary.simpleMessage(
+      "ਪਹਿਲਾਂ ਹੀ ਪੂਰਾ ਹੋਇਆ",
+    ),
     "amenities": MessageLookupByLibrary.simpleMessage("ਸੁਵਿਧਾਵਾਂ"),
     "apply_filters": MessageLookupByLibrary.simpleMessage("ਫਿਲਟਰ ਲਾਗੂ ਕਰੋ"),
     "area_max_to_min": MessageLookupByLibrary.simpleMessage(
@@ -62,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "ਇਲਾਕਾ (ਘੱਟ ਤੋਂ ਵੱਧ ਤਕ)",
     ),
     "available_area": MessageLookupByLibrary.simpleMessage("ਉਪਲਬਧ ਖੇਤਰ"),
+    "back": MessageLookupByLibrary.simpleMessage("ਵਾਪਸ"),
+    "basic_info": MessageLookupByLibrary.simpleMessage("ਮੂਲ ਜਾਣਕਾਰੀ"),
     "became_partner": MessageLookupByLibrary.simpleMessage("ਸਾਥੀ ਬਣੋ"),
     "bids": MessageLookupByLibrary.simpleMessage("ਬੋਲੀ"),
     "bike_parking_slots": MessageLookupByLibrary.simpleMessage(
@@ -96,6 +104,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "coming_soon": MessageLookupByLibrary.simpleMessage("ਜਲਦੀ ਆ ਰਿਹਾ ਹੈ"),
     "company_name": MessageLookupByLibrary.simpleMessage("ਕੰਪਨੀ ਦਾ ਨਾਮ"),
     "complete_kyc": MessageLookupByLibrary.simpleMessage("ਕੇਵਾਈਸੀ ਪੂਰਾ ਕਰੋ"),
+    "confirm_delete_account": MessageLookupByLibrary.simpleMessage(
+      "ਕੀ ਤੁਸੀਂ ਵਾਸਤਵ ਵਿੱਚ ਆਪਣਾ ਅਕਾਉਂਟ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? ਇਹ ਕਦਮ ਵਾਪਸ ਨਹੀਂ ਲੈ ਜਾ ਸਕਦਾ",
+    ),
+    "confirm_otp": MessageLookupByLibrary.simpleMessage("OTP ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ"),
     "congratulations": MessageLookupByLibrary.simpleMessage("ਵਧਾਈਆਂ"),
     "connect_with_whatsapp": MessageLookupByLibrary.simpleMessage(
       "ਵਟਸਐਪ ਨਾਲ ਜੁੜੋ",
@@ -115,6 +127,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ਕਾਂਟ੍ਰੈਕਟ ਦਸਤਾਵੇਜ਼",
     ),
     "dark_store": MessageLookupByLibrary.simpleMessage("ਡਾਰਕ ਸਟੋਰ"),
+    "delete_account": MessageLookupByLibrary.simpleMessage("ਅਕਾਉਂਟ ਮਿਟਾਓ"),
     "designation": MessageLookupByLibrary.simpleMessage("ਅਹੁਦਾ"),
     "dock_levelers": MessageLookupByLibrary.simpleMessage("ਡੌਕ ਲੈਵਲਰ"),
     "docks_height": MessageLookupByLibrary.simpleMessage(
@@ -140,15 +153,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "ਕਿਰਪਾ ਕਰਕੇ ਸਾਫ਼ਗਾਈ ਅਤੇ ਉਚਿਤ ਲਾਈਟਿੰਗ ਯਕੀਨੀ ਬਣਾਓ",
     ),
     "enter_address": MessageLookupByLibrary.simpleMessage("ਪਤਾ ਦਰਜ ਕਰੋ"),
+    "enter_property_details": MessageLookupByLibrary.simpleMessage(
+      "ਆਪਣੀ ਸੰਪਤੀ ਦੀ ਜਾਣਕਾਰੀ ਭਰੋ",
+    ),
+    "exit_app": MessageLookupByLibrary.simpleMessage("ਐਪ ਬੰਦ ਕਰੋ"),
     "express_interest": MessageLookupByLibrary.simpleMessage("ਦਿਲਚਸਪੀ ਜਤਾਓ"),
     "express_interest_to_get_callback": MessageLookupByLibrary.simpleMessage(
       "ਕਾਲਬੈਕ ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ ਦਿਲਚਸਪੀ ਦਿਖਾਓ.",
+    ),
+    "facility_feature": MessageLookupByLibrary.simpleMessage(
+      "ਸੁਵਿਧਾਵਾਂ ਅਤੇ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ",
     ),
     "factory": MessageLookupByLibrary.simpleMessage("ਫੈਕਟਰੀ"),
     "failed_to_load_image": MessageLookupByLibrary.simpleMessage(
       "ਚਿੱਤਰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ!",
     ),
+    "failed_update_profile": MessageLookupByLibrary.simpleMessage(
+      "ਪਰੋਫ਼ਾਈਲ ਅੱਪਡੇਟ ਕਰਨ ਵਿੱਚ ਅਸਫਲ",
+    ),
     "fans": MessageLookupByLibrary.simpleMessage("ਪੱਖੇ"),
+    "few_simple_steps": MessageLookupByLibrary.simpleMessage(
+      "ਸਿਰਫ਼ ਕੁਝ ਆਸਾਨ ਕਦਮਾਂ ਵਿੱਚ",
+    ),
     "filter": MessageLookupByLibrary.simpleMessage("ਛਾਂਟੋ"),
     "fire_noc": MessageLookupByLibrary.simpleMessage(
       "ਫਾਇਰ NOC: ਕੀ ਤੁਹਾਡੇ ਗੋਦਾਮ ਨੂੰ ਅੱਗ ਦੇ ਖਤਰੇ ਤੋਂ ਬਚਾਇਆ ਗਿਆ ਹੈ?",
@@ -164,6 +190,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "general": MessageLookupByLibrary.simpleMessage("ਸਧਾਰਨ"),
     "get_address": MessageLookupByLibrary.simpleMessage("ਪਤਾ ਪ੍ਰਾਪਤ ਕਰੋ"),
+    "get_otp": MessageLookupByLibrary.simpleMessage("OTP ਪ੍ਰਾਪਤ ਕਰੋ"),
+    "get_personalized_recommendations": MessageLookupByLibrary.simpleMessage(
+      "ਆਪਣੇ ਨੇੜੇ ਨਿੱਜੀ ਸਿਫਾਰਸ਼ਾਂ ਪ੍ਰਾਪਤ ਕਰੋ",
+    ),
     "ground_floor": MessageLookupByLibrary.simpleMessage("ਭੂਮਿਟੀ"),
     "have_clu_document": MessageLookupByLibrary.simpleMessage(
       "ਕੀ ਤੁਹਾਡੇ ਕੋਲ CLU ਦਸਤਾਵੇਜ਼ ਹੈ?",
@@ -193,7 +223,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "larger_collection_of_warehouses": MessageLookupByLibrary.simpleMessage(
       "ਵੱਡਾ ਗੋਦਾਮ ਸੰਗ੍ਰਹਿ",
     ),
+    "lease_rent_warehouse": MessageLookupByLibrary.simpleMessage(
+      "ਗੋਦਾਮ ਕਿਰਾਏ ਤੇ ਲਓ ਅਤੇ ਕਿਰਾਏ ਤੇ ਦਿਓ",
+    ),
     "lights": MessageLookupByLibrary.simpleMessage("ਲਾਈਟਾਂ"),
+    "list_free_lisofy": MessageLookupByLibrary.simpleMessage(
+      "ਇਹ ਮੁਫ਼ਤ ਲਿਸਟ ਕਰੋ, Lisofy ਕੋਈ ਚਾਰਜ ਨਹੀਂ ਲਵੇਗਾ",
+    ),
+    "list_property_for_rent": MessageLookupByLibrary.simpleMessage(
+      "ਆਪਣੀ ਸੰਪਤੀ ਕਿਰਾਏ ਲਈ ਲਿਸਟ ਕਰੋ",
+    ),
+    "list_property_lisofy": MessageLookupByLibrary.simpleMessage(
+      "ਆਪਣੀ ਸੰਪਤੀ Lisofy ਵਿੱਚ ਲਿਸਟ ਕਰੋ",
+    ),
     "location": MessageLookupByLibrary.simpleMessage("ਸਥਾਨ"),
     "lock_in_period": MessageLookupByLibrary.simpleMessage("ਲੌਕ-ਇਨ ਅਵਧੀ"),
     "log_out": MessageLookupByLibrary.simpleMessage("ਲਾਗ ਆਉਟ"),
@@ -207,6 +249,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "ਨਮੂਨਾ ਖਰਚ (ਪ੍ਰਤੀ ਵਰਗ ਫੁੱਟ)",
     ),
     "manage": MessageLookupByLibrary.simpleMessage("ਪਰਬੰਧ ਕਰੋ"),
+    "manage_at_ease": MessageLookupByLibrary.simpleMessage(
+      "ਆਸਾਨੀ ਨਾਲ ਪ੍ਰਬੰਧ ਕਰੋ",
+    ),
     "manage_photos": MessageLookupByLibrary.simpleMessage("ਫੋਟੋ ਪ੍ਰਬੰਧਿਤ ਕਰੋ"),
     "manage_videos": MessageLookupByLibrary.simpleMessage("ਵੀਡੀਓ ਪ੍ਰਬੰਧਿਤ ਕਰੋ"),
     "manage_your_warehouse": MessageLookupByLibrary.simpleMessage(
@@ -223,7 +268,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "name": MessageLookupByLibrary.simpleMessage("ਨਾਮ"),
     "near_by": MessageLookupByLibrary.simpleMessage("ਨਜ਼ਦੀਕ"),
     "need_assistance": MessageLookupByLibrary.simpleMessage("ਮਦਦ ਚਾਹੀਦੀ ਹੈ"),
+    "network_error_try_again": MessageLookupByLibrary.simpleMessage(
+      "ਨੈੱਟਵਰਕ ਗਲਤੀ, ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
+    ),
     "no": MessageLookupByLibrary.simpleMessage("ਨਹੀਂ"),
+    "no_document_uploaded": MessageLookupByLibrary.simpleMessage(
+      "ਕੋਈ ਦਸਤਾਵੇਜ਼ ਅੱਪਲੋਡ ਨਹੀਂ ਕੀਤਾ ਗਿਆ",
+    ),
     "no_interested_warehouse_found": MessageLookupByLibrary.simpleMessage(
       "ਕੋਈ ਦਿਲਚਸਪ ਗੋਦਾਮ ਨਹੀਂ ਮਿਲਿਆ",
     ),
@@ -255,13 +306,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "office_space": MessageLookupByLibrary.simpleMessage("ਦਫ਼ਤਰ ਥਾਂ"),
     "ok": MessageLookupByLibrary.simpleMessage("ਠੀਕ ਹੈ"),
     "open": MessageLookupByLibrary.simpleMessage("ਖੋਲ੍ਹੋ"),
+    "open_settings": MessageLookupByLibrary.simpleMessage("ਸੈਟਿੰਗ ਖੋਲ੍ਹੋ"),
     "open_space": MessageLookupByLibrary.simpleMessage("ਖੁੱਲ੍ਹੀ ਜਗ੍ਹਾ"),
+    "optimized_supply_chain": MessageLookupByLibrary.simpleMessage(
+      "ਅਨੁਕੂਲ ਸਪਲਾਈ ਚੇਨ",
+    ),
     "other": MessageLookupByLibrary.simpleMessage("ਹੋਰ"),
     "others": MessageLookupByLibrary.simpleMessage("ਹੋਰ"),
+    "otp_sent_to": MessageLookupByLibrary.simpleMessage("OTP ਭੇਜਿਆ ਗਿਆ"),
     "outer": MessageLookupByLibrary.simpleMessage("ਬਾਹਰੀ"),
     "owner_pan_card": MessageLookupByLibrary.simpleMessage("ਮਾਲਕ ਦਾ PAN ਕਾਰਡ"),
     "parking": MessageLookupByLibrary.simpleMessage("ਪਾਰਕਿੰਗ"),
     "parking_land": MessageLookupByLibrary.simpleMessage("ਪਾਰਕਿੰਗ ਦੀ ਜਗ੍ਹਾ"),
+    "partner_app": MessageLookupByLibrary.simpleMessage("ਪਾਰਟਨਰ ਐਪ"),
     "payments": MessageLookupByLibrary.simpleMessage("ਭੁਗਤਾਨ"),
     "peb": MessageLookupByLibrary.simpleMessage("PEB"),
     "phone_notification": MessageLookupByLibrary.simpleMessage("ਫ਼ੋਨ ਸੂਚਨਾ"),
@@ -276,6 +333,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_wait_for_sometime": MessageLookupByLibrary.simpleMessage(
       "ਕ੍ਰਿਪਾ ਕਰਕੇ ਕੁਝ ਸਮਾਂ ਰੁਕੋ...",
     ),
+    "post_property": MessageLookupByLibrary.simpleMessage(
+      "ਆਪਣੀ ਸੰਪਤੀ ਪੋਸਟ ਕਰੋ",
+    ),
     "post_your_property_free": MessageLookupByLibrary.simpleMessage(
       "ਆਪਣੀ ਸੰਪਤੀ ਮੁਫ਼ਤ ਵਿੱਚ ਪੋਸਟ ਕਰੋ",
     ),
@@ -286,7 +346,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "price_min_to_max": MessageLookupByLibrary.simpleMessage(
       "ਕੀਮਤ (ਘੱਟ ਤੋਂ ਵੱਧ ਤਕ)",
     ),
+    "pricing_leasing_team": MessageLookupByLibrary.simpleMessage(
+      "ਕੀਮਤ ਅਤੇ ਲੀਜਿੰਗ ਟੀਮ",
+    ),
     "privacy_policy": MessageLookupByLibrary.simpleMessage("ਪ੍ਰਾਈਵੇਸੀ ਨੀਤੀ"),
+    "property_type": MessageLookupByLibrary.simpleMessage("ਸੰਪਤੀ ਦੀ ਕਿਸਮ"),
     "provide_office_space": MessageLookupByLibrary.simpleMessage(
       "ਕੀ ਤੁਸੀਂ ਦਫ਼ਤਰ ਦੀ ਜਗ੍ਹਾ ਪ੍ਰਦਾਨ ਕਰਦੇ ਹੋ?",
     ),
@@ -302,12 +366,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "ਪ੍ਰਤੀ ਵਰਗ ਫੁੱਟ ਕਿਰਾਇਆ",
     ),
     "rent_range": MessageLookupByLibrary.simpleMessage("ਕਿਰਾਏ ਦੀ ਹੱਦ"),
+    "resend_otp": MessageLookupByLibrary.simpleMessage("OTP ਮੁੜ ਭੇਜੋ"),
+    "retry": MessageLookupByLibrary.simpleMessage("ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ"),
+    "safety_measures": MessageLookupByLibrary.simpleMessage("ਸੁਰੱਖਿਆ ਉਪਾਇਆ"),
     "save": MessageLookupByLibrary.simpleMessage("ਸੇਵ ਕਰੋ"),
     "save_next": MessageLookupByLibrary.simpleMessage("ਸੰਭਾਲੋ ਅਤੇ ਅਗਲਾ"),
     "schedule_a_visit": MessageLookupByLibrary.simpleMessage(
       "ਇੱਕ ਦੌਰਾ ਤੈਅ ਕਰੋ",
     ),
     "seall": MessageLookupByLibrary.simpleMessage("ਸਭ ਦਿਖਾਓ..."),
+    "seamless_inventory_tracking": MessageLookupByLibrary.simpleMessage(
+      "ਸਮਰੱਥ ਇਨਵੈਂਟਰੀ ਟਰੈਕਿੰਗ",
+    ),
+    "search": MessageLookupByLibrary.simpleMessage("ਖੋਜੋ"),
     "search_by_location": MessageLookupByLibrary.simpleMessage(
       "ਸਥਾਨ ਦੁਆਰਾ ਖੋਜੋ",
     ),
@@ -332,6 +403,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "side_height": MessageLookupByLibrary.simpleMessage(
       "ਪਾਸੇ ਦੀ ਉਚਾਈ (ਫੀਟ ਵਿੱਚ)",
     ),
+    "sign_in_login": MessageLookupByLibrary.simpleMessage("ਸਾਈਨ ਇਨ / ਲਾਗਇਨ"),
+    "size_capacity": MessageLookupByLibrary.simpleMessage("ਆਕਾਰ ਅਤੇ ਸਮਰੱਥਾ"),
     "skip_for_now": MessageLookupByLibrary.simpleMessage("ਹੁਣ ਛੱਡੋ"),
     "sorry": MessageLookupByLibrary.simpleMessage("ਮਾਫ਼ ਕਰਨਾ..."),
     "sort": MessageLookupByLibrary.simpleMessage("ਵਰਗਬੱਧ ਕਰੋ"),
@@ -352,6 +425,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "thanks_for_feedback": MessageLookupByLibrary.simpleMessage(
       "ਤੁਹਾਡੀ ਪ੍ਰਤੀਕ੍ਰਿਆ ਲਈ ਧੰਨਵਾਦ!",
     ),
+    "there": MessageLookupByLibrary.simpleMessage("ਉਥੇ"),
     "toilets": MessageLookupByLibrary.simpleMessage("ਟਾਇਲਟ"),
     "token_advance": MessageLookupByLibrary.simpleMessage("ਟੋਕਨ ਐਡਵਾਂਸ"),
     "total_area": MessageLookupByLibrary.simpleMessage("ਕੁੱਲ ਖੇਤਰਫਲ"),
@@ -400,6 +474,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "verified_property_and_owner": MessageLookupByLibrary.simpleMessage(
       "ਪ੍ਰਮਾਣਿਤ ਸੰਪਤੀ ਅਤੇ ਮਾਲਕ",
+    ),
+    "verify_proceed": MessageLookupByLibrary.simpleMessage(
+      "ਤਸਦੀਕ ਕਰੋ ਅਤੇ ਅੱਗੇ ਵਧੋ",
     ),
     "videos": MessageLookupByLibrary.simpleMessage("ਵੀਡੀਓ"),
     "view_less": MessageLookupByLibrary.simpleMessage("ਘੱਟ ਦੇਖੋ"),
@@ -457,6 +534,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "whose_partner_question": MessageLookupByLibrary.simpleMessage(
       "ਤੁਸੀਂ ਕਿਸ ਦੇ ਭਾਗੀਦਾਰ ਬਣਨਾ ਚਾਹੁੰਦੇ ਹੋ?",
+    ),
+    "widely_trusted_by": MessageLookupByLibrary.simpleMessage(
+      "ਵਿਸ਼ਵਾਸੀ ਦੁਆਰਾ ਵਿਅਕਤ",
     ),
     "within_15_days": MessageLookupByLibrary.simpleMessage("15 ਦਿਨਾਂ ਵਿੱਚ"),
     "within_30_days": MessageLookupByLibrary.simpleMessage("30 ਦਿਨਾਂ ਵਿੱਚ"),

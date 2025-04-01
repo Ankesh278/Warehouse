@@ -552,15 +552,15 @@ if (kDebugMode) {
                                         latitude: widget.latitude,
                                       )));
                             },
-                            child: const Column(
+                            child:  Column(
                               children: [
-                                ImageIcon(
+                                const ImageIcon(
                                   AssetImage(
                                       ImageAssets.backArrow
                                   ),
                                   color: Colors.white,
                                 ),
-                                Text("Back",style: TextStyle(color: Colors.white,fontSize: 8,fontWeight: FontWeight.w100),)
+                                Text(S.of(context).back,style: const TextStyle(color: Colors.white,fontSize: 8,fontWeight: FontWeight.w100),)
                               ],
                             )
                         ),
@@ -930,10 +930,10 @@ if (kDebugMode) {
                                             Container(
                                               margin: EdgeInsets.only(
                                                   bottom: screenHeight * 0.1),
-                                              child: const Center(
+                                              child:  Center(
                                                   child: Text(
-                                                    "No Warehouse near you...",
-                                                    style: TextStyle(
+                                                    S.of(context).no_warehouse_near_you,
+                                                    style: const TextStyle(
                                                         fontWeight: FontWeight.w800,
                                                         fontSize: 18),
                                                   )),
@@ -1277,9 +1277,6 @@ if (kDebugMode) {
                                                               7)),
                                                       child: InkWell(
                                                         onTap:(){
-                                                          if (kDebugMode) {
-                                                            print("ClickedImage$imageList");
-                                                          }
                                                           downloadImages(warehouse.filePath);
                                                           },
                                                         child: const Icon(
@@ -1573,11 +1570,11 @@ class AdvancedFiltersBottomSheetState
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 12.0),
+                 Padding(
+                  padding: const EdgeInsets.only(left: 12.0),
                   child: Text(
-                    "Advanced Filters",
-                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                    S.of(context).advanced_filters,
+                    style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
                 IconButton(
@@ -1637,7 +1634,7 @@ class AdvancedFiltersBottomSheetState
                         ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Select Rent Range (₹)", style: TextStyle(fontWeight: FontWeight.bold)),
+                         Text("${S.of(context).select_rent_range} (₹)", style: const TextStyle(fontWeight: FontWeight.bold)),
                         const SizedBox(height: 10),
                         RangeSlider(
                           min: minRent,
@@ -1674,7 +1671,7 @@ class AdvancedFiltersBottomSheetState
                         );
                       }).toList(),
                     )
-                        : const Center(child: Text('Select a filter', style: TextStyle(fontSize: 14))),
+                        :  Center(child: Text(S.of(context).select_filter, style: const TextStyle(fontSize: 14))),
                   ),
                 ),
               ],
@@ -1699,7 +1696,7 @@ class AdvancedFiltersBottomSheetState
                     });
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.grey.shade300),
-                  child: const Text("Clear All", style: TextStyle(color: Colors.black)),
+                  child:  Text(S.of(context).clear_all, style: const TextStyle(color: Colors.black)),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -1709,7 +1706,7 @@ class AdvancedFiltersBottomSheetState
                     });
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                  child: const Text("Apply Filters", style: TextStyle(color: Colors.white)),
+                  child:  Text(S.of(context).apply_filters, style: const TextStyle(color: Colors.white)),
                 ),
               ],
             ),

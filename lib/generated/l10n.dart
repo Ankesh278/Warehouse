@@ -2074,6 +2074,336 @@ class S {
       args: [],
     );
   }
+
+  /// `Exit App`
+  String get exit_app {
+    return Intl.message('Exit App', name: 'exit_app', desc: '', args: []);
+  }
+
+  /// `Open Settings`
+  String get open_settings {
+    return Intl.message(
+      'Open Settings',
+      name: 'open_settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Network Error, Please try again`
+  String get network_error_try_again {
+    return Intl.message(
+      'Network Error, Please try again',
+      name: 'network_error_try_again',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get retry {
+    return Intl.message('Retry', name: 'retry', desc: '', args: []);
+  }
+
+  /// `There`
+  String get there {
+    return Intl.message('There', name: 'there', desc: '', args: []);
+  }
+
+  /// `Get personalized recommendations near you`
+  String get get_personalized_recommendations {
+    return Intl.message(
+      'Get personalized recommendations near you',
+      name: 'get_personalized_recommendations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lease & Rent Warehouse`
+  String get lease_rent_warehouse {
+    return Intl.message(
+      'Lease & Rent Warehouse',
+      name: 'lease_rent_warehouse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `List your property for rent`
+  String get list_property_for_rent {
+    return Intl.message(
+      'List your property for rent',
+      name: 'list_property_for_rent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In just a few simple steps`
+  String get few_simple_steps {
+    return Intl.message(
+      'In just a few simple steps',
+      name: 'few_simple_steps',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `List your property in the Lisofy`
+  String get list_property_lisofy {
+    return Intl.message(
+      'List your property in the Lisofy',
+      name: 'list_property_lisofy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Partner App`
+  String get partner_app {
+    return Intl.message('Partner App', name: 'partner_app', desc: '', args: []);
+  }
+
+  /// `Basic Info`
+  String get basic_info {
+    return Intl.message('Basic Info', name: 'basic_info', desc: '', args: []);
+  }
+
+  /// `Size & Capacity`
+  String get size_capacity {
+    return Intl.message(
+      'Size & Capacity',
+      name: 'size_capacity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Facility & Features`
+  String get facility_feature {
+    return Intl.message(
+      'Facility & Features',
+      name: 'facility_feature',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pricing & Leasing Team`
+  String get pricing_leasing_team {
+    return Intl.message(
+      'Pricing & Leasing Team',
+      name: 'pricing_leasing_team',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your property details`
+  String get enter_property_details {
+    return Intl.message(
+      'Enter your property details',
+      name: 'enter_property_details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Property Type`
+  String get property_type {
+    return Intl.message(
+      'Property Type',
+      name: 'property_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Safety Measures`
+  String get safety_measures {
+    return Intl.message(
+      'Safety Measures',
+      name: 'safety_measures',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage at your ease`
+  String get manage_at_ease {
+    return Intl.message(
+      'Manage at your ease',
+      name: 'manage_at_ease',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seamless Inventory Tracking`
+  String get seamless_inventory_tracking {
+    return Intl.message(
+      'Seamless Inventory Tracking',
+      name: 'seamless_inventory_tracking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Optimized Supply Chain`
+  String get optimized_supply_chain {
+    return Intl.message(
+      'Optimized Supply Chain',
+      name: 'optimized_supply_chain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `List it for free, Lisofy will not charge anything`
+  String get list_free_lisofy {
+    return Intl.message(
+      'List it for free, Lisofy will not charge anything',
+      name: 'list_free_lisofy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Widely trusted by`
+  String get widely_trusted_by {
+    return Intl.message(
+      'Widely trusted by',
+      name: 'widely_trusted_by',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Post your property`
+  String get post_property {
+    return Intl.message(
+      'Post your property',
+      name: 'post_property',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search`
+  String get search {
+    return Intl.message('Search', name: 'search', desc: '', args: []);
+  }
+
+  /// `About Warehouse Now`
+  String get about_warehouse_now {
+    return Intl.message(
+      'About Warehouse Now',
+      name: 'about_warehouse_now',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back`
+  String get back {
+    return Intl.message('Back', name: 'back', desc: '', args: []);
+  }
+
+  /// `Already completed`
+  String get already_completed {
+    return Intl.message(
+      'Already completed',
+      name: 'already_completed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to update profile`
+  String get failed_update_profile {
+    return Intl.message(
+      'Failed to update profile',
+      name: 'failed_update_profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No document uploaded`
+  String get no_document_uploaded {
+    return Intl.message(
+      'No document uploaded',
+      name: 'no_document_uploaded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Account`
+  String get delete_account {
+    return Intl.message(
+      'Delete Account',
+      name: 'delete_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you really want to delete your account? This action cannot be undone`
+  String get confirm_delete_account {
+    return Intl.message(
+      'Do you really want to delete your account? This action cannot be undone',
+      name: 'confirm_delete_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in / Login`
+  String get sign_in_login {
+    return Intl.message(
+      'Sign in / Login',
+      name: 'sign_in_login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get OTP`
+  String get get_otp {
+    return Intl.message('Get OTP', name: 'get_otp', desc: '', args: []);
+  }
+
+  /// `Confirm OTP`
+  String get confirm_otp {
+    return Intl.message('Confirm OTP', name: 'confirm_otp', desc: '', args: []);
+  }
+
+  /// `OTP has been sent to`
+  String get otp_sent_to {
+    return Intl.message(
+      'OTP has been sent to',
+      name: 'otp_sent_to',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resend OTP`
+  String get resend_otp {
+    return Intl.message('Resend OTP', name: 'resend_otp', desc: '', args: []);
+  }
+
+  /// `Verify & Proceed`
+  String get verify_proceed {
+    return Intl.message(
+      'Verify & Proceed',
+      name: 'verify_proceed',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

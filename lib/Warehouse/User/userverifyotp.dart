@@ -4,6 +4,7 @@ import 'package:Lisofy/Warehouse/Partner/partner_registration_screen.dart';
 import 'package:Lisofy/Warehouse/User/UserProvider/photo_provider.dart';
 import 'package:Lisofy/Warehouse/User/getuserlocation.dart';
 import 'package:Lisofy/Warehouse/User/models/user_data_model.dart';
+import 'package:Lisofy/generated/l10n.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -113,7 +114,10 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
           setError("Error processing API response: ${e.toString()}");
         }
       } else {
-        setError('Unexpected server response: ${response.statusCode}');
+        if (kDebugMode) {
+          print("${response.statusCode}");
+        }
+        setError('Something went wrong...');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -153,17 +157,14 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
     await prefs.setString('name', user.name);
     await prefs.setString('email', user.mailid);
     await prefs.setString('profileImage', user.userProfile);
-
     if (kDebugMode) {
       print("ImageUrl: ${user.userProfile}");
     }
     profileProvider.setProfileImageUrl(profileUrl);
-
     if (kDebugMode) {
       print("Updated Profile URL: https://xpacesphere.com${user.userProfile}");
     }
   }
-
   Future<void> _storeUserData(bool isLoggedIn) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isUserLoggedIn', isLoggedIn);
@@ -263,7 +264,7 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
                                 child: Container(
                                   margin: EdgeInsets.only(left: screenWidth * 0.045),
                                   child: Text(
-                                    "Confirm OTP",
+                                    S.of(context).confirm_otp,
                                     style: TextStyle(
                                       fontSize: screenWidth * 0.05,
                                       color: Colors.white,
@@ -280,7 +281,7 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
                                     top: screenHeight * 0.01,
                                   ),
                                   child: Text(
-                                    "OTP has been sent to ${widget.phoneNumber}",
+                                    "${S.of(context).otp_sent_to}: ${widget.phoneNumber}",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: screenWidth * 0.04,
@@ -386,7 +387,7 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
                                             // Handle resend OTP logic here
                                           },
                                           child: Text(
-                                            'Resend OTP',
+                                            S.of(context).resend_otp,
                                             style: TextStyle(
                                               color: _isButtonDisabled
                                                   ? Colors.grey
@@ -413,13 +414,12 @@ class UserVerifyOtpState extends State<UserVerifyOtp> {
                                     backgroundColor: Colors.blue,
                                     minimumSize: Size(double.infinity, screenHeight * 0.06),
                                   ),
-                                  child: const Text('Verify & Proceed'),
+                                  child:  Text(S.of(context).verify_proceed),
                                 ),
                               ),
                               SizedBox(height: screenHeight * 0.017),
                               SizedBox(height: screenHeight * 0.1),
-                              Text(
-                                "By continuing, you agree to our Terms and Conditions",
+                              Text("By continuing, you agree to our Terms and Conditions",
                                 style: TextStyle(
                                   fontSize: screenWidth * 0.025,
                                   color: Colors.blue,
