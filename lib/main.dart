@@ -22,6 +22,7 @@ import 'package:Lisofy/new_home_page.dart';
 import 'package:Lisofy/resources/ImageAssets/ImagesAssets.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -41,19 +42,27 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 void main() async {
-  //debugPaintSizeEnabled = true;
   WidgetsFlutterBinding.ensureInitialized();
+  FlutterError.onError = (FlutterErrorDetails details) {
+    if (kReleaseMode) {
+      FirebaseCrashlytics.instance.recordFlutterError(details);
+    } else {
+      FirebaseCrashlytics.instance.recordFlutterError(details);
+      FlutterError.presentError(details);
+    }
+  };
   try {
     await Firebase.initializeApp();
   } catch (e) {
     if (kDebugMode) {
-      print("Firebase Initialization Error: \$e");
-      runApp(const MaterialApp(
-        home: Scaffold(
-          body: Center(child: Text('Failed to initialize app. Please restart...')),
-        ),
-      ));
+      print("Firebase Initialization Error: $e");
+      FirebaseCrashlytics.instance.recordError(e, null);
     }
+    runApp(const MaterialApp(
+      home: Scaffold(
+        body: Center(child: Text('Failed to initialize app. Please restart...')),
+      ),
+    ));
     return;
   }
 
@@ -65,33 +74,35 @@ void main() async {
       statusBarIconBrightness: Brightness.light,
     ),
   );
+
   SharedPreferences prefs;
   try {
     prefs = await SharedPreferences.getInstance();
   } catch (e) {
     if (kDebugMode) {
       print("SharedPreferences Error: $e");
+      FirebaseCrashlytics.instance.recordError(e, null);
     }
     runApp(
       const MaterialApp(
         home: Scaffold(
-          body: Center(
-            child: Text('Failed to load app data. Please restart...'),
-          ),
+          body: Center(child: Text('Failed to load app data. Please restart...')),
         ),
       ),
     );
     return;
   }
+
   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
   bool isUserLoggedIn = prefs.getBool('isUserLoggedIn') ?? false;
   String name = prefs.getString('name') ?? '';
   double latitude = prefs.getDouble('latitude') ?? 0.00;
   double longitude = prefs.getDouble('longitude') ?? 0.00;
+
   runApp(
     MultiProvider(
       providers: [
-        /// WarehouseProviders
+        /// Warehouse Providers
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
         ChangeNotifierProvider<AuthUserProvider>(create: (_) => AuthUserProvider()),
         ChangeNotifierProvider<NetworkConnectionService>(create: (_) => NetworkConnectionService()),
@@ -107,11 +118,9 @@ void main() async {
         ChangeNotifierProvider(create: (_) => RatingProvider()),
         ChangeNotifierProvider(create: (_) => LoaderNotifier()),
 
-        ///Transportation Providers
+        /// Transportation Providers
         ChangeNotifierProvider(create: (_) => BookingScreenProvider()),
         ChangeNotifierProvider(create: (_) => TransportPageHomeProvider()),
-
-
       ],
       child: MyApp(
         isLoggedIn: isLoggedIn,
@@ -123,6 +132,7 @@ void main() async {
     ),
   );
 }
+
 
 class MyApp extends StatefulWidget {
   final bool isLoggedIn;
